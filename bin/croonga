@@ -1,0 +1,23 @@
+#!/usr/bin/env node
+/* vim: set filetype=javascript */
+
+var croongaServer = require(__dirname + '/../lib/server');
+var optimist = require('optimist');
+var program = require('commander')
+
+program
+  .usage('[options]')
+  .option('-p, --port <port>', 'specify port [3000]', Number, 3000)
+  .option('-d, --basedir <path>', 'db basedir [/tmp/croonga]', String, '/tmp/croonga')
+  .parse(process.argv);
+
+var server;
+
+server = croongaServer.createServer({
+  baseDir: program.basedir
+});
+
+server.listen(program.port, function() {
+  console.log('%s listening at %s', server.name, server.url);
+  console.log('basedir is %s', program.basedir);
+});

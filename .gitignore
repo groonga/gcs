@@ -1,0 +1,6 @@
+build
+.lock-wscript
+node_modules
+lib/nroonga_bindings.node
+test/tmp
+deps

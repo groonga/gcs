@@ -1,0 +1,33 @@
+{
+  "name": "croonga",
+  "description": "Groonga CloudSearch",
+  "version": "0.0.0",
+  "author": "Yoji Shidara <dara@shidara.net>",
+  "keywords": ["groonga", "fulltext", "search", "database"],
+  "homepage" : "http://github.com/croonga/croonga",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/croonga/croonga.git"
+  },
+  "bugs": {
+    "url": "http://github.com/croonga/croonga/issues"
+  },
+  "devDependencies": {
+    "mocha":"",
+    "should":""
+  },
+  "dependencies": {
+    "coffee-script":"",
+    "commander":"",
+    "nroonga":"",
+    "restify":""
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/mocha --reporter list -r should --compilers coffee:coffee-script",
+    "start": "./bin/croonga"
+  },
+  "main": "./lib/croonga",
+  "engines": {
+    "node": "~ 0.6.18"
+  }
+}
