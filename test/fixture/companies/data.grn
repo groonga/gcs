@@ -1,7 +1,15 @@
 load --table crn_companies
 [
 ["_key","version","lang","crn_name","crn_address","crn_email_address","crn_description"],
-["id1",1,"en","Brazil","Shibuya, Tokyo","info@razil.jp",""],
-["id2",1,"en","Enishi Tech Inc.","Sapporo, Hokkaido","info@enishi-tech.com",""],
-["id3",1,"en","ClearCode Inc.","Hongo, Tokyo","info@clear-code.com",""]
+["id1",1,"en","Brazil","Shibuya, Tokyo, Japan","info@razil.jp",""],
+["id2",1,"en","Enishi Tech Inc.","Sapporo, Hokkaido, Japan","info@enishi-tech.com",""],
+["id3",1,"en","ClearCode Inc.","Hongo, Tokyo, Japan","info@clear-code.com",""],
+["id4",1,"en","Anaheim Electronics","Granada, Moon","",""],
+["id5",1,"en","Shinsei Industry","Earth","",""],
+["id6",1,"en","Omni Consumer Products","Detroit and Delta City, Michigan, United States","",""],
+["id7",1,"en","Capsule Corporation","West City","",""],
+["id8",1,"en","Stark Industries","United States","",""],
+["id9",1,"en","Umbrella Corporation","Tokyo, Japan","",""],
+["id10",1,"en","U.S. Robots and Mechanical Men","New York, United States","",""]
 ]
+
