@@ -17,13 +17,12 @@
     "should":""
   },
   "dependencies": {
-    "coffee-script":"",
     "commander":"",
     "nroonga":"",
     "restify":""
   },
   "scripts": {
-    "test": "./node_modules/.bin/mocha --reporter list -r should --compilers coffee:coffee-script",
+    "test": "./node_modules/.bin/mocha --reporter list -r should",
     "start": "./bin/croonga"
   },
   "main": "./lib/croonga",
