@@ -3,3 +3,8 @@ column_create companies name COLUMN_SCALAR ShortText
 column_create companies address COLUMN_SCALAR ShortText
 column_create companies email_address COLUMN_SCALAR ShortText
 column_create companies description COLUMN_SCALAR ShortText
+table_create BigramTerms TABLE_PAT_KEY|KEY_NORMALIZE ShortText --default_tokenizer TokenBigram
+column_create BigramTerms companies_name COLUMN_INDEX|WITH_POSITION companies name
+column_create BigramTerms companies_address COLUMN_INDEX|WITH_POSITION companies address
+column_create BigramTerms companies_email_address COLUMN_INDEX|WITH_POSITION companies email_address
+column_create BigramTerms companies_description COLUMN_INDEX|WITH_POSITION companies description
