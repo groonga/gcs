@@ -1,0 +1,5 @@
+table_create crn_companies TABLE_HASH_KEY ShortText
+column_create crn_companies crn_name COLUMN_SCALAR ShortText
+column_create crn_companies crn_address COLUMN_SCALAR ShortText
+column_create crn_companies crn_email_address COLUMN_SCALAR ShortText
+column_create crn_companies crn_description COLUMN_SCALAR ShortText
