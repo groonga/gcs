@@ -25,6 +25,7 @@ describe('croonga command', function() {
       command.on('exit', function(code) {
         code.should.equal(0);
         output.stdout.should.include("Usage:");
+        output.stderr.should.equal('');
         done();
       });
     });
