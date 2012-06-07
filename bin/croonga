@@ -17,6 +17,6 @@ server = croongaServer.createServer({
 });
 
 server.listen(program.port, function() {
-  console.log('%s listening at %s', server.name, server.url);
+  console.log('croonga listening at %d', program.port);
   console.log('basedir is %s', program.basedir);
 });

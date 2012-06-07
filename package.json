@@ -19,7 +19,7 @@
   "dependencies": {
     "commander":"",
     "nroonga":"",
-    "restify":""
+    "express":""
   },
   "scripts": {
     "test": "./node_modules/.bin/mocha --reporter list -r should",
