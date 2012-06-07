@@ -23,9 +23,9 @@ describe('croonga command', function() {
   it('should output help for --help', function(done) {
     run(['--help'], function(error, command, output) {
       command.on('exit', function(code) {
-        code.should.equal(0);
-        output.stdout.should.include("Usage:");
         output.stderr.should.equal('');
+        output.stdout.should.include("Usage:");
+        code.should.equal(0);
         done();
       });
     });
