@@ -33,10 +33,10 @@ suite('batch translator', function() {
           }
         };
     var expected = 'load --table test ' + JSON.stringify([{
-          '_key': input['id'],
-          'name': input['fields']['name'],
+          '_key': batch['id'],
+          'name': batch['fields']['name'],
           'birhday': input['fields']['birhday'],
-          'job': input['fields']['job']
+          'job': batch['fields']['job']
         }]);
     var translated = translator.addToLoad(batch);
     assert.equal(translated, expected);
