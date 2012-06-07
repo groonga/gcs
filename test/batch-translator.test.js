@@ -32,12 +32,12 @@ suite('batch translator', function() {
             'job': 'Meat Guy'
           }
         };
-    var expected = 'load --table test ' + JSON.stringify([
+    var expected = 'load --table test ' + JSON.stringify([{
           '_key': input['id'],
           'name': input['fields']['name'],
           'birhday': input['fields']['birhday'],
           'job': input['fields']['job']
-        ]);
+        }]);
     var translated = translator.addToLoad(batch);
     assert.equal(translated, expected);
   });
