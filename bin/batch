@@ -4,6 +4,7 @@
 var nroonga = require('nroonga');
 var program = require('commander');
 var fs = require('fs');
+var BatchProcessor = require('batch').BatchProcessor;
 
 program
   .usage('[options] [batch files]...')
@@ -20,20 +21,18 @@ program
           'UTF-8')
   .parse(process.argv);
 
-function BatchProcessor(options) {
+function BatchCommand(options) {
   this.databasePath = options.databasePath;
   this.domain = options.domain;
   this.encoding = options.encoding;
   this.init();
 }
-BatchProcessor.prototype = {
+BatchCommand.prototype = {
   init: function() {
     this.assertOptions();
 
     console.log('domain = ' + this.domain);
     console.log('database = ' + this.databasePath);
-
-    this.database = new nroonga.Database(this.databasePath);
   },
 
   assertOptions: function() {
@@ -41,17 +40,22 @@ BatchProcessor.prototype = {
       throw new Error('You must specify the domain name!');
   },
 
-  processAll: function(batches) {
-    for (var i = 0, maxi = batches.length; i < maxi; i++) {
-      this.process(batches[i]);
+  processAll: function(paths) {
+    for (var i = 0, maxi = paths.length; i < maxi; i++) {
+      this.process(paths[i]);
     }
   },
 
-  process: function(batch) {
-    console.log('processing batch [' + batch + ']...');
+  process: function(path) {
+    console.log('processing batch file [' + path + ']...');
 
-    var contents = fs.readFileSync(batch, this.encoding)
-    console.log(contents);
+    var batch = fs.readFileSync(path, this.encoding)
+    batch = JSON.parse(batch);
+    var processor = BatchProcessor.new({
+          databasePath: this.databasePath,
+          domain: this.domain
+        });
+    processor.process(batch);
   }
 }
 
@@ -61,5 +65,5 @@ var batchProcessor = new BatchProcessor({
       encoding: program.encoding
     });
 
-var batches = program.args;
-batchProcessor.processAll(batches);
+var batcheFilePaths = program.args;
+batchProcessor.processAll(batcheFilePaths);
