@@ -4,7 +4,7 @@
 var nroonga = require('nroonga');
 var program = require('commander');
 var fs = require('fs');
-var BatchProcessor = require('batch').BatchProcessor;
+var BatchProcessor = require('batch/processor').Processor;
 
 program
   .usage('[options] [batch files]...')

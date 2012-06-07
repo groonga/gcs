@@ -4,15 +4,15 @@ var assert = require('chai').assert;
 var fs = require('fs');
 var path = require('path');
 
-var BatchProcessor = require('../lib/batch').BatchProcessor;
+var Processor = require('../lib/batch/processor').Processor;
 
 suiteSetup(function() {
   utils.prepareCleanTemporaryDatabase();
 });
 
-suite('batch', function() {
+suite('batch processor', function() {
   test('initialize', function() {
-    var processor = new BatchProcessor({
+    var processor = new Processor({
           databasePath: utils.databasePath,
           domain: 'test-domain'
         });
