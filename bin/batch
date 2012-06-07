@@ -1,0 +1,65 @@
+#!/usr/bin/env node
+/* vim: set filetype=javascript */
+
+var nroonga = require('nroonga');
+var program = require('commander');
+var fs = require('fs');
+
+program
+  .usage('[options] [batch files]...')
+  .option('--database-path <path>',
+          'path to the database file [(project root)/database/croonga]',
+          String,
+          __dirname + '/../database/croonga')
+  .option('--domain <name>',
+          'the name of the domain',
+          String)
+  .option('--encoding <encoding>',
+          'character encoding of batch files [UTF-8]',
+          String,
+          'UTF-8')
+  .parse(process.argv);
+
+function BatchProcessor(options) {
+  this.databasePath = options.databasePath;
+  this.domain = options.domain;
+  this.encoding = options.encoding;
+  this.init();
+}
+BatchProcessor.prototype = {
+  init: function() {
+    this.assertOptions();
+
+    console.log('domain = ' + this.domain);
+    console.log('database = ' + this.databasePath);
+
+    this.database = new nroonga.Database(this.databasePath);
+  },
+
+  assertOptions: function() {
+    if (!this.domain)
+      throw new Error('You must specify the domain name!');
+  },
+
+  processAll: function(batches) {
+    for (var i = 0, maxi = batches.length; i < maxi; i++) {
+      this.process(batches[i]);
+    }
+  },
+
+  process: function(batch) {
+    console.log('processing batch [' + batch + ']...');
+
+    var contents = fs.readFileSync(batch, this.encoding)
+    console.log(contents);
+  }
+}
+
+var batchProcessor = new BatchProcessor({
+      databasePath: program.databasePath,
+      domain: program.domain,
+      encoding: program.encoding
+    });
+
+var batches = program.args;
+batchProcessor.processAll(batches);
