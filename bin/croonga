@@ -7,16 +7,16 @@ var program = require('commander');
 program
   .usage('[options]')
   .option('-p, --port <port>', 'specify port [3000]', Number, 3000)
-  .option('-d, --basedir <path>', 'db basedir [/tmp/croonga]', String, '/tmp/croonga')
+  .option('-d, --dbpath <path>', 'database path [./database/croonga]', String, './database/croonga')
   .parse(process.argv);
 
 var server;
 
 server = croongaServer.createServer({
-  baseDir: program.basedir
+  dbPath: program.dbpath
 });
 
 server.listen(program.port, function() {
   console.log('croonga listening at %d', program.port);
-  console.log('basedir is %s', program.basedir);
+  console.log('database is at %s', program.dbpath);
 });
