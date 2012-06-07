@@ -19,7 +19,8 @@
   "dependencies": {
     "commander":"",
     "nroonga":"",
-    "restify":""
+    "restify":"",
+    "optimist":""
   },
   "scripts": {
     "test": "./node_modules/.bin/mocha --reporter list -r should",
