@@ -2,7 +2,6 @@
 /* vim: set filetype=javascript */
 
 var croongaServer = require(__dirname + '/../lib/server');
-var optimist = require('optimist');
 var program = require('commander')
 
 program
