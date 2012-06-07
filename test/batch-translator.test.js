@@ -35,7 +35,7 @@ suite('batch translator', function() {
     var expected = 'load --table test ' + JSON.stringify([{
           '_key': batch['id'],
           'name': batch['fields']['name'],
-          'birhday': input['fields']['birhday'],
+          'birhday': batch['fields']['birhday'],
           'job': batch['fields']['job']
         }]);
     var translated = translator.addToLoad(batch);
