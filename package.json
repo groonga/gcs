@@ -23,7 +23,7 @@
     "express":""
   },
   "scripts": {
-    "test": "./node_modules/.bin/mocha --reporter list -r should",
+    "test": "./node_modules/.bin/mocha --reporter list -r should --ui tdd",
     "start": "./bin/croonga"
   },
   "main": "./lib/croonga",

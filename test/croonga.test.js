@@ -19,8 +19,8 @@ function run(options, callback) {
   callback(null, command, output);
 }
 
-describe('croonga command', function() {
-  it('should output help for --help', function(done) {
+suite('croonga command', function() {
+  test('should output help for --help', function(done) {
     run(['--help'], function(error, command, output) {
       command.on('exit', function(code) {
         output.stderr.should.equal('');
