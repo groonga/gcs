@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "author": "Yoji Shidara <dara@shidara.net>",
   "keywords": ["groonga", "fulltext", "search", "database"],
-  "homepage" : "http://github.com/croonga/croonga",
+  "homepage": "http://github.com/croonga/croonga",
   "repository": {
     "type": "git",
     "url": "git://github.com/croonga/croonga.git"
@@ -13,14 +13,14 @@
     "url": "http://github.com/croonga/croonga/issues"
   },
   "devDependencies": {
-    "mocha":"",
-    "should":"",
-    "chai":""
+    "mocha": "",
+    "should": "",
+    "chai": ""
   },
   "dependencies": {
-    "commander":"",
-    "nroonga":"",
-    "express":""
+    "commander": "",
+    "nroonga": "",
+    "express": ""
   },
   "scripts": {
     "test": "./node_modules/.bin/mocha --reporter list -r should --ui tdd",
