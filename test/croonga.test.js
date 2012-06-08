@@ -1,5 +1,5 @@
 var http = require('http');
-var should = require('should');
+var assert = require('chai').assert;
 var spawn = require('child_process').spawn;
 
 function run(options, callback) {
@@ -23,9 +23,9 @@ suite('croonga command', function() {
   test('should output help for --help', function(done) {
     run(['--help'], function(error, command, output) {
       command.on('exit', function(code) {
-        output.stderr.should.equal('');
-        output.stdout.should.include("Usage:");
-        code.should.equal(0);
+        assert.equal(output.stderr, '');
+        assert.include(output.stdout, 'Usage:');
+        assert.equal(code, 0);
         done();
       });
     });

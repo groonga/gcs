@@ -14,7 +14,6 @@
   },
   "devDependencies": {
     "mocha": "",
-    "should": "",
     "chai": ""
   },
   "dependencies": {
@@ -23,7 +22,7 @@
     "express": ""
   },
   "scripts": {
-    "test": "./node_modules/.bin/mocha --reporter list -r should --ui tdd",
+    "test": "./node_modules/.bin/mocha --reporter list --ui tdd",
     "start": "./bin/croonga"
   },
   "main": "./lib/croonga",
