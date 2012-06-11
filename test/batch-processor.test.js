@@ -3,11 +3,27 @@ var utils = require('./test-utils');
 var assert = require('chai').assert;
 var fs = require('fs');
 var path = require('path');
+var nroonga = require('nroonga');
 
 var Processor = require('../lib/batch/processor').Processor;
 
 suiteSetup(function() {
   utils.prepareCleanTemporaryDatabase();
+
+  var database = new nroonga.Database(utils.databasePath);
+  database.commandSync('table_create', {
+    name: 'test',
+    flags: 'TABLE_HASH_KEY',
+    key_type: 'ShortText'
+  });
+  ['name', 'birthday', 'job'].forEach(function(column) {
+    database.commandSync('column_create', {
+      table: 'test',
+      name: column,
+      flags: 'COLUMN_SCALAR',
+      type: 'ShortText'
+    });
+  });
 });
 
 suite('batch/processor/Processor (instance methods)', function() {
