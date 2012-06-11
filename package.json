@@ -19,7 +19,8 @@
   "dependencies": {
     "commander": "",
     "nroonga": "",
-    "express": ""
+    "express": "",
+    "jsdeferred": ""
   },
   "scripts": {
     "test": "./node_modules/.bin/mocha --reporter list --ui tdd",
