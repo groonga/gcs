@@ -31,8 +31,8 @@ suite('batch/processor/Processor (instance methods)', function() {
     });
 
     processor = new Processor({
-//      databasePath: utils.databasePath, // we must reuse the existing connection!
-      database: database,
+      databasePath: utils.databasePath,
+      database: database, // we must reuse the existing connection!
       domain: 'test',
     });
     console.log(processor.database.commandSync('table_list'));
