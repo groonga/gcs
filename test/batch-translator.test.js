@@ -17,7 +17,7 @@ suite('batch translator', function() {
 
   test('initialize', function() {
     assert.equal(translator.domain, 'test');
-    assert.equal(translator.table, 'test');
+    assert.equal(translator.tableName, 'test');
   });
 
   test('addToLoad', function() {
