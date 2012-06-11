@@ -35,7 +35,7 @@ suite('batch/translator/Translator (instance methods)', function() {
           }
         };
     var translated = translator.addToLoad(batch);
-    assert.equal(translated, expected);
+    assert.deepEqual(translated, expected);
   });
 
   test('translateOne for add', function() {
@@ -53,7 +53,7 @@ suite('batch/translator/Translator (instance methods)', function() {
           }
         };
     var translated = translator.translateOne(batch);
-    assert.equal(translated, expected);
+    assert.deepEqual(translated, expected);
   });
 
   test('translate', function() {
@@ -85,7 +85,7 @@ suite('batch/translator/Translator (instance methods)', function() {
           }
         ];
     var translated = translator.translate(BATCHES);
-    assert.equal(translated, expected);
+    assert.deepEqual(translated, expected);
   });
 });
 
