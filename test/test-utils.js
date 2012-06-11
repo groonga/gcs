@@ -5,6 +5,33 @@ var temporaryDirectory = exports.temporaryDirectory = path.join(__dirname, 'tmp'
 var databaseDirectory = exports.databaseDirectory = path.join(temporaryDirectory, 'database');
 var databasePath = exports.databasePath = path.join(databaseDirectory, 'croonga');
 
+exports.prepareCleanTemporaryDatabase = function() {
+  rmRSync(temporaryDirectory);
+  mkdirPSync(databaseDirectory);
+};
+
+function isDirectory(path) {
+  return fs.statSync(path).isDirectory();
+}
+exports.isDirectory = isDirectory;
+
+function rmRSync(directoryPath) {
+  if (!path.existsSync(directoryPath)) return;
+
+  var files = fs.readdirSync(directoryPath);
+  var file, filePath;
+  for (var i = 0, maxi = files.length; i < maxi; i++) {
+    file = files[i];
+    filePath = path.join(directoryPath, file);
+    if (isDirectory(filePath))
+      rmRSync(filePath);
+    else
+      fs.unlinkSync(filePath);
+  }
+  fs.rmdirSync(directoryPath);
+}
+exports.rmRSync = rmRSync;
+
 function mkdirPSync(directoryPath) {
   var parent = path.dirname(directoryPath);
   if (!path.existsSync(parent))
