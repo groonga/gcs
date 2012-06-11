@@ -60,8 +60,8 @@ suite('batch translator', function() {
 
 var BATCH_ADD_MEAT_GUY = {
       'type': 'add',
-      'id': 'id'+parseInt(Math.random() * 1000),
-      'version': parseInt(Math.random() * 1000),
+      'id': 'id29',
+      'version': 29,
       'lang': 'en',
       'fields': {
         'name': 'Meat Guy',
