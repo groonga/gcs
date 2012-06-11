@@ -113,6 +113,7 @@ suite('batch/translator/Translator (class methods)', function() {
 
   suite('commandsToString', function() {
     test('load ', function() {
+      var batches = BATCHES;
       var commands = [
             {
               command: 'load',
