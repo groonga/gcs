@@ -35,7 +35,6 @@ suite('batch/processor/Processor (instance methods)', function() {
       database: database, // we must reuse the existing connection!
       domain: 'test',
     });
-    console.log(processor.database.commandSync('table_list'));
   });
 
   teardown(function() {
