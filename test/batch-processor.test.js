@@ -31,9 +31,11 @@ suite('batch/processor/Processor (instance methods)', function() {
     });
 
     processor = new Processor({
-      databasePath: utils.databasePath,
-      domain: 'test'
+//      databasePath: utils.databasePath, // we must reuse the existing connection!
+      database: database,
+      domain: 'test',
     });
+    console.log(processor.database.commandSync('table_list'));
   });
 
   teardown(function() {
@@ -55,8 +57,7 @@ suite('batch/processor/Processor (instance methods)', function() {
         done();
       })
       .error(function(error) {
-        assertNull(error); // to handle error in the method
-        done();
+        done(error);
       });
   });
 });
