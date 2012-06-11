@@ -13,14 +13,9 @@ suiteSetup(function() {
 
 suite('batch/processor/Processor (instance methods)', function() {
   var processor;
+  var database = new nroonga.Database(utils.databasePath);
 
   setup(function() {
-    var database = new nroonga.Database(utils.databasePath);
-
-    database.commandSync('table_remove', {
-      name: 'test'
-    });
-
     database.commandSync('table_create', {
       name: 'test',
       flags: 'TABLE_HASH_KEY',
@@ -43,6 +38,9 @@ suite('batch/processor/Processor (instance methods)', function() {
 
   teardown(function() {
     processor = undefined;
+    database.commandSync('table_remove', {
+      name: 'test'
+    });
   });
 
   test('initialize', function() {
