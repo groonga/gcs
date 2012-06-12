@@ -72,7 +72,7 @@ var BATCH_ADD_MEAT_GUY = {
       'lang': 'en',
       'fields': {
         'name': 'Meat Guy',
-        'birhday': '2929-02-09',
+        'birthday': '2929-02-09',
         'job': 'Meat Guy'
       }
     };
@@ -83,7 +83,7 @@ var BATCH_ADD_MEAT_LADY = {
       'lang': 'en',
       'fields': {
         'name': 'Meat Lady',
-        'birhday': '2929-02-09',
+        'birthday': '2929-02-09',
         'job': 'Meat Lady'
       }
     };
