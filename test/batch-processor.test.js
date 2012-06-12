@@ -13,9 +13,10 @@ suiteSetup(function() {
 
 suite('batch/processor/Processor (instance methods)', function() {
   var processor;
-  var database = new nroonga.Database(utils.databasePath);
+  var database;
 
   setup(function() {
+    database = new nroonga.Database(utils.databasePath);
     database.commandSync('table_create', {
       name: 'test',
       flags: 'TABLE_HASH_KEY',
