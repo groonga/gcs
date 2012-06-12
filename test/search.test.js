@@ -39,7 +39,7 @@ suite('Search API', function() {
     var options = {
       host: utils.testHost,
       port: utils.testPort,
-      path: '/2011-02-01/search?q=Tokyo'
+      path: '/2011-02-01/search?q=Tokyo&DomainName=companies'
     };
     http.get(options, function(response) {
       assert.equal(response.statusCode, 200);
@@ -48,7 +48,14 @@ suite('Search API', function() {
         body += data;
       });
       response.on('end', function() {
-        assert.equal(body, 'OK'); // FIXME
+        var actual = JSON.parse(body);
+        var expected = { // FIXME
+          rank: '-text_relevance',
+          'match-expr': 'Tokyo',
+          hits: {found:7, start:0, hit: []},
+          info: {}
+        };
+        assert.deepEqual(actual, expected);
         done();
       });
     }).on('error', function(error) {
