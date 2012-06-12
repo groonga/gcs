@@ -5,6 +5,11 @@ var temporaryDirectory = exports.temporaryDirectory = path.join(__dirname, 'tmp'
 var databaseDirectory = exports.databaseDirectory = path.join(temporaryDirectory, 'database');
 var databasePath = exports.databasePath = path.join(databaseDirectory, 'croonga');
 
+var testHost = 'localhost';
+var testPort = 3333;
+exports.testHost = testHost;
+exports.testPort = testPort;
+
 exports.prepareCleanTemporaryDatabase = function() {
   rmRSync(temporaryDirectory);
   mkdirPSync(databaseDirectory);
