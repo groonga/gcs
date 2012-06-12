@@ -16,7 +16,7 @@ function executeGroonga(path, done) {
   var stderr = '';
   stream.pipe(command.stdin);
   command.stderr.on('data', function(data) {
-    output.stderr += data;
+    stderr += data;
   });
   command.on('exit', function(code) {
     if (code !== 0) {
