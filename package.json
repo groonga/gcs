@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "commander": "",
-    "nroonga": "",
+    "nroonga": "git://github.com/nroonga/nroonga.git#master",
     "express": "",
     "jsdeferred": ""
   },
