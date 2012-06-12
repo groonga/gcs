@@ -13,8 +13,15 @@ function executeGroonga(path, done) {
   var options = [utils.databasePath];
   var command = spawn('groonga', options);
   var stream = fs.createReadStream(path);
+  var stderr = '';
   stream.pipe(command.stdin);
-  command.on('exit', function() {
+  command.stderr.on('data', function(data) {
+    output.stderr += data;
+  });
+  command.on('exit', function(code) {
+    if (code !== 0) {
+      throw 'failed to execute groonga. stderr: ' + stderr;
+    }
     done();
   });
 }
