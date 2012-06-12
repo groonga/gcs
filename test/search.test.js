@@ -24,11 +24,18 @@ suite('Search API', function() {
     var options = {
       host: utils.testHost,
       port: utils.testPort,
-      path: '/2011-02-01/search'
+      path: '/2011-02-01/search?q=Tokyo'
     };
     http.get(options, function(response) {
       assert.equal(response.statusCode, 200);
-      done();
+      var body = '';
+      response.on('data', function(data) {
+        body += data;
+      });
+      response.on('end', function() {
+        assert.equal(body, 'OK'); // FIXME
+        done();
+      });
     }).on('error', function(error) {
       throw error;
     });
