@@ -2,16 +2,31 @@ var utils = require('./test-utils');
 var assert = require('chai').assert;
 var croongaServer = require(__dirname + '/../lib/server');
 var http = require('http');
+var spawn = require('child_process').spawn;
+var fs = require('fs');
 
 suiteSetup(function() {
   utils.prepareCleanTemporaryDatabase();
 });
 
+function executeGroonga(path, done) {
+  var options = [utils.databasePath];
+  var command = spawn('groonga', options);
+  var stream = fs.createReadStream(path);
+  stream.pipe(command.stdin);
+  command.on('exit', function() {
+    done();
+  });
+}
 
 suite('Search API', function() {
   var server;
 
-  setup(function() {
+  setup(function(done) {
+    executeGroonga(__dirname + '/fixture/companies/ddl.grn', function() {
+      executeGroonga(__dirname + '/fixture/companies/data.grn', done);
+    });
+
     server = croongaServer.createServer({databasePath: utils.databasePath});
     server.listen(utils.testPort);
   });
