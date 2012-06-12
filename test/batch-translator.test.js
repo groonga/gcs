@@ -29,7 +29,7 @@ suite('batch/translator/Translator (instance methods)', function() {
             values: JSON.stringify([{
               '_key': batch['id'],
               'name': batch['fields']['name'],
-              'birhday': batch['fields']['birhday'],
+              'birthday': batch['fields']['birthday'],
               'job': batch['fields']['job']
             }])
           }
@@ -47,7 +47,7 @@ suite('batch/translator/Translator (instance methods)', function() {
             values: JSON.stringify([{
               '_key': batch['id'],
               'name': batch['fields']['name'],
-              'birhday': batch['fields']['birhday'],
+              'birthday': batch['fields']['birthday'],
               'job': batch['fields']['job']
             }])
           }
@@ -66,7 +66,7 @@ suite('batch/translator/Translator (instance methods)', function() {
               values: JSON.stringify([{
                 '_key': batches[0]['id'],
                 'name': batches[0]['fields']['name'],
-                'birhday': batches[0]['fields']['birhday'],
+                'birthday': batches[0]['fields']['birthday'],
                 'job': batches[0]['fields']['job']
               }])
             }
@@ -78,7 +78,7 @@ suite('batch/translator/Translator (instance methods)', function() {
               values: JSON.stringify([{
                 '_key': batches[1]['id'],
                 'name': batches[1]['fields']['name'],
-                'birhday': batches[1]['fields']['birhday'],
+                'birthday': batches[1]['fields']['birthday'],
                 'job': batches[1]['fields']['job']
               }])
             }
@@ -100,7 +100,7 @@ suite('batch/translator/Translator (class methods)', function() {
               values: JSON.stringify([{
                 '_key': batch['id'],
                 'name': batch['fields']['name'],
-                'birhday': batch['fields']['birhday'],
+                'birthday': batch['fields']['birthday'],
                 'job': batch['fields']['job']
               }])
             }
@@ -122,7 +122,7 @@ suite('batch/translator/Translator (class methods)', function() {
                 values: JSON.stringify([{
                   '_key': batches[0]['id'],
                   'name': batches[0]['fields']['name'],
-                  'birhday': batches[0]['fields']['birhday'],
+                  'birthday': batches[0]['fields']['birthday'],
                   'job': batches[0]['fields']['job']
                 }])
               }
@@ -134,7 +134,7 @@ suite('batch/translator/Translator (class methods)', function() {
                 values: JSON.stringify([{
                   '_key': batches[1]['id'],
                   'name': batches[1]['fields']['name'],
-                  'birhday': batches[1]['fields']['birhday'],
+                  'birthday': batches[1]['fields']['birthday'],
                   'job': batches[1]['fields']['job']
                 }])
               }
@@ -157,7 +157,7 @@ var BATCH_ADD_MEAT_GUY = {
       'lang': 'en',
       'fields': {
         'name': 'Meat Guy',
-        'birhday': '2929-02-09',
+        'birthday': '2929-02-09',
         'job': 'Meat Guy'
       }
     };
@@ -168,7 +168,7 @@ var BATCH_ADD_MEAT_LADY = {
       'lang': 'en',
       'fields': {
         'name': 'Meat Lady',
-        'birhday': '2929-02-09',
+        'birthday': '2929-02-09',
         'job': 'Meat Lady'
       }
     };
