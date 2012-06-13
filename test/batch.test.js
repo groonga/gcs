@@ -3,6 +3,9 @@ var assert = require('chai').assert;
 var fs = require('fs');
 var nroonga = require('nroonga');
 
+var schemeDump = fs.readFileSync(__dirname + '/fixture/companies/ddl.grn', 'UTF-8').replace(/\s+$/, '');
+var loadDump = fs.readFileSync(__dirname + '/fixture/companies/data.grn', 'UTF-8').replace(/\s+$/, '');
+
 var temporaryDatabase;
 
 suiteSetup(function() {
@@ -42,6 +45,12 @@ suite('documents/batch API', function() {
               })
             };
         assert.deepEqual(response, expected);
+
+        var dump = database.commandSync('dump', {
+              tables: 'companies'
+            });
+        assert.equal(dump, schemeDump + '\n' + loadDump);
+
         done();
       })
       .error(function(error) {
