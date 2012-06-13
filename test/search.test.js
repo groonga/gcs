@@ -1,40 +1,22 @@
 var utils = require('./test-utils');
 var assert = require('chai').assert;
 var http = require('http');
-var spawn = require('child_process').spawn;
 var fs = require('fs');
+var nroonga = require('nroonga');
 
 suiteSetup(function() {
   utils.prepareCleanTemporaryDatabase();
 });
 
-function executeGroonga(path, done) {
-  var options = [utils.databasePath];
-  var command = spawn('groonga', options);
-  var stream = fs.createReadStream(path);
-  var stderr = '';
-  stream.pipe(command.stdin);
-  command.stderr.on('data', function(data) {
-    stderr += data;
-  });
-  command.on('exit', function(code) {
-    if (code !== 0) {
-      throw 'failed to execute groonga. stderr: ' + stderr;
-    }
-    done();
-  });
-}
-
 suite('Search API', function() {
+  var database;
   var server;
 
-  setup(function(done) {
-    executeGroonga(__dirname + '/fixture/companies/ddl.grn', function() {
-      executeGroonga(__dirname + '/fixture/companies/data.grn', function() {
-        server = utils.setupServer();
-        done();
-      });
-    });
+  setup(function() {
+    database = new nroonga.Database(utils.databasePath);
+    utils.loadDumpFile(database, __dirname + '/fixture/companies/ddl.grn');
+    utils.loadDumpFile(database, __dirname + '/fixture/companies/data.grn');
+    server = utils.setupServer();
   });
 
   teardown(function() {
