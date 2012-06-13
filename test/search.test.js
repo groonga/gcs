@@ -1,7 +1,5 @@
 var utils = require('./test-utils');
 var assert = require('chai').assert;
-var croongaServer = require(__dirname + '/../lib/server');
-var http = require('http');
 var spawn = require('child_process').spawn;
 var fs = require('fs');
 
@@ -32,8 +30,7 @@ suite('Search API', function() {
   setup(function(done) {
     executeGroonga(__dirname + '/fixture/companies/ddl.grn', function() {
       executeGroonga(__dirname + '/fixture/companies/data.grn', function() {
-        server = croongaServer.createServer({databasePath: utils.databasePath});
-        server.listen(utils.testPort);
+        server = utils.setupServer();
         done();
       });
     });
@@ -47,16 +44,13 @@ suite('Search API', function() {
     var options = {
       host: utils.testHost,
       port: utils.testPort,
-      path: '/2011-02-01/search?q=Tokyo&DomainName=companies'
+      path: 
     };
-    http.get(options, function(response) {
-      assert.equal(response.statusCode, 200);
-      var body = '';
-      response.on('data', function(data) {
-        body += data;
-      });
-      response.on('end', function() {
-        var actual = JSON.parse(body);
+    var path = '/2011-02-01/search?q=Tokyo&DomainName=companies';
+    utils.get(path)
+      .next(function(response) {
+        assert.equal(response.statusCode, 200);
+        var actual = JSON.parse(response.body);
         var expected = { // FIXME
           rank: '-text_relevance',
           'match-expr': 'Tokyo',
@@ -65,9 +59,9 @@ suite('Search API', function() {
         };
         assert.deepEqual(actual, expected);
         done();
+      })
+      .error(function(error) {
+        done(error);
       });
-    }).on('error', function(error) {
-      throw error;
-    });
   });
 });
