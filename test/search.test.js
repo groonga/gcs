@@ -41,11 +41,6 @@ suite('Search API', function() {
   });
 
   test('GET /2011-02-01/search', function(done) {
-    var options = {
-      host: utils.testHost,
-      port: utils.testPort,
-      path: 
-    };
     var path = '/2011-02-01/search?q=Tokyo&DomainName=companies';
     utils.get(path)
       .next(function(response) {
