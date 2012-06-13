@@ -87,6 +87,13 @@ exports.prepareCleanTemporaryDatabase = function() {
   mkdirp.sync(databaseDirectory);
 };
 
+exports.loadDumpFile = function(database, path) {
+  var dump = fs.readFileSync(path, 'UTF-8');
+  dump.split('\n').forEach(function(line) {
+    database.commandSyncString(line);
+  });
+}
+
 function isDirectory(path) {
   return fs.statSync(path).isDirectory();
 }

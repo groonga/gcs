@@ -23,9 +23,8 @@ suite('batch/processor/Processor (instance methods)', function() {
 
   setup(function() {
     database = new nroonga.Database(utils.databasePath);
-    schemeDump.split('\n').forEach(function(command) {
-      database.commandSyncString(command);
-    });
+    utils.loadDumpFile(database, __dirname + '/fixture/companies/ddl.grn');
+    utils.loadDumpFile(database, __dirname + '/fixture/companies/data.grn');
 
     processor = new Processor({
       databasePath: utils.databasePath,
