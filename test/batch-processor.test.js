@@ -6,7 +6,12 @@ var path = require('path');
 var nroonga = require('nroonga');
 
 var Processor = require('../lib/batch/processor').Processor;
-var Translator = require('../lib/batch/translator').Translator;
+
+var addBatches = fs.readFileSync(__dirname + '/fixture/companies/add.sdf.json', 'UTF-8');
+addBatches = JSON.parse(addBatches);
+
+var schemeDump = fs.readFileSync(__dirname + '/fixture/companies/ddl.grn', 'UTF-8').replace(/\s+$/, '');
+var loadDump = fs.readFileSync(__dirname + '/fixture/companies/data.grn', 'UTF-8').replace(/\s+$/, '');
 
 suiteSetup(function() {
   utils.prepareCleanTemporaryDatabase();
@@ -18,53 +23,41 @@ suite('batch/processor/Processor (instance methods)', function() {
 
   setup(function() {
     database = new nroonga.Database(utils.databasePath);
-    database.commandSync('table_create', {
-      name: 'test',
-      flags: 'TABLE_HASH_KEY',
-      key_type: 'ShortText'
-    });
-    ['name', 'birthday', 'job'].forEach(function(column) {
-      database.commandSync('column_create', {
-        table: 'test',
-        name: column,
-        flags: 'COLUMN_SCALAR',
-        type: 'ShortText'
-      });
+    schemeDump.split('\n').forEach(function(command) {
+      database.commandSyncString(command);
     });
 
     processor = new Processor({
       databasePath: utils.databasePath,
       database: database, // we must reuse the existing connection!
-      domain: 'test',
+      domain: 'companies',
     });
   });
 
   teardown(function() {
     processor = undefined;
-    database.commandSync('table_remove', {
-      name: 'test'
-    });
+    database.commandSync('table_remove', { name: 'BigramTerms' });
+    database.commandSync('table_remove', { name: 'companies' });
   });
 
   test('initialize', function() {
     assert.equal(processor.databasePath, utils.databasePath);
-    assert.equal(processor.domain, 'test');
+    assert.equal(processor.domain, 'companies');
   });
 
-  test('process load', function(done) {
-    processor.process(BATCHES)
+  test('process add-batches', function(done) {
+    processor.process(addBatches)
       .next(function(results) {
-        var translator = new Translator('test');
         var expected = {
               status: 'success',
-              adds: 2,
+              adds: 10,
               deletes: 0
             };
         assert.deepEqual(results, expected);
         var dump = database.commandSync('dump', {
-              table: 'test'
+              tables: 'companies'
             });
-        assert.equal(dump, DUMP);
+        assert.equal(dump, schemeDump + '\n' + loadDump);
         done();
       })
       .error(function(error) {
@@ -72,40 +65,3 @@ suite('batch/processor/Processor (instance methods)', function() {
       });
   });
 });
-
-var BATCH_ADD_MEAT_GUY = {
-      'type': 'add',
-      'id': 'id29',
-      'version': 29,
-      'lang': 'en',
-      'fields': {
-        'name': 'Meat Guy',
-        'birthday': '2929-02-09',
-        'job': 'Meat Guy'
-      }
-    };
-var BATCH_ADD_MEAT_LADY = {
-      'type': 'add',
-      'id': 'id2929',
-      'version': 2929,
-      'lang': 'en',
-      'fields': {
-        'name': 'Meat Lady',
-        'birthday': '2929-02-09',
-        'job': 'Meat Lady'
-      }
-    };
-var BATCHES = [
-      BATCH_ADD_MEAT_GUY,
-      BATCH_ADD_MEAT_LADY
-    ];
-var DUMP = 'table_create test TABLE_HASH_KEY ShortText\n' +
-           'column_create test birthday COLUMN_SCALAR ShortText\n' +
-           'column_create test job COLUMN_SCALAR ShortText\n' +
-           'column_create test name COLUMN_SCALAR ShortText\n' +
-           'load --table test\n' +
-           '[\n' +
-           '["_key","birthday","job","name"],\n' +
-           '["id29","2929-02-09","Meat Guy","Meat Guy"],\n' +
-           '["id2929","2929-02-09","Meat Lady","Meat Lady"]\n' +
-           ']';

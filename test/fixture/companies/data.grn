@@ -1,14 +1,14 @@
 load --table companies
 [
-["_key","name","address","email_address","description"],
-["id1","Brazil","Shibuya, Tokyo, Japan","info@razil.jp",""],
-["id2","Enishi Tech Inc.","Sapporo, Hokkaido, Japan","info@enishi-tech.com",""],
-["id3","ClearCode Inc.","Hongo, Tokyo, Japan","info@clear-code.com",""],
-["id4","Anaheim Electronics","Granada, Moon","",""],
-["id5","Shinsei Industry","Earth","",""],
-["id6","Omni Consumer Products","Detroit and Delta City, Michigan, United States","",""],
-["id7","Capsule Corporation","West City","",""],
-["id8","Stark Industries","United States","",""],
-["id9","Umbrella Corporation","Tokyo, Japan","",""],
-["id10","U.S. Robots and Mechanical Men","New York, United States","",""]
+["_key","address","description","email_address","name"],
+["id1","Shibuya, Tokyo, Japan","","info@razil.jp","Brazil"],
+["id2","Sapporo, Hokkaido, Japan","","info@enishi-tech.com","Enishi Tech Inc."],
+["id3","Hongo, Tokyo, Japan","","info@clear-code.com","ClearCode Inc."],
+["id4","Granada, Moon","","","Anaheim Electronics"],
+["id5","Earth","","","Shinsei Industry"],
+["id6","Detroit and Delta City, Michigan, United States","","","Omni Consumer Products"],
+["id7","West City","","","Capsule Corporation"],
+["id8","United States","","","Stark Industries"],
+["id9","Tokyo, Japan","","","Umbrella Corporation"],
+["id10","New York, United States","","","U.S. Robots and Mechanical Men"]
 ]
