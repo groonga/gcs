@@ -31,11 +31,12 @@ suite('Search API', function() {
 
   setup(function(done) {
     executeGroonga(__dirname + '/fixture/companies/ddl.grn', function() {
-      executeGroonga(__dirname + '/fixture/companies/data.grn', done);
+      executeGroonga(__dirname + '/fixture/companies/data.grn', function() {
+        server = croongaServer.createServer({databasePath: utils.databasePath});
+        server.listen(utils.testPort);
+        done();
+      });
     });
-
-    server = croongaServer.createServer({databasePath: utils.databasePath});
-    server.listen(utils.testPort);
   });
 
   teardown(function() {
