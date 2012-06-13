@@ -4,18 +4,17 @@ var mkdirp = require('mkdirp');
 var croongaServer = require(__dirname + '/../lib/server');
 var http = require('http');
 var Deferred = require('jsdeferred').Deferred;
+var nroonga = require('nroonga');
 
 var temporaryDirectory = exports.temporaryDirectory = path.join(__dirname, 'tmp');
-var databaseDirectory = exports.databaseDirectory = path.join(temporaryDirectory, 'database');
-var databasePath = exports.databasePath = path.join(databaseDirectory, 'croonga');
 
 var testHost = 'localhost';
 var testPort = 3333;
 exports.testHost = testHost;
 exports.testPort = testPort;
 
-function setupServer() {
-  var server = croongaServer.createServer({databasePath: databasePath});
+function setupServer(database) {
+  var server = croongaServer.createServer({database: database});
   server.listen(testPort);
   return server;
 }
@@ -87,9 +86,25 @@ function post(path, body, bodyContentType) {
 }
 exports.post = post;
 
-exports.prepareCleanTemporaryDatabase = function() {
-  rmRSync(temporaryDirectory);
+var databaseCount = 0;
+
+exports.createTemporaryDatabase = function() {
+  var databaseName = 'database-' + ++databaseCount;
+  var databaseDirectory = path.join(temporaryDirectory, databaseName);
+  var databasePath = path.join(databaseDirectory, 'database');
+  rmRSync(databaseDirectory);
   mkdirp.sync(databaseDirectory);
+  return {
+    path: databasePath,
+    get: function() {
+      return this._database ||
+             (this._database = new nroonga.Database(databasePath));
+    },
+    teardown: function() {
+      rmRSync(databaseDirectory);
+      this._database = undefined;
+    }
+  };
 };
 
 exports.loadDumpFile = function(database, path) {

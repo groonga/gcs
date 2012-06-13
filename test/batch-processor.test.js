@@ -13,8 +13,15 @@ addBatches = JSON.parse(addBatches);
 var schemeDump = fs.readFileSync(__dirname + '/fixture/companies/ddl.grn', 'UTF-8').replace(/\s+$/, '');
 var loadDump = fs.readFileSync(__dirname + '/fixture/companies/data.grn', 'UTF-8').replace(/\s+$/, '');
 
+var temporaryDatabase;
+
 suiteSetup(function() {
-  utils.prepareCleanTemporaryDatabase();
+  temporaryDatabase = utils.createTemporaryDatabase();
+});
+
+suiteTeardown(function() {
+  temporaryDatabase.teardown();
+  temporaryDatabase = undefined;
 });
 
 suite('batch/processor/Processor (instance methods)', function() {
@@ -22,12 +29,12 @@ suite('batch/processor/Processor (instance methods)', function() {
   var database;
 
   setup(function() {
-    database = new nroonga.Database(utils.databasePath);
+    database = temporaryDatabase.get();
     utils.loadDumpFile(database, __dirname + '/fixture/companies/ddl.grn');
     utils.loadDumpFile(database, __dirname + '/fixture/companies/data.grn');
 
     processor = new Processor({
-      databasePath: utils.databasePath,
+      databasePath: temporaryDatabase.path,
       database: database, // we must reuse the existing connection!
       domain: 'companies',
     });
@@ -40,7 +47,7 @@ suite('batch/processor/Processor (instance methods)', function() {
   });
 
   test('initialize', function() {
-    assert.equal(processor.databasePath, utils.databasePath);
+    assert.equal(processor.databasePath, temporaryDatabase.path);
     assert.equal(processor.domain, 'companies');
   });
 

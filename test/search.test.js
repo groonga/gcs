@@ -2,10 +2,16 @@ var utils = require('./test-utils');
 var assert = require('chai').assert;
 var http = require('http');
 var fs = require('fs');
-var nroonga = require('nroonga');
+
+var temporaryDatabase;
 
 suiteSetup(function() {
-  utils.prepareCleanTemporaryDatabase();
+  temporaryDatabase = utils.createTemporaryDatabase();
+});
+
+suiteTeardown(function() {
+  temporaryDatabase.teardown();
+  temporaryDatabase = undefined;
 });
 
 suite('Search API', function() {
@@ -13,10 +19,10 @@ suite('Search API', function() {
   var server;
 
   setup(function() {
-    database = new nroonga.Database(utils.databasePath);
+    database = temporaryDatabase.get();
     utils.loadDumpFile(database, __dirname + '/fixture/companies/ddl.grn');
     utils.loadDumpFile(database, __dirname + '/fixture/companies/data.grn');
-    server = utils.setupServer();
+    server = utils.setupServer(database);
   });
 
   teardown(function() {

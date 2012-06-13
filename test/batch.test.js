@@ -3,8 +3,15 @@ var assert = require('chai').assert;
 var fs = require('fs');
 var nroonga = require('nroonga');
 
+var temporaryDatabase;
+
 suiteSetup(function() {
-  utils.prepareCleanTemporaryDatabase();
+  temporaryDatabase = utils.createTemporaryDatabase();
+});
+
+suiteTeardown(function() {
+  temporaryDatabase.teardown();
+  temporaryDatabase = undefined;
 });
 
 suite('documents/batch API', function() {
@@ -12,9 +19,9 @@ suite('documents/batch API', function() {
   var server;
 
   setup(function() {
-    database = new nroonga.Database(utils.databasePath);
+    database = temporaryDatabase.get();
     utils.loadDumpFile(database, __dirname + '/fixture/companies/ddl.grn');
-    server = utils.setupServer();
+    server = utils.setupServer(database);
   });
 
   teardown(function() {
@@ -26,14 +33,15 @@ suite('documents/batch API', function() {
     var path = '/2011-02-01/documents/batch?DomainName=companies';
     utils.post(path, batch, 'application/json')
       .next(function(response) {
-        assert.equal(response.statusCode, 200);
-        var actual = JSON.parse(response.body);
         var expected = {
-              status: 'success',
-              adds: 10,
-              deletes: 0
+              statusCode: 200,
+              body: JSON.stringify({
+                status: 'success',
+                adds: 10,
+                deletes: 0
+              })
             };
-        assert.deepEqual(actual, expected);
+        assert.deepEqual(response, expected);
         done();
       })
       .error(function(error) {
