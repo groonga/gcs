@@ -6,6 +6,7 @@ var path = require('path');
 var nroonga = require('nroonga');
 
 var Processor = require('../lib/batch/processor').Processor;
+var Translator = require('../lib/batch/translator').Translator;
 
 suiteSetup(function() {
   utils.prepareCleanTemporaryDatabase();
@@ -53,7 +54,13 @@ suite('batch/processor/Processor (instance methods)', function() {
   test('process load', function(done) {
     processor.process(BATCHES)
       .next(function(results) {
-        assert.deepEqual(results, [1, 1]);
+        var translator = new Translator('test');
+        var expected = {
+              status: 'success',
+              adds: 2,
+              deletes: 0
+            };
+        assert.deepEqual(results, expected);
         var dump = database.commandSync('dump', {
               table: 'test'
             });
