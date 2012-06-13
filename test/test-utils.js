@@ -3,6 +3,7 @@ var path = require('path');
 var mkdirp = require('mkdirp');
 var croongaServer = require(__dirname + '/../lib/server');
 var http = require('http');
+var Deferred = require('jsdeferred').Deferred;
 
 var temporaryDirectory = exports.temporaryDirectory = path.join(__dirname, 'tmp');
 var databaseDirectory = exports.databaseDirectory = path.join(temporaryDirectory, 'database');
@@ -47,14 +48,18 @@ function get(path) {
 }
 exports.get = get;
 
-function post(path, body) {
+function post(path, body, bodyContentType) {
   var deferred = new Deferred();
 
   var options = {
         host: testHost,
         port: testPort,
         path: path,
-        method: 'POST'
+        method: 'POST',
+        headers: {
+          'Content-Type': bodyContentType,
+          'Content-Length': body.length
+        }
       };
 
   Deferred.next(function() {
