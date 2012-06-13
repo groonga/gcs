@@ -1,6 +1,6 @@
 var utils = require('./test-utils');
-
 var assert = require('chai').assert;
+var fs = require('fs');
 
 var Translator = require('../lib/batch/translator').Translator;
 
@@ -20,8 +20,11 @@ suite('batch/translator/Translator (instance methods)', function() {
     assert.equal(translator.tableName, 'test');
   });
 
+  var batches = fs.readFileSync(__dirname + '/fixture/companies/add.sdf.json', 'UTF-8');
+  batches = JSON.parse(batches);
+
   test('addToLoad', function() {
-    var batch = BATCH_ADD_MEAT_GUY;
+    var batch = batches[0];
     var expected = {
           command: 'load',
           options: {
@@ -29,8 +32,8 @@ suite('batch/translator/Translator (instance methods)', function() {
             values: JSON.stringify([{
               '_key': batch['id'],
               'name': batch['fields']['name'],
-              'birthday': batch['fields']['birthday'],
-              'job': batch['fields']['job']
+              'address': batch['fields']['address'],
+              'email_address': batch['fields']['email_address']
             }])
           }
         };
@@ -39,7 +42,7 @@ suite('batch/translator/Translator (instance methods)', function() {
   });
 
   test('translateOne for add', function() {
-    var batch = BATCH_ADD_MEAT_GUY;
+    var batch = batches[0];
     var expected = {
           command: 'load',
           options: {
@@ -47,8 +50,8 @@ suite('batch/translator/Translator (instance methods)', function() {
             values: JSON.stringify([{
               '_key': batch['id'],
               'name': batch['fields']['name'],
-              'birthday': batch['fields']['birthday'],
-              'job': batch['fields']['job']
+              'address': batch['fields']['address'],
+              'email_address': batch['fields']['email_address']
             }])
           }
         };
@@ -57,7 +60,6 @@ suite('batch/translator/Translator (instance methods)', function() {
   });
 
   test('translate', function() {
-    var batches = BATCHES;
     var expected = [
           {
             command: 'load',
@@ -66,8 +68,8 @@ suite('batch/translator/Translator (instance methods)', function() {
               values: JSON.stringify([{
                 '_key': batches[0]['id'],
                 'name': batches[0]['fields']['name'],
-                'birthday': batches[0]['fields']['birthday'],
-                'job': batches[0]['fields']['job']
+                'address': batches[0]['fields']['address'],
+                'email_address': batches[0]['fields']['email_address']
               }])
             }
           },
@@ -78,13 +80,13 @@ suite('batch/translator/Translator (instance methods)', function() {
               values: JSON.stringify([{
                 '_key': batches[1]['id'],
                 'name': batches[1]['fields']['name'],
-                'birthday': batches[1]['fields']['birthday'],
-                'job': batches[1]['fields']['job']
+                'address': batches[1]['fields']['address'],
+                'email_address': batches[1]['fields']['email_address']
               }])
             }
           }
         ];
-    var translated = translator.translate(BATCHES);
+    var translated = translator.translate(batches);
     assert.deepEqual(translated, expected);
   });
 });
@@ -92,7 +94,7 @@ suite('batch/translator/Translator (instance methods)', function() {
 suite('batch/translator/Translator (class methods)', function() {
   suite('commandToString', function() {
     test('load ', function() {
-      var batch = BATCH_ADD_MEAT_GUY;
+      var batch = batches[0];
       var command = {
             command: 'load',
             options: {
@@ -100,8 +102,8 @@ suite('batch/translator/Translator (class methods)', function() {
               values: JSON.stringify([{
                 '_key': batch['id'],
                 'name': batch['fields']['name'],
-                'birthday': batch['fields']['birthday'],
-                'job': batch['fields']['job']
+                'address': batch['fields']['address'],
+                'email_address': batch['fields']['email_address']
               }])
             }
           };
@@ -113,7 +115,6 @@ suite('batch/translator/Translator (class methods)', function() {
 
   suite('commandsToString', function() {
     test('load ', function() {
-      var batches = BATCHES;
       var commands = [
             {
               command: 'load',
@@ -122,8 +123,8 @@ suite('batch/translator/Translator (class methods)', function() {
                 values: JSON.stringify([{
                   '_key': batches[0]['id'],
                   'name': batches[0]['fields']['name'],
-                  'birthday': batches[0]['fields']['birthday'],
-                  'job': batches[0]['fields']['job']
+                  'address': batches[0]['fields']['address'],
+                  'email_address': batches[0]['fields']['email_address']
                 }])
               }
             },
@@ -134,8 +135,8 @@ suite('batch/translator/Translator (class methods)', function() {
                 values: JSON.stringify([{
                   '_key': batches[1]['id'],
                   'name': batches[1]['fields']['name'],
-                  'birthday': batches[1]['fields']['birthday'],
-                  'job': batches[1]['fields']['job']
+                  'address': batches[1]['fields']['address'],
+                  'email_address': batches[1]['fields']['email_address']
                 }])
               }
             }
@@ -149,30 +150,3 @@ suite('batch/translator/Translator (class methods)', function() {
     });
   });
 });
-
-var BATCH_ADD_MEAT_GUY = {
-      'type': 'add',
-      'id': 'id29',
-      'version': 29,
-      'lang': 'en',
-      'fields': {
-        'name': 'Meat Guy',
-        'birthday': '2929-02-09',
-        'job': 'Meat Guy'
-      }
-    };
-var BATCH_ADD_MEAT_LADY = {
-      'type': 'add',
-      'id': 'id2929',
-      'version': 2929,
-      'lang': 'en',
-      'fields': {
-        'name': 'Meat Lady',
-        'birthday': '2929-02-09',
-        'job': 'Meat Lady'
-      }
-    };
-var BATCHES = [
-      BATCH_ADD_MEAT_GUY,
-      BATCH_ADD_MEAT_LADY
-    ];
