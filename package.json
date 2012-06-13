@@ -20,7 +20,8 @@
     "commander": "",
     "nroonga": "git://github.com/nroonga/nroonga.git#master",
     "express": "",
-    "jsdeferred": ""
+    "jsdeferred": "",
+    "mkdirp": ""
   },
   "scripts": {
     "test": "./node_modules/.bin/mocha --reporter list --ui tdd",

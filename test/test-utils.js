@@ -1,5 +1,6 @@
 var fs = require('fs');
 var path = require('path');
+var mkdirp = require('mkdirp');
 
 var temporaryDirectory = exports.temporaryDirectory = path.join(__dirname, 'tmp');
 var databaseDirectory = exports.databaseDirectory = path.join(temporaryDirectory, 'database');
@@ -12,7 +13,7 @@ exports.testPort = testPort;
 
 exports.prepareCleanTemporaryDatabase = function() {
   rmRSync(temporaryDirectory);
-  mkdirPSync(databaseDirectory);
+  mkdirp.sync(databaseDirectory);
 };
 
 function isDirectory(path) {
@@ -36,11 +37,3 @@ function rmRSync(directoryPath) {
   fs.rmdirSync(directoryPath);
 }
 exports.rmRSync = rmRSync;
-
-function mkdirPSync(directoryPath) {
-  var parent = path.dirname(directoryPath);
-  if (!path.existsSync(parent))
-    mkdirPSync(parent);
-  fs.mkdirSync(directoryPath);
-}
-exports.mkdirPSync = mkdirPSync;
