@@ -41,11 +41,19 @@ suite('Search API', function() {
   });
 
   test('GET /2011-02-01/search', function(done) {
-    var path = '/2011-02-01/search?q=Tokyo&DomainName=companies';
-    utils.get(path)
-      .next(function(response) {
-        assert.equal(response.statusCode, 200);
-        var actual = JSON.parse(response.body);
+    var options = {
+      host: utils.testHost,
+      port: utils.testPort,
+      path: '/2011-02-01/search?q=Tokyo&DomainName=companies'
+    };
+    http.get(options, function(response) {
+      assert.equal(response.statusCode, 200);
+      var body = '';
+      response.on('data', function(data) {
+        body += data;
+      });
+      response.on('end', function() {
+        var actual = JSON.parse(body);
         var expected = { // FIXME
           rank: '-text_relevance',
           'match-expr': 'Tokyo',
@@ -54,9 +62,9 @@ suite('Search API', function() {
         };
         assert.deepEqual(actual, expected);
         done();
-      })
-      .error(function(error) {
-        done(error);
       });
+    }).on('error', function(error) {
+      throw error;
+    });
   });
 });
