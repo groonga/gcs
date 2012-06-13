@@ -4,6 +4,9 @@ var fs = require('fs');
 
 var Translator = require('../lib/batch/translator').Translator;
 
+var batches = fs.readFileSync(__dirname + '/fixture/companies/add.sdf.json', 'UTF-8');
+batches = JSON.parse(batches);
+
 suite('batch/translator/Translator (instance methods)', function() {
   var translator;
 
@@ -19,9 +22,6 @@ suite('batch/translator/Translator (instance methods)', function() {
     assert.equal(translator.domain, 'test');
     assert.equal(translator.tableName, 'test');
   });
-
-  var batches = fs.readFileSync(__dirname + '/fixture/companies/add.sdf.json', 'UTF-8');
-  batches = JSON.parse(batches);
 
   test('addToLoad', function() {
     var batch = batches[0];
@@ -86,7 +86,7 @@ suite('batch/translator/Translator (instance methods)', function() {
             }
           }
         ];
-    var translated = translator.translate(batches);
+    var translated = translator.translate(batches.slice(0, 2));
     assert.deepEqual(translated, expected);
   });
 });
