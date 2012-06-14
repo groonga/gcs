@@ -51,6 +51,17 @@ suite('batch/processor/Processor (instance methods)', function() {
     assert.equal(processor.domain, 'companies');
   });
 
+  test('getColumns', function(done) {
+    processor.getColumns()
+      .next(function(columns) {
+        assert.equal(columns, ['']);
+        done();
+      })
+      .error(function(error) {
+        done(error);
+      });
+  });
+
   test('process add-batches', function(done) {
     processor.process(addBatches)
       .next(function(results) {
