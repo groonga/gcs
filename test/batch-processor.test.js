@@ -7,9 +7,6 @@ var nroonga = require('nroonga');
 
 var Processor = require('../lib/batch/processor').Processor;
 
-var addBatches = fs.readFileSync(__dirname + '/fixture/companies/add.sdf.json', 'UTF-8');
-addBatches = JSON.parse(addBatches);
-
 var schemeDump = fs.readFileSync(__dirname + '/fixture/companies/ddl.grn', 'UTF-8').replace(/\s+$/, '');
 var loadDump = fs.readFileSync(__dirname + '/fixture/companies/data.grn', 'UTF-8').replace(/\s+$/, '');
 
@@ -64,7 +61,9 @@ suite('batch/processor/Processor (instance methods)', function() {
   });
 
   test('process add-batches', function(done) {
-    processor.process(addBatches)
+    var batches = fs.readFileSync(__dirname + '/fixture/companies/add.sdf.json', 'UTF-8');
+    batches = JSON.parse(batches);
+    processor.process(batches)
       .next(function(results) {
         var expected = {
               status: 'success',
@@ -80,6 +79,24 @@ suite('batch/processor/Processor (instance methods)', function() {
       })
       .error(function(error) {
         done(error);
+      });
+  });
+
+  test('process invalid batches', function(done) {
+    var batches = fs.readFileSync(__dirname + '/fixture/companies/invalid.sdf.json', 'UTF-8');
+    processor.process(batches)
+      .next(function(results) {
+        var error = new Error('no validation error: ' + results);
+        done(error);
+      })
+      .error(function(error) {
+        if (error.message == Processor.INVALID_BATCH) {
+          assert.deepEqual(error.errors,
+                           []);
+          done();
+        } else {
+          done(error);
+        }
       });
   });
 });

@@ -1,0 +1,26 @@
+[
+  {
+    "type": "add",
+    "id": "invalidfield",
+    "version": 1,
+    "lang": "en",
+    "fields": {
+      "unknown1": "unknown",
+      "unknown2": "unknown",
+      "name": null
+    }
+  },
+  {
+    "type": "add",
+    "id": "nofields",
+    "version": 1,
+    "lang": "en"
+  },
+  {
+    "type": "add",
+    "id": "emptyfields",
+    "version": 1,
+    "lang": "en",
+    "fields": {}
+  }
+]
