@@ -3,7 +3,6 @@ var utils = require('./test-utils');
 var assert = require('chai').assert;
 var fs = require('fs');
 var path = require('path');
-var nroonga = require('nroonga');
 
 var Processor = require('../lib/batch/processor').Processor;
 

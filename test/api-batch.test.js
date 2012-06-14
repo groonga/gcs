@@ -1,7 +1,6 @@
 var utils = require('./test-utils');
 var assert = require('chai').assert;
 var fs = require('fs');
-var nroonga = require('nroonga');
 
 var schemeDump = fs.readFileSync(__dirname + '/fixture/companies/ddl.grn', 'UTF-8').replace(/\s+$/, '');
 var loadDump = fs.readFileSync(__dirname + '/fixture/companies/data.grn', 'UTF-8').replace(/\s+$/, '');
