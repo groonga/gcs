@@ -75,7 +75,39 @@ suite('Configuration API', function() {
       .next(function(response) {
         var expected = {
               statusCode: 400,
-              body: 'Unknown API version "2011-02-02".'
+              body: 'API version "2011-02-02" is not supported.'
+            };
+        assert.deepEqual(response, expected);
+        done();
+      })
+      .error(function(error) {
+        done(error);
+      });
+  });
+
+  test('Get, no action', function(done) {
+    var path = '/?Version=2011-02-01';
+    utils.get(path)
+      .next(function(response) {
+        var expected = {
+              statusCode: 400,
+              body: 'Action must be given as the parameter "Action".'
+            };
+        assert.deepEqual(response, expected);
+        done();
+      })
+      .error(function(error) {
+        done(error);
+      });
+  });
+
+  test('Get, invalid action', function(done) {
+    var path = '/?Version=2011-02-01&Action=unknown';
+    utils.get(path)
+      .next(function(response) {
+        var expected = {
+              statusCode: 400,
+              body: 'Action "unknown" is not supported.'
             };
         assert.deepEqual(response, expected);
         done();
