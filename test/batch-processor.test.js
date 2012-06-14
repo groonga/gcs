@@ -54,7 +54,8 @@ suite('batch/processor/Processor (instance methods)', function() {
   test('getColumns', function(done) {
     processor.getColumns()
       .next(function(columns) {
-        assert.equal(columns, ['']);
+        var expected = ['name', 'address', 'email_address', 'description'];
+        assert.equal(columns.sort(), expected.sort());
         done();
       })
       .error(function(error) {
