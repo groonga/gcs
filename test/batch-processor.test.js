@@ -93,11 +93,18 @@ suite('batch/processor/Processor (instance methods)', function() {
       .error(function(error) {
         if (error.message == Processor.INVALID_BATCH) {
           assert.deepEqual(error.errors,
-                           []);
+                           ['invalidfield: The field "unknown1" is unknown.',
+                            'invalidfield: The field "unknown2" is unknown.',
+                            'invalidfield: The field "name" is null.',
+                            'nofields: You must specify "fields".',
+                            'emptyfields: You must specify one or more fields to "fields".']);
           done();
         } else {
-          done(error);
+          throw error;
         }
+      })
+      .error(function(error) {
+        done(error);
       });
   });
 });
