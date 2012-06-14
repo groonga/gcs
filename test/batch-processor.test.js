@@ -38,7 +38,7 @@ suite('batch/processor/Processor (instance methods)', function() {
 
   teardown(function() {
     processor = undefined;
-    database.commandSync('table_remove', { name: 'BigramTerms' });
+    database.commandSync('table_remove', { name: 'companies_BigramTerms' });
     database.commandSync('table_remove', { name: 'companies' });
   });
 

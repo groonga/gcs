@@ -29,7 +29,7 @@ suite('documents/batch API', function() {
 
   teardown(function() {
     server.close();
-    database.commandSync('table_remove', { name: 'BigramTerms' });
+    database.commandSync('table_remove', { name: 'companies_BigramTerms' });
     database.commandSync('table_remove', { name: 'companies' });
   });
 
