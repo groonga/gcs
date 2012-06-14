@@ -1,7 +1,6 @@
 var utils = require('./test-utils');
 var assert = require('chai').assert;
 var fs = require('fs');
-var nroonga = require('nroonga');
 
 var temporaryDatabase;
 
@@ -29,7 +28,7 @@ suite('Configuration API', function() {
   });
 
   test('Get, Action=CreateDomain', function(done) {
-    var path = '/?DomainName=companies&Action=CreateDomain';
+    var path = '/?DomainName=companies&Action=CreateDomain&version=2011-02-01';
     utils.get(path)
       .next(function(response) {
         var expected = {
