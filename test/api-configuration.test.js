@@ -28,7 +28,7 @@ suite('Configuration API', function() {
   });
 
   test('Get, Action=CreateDomain', function(done) {
-    var path = '/?DomainName=companies&Action=CreateDomain&version=2011-02-01';
+    var path = '/?DomainName=companies&Action=CreateDomain&Version=2011-02-01';
     utils.get(path)
       .next(function(response) {
         var expected = {
@@ -46,6 +46,38 @@ suite('Configuration API', function() {
                          '--default_tokenizer TokenBigram';
         assert.equal(dump, expected);
 
+        done();
+      })
+      .error(function(error) {
+        done(error);
+      });
+  });
+
+  test('Get, no version', function(done) {
+    var path = '/';
+    utils.get(path)
+      .next(function(response) {
+        var expected = {
+              statusCode: 400,
+              body: 'API version must be given as the parameter "Version".'
+            };
+        assert.deepEqual(response, expected);
+        done();
+      })
+      .error(function(error) {
+        done(error);
+      });
+  });
+
+  test('Get, invalid version', function(done) {
+    var path = '/?Version=2011-02-02';
+    utils.get(path)
+      .next(function(response) {
+        var expected = {
+              statusCode: 400,
+              body: 'Unknown API version "2011-02-02".'
+            };
+        assert.deepEqual(response, expected);
         done();
       })
       .error(function(error) {
