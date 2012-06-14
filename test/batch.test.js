@@ -138,4 +138,35 @@ suite('documents/batch API', function() {
         done(error);
       });
   });
+
+  test('invalid batches', function(done) {
+    var batch = fs.readFileSync(__dirname + '/fixture/companies/invalid.sdf.json', 'UTF-8');
+    var path = '/2011-02-01/documents/batch?DomainName=companies';
+    utils.post(path, batch, {
+      'Content-Type': 'application/json',
+      'Content-Length': batch.length
+    })
+      .next(function(response) {
+        var expected = {
+              statusCode: 200,
+              body: JSON.stringify({
+                status: 'error',
+                adds: 0,
+                deletes: 0,
+                errors: [
+                  { message: 'invalidfield: The field "unknown1" is unknown.' },
+                  { message: 'invalidfield: The field "unknown2" is unknown.' },
+                  { message: 'invalidfield: The field "name" is null.' },
+                  { message: 'nofields: You must specify "fields".' },
+                  { message: 'emptyfields: You must specify one or more fields to "fields".' }
+                ]
+              })
+            };
+        assert.deepEqual(response, expected);
+        done();
+      })
+      .error(function(error) {
+        done(error);
+      });
+  });
 });
