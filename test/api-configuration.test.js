@@ -53,6 +53,40 @@ suite('Configuration API', function() {
       });
   });
 
+  test('Get, Action=DefineIndexField', function(done) {
+    var path = '/?DomainName=companies&Action=CreateDomain&Version=2011-02-01';
+    utils.get(path)
+      .next(function(response) {
+        var path = '/?DomainName=companies&IndexField.IndexFieldName=name&' +
+                   'Action=DefineIndexField&Version=2011-02-01';
+        return utils.get(path);
+      })
+      .next(function(response) {
+        var expected = {
+              statusCode: 200,
+              body: ''
+            };
+//        assert.deepEqual(response, expected);
+
+        var dump = database.commandSync('dump', {
+              tables: 'companies'
+            });
+        var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
+                       'table_create companies_BigramTerms ' +
+                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
+                         '--default_tokenizer TokenBigram\n' +
+                       'column_create companies name COLUMN_SCALAR ShortText\n' +
+                       'column_create companies_BigramTerms companies_name ' +
+                         'COLUMN_INDEX|WITH_POSITION companies name';
+        assert.equal(dump, expected);
+
+        done();
+      })
+      .error(function(error) {
+        done(error);
+      });
+  });
+
   test('Get, no version', function(done) {
     var path = '/';
     utils.get(path)
