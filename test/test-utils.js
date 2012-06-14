@@ -47,7 +47,7 @@ function get(path) {
 }
 exports.get = get;
 
-function post(path, body, bodyContentType) {
+function post(path, body, headers) {
   var deferred = new Deferred();
 
   var options = {
@@ -55,11 +55,15 @@ function post(path, body, bodyContentType) {
         port: testPort,
         path: path,
         method: 'POST',
-        headers: {
-          'Content-Type': bodyContentType,
-          'Content-Length': body.length
-        }
+        headers: {}
       };
+
+  if (headers) {
+    for (var header in headers) {
+      if (headers.hasOwnProperty(header))
+        options.headers[header] = headers[header];
+    }
+  }
 
   Deferred.next(function() {
     var request = http.request(options, function(response) {
@@ -78,7 +82,7 @@ function post(path, body, bodyContentType) {
       deferred.fail(error);
     });
 
-    request.write(body);
+    if (body) request.write(body);
     request.end();
   });
 

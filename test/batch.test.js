@@ -36,7 +36,10 @@ suite('documents/batch API', function() {
   test('add', function(done) {
     var batch = fs.readFileSync(__dirname + '/fixture/companies/add.sdf.json', 'UTF-8');
     var path = '/2011-02-01/documents/batch?DomainName=companies';
-    utils.post(path, batch, 'application/json')
+    utils.post(path, batch, {
+      'Content-Type': 'application/json',
+      'Content-Length': batch.length
+    })
       .next(function(response) {
         var expected = {
               statusCode: 200,
@@ -62,7 +65,9 @@ suite('documents/batch API', function() {
 
   test('no content type', function(done) {
     var path = '/2011-02-01/documents/batch?DomainName=companies';
-    utils.post(path, 'foobar', '')
+    utils.post(path, 'foobar', {
+      'Content-Length': 'foobar'.length
+    })
       .next(function(response) {
         var expected = {
               statusCode: 400,
@@ -71,7 +76,7 @@ suite('documents/batch API', function() {
                 adds: 0,
                 deletes: 0,
                 errors: [
-                  { message: 'Content-Type is required' }
+                  { message: 'The Content-Type header is missing.' }
                 ]
               })
             };
@@ -85,7 +90,10 @@ suite('documents/batch API', function() {
 
   test('invalid content type', function(done) {
     var path = '/2011-02-01/documents/batch?DomainName=companies';
-    utils.post(path, 'foobar', 'text/plain')
+    utils.post(path, 'foobar', {
+      'Content-Type': 'text/plain',
+      'Content-Length': 'foobar'.length
+    })
       .next(function(response) {
         var expected = {
               statusCode: 400,
@@ -94,7 +102,32 @@ suite('documents/batch API', function() {
                 adds: 0,
                 deletes: 0,
                 errors: [
-                  { message: 'invalid content type "text/plain"' }
+                  { message: 'Invalid Content-Type header: "text/plain"' }
+                ]
+              })
+            };
+        assert.deepEqual(response, expected);
+        done();
+      })
+      .error(function(error) {
+        done(error);
+      });
+  });
+
+  test('no content length', function(done) {
+    var path = '/2011-02-01/documents/batch?DomainName=companies';
+    utils.post(path, '[]', {
+      'Content-Type': 'application/json'
+    })
+      .next(function(response) {
+        var expected = {
+              statusCode: 401,
+              body: JSON.stringify({
+                status: 'error',
+                adds: 0,
+                deletes: 0,
+                errors: [
+                  { message: 'The Content-Length header is missing.' }
                 ]
               })
             };
