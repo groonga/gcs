@@ -71,10 +71,10 @@ suite('Configuration API', function() {
         var dump = database.commandSync('dump', {
               tables: 'companies'
             });
-        var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
-                       'table_create companies_BigramTerms ' +
+        var expected = 'table_create companies_BigramTerms ' +
                          'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
                          '--default_tokenizer TokenBigram\n' +
+                       'table_create companies TABLE_HASH_KEY ShortText\n' +
                        'column_create companies name COLUMN_SCALAR ShortText\n' +
                        'column_create companies_BigramTerms companies_name ' +
                          'COLUMN_INDEX|WITH_POSITION companies name';
