@@ -29,6 +29,8 @@ suite('documents/batch API', function() {
 
   teardown(function() {
     server.close();
+    database.commandSync('table_remove', { name: 'BigramTerms' });
+    database.commandSync('table_remove', { name: 'companies' });
   });
 
   test('add', function(done) {
@@ -51,6 +53,52 @@ suite('documents/batch API', function() {
             });
         assert.equal(dump, schemeDump + '\n' + loadDump);
 
+        done();
+      })
+      .error(function(error) {
+        done(error);
+      });
+  });
+
+  test('no content type', function(done) {
+    var path = '/2011-02-01/documents/batch?DomainName=companies';
+    utils.post(path, 'foobar', '')
+      .next(function(response) {
+        var expected = {
+              statusCode: 400,
+              body: JSON.stringify({
+                status: 'error',
+                adds: 0,
+                deletes: 0,
+                errors: [
+                  { message: 'Content-Type is required' }
+                ]
+              })
+            };
+        assert.deepEqual(response, expected);
+        done();
+      })
+      .error(function(error) {
+        done(error);
+      });
+  });
+
+  test('invalid content type', function(done) {
+    var path = '/2011-02-01/documents/batch?DomainName=companies';
+    utils.post(path, 'foobar', 'text/plain')
+      .next(function(response) {
+        var expected = {
+              statusCode: 400,
+              body: JSON.stringify({
+                status: 'error',
+                adds: 0,
+                deletes: 0,
+                errors: [
+                  { message: 'invalid content type "text/plain"' }
+                ]
+              })
+            };
+        assert.deepEqual(response, expected);
         done();
       })
       .error(function(error) {
