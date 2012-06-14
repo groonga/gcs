@@ -84,6 +84,7 @@ suite('batch/processor/Processor (instance methods)', function() {
 
   test('process invalid batches', function(done) {
     var batches = fs.readFileSync(__dirname + '/fixture/companies/invalid.sdf.json', 'UTF-8');
+    batches = JSON.parse(batches);
     processor.process(batches)
       .next(function(results) {
         var error = new Error('no validation error: ' + results);
