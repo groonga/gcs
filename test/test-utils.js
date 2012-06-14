@@ -2,6 +2,7 @@ var fs = require('fs');
 var path = require('path');
 var mkdirp = require('mkdirp');
 var croongaServer = require(__dirname + '/../lib/server');
+var formatter = require(__dirname + '/../lib/formatter');
 var http = require('http');
 var Deferred = require('jsdeferred').Deferred;
 var nroonga = require('nroonga');
@@ -103,6 +104,13 @@ exports.createTemporaryDatabase = function() {
     get: function() {
       return this._database ||
              (this._database = new nroonga.Database(databasePath));
+    },
+    clear: function() {
+      var database = this._database;
+      var tables = database.commandSync('table_list');
+      formatter.formatResults(tables).forEach(function(table) {
+        database.commandSync('table_remove', { name: table.name });
+      });
     },
     teardown: function() {
       rmRSync(databaseDirectory);
