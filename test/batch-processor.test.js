@@ -44,22 +44,16 @@ suite('batch/processor/Processor (instance methods)', function() {
     assert.equal(processor.databasePath, temporaryDatabase.path);
   });
 
-  test('getColumns', function(done) {
-    processor.getColumns()
-      .next(function(columns) {
-        var expected = ['name', 'address', 'email_address', 'description'];
-        assert.deepEqual(columns.sort(), expected.sort());
-        done();
-      })
-      .error(function(error) {
-        done(error);
-      });
+  test('getColumns', function() {
+    var columns = processor.getColumns();
+    var expected = ['name', 'address', 'email_address', 'description'];
+    assert.deepEqual(columns.sort(), expected.sort());
   });
 
   test('process add-batches', function(done) {
     var batches = fs.readFileSync(__dirname + '/fixture/companies/add.sdf.json', 'UTF-8');
     batches = JSON.parse(batches);
-    processor.process(batches)
+    processor.load(batches)
       .next(function(result) {
         var expected = {
               status: 'success',
@@ -78,32 +72,31 @@ suite('batch/processor/Processor (instance methods)', function() {
       });
   });
 
-  test('process invalid batches', function(done) {
+  test('process invalid batches', function() {
     var batches = fs.readFileSync(__dirname + '/fixture/companies/invalid.sdf.json', 'UTF-8');
     batches = JSON.parse(batches);
-    processor.process(batches)
-      .next(function(result) {
-        var expected = {
-              status: 'error',
-              adds: 0,
-              deletes: 0,
-              errors: [
-                { message: 'invalidfield: The field "unknown1" is unknown.' },
-                { message: 'invalidfield: The field "unknown2" is unknown.' },
-                { message: 'invalidfield: The field "name" is null.' },
-                { message: 'nofields: You must specify "fields".' },
-                { message: 'emptyfields: You must specify one or more fields to "fields".' }
-              ]
-            };
-        assert.deepEqual(result, expected);
-        var dump = database.commandSync('dump', {
-              tables: 'companies'
-            });
-        assert.equal(dump, schemeDump);
-        done();
-      })
-      .error(function(error) {
-        done(error);
-      });
+    var actualError;
+    assert.throw(function() {
+      try {
+        processor.validate(batches);
+      } catch(error) {
+        actualError = error;
+        throw error;
+      }
+    }, Processor.INVALID_BATCH);
+
+    var expected = {
+          status: 'error',
+          adds: 0,
+          deletes: 0,
+          errors: [
+            { message: 'invalidfield: The field "unknown1" is unknown.' },
+            { message: 'invalidfield: The field "unknown2" is unknown.' },
+            { message: 'invalidfield: The field "name" is null.' },
+            { message: 'nofields: You must specify "fields".' },
+            { message: 'emptyfields: You must specify one or more fields to "fields".' }
+          ]
+        };
+    assert.deepEqual(actualError.result, expected);
   });
 });
