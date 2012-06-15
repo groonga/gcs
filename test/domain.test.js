@@ -54,6 +54,38 @@ suite('domain', function() {
       assert.equal(domain.termsTableName, 'valid123_BigramTerms');
     });
 
+    suite('from query parameter', function() {
+      test('valid', function() {
+        var request = { query: { DomainName: 'test0123' } };
+        var domain = new Domain(request);
+        assert.equal(domain.name, 'test0123');
+      });
+
+      test('invalid', function() {
+        assert.throw(function() {
+          var request = { query: { DomainName: 'domain_name' } };
+          var domain = new Domain(request);
+        }, /cannot appear in a domain name/)
+      });
+    });
+
+    suite('from host name', function() {
+      test('valid', function() {
+        var host = 'doc-test0123-id0123.us-east-1.example.com';
+        var request = { headers: { Host: host } };
+        var domain = new Domain(request);
+        assert.equal(domain.name, 'test0123');
+      });
+
+      test('invalid', function() {
+        assert.throw(function() {
+          var host = 'doc-domain_name-id0123.us-east-1.example.com';
+          var request = { headers: { Host: host } };
+          var domain = new Domain(request);
+        }, /cannot appear in a domain name/)
+      });
+    });
+
     suite('getNameFromHost', function() {
       test('valid, doc, lower case and number', function() {
         var host = 'doc-test0123-id0123.us-east-1.example.com';
