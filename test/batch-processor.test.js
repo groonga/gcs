@@ -42,7 +42,6 @@ suite('batch/processor/Processor (instance methods)', function() {
 
   test('initialize', function() {
     assert.equal(processor.databasePath, temporaryDatabase.path);
-    assert.equal(processor.domain, 'companies');
   });
 
   test('getColumns', function(done) {

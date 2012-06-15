@@ -18,11 +18,6 @@ suite('batch/translator/Translator (instance methods)', function() {
     translator = undefined;
   });
 
-  test('initialize', function() {
-    assert.equal(translator.domain, 'test');
-    assert.equal(translator.tableName, 'test');
-  });
-
   test('addToLoad', function() {
     var batch = batches[0];
     var expected = {
