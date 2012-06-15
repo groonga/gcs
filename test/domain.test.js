@@ -111,7 +111,7 @@ suite('domain', function() {
 
     test('indexColumnName', function() {
       var field = new IndexField('valid_123', domain);
-      assert.equal(domain.indexColumnName, 'testdomain_valid_123');
+      assert.equal(field.indexColumnName, 'testdomain_valid_123');
     });
   });
 });
