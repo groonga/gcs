@@ -50,12 +50,15 @@ suite('Search API', function() {
             found: 1,
             start: 0,
             hit: [{
-              _id: 3,
-              _key: 'id3',
-              address: 'Hongo, Tokyo, Japan',
-              description: '',
-              email_address: 'info@clear-code.com',
-              name: 'ClearCode Inc.'
+              id: 'id3',
+              data: {
+                _id: [3],
+                _key: ['id3'],
+                address: ['Hongo, Tokyo, Japan'],
+                description: [''],
+                email_address: ['info@clear-code.com'],
+                name: ['ClearCode Inc.']
+              }
             }]
           },
           info: {}
