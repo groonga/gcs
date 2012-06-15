@@ -50,7 +50,7 @@ suite('batch/processor/Processor (instance methods)', function() {
     assert.deepEqual(columns.sort(), expected.sort());
   });
 
-  test('process add-batches', function(done) {
+  test('load add-batches', function(done) {
     var batches = fs.readFileSync(__dirname + '/fixture/companies/add.sdf.json', 'UTF-8');
     batches = JSON.parse(batches);
     processor.load(batches)
@@ -72,7 +72,16 @@ suite('batch/processor/Processor (instance methods)', function() {
       });
   });
 
-  test('process invalid batches', function() {
+  test('validation, valid batches', function() {
+    var batches = fs.readFileSync(__dirname + '/fixture/companies/add.sdf.json', 'UTF-8');
+    batches = JSON.parse(batches);
+    // assert.notThrow(function() {
+      processor.validate(batches);
+    // }, Processor.INVALID_BATCH);
+    assert(true);
+  });
+
+  test('validation, invalid batches', function() {
     var batches = fs.readFileSync(__dirname + '/fixture/companies/invalid.sdf.json', 'UTF-8');
     batches = JSON.parse(batches);
     var actualError;
