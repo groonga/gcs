@@ -48,6 +48,11 @@ suite('domain', function() {
         var domain = new Domain('DomainName');
       }, /"D", "N" cannot appear in a domain name/)
     });
+
+    test('termsTableName', function() {
+      var domain = new Domain('valid123');
+      assert.equal(domain.termsTableName, 'valid123_BigramTerms');
+    });
   });
 
   suite('IndexField', function() {
@@ -102,6 +107,11 @@ suite('domain', function() {
       assert.throw(function() {
         var field = new IndexField('FieldName', domain);
       }, /"F", "N" cannot appear in a field name/)
+    });
+
+    test('indexColumnName', function() {
+      var field = new IndexField('valid_123', domain);
+      assert.equal(domain.indexColumnName, 'testdomain_valid_123');
     });
   });
 });
