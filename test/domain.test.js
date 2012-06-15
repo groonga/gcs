@@ -53,6 +53,38 @@ suite('domain', function() {
       var domain = new Domain('valid123');
       assert.equal(domain.termsTableName, 'valid123_BigramTerms');
     });
+
+    suite('getNameFromHost', function() {
+      test('valid, doc, lower case and number', function() {
+        var host = 'doc-test0123-id0123.us-east-1.example.com';
+        var name = Domain.getNameFromHost(host);
+        assert.equal(name, 'test0123');
+      });
+
+      test('valid, search, lower case and number', function() {
+        var host = 'search-test0123-id0123.us-east-1.example.com';
+        var name = Domain.getNameFromHost(host);
+        assert.equal(name, 'test0123');
+      });
+
+      test('valid, doc, lower case, hyphen and number', function() {
+        var host = 'doc-test-0123-id0123.us-east-1.example.com';
+        var name = Domain.getNameFromHost(host);
+        assert.equal(name, 'test-0123');
+      });
+
+      test('valid, search, lower case, hyphen and number', function() {
+        var host = 'search-test-0123-id0123.us-east-1.example.com';
+        var name = Domain.getNameFromHost(host);
+        assert.equal(name, 'test-0123');
+      });
+
+      test('invalid', function() {
+        var host = 'cloudsearch.us-east-1.example.com';
+        var name = Domain.getNameFromHost(host);
+        assert.equal(name, '');
+      });
+    });
   });
 
   suite('IndexField', function() {
