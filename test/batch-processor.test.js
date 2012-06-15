@@ -31,7 +31,7 @@ suite('batch/processor/Processor (instance methods)', function() {
     processor = new Processor({
       databasePath: temporaryDatabase.path,
       database: database, // we must reuse the existing connection!
-      domainName: 'companies',
+      domain: 'companies',
     });
   });
 
