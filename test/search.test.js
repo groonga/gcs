@@ -33,7 +33,7 @@ suite('Search API', function() {
     var options = {
       host: utils.testHost,
       port: utils.testPort,
-      path: '/2011-02-01/search?q=Tokyo&DomainName=companies'
+      path: '/2011-02-01/search?q=Hongo&DomainName=companies'
     };
     http.get(options, function(response) {
       assert.equal(response.statusCode, 200);
@@ -45,8 +45,19 @@ suite('Search API', function() {
         var actual = JSON.parse(body);
         var expected = { // FIXME
           rank: '-text_relevance',
-          'match-expr': 'Tokyo',
-          hits: {found:7, start:0, hit: []},
+          'match-expr': 'Hongo',
+          hits: {
+            found: 1,
+            start: 0,
+            hit: [{
+              _id: 3,
+              _key: 'id3',
+              address: 'Hongo, Tokyo, Japan',
+              description: '',
+              email_address: 'info@clear-code.com',
+              name: 'ClearCode Inc.'
+            }]
+          },
           info: {}
         };
         assert.deepEqual(actual, expected);
