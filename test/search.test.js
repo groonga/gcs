@@ -45,7 +45,7 @@ suite('Search API', function() {
         var actual = JSON.parse(body);
         var expected = { // FIXME
           rank: '-text_relevance',
-          'match-expr': 'Hongo',
+          'match-expr': '',
           hits: {
             found: 1,
             start: 0,
