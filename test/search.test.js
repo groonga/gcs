@@ -61,7 +61,9 @@ suite('Search API', function() {
               }
             }]
           },
-          info: {}
+          info: {
+            rid: '000000000000000000000000000000000000000000000000000000000000000'
+          }
         };
         assert.deepEqual(actual, expected);
         done();
