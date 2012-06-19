@@ -43,6 +43,8 @@ suite('Search API', function() {
       });
       response.on('end', function() {
         var actual = JSON.parse(body);
+        assert.operator(actual.info['time-ms'], '>=', 0, 'time-ms is ok');
+        actual.info['time-ms'] = 0; // always set 0 for test
         var expected = { // FIXME
           rank: '-text_relevance',
           'match-expr': '',
@@ -63,6 +65,7 @@ suite('Search API', function() {
           },
           info: {
             rid: '000000000000000000000000000000000000000000000000000000000000000',
+            'time-ms': 0, // always 0
             'cpu-time-ms': 0
           }
         };
