@@ -72,7 +72,7 @@ suite('domain', function() {
     suite('from host name', function() {
       test('valid', function() {
         var host = 'doc-test0123-id0123.us-east-1.example.com';
-        var request = { headers: { Host: host } };
+        var request = { headers: { host: host } };
         var domain = new Domain(request);
         assert.equal(domain.name, 'test0123');
       });
@@ -80,7 +80,7 @@ suite('domain', function() {
       test('invalid', function() {
         assert.throw(function() {
           var host = 'doc-domain_name-id0123.us-east-1.example.com';
-          var request = { headers: { Host: host } };
+          var request = { headers: { host: host } };
           var domain = new Domain(request);
         }, /cannot appear in a domain name/)
       });
