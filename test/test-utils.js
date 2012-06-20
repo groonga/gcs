@@ -1,7 +1,7 @@
 var fs = require('fs');
 var path = require('path');
 var mkdirp = require('mkdirp');
-var croongaServer = require(__dirname + '/../lib/server');
+var gcsServer = require(__dirname + '/../lib/server');
 var http = require('http');
 var Deferred = require('jsdeferred').Deferred;
 var nroonga = require('nroonga');
@@ -15,7 +15,7 @@ exports.testHost = testHost;
 exports.testPort = testPort;
 
 function setupServer(database) {
-  var server = croongaServer.createServer({database: database});
+  var server = gcsServer.createServer({database: database});
   server.listen(testPort);
   return server;
 }
