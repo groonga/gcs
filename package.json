@@ -30,7 +30,7 @@
   "bin": {
     "gcs": "./bin/gcs"
   },
-  "main": "./lib/croonga",
+  "main": "./lib/server",
   "engines": {
     "node": "~ 0.6.18"
   }
