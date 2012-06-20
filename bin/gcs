@@ -3,10 +3,12 @@
 var gcsServer = require(__dirname + '/../lib/server');
 var program = require('commander');
 
+var defaultDatabasePath = process.env.HOME + '/.gcs/database/gcs';
+
 program
   .usage('[options]')
   .option('-p, --port <port>', 'specify port [3000]', Number, 3000)
-  .option('--database-path <path>', 'database path [./database/gcs]', String, './database/gcs')
+  .option('--database-path <path>', 'database path [' + defaultDatabasePath + ']', String, defaultDatabasePath)
   .parse(process.argv);
 
 var server;
