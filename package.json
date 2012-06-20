@@ -4,13 +4,13 @@
   "version": "0.0.0",
   "author": "Yoji Shidara <dara@shidara.net>",
   "keywords": ["groonga", "fulltext", "search", "database"],
-  "homepage": "http://github.com/croonga/croonga",
+  "homepage": "http://github.com/groonga/gcs",
   "repository": {
     "type": "git",
-    "url": "git://github.com/croonga/croonga.git"
+    "url": "git://github.com/groonga/gcs.git"
   },
   "bugs": {
-    "url": "http://github.com/croonga/croonga/issues"
+    "url": "http://github.com/groonga/gcs/issues"
   },
   "devDependencies": {
     "mocha": "",
