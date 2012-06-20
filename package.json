@@ -1,5 +1,5 @@
 {
-  "name": "croonga",
+  "name": "gcs",
   "description": "Groonga CloudSearch",
   "version": "0.0.0",
   "author": "Yoji Shidara <dara@shidara.net>",
@@ -25,7 +25,7 @@
   },
   "scripts": {
     "test": "./node_modules/.bin/mocha --reporter list --ui tdd",
-    "start": "./bin/croonga"
+    "start": "./bin/gcs"
   },
   "main": "./lib/croonga",
   "engines": {

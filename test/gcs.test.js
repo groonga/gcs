@@ -4,7 +4,7 @@ var spawn = require('child_process').spawn;
 
 function run(options, callback) {
   var command, commandPath, output;
-  commandPath = __dirname + '/../bin/croonga';
+  commandPath = __dirname + '/../bin/gcs';
   command = spawn(commandPath, options);
   output = {
     stdout: '',
@@ -19,7 +19,7 @@ function run(options, callback) {
   callback(null, command, output);
 }
 
-suite('croonga command', function() {
+suite('gcs command', function() {
   test('should output help for --help', function(done) {
     run(['--help'], function(error, command, output) {
       command.on('exit', function(code) {
