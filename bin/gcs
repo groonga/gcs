@@ -6,7 +6,7 @@ var program = require('commander');
 program
   .usage('[options]')
   .option('-p, --port <port>', 'specify port [3000]', Number, 3000)
-  .option('--database-path <path>', 'database path [./database/gcs]', String, './database/croonga')
+  .option('--database-path <path>', 'database path [./database/gcs]', String, './database/gcs')
   .parse(process.argv);
 
 var server;
