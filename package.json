@@ -27,6 +27,9 @@
     "test": "./node_modules/.bin/mocha --reporter list --ui tdd",
     "start": "./bin/gcs"
   },
+  "bin": {
+    "gcs": "./bin/gcs"
+  },
   "main": "./lib/croonga",
   "engines": {
     "node": "~ 0.6.18"
