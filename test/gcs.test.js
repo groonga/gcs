@@ -1,4 +1,3 @@
-var http = require('http');
 var assert = require('chai').assert;
 var spawn = require('child_process').spawn;
 
