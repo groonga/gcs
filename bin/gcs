@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-/* vim: set filetype=javascript */
 
 var croongaServer = require(__dirname + '/../lib/server');
 var program = require('commander');
