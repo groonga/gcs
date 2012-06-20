@@ -2,7 +2,7 @@
   "name": "gcs",
   "description": "Groonga CloudSearch",
   "version": "0.0.0",
-  "author": "Yoji Shidara <dara@shidara.net>",
+  "author": "Groonga CloudSearch project <gcs@groonga.org>",
   "keywords": ["groonga", "fulltext", "search", "database"],
   "homepage": "http://github.com/groonga/gcs",
   "repository": {
