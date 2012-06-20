@@ -1,21 +1,21 @@
 #!/usr/bin/env node
 
-var croongaServer = require(__dirname + '/../lib/server');
+var gcsServer = require(__dirname + '/../lib/server');
 var program = require('commander');
 
 program
   .usage('[options]')
   .option('-p, --port <port>', 'specify port [3000]', Number, 3000)
-  .option('--database-path <path>', 'database path [./database/croonga]', String, './database/croonga')
+  .option('--database-path <path>', 'database path [./database/gcs]', String, './database/croonga')
   .parse(process.argv);
 
 var server;
 
-server = croongaServer.createServer({
+server = gcsServer.createServer({
   databasePath: program.databasePath
 });
 
 server.listen(program.port, function() {
-  console.log('croonga listening at %d', program.port);
+  console.log('gcs listening at %d', program.port);
   console.log('database is at %s', program.databasePath);
 });
