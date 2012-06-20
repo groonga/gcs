@@ -9,9 +9,9 @@ var BatchProcessor = require('batch/processor').Processor;
 program
   .usage('[options] [batch files]...')
   .option('--database-path <path>',
-          'path to the database file [(project root)/database/croonga]',
+          'path to the database file [(project root)/database/gcs]',
           String,
-          __dirname + '/../database/croonga')
+          __dirname + '/../database/gcs')
   .option('--domain <name>',
           'the name of the domain',
           String)
