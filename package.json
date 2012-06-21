@@ -21,7 +21,8 @@
     "nroonga": "git://github.com/nroonga/nroonga.git#master",
     "express": "",
     "jsdeferred": "",
-    "mkdirp": ""
+    "mkdirp": "",
+    "jade": ""
   },
   "scripts": {
     "test": "./node_modules/.bin/mocha --reporter list --ui tdd",
