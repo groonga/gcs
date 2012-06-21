@@ -47,7 +47,7 @@ namespace(:msgpack) do
   directory build_dir.to_s
 
   file(libmsgpack_so_path.to_s) do
-    Rake["msgpack:intall"].invoke
+    Rake::Task["msgpack:intall"].invoke
   end
 
   desc("Intall MessagePack")
@@ -76,7 +76,7 @@ namespace(:groonga) do
   directory build_dir.to_s
 
   file(libgroonga_so_path.to_s) do
-    Rake["groonga:intall"].invoke
+    Rake::Task["groonga:intall"].invoke
   end
 
   desc("Intall groonga")
@@ -105,7 +105,7 @@ namespace(:node) do
   directory build_dir.to_s
 
   file(node_path.to_s) do
-    Rake["node:intall"].invoke
+    Rake::Task["node:intall"].invoke
   end
 
   desc("Intall Node.js")
@@ -129,7 +129,7 @@ end
 gcs_path = @dist_dir + "bin/gcs"
 namespace(:gcs) do
   file(gcs_path.to_s) do
-    Rake["gcs:install"].invoke
+    Rake::Task["gcs:install"].invoke
   end
 
   desc("Install Groonga CloudSearch")
