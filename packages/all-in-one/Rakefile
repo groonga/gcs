@@ -209,7 +209,7 @@ gcs_version = JSON.parse(gcs_package_json.read)["version"]
 gcs_package_basename = "gcs-#{gcs_version}"
 gcs_package_tar_gz = "#{gcs_package_basename}.tar.gz"
 gcs_package_path = tmp_dir + gcs_package_basename
-gcs_package_tar_gz_path = tmp_dir + gcs_package_tar_gz
+gcs_package_tar_gz_path = base_dir + gcs_package_tar_gz
 file(gcs_package_tar_gz_path.to_s) do
   Rake::Task["package"]
 end
@@ -220,7 +220,7 @@ task(:package => gcs_path.to_s) do
   run_gcs_path = @dist_dir + "bin/run-gcs"
   create_gcs_wrapper(run_gcs_path)
   Dir.chdir(gcs_package_path.dirname.to_s) do
-    sh("tar", "czf", gcs_package_tar_gz, gcs_package_basename)
+    sh("tar", "czf", gcs_package_tar_gz_path.to_s, gcs_package_basename)
   end
 end
 
