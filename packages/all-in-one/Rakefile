@@ -4,6 +4,7 @@ require "uri"
 require "pathname"
 require "open-uri"
 
+top_dir = Pathname.new("../..").expand_path
 tmp_dir = Pathname.new("tmp").expand_path
 @download_dir = tmp_dir + "download"
 @build_dir = tmp_dir + "build"
@@ -124,6 +125,25 @@ namespace(:node) do
     end
   end
 end
+
+gcs_path = @dist_dir + "bin/gcs"
+namespace(:gcs) do
+  file(gcs_path.to_s) do
+    Rake["gcs:install"].invoke
+  end
+
+  desc("Install Groonga CloudSearch")
+  task(:install => [node_path.to_s]) do
+    Dir.chdir(@dist_dir.to_s) do
+      bin_dir = @dist_dir + "bin"
+      path = ENV["PATH"]
+      sh("env", "PATH=#{bin_dir}:#{path}",
+         "bin/npm", "install", "-g", top_dir.to_s) or exit(false)
+    end
+  end
+end
+
+task(:default => gcs_path.to_s)
 
 desc("Remove all auto generated files")
 task(:clean) do
