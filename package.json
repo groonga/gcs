@@ -22,7 +22,8 @@
     "express": "",
     "jsdeferred": "",
     "mkdirp": "",
-    "jade": ""
+    "jade": "",
+    "dateformat": ""
   },
   "scripts": {
     "test": "./node_modules/.bin/mocha --reporter list --ui tdd",
