@@ -3,7 +3,7 @@
   "description": "Groonga CloudSearch",
   "version": "0.0.0",
   "author": "Groonga CloudSearch project <gcs@groonga.org>",
-  "keywords": ["groonga", "fulltext", "search", "database"],
+  "keywords": ["Amazon CloudSearch", "groonga", "fulltext", "search", "database"],
   "homepage": "http://gcs.groonga.org",
   "repository": {
     "type": "git",
