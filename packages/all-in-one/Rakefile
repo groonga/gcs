@@ -4,6 +4,7 @@ require "rbconfig"
 require "uri"
 require "pathname"
 require "open-uri"
+require "json"
 
 build_debug_p = ENV["BUILD_DEBUG"] == "yes"
 debug_flags = ["CFLAGS=-ggdb3 -O0", "CXXFLAGS=-ggdb3 -O0"]
@@ -167,7 +168,25 @@ namespace(:gcs) do
   end
 end
 
-task(:default => gcs_path.to_s)
+gcs_package_json = top_dir + "package.json"
+gcs_version = JSON.parse(gcs_package_json.read)["version"]
+gcs_package_basename = "gcs-#{gcs_version}"
+gcs_package_tar_gz = "#{gcs_package_basename}.tar.gz"
+gcs_package_path = tmp_dir + gcs_package_basename
+gcs_package_tar_gz_path = tmp_dir + gcs_package_tar_gz
+file(gcs_package_tar_gz_path.to_s) do
+  Rake::Task["package"]
+end
+
+task(:package => gcs_path.to_s) do
+  rm_rf(gcs_package_path.to_s)
+  cp_r(@dist_dir.to_s, gcs_package_path.to_s)
+  Dir.chdir(gcs_package_path.dirname.to_s) do
+    sh("tar", "czf", gcs_package_tar_gz, gcs_package_basename)
+  end
+end
+
+task(:default => :package)
 
 desc("Remove all auto generated files")
 task(:clean) do
