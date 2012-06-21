@@ -4,8 +4,9 @@ require "uri"
 require "pathname"
 require "open-uri"
 
-top_dir = Pathname.new("../..").expand_path
-tmp_dir = Pathname.new("tmp").expand_path
+base_dir = Pathname.new(__FILE__).dirname.expand_path
+top_dir = base_dir.parent.parent
+tmp_dir = base_dir + "tmp"
 @download_dir = tmp_dir + "download"
 @build_dir = tmp_dir + "build"
 @dist_dir = tmp_dir + "dist"
