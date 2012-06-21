@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "author": "Groonga CloudSearch project <gcs@groonga.org>",
   "keywords": ["groonga", "fulltext", "search", "database"],
-  "homepage": "http://github.com/groonga/gcs",
+  "homepage": "http://gcs.groonga.org",
   "repository": {
     "type": "git",
     "url": "git://github.com/groonga/gcs.git"
