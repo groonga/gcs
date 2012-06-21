@@ -100,6 +100,11 @@ namespace(:groonga) do
       sh("tar", "xzf", tar_gz_path.to_s) or exit(false)
       Dir.chdir(source_path.to_s) do
         options = ["--prefix=#{@dist_dir}"]
+        options << "--without-mecab"
+        options << "--without-libevent"
+        options << "--disable-zermq"
+        options << "--disable-libedit"
+        options << "--without-cutter"
         options.concat(debug_flags) if build_debug_p
         sh("./configure", *options) or exit(false)
         sh("make", "-j8") or exit(false)
