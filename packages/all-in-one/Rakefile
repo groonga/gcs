@@ -47,11 +47,11 @@ namespace(:msgpack) do
   directory build_dir.to_s
 
   file(libmsgpack_so_path.to_s) do
-    Rake["msgpack:build"].invoke
+    Rake["msgpack:intall"].invoke
   end
 
-  desc("Build MessagePack")
-  task(:build => ["download:prepare", "build:prepare", build_dir.to_s]) do
+  desc("Intall MessagePack")
+  task(:intall => ["download:prepare", "build:prepare", build_dir.to_s]) do
     base_url = "http://msgpack.org/releases/cpp"
     tar_gz_path = download("#{base_url}/#{tar_gz_basename}")
     source_path = build_dir + source_basename
@@ -76,11 +76,11 @@ namespace(:groonga) do
   directory build_dir.to_s
 
   file(libgroonga_so_path.to_s) do
-    Rake["groonga:build"].invoke
+    Rake["groonga:intall"].invoke
   end
 
-  desc("Build groonga")
-  task(:build => [libmsgpack_so_path.to_s, build_dir.to_s]) do
+  desc("Intall groonga")
+  task(:intall => [libmsgpack_so_path.to_s, build_dir.to_s]) do
     base_url = "http://packages.groonga.org/source/groonga"
     tar_gz_path = download("#{base_url}/#{tar_gz_basename}")
     source_path = build_dir + source_basename
@@ -105,12 +105,12 @@ namespace(:node) do
   directory build_dir.to_s
 
   file(node_path.to_s) do
-    Rake["node:build"].invoke
+    Rake["node:intall"].invoke
   end
 
-  desc("Build Node.js")
+  desc("Intall Node.js")
   depended_libraries = [libmsgpack_so_path.to_s, libgroonga_so_path.to_s]
-  task(:build => [build_dir.to_s, *depended_libraries]) do
+  task(:intall => [build_dir.to_s, *depended_libraries]) do
     base_url = "http://nodejs.org/dist"
     tar_gz_path = download("#{base_url}/v#{version}/#{tar_gz_basename}")
     source_path = build_dir + source_basename
