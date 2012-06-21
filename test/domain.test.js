@@ -111,6 +111,12 @@ suite('domain', function() {
         assert.equal(name, 'test-0123');
       });
 
+      test('valid, search, lower case, hyphen and number, deep subdomain including region identifier', function() {
+        var host = 'search-test-0123-id0123.us-east-1.example.com';
+        var name = Domain.getNameFromHost(host);
+        assert.equal(name, 'test-0123');
+      });
+
       test('invalid', function() {
         var host = 'cloudsearch.example.com';
         var name = Domain.getNameFromHost(host);
