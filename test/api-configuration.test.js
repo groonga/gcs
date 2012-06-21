@@ -120,8 +120,8 @@ suite('Configuration API', function() {
     var path = '/?Version=2011-02-02';
     utils.get(path)
       .next(function(response) {
-        var message = 'A bad or out-of-range value "' + version +
-                      '" was supplied for the "Version" input parameter.';
+        var message = 'A bad or out-of-range value "2011-02-02" was supplied ' +
+                      'for the "Version" input parameter.';
         var expected = {
               statusCode: 400,
               body: createCommonErrorResponse('InvalidParameterValue', message)
