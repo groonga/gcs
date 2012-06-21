@@ -1,0 +1,131 @@
+# -*- ruby -*-
+
+require "uri"
+require "pathname"
+require "open-uri"
+
+tmp_dir = Pathname.new("tmp").expand_path
+@download_dir = tmp_dir + "download"
+@build_dir = tmp_dir + "build"
+@dist_dir = tmp_dir + "dist"
+
+directory @download_dir.to_s
+directory @build_dir.to_s
+
+def download(url)
+  url = URI.parse(url) unless url.is_a?(URI::Generic)
+  basename = File.basename(url.path)
+  downloaded_path = @download_dir + basename
+  return downloaded_path if downloaded_path.exist?
+
+  url.open do |input|
+    downloaded_path.open("w", :encoding => "binary") do |output|
+      buffer = ""
+      while input.read(4096, buffer)
+        output.print(buffer)
+      end
+    end
+  end
+  downloaded_path
+end
+
+namespace(:download) do
+  task(:prepare => [@download_dir.to_s])
+end
+
+namespace(:build) do
+  task(:prepare => [@build_dir.to_s])
+end
+
+libmsgpack_so_path = @dist_dir + "lib/libmsgpack.so"
+namespace(:msgpack) do
+  version = "0.5.7"
+  source_basename = "msgpack-#{version}"
+  tar_gz_basename = "#{source_basename}.tar.gz"
+  build_dir = @build_dir + "msgpack"
+  directory build_dir.to_s
+
+  file(libmsgpack_so_path.to_s) do
+    Rake["msgpack:build"].invoke
+  end
+
+  desc("Build MessagePack")
+  task(:build => ["download:prepare", "build:prepare", build_dir.to_s]) do
+    base_url = "http://msgpack.org/releases/cpp"
+    tar_gz_path = download("#{base_url}/#{tar_gz_basename}")
+    source_path = build_dir + source_basename
+    Dir.chdir(build_dir.to_s) do
+      rm_rf(source_path.to_s)
+      sh("tar", "xzf", tar_gz_path.to_s) or exit(false)
+      Dir.chdir(source_path.to_s) do
+        sh("./configure", "--prefix=#{@dist_dir}") or exit(false)
+        sh("make", "-j8") or exit(false)
+        sh("make", "install") or exit(false)
+      end
+    end
+  end
+end
+
+libgroonga_so_path = @dist_dir + "lib/libgroonga.so"
+namespace(:groonga) do
+  version = "2.0.3"
+  source_basename = "groonga-#{version}"
+  tar_gz_basename = "#{source_basename}.tar.gz"
+  build_dir = @build_dir + "groonga"
+  directory build_dir.to_s
+
+  file(libgroonga_so_path.to_s) do
+    Rake["groonga:build"].invoke
+  end
+
+  desc("Build groonga")
+  task(:build => [libmsgpack_so_path.to_s, build_dir.to_s]) do
+    base_url = "http://packages.groonga.org/source/groonga"
+    tar_gz_path = download("#{base_url}/#{tar_gz_basename}")
+    source_path = build_dir + source_basename
+    Dir.chdir(build_dir.to_s) do
+      rm_rf(source_path.to_s)
+      sh("tar", "xzf", tar_gz_path.to_s) or exit(false)
+      Dir.chdir(source_path.to_s) do
+        sh("./configure", "--prefix=#{@dist_dir}") or exit(false)
+        sh("make", "-j8") or exit(false)
+        sh("make", "install") or exit(false)
+      end
+    end
+  end
+end
+
+node_path = @dist_dir + "bin/node"
+namespace(:node) do
+  version = "0.6.19"
+  source_basename = "node-v#{version}"
+  tar_gz_basename = "#{source_basename}.tar.gz"
+  build_dir = @build_dir + "node"
+  directory build_dir.to_s
+
+  file(node_path.to_s) do
+    Rake["node:build"].invoke
+  end
+
+  desc("Build Node.js")
+  depended_libraries = [libmsgpack_so_path.to_s, libgroonga_so_path.to_s]
+  task(:build => [build_dir.to_s, *depended_libraries]) do
+    base_url = "http://nodejs.org/dist"
+    tar_gz_path = download("#{base_url}/v#{version}/#{tar_gz_basename}")
+    source_path = build_dir + source_basename
+    Dir.chdir(build_dir.to_s) do
+      rm_rf(source_path.to_s)
+      sh("tar", "xzf", tar_gz_path.to_s) or exit(false)
+      Dir.chdir(source_path.to_s) do
+        sh("./configure", "--prefix=#{@dist_dir}") or exit(false)
+        sh("make", "-j8") or exit(false)
+        sh("make", "install") or exit(false)
+      end
+    end
+  end
+end
+
+desc("Remove all auto generated files")
+task(:clean) do
+  rm_rf(tmp_dir.to_s)
+end
