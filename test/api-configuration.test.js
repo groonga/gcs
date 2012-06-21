@@ -58,7 +58,7 @@ suite('Configuration API', function() {
                           '<DocService>' +
                             '<Endpoint>http://doc-companies-example.localhost/2011-02-01/documents</Endpoint>' +
                           '</DocService>' +
-                          '<DomainId>' + FAKE_DOMAIN_ID + '</DomainId>' +
+                          '<DomainId>' + FAKE_DOMAIN_ID + '/companies</DomainId>' +
                           '<DomainName>companies</DomainName>' +
                           '<NumSearchableDocs>0</NumSearchableDocs>' +
                           '<RequiresIndexDocuments>false</RequiresIndexDocuments>' +
