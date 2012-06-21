@@ -132,7 +132,7 @@ namespace(:node) do
       sh("tar", "xzf", tar_gz_path.to_s) or exit(false)
       Dir.chdir(source_path.to_s) do
         options = ["--prefix=#{@dist_dir}"]
-        options.concat(debug_flags) if build_debug_p
+        # options.concat(debug_flags) if build_debug_p
         sh("./configure", *options) or exit(false)
         sh("make", "-j8") or exit(false)
         sh("make", "install") or exit(false)
