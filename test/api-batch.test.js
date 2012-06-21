@@ -33,10 +33,11 @@ suite('documents/batch API', function() {
 
   test('add', function(done) {
     var batch = fs.readFileSync(__dirname + '/fixture/companies/add.sdf.json', 'UTF-8');
-    var path = '/2011-02-01/documents/batch?DomainName=companies';
+    var path = '/2011-02-01/documents/batch';
     utils.post(path, batch, {
       'Content-Type': 'application/json',
-      'Content-Length': batch.length
+      'Content-Length': batch.length,
+      'Host': 'doc-companies-example.localhost'
     })
       .next(function(response) {
         var expected = {
@@ -62,9 +63,10 @@ suite('documents/batch API', function() {
   });
 
   test('no content type', function(done) {
-    var path = '/2011-02-01/documents/batch?DomainName=companies';
+    var path = '/2011-02-01/documents/batch';
     utils.post(path, 'foobar', {
-      'Content-Length': 'foobar'.length
+      'Content-Length': 'foobar'.length,
+      'Host': 'doc-companies-example.localhost'
     })
       .next(function(response) {
         var expected = {
@@ -87,10 +89,11 @@ suite('documents/batch API', function() {
   });
 
   test('invalid content type', function(done) {
-    var path = '/2011-02-01/documents/batch?DomainName=companies';
+    var path = '/2011-02-01/documents/batch';
     utils.post(path, 'foobar', {
       'Content-Type': 'text/plain',
-      'Content-Length': 'foobar'.length
+      'Content-Length': 'foobar'.length,
+      'Host': 'doc-companies-example.localhost'
     })
       .next(function(response) {
         var expected = {
@@ -113,9 +116,10 @@ suite('documents/batch API', function() {
   });
 
   test('no content length', function(done) {
-    var path = '/2011-02-01/documents/batch?DomainName=companies';
+    var path = '/2011-02-01/documents/batch';
     utils.post(path, '[]', {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Host': 'doc-companies-example.localhost'
     })
       .next(function(response) {
         var expected = {
@@ -139,10 +143,11 @@ suite('documents/batch API', function() {
 
   test('invalid batches', function(done) {
     var batch = fs.readFileSync(__dirname + '/fixture/companies/invalid.sdf.json', 'UTF-8');
-    var path = '/2011-02-01/documents/batch?DomainName=companies';
+    var path = '/2011-02-01/documents/batch';
     utils.post(path, batch, {
       'Content-Type': 'application/json',
-      'Content-Length': batch.length
+      'Content-Length': batch.length,
+      'Host': 'doc-companies-example.localhost'
     })
       .next(function(response) {
         var expected = {
