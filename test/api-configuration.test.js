@@ -102,9 +102,11 @@ suite('Configuration API', function() {
     var path = '/';
     utils.get(path)
       .next(function(response) {
+        var message = 'An input parameter "Version" that is mandatory for ' +
+                      'processing the request is not supplied.';;
         var expected = {
               statusCode: 400,
-              body: 'API version must be given as the parameter "Version".'
+              body: createCommonErrorResponse('MissingParameter', message)
             };
         assert.deepEqual(response, expected);
         done();
@@ -118,9 +120,11 @@ suite('Configuration API', function() {
     var path = '/?Version=2011-02-02';
     utils.get(path)
       .next(function(response) {
+        var message = 'A bad or out-of-range value "' + version +
+                      '" was supplied for the "Version" input parameter.';
         var expected = {
               statusCode: 400,
-              body: 'API version "2011-02-02" is not supported.'
+              body: createCommonErrorResponse('InvalidParameterValue', message)
             };
         assert.deepEqual(response, expected);
         done();
@@ -137,7 +141,7 @@ suite('Configuration API', function() {
         var message = 'The request is missing an action or operation parameter.';
         var expected = {
               statusCode: 400,
-              body: createCommonErrorResponse('InvalidAction', message)
+              body: createCommonErrorResponse('MissingAction', message)
             };
         assert.deepEqual(response, expected);
         done();
