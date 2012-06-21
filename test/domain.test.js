@@ -71,7 +71,7 @@ suite('domain', function() {
 
     suite('from host name', function() {
       test('valid', function() {
-        var host = 'doc-test0123-id0123.us-east-1.example.com';
+        var host = 'doc-test0123-id0123.example.com';
         var request = { headers: { host: host } };
         var domain = new Domain(request);
         assert.equal(domain.name, 'test0123');
@@ -79,7 +79,7 @@ suite('domain', function() {
 
       test('invalid', function() {
         assert.throw(function() {
-          var host = 'doc-domain_name-id0123.us-east-1.example.com';
+          var host = 'doc-domain_name-id0123.example.com';
           var request = { headers: { host: host } };
           var domain = new Domain(request);
         }, /cannot appear in a domain name/);
@@ -88,31 +88,31 @@ suite('domain', function() {
 
     suite('getNameFromHost', function() {
       test('valid, doc, lower case and number', function() {
-        var host = 'doc-test0123-id0123.us-east-1.example.com';
+        var host = 'doc-test0123-id0123.example.com';
         var name = Domain.getNameFromHost(host);
         assert.equal(name, 'test0123');
       });
 
       test('valid, search, lower case and number', function() {
-        var host = 'search-test0123-id0123.us-east-1.example.com';
+        var host = 'search-test0123-id0123.example.com';
         var name = Domain.getNameFromHost(host);
         assert.equal(name, 'test0123');
       });
 
       test('valid, doc, lower case, hyphen and number', function() {
-        var host = 'doc-test-0123-id0123.us-east-1.example.com';
+        var host = 'doc-test-0123-id0123.example.com';
         var name = Domain.getNameFromHost(host);
         assert.equal(name, 'test-0123');
       });
 
       test('valid, search, lower case, hyphen and number', function() {
-        var host = 'search-test-0123-id0123.us-east-1.example.com';
+        var host = 'search-test-0123-id0123.example.com';
         var name = Domain.getNameFromHost(host);
         assert.equal(name, 'test-0123');
       });
 
       test('invalid', function() {
-        var host = 'cloudsearch.us-east-1.example.com';
+        var host = 'cloudsearch.example.com';
         var name = Domain.getNameFromHost(host);
         assert.equal(name, '');
       });
