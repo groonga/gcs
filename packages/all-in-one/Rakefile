@@ -4,7 +4,12 @@ require "uri"
 require "pathname"
 require "open-uri"
 
-tmp_dir = Pathname.new("tmp").expand_path
+build_debug_p = ENV["BUILD_DEBUG"] == "yes"
+debug_flags = ["CFLAGS=-ggdb3 -O0", "CXXFLAGS=-ggdb3 -O0"]
+
+base_dir = Pathname.new(__FILE__).dirname.expand_path
+top_dir = base_dir.parent.parent
+tmp_dir = base_dir + "tmp"
 @download_dir = tmp_dir + "download"
 @build_dir = tmp_dir + "build"
 @dist_dir = tmp_dir + "dist"
@@ -35,6 +40,11 @@ end
 
 namespace(:build) do
   task(:prepare => [@build_dir.to_s])
+
+  desc("Use debug flags for building")
+  task(:debug) do
+    build_debug_p = true
+  end
 end
 
 libmsgpack_so_path = @dist_dir + "lib/libmsgpack.so"
@@ -46,11 +56,11 @@ namespace(:msgpack) do
   directory build_dir.to_s
 
   file(libmsgpack_so_path.to_s) do
-    Rake["msgpack:build"].invoke
+    Rake::Task["msgpack:intall"].invoke
   end
 
-  desc("Build MessagePack")
-  task(:build => ["download:prepare", "build:prepare", build_dir.to_s]) do
+  desc("Intall MessagePack")
+  task(:intall => ["download:prepare", "build:prepare", build_dir.to_s]) do
     base_url = "http://msgpack.org/releases/cpp"
     tar_gz_path = download("#{base_url}/#{tar_gz_basename}")
     source_path = build_dir + source_basename
@@ -58,7 +68,9 @@ namespace(:msgpack) do
       rm_rf(source_path.to_s)
       sh("tar", "xzf", tar_gz_path.to_s) or exit(false)
       Dir.chdir(source_path.to_s) do
-        sh("./configure", "--prefix=#{@dist_dir}") or exit(false)
+        options = ["--prefix=#{@dist_dir}"]
+        options.concat(debug_flags) if build_debug_p
+        sh("./configure", *options) or exit(false)
         sh("make", "-j8") or exit(false)
         sh("make", "install") or exit(false)
       end
@@ -75,11 +87,11 @@ namespace(:groonga) do
   directory build_dir.to_s
 
   file(libgroonga_so_path.to_s) do
-    Rake["groonga:build"].invoke
+    Rake::Task["groonga:intall"].invoke
   end
 
-  desc("Build groonga")
-  task(:build => [libmsgpack_so_path.to_s, build_dir.to_s]) do
+  desc("Intall groonga")
+  task(:intall => [libmsgpack_so_path.to_s, build_dir.to_s]) do
     base_url = "http://packages.groonga.org/source/groonga"
     tar_gz_path = download("#{base_url}/#{tar_gz_basename}")
     source_path = build_dir + source_basename
@@ -87,7 +99,9 @@ namespace(:groonga) do
       rm_rf(source_path.to_s)
       sh("tar", "xzf", tar_gz_path.to_s) or exit(false)
       Dir.chdir(source_path.to_s) do
-        sh("./configure", "--prefix=#{@dist_dir}") or exit(false)
+        options = ["--prefix=#{@dist_dir}"]
+        options.concat(debug_flags) if build_debug_p
+        sh("./configure", *options) or exit(false)
         sh("make", "-j8") or exit(false)
         sh("make", "install") or exit(false)
       end
@@ -104,12 +118,12 @@ namespace(:node) do
   directory build_dir.to_s
 
   file(node_path.to_s) do
-    Rake["node:build"].invoke
+    Rake::Task["node:intall"].invoke
   end
 
-  desc("Build Node.js")
+  desc("Intall Node.js")
   depended_libraries = [libmsgpack_so_path.to_s, libgroonga_so_path.to_s]
-  task(:build => [build_dir.to_s, *depended_libraries]) do
+  task(:intall => [build_dir.to_s, *depended_libraries]) do
     base_url = "http://nodejs.org/dist"
     tar_gz_path = download("#{base_url}/v#{version}/#{tar_gz_basename}")
     source_path = build_dir + source_basename
@@ -117,13 +131,34 @@ namespace(:node) do
       rm_rf(source_path.to_s)
       sh("tar", "xzf", tar_gz_path.to_s) or exit(false)
       Dir.chdir(source_path.to_s) do
-        sh("./configure", "--prefix=#{@dist_dir}") or exit(false)
+        options = ["--prefix=#{@dist_dir}"]
+        # options.concat(debug_flags) if build_debug_p
+        sh("./configure", *options) or exit(false)
         sh("make", "-j8") or exit(false)
         sh("make", "install") or exit(false)
       end
     end
   end
 end
+
+gcs_path = @dist_dir + "bin/gcs"
+namespace(:gcs) do
+  file(gcs_path.to_s) do
+    Rake::Task["gcs:install"].invoke
+  end
+
+  desc("Install Groonga CloudSearch")
+  task(:install => [node_path.to_s]) do
+    Dir.chdir(@dist_dir.to_s) do
+      bin_dir = @dist_dir + "bin"
+      path = ENV["PATH"]
+      sh("env", "PATH=#{bin_dir}:#{path}",
+         "bin/npm", "install", "-g", top_dir.to_s) or exit(false)
+    end
+  end
+end
+
+task(:default => gcs_path.to_s)
 
 desc("Remove all auto generated files")
 task(:clean) do
