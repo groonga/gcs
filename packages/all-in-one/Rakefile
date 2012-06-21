@@ -198,7 +198,7 @@ esac
 PATH="${bin_dir}:${PATH}"
 export PATH
 
-${bin_dir}/gcs
+"${bin_dir}/gcs" "$@"
 EOS
   end
   chmod(0755, run_gcs_path.to_s)
