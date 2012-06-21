@@ -94,7 +94,9 @@ suite('Configuration API', function() {
 
   test('Get, Action=DefineIndexField', function(done) {
     var path = '/?DomainName=companies&Action=CreateDomain&Version=2011-02-01';
-    utils.get(path)
+    utils.get(path, {
+                'Host': 'cloudsearch.localhost'
+              })
       .next(function(response) {
         var path = '/?DomainName=companies&IndexField.IndexFieldName=name&' +
                    'Action=DefineIndexField&Version=2011-02-01';
@@ -157,7 +159,9 @@ suite('Configuration API', function() {
 
   test('Get, no version', function(done) {
     var path = '/?Action=unknown';
-    utils.get(path)
+    utils.get(path, {
+                'Host': 'cloudsearch.localhost'
+              })
       .next(function(response) {
         var message = 'An input parameter "Version" that is mandatory for ' +
                       'processing the request is not supplied.';;
@@ -175,7 +179,9 @@ suite('Configuration API', function() {
 
   test('Get, invalid version', function(done) {
     var path = '/?Version=2011-02-02&Action=unknown';
-    utils.get(path)
+    utils.get(path, {
+                'Host': 'cloudsearch.localhost'
+              })
       .next(function(response) {
         var message = 'A bad or out-of-range value "2011-02-02" was supplied ' +
                       'for the "Version" input parameter.';
@@ -193,7 +199,9 @@ suite('Configuration API', function() {
 
   test('Get, invalid action', function(done) {
     var path = '/?Version=2011-02-01&Action=unknown';
-    utils.get(path)
+    utils.get(path, {
+                'Host': 'cloudsearch.localhost'
+              })
       .next(function(response) {
         var message = 'The action unknown is not valid for this web service.';
         var expected = {
