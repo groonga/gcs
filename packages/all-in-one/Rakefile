@@ -24,7 +24,8 @@ def download(url)
   return downloaded_path if downloaded_path.exist?
 
   url.open do |input|
-    downloaded_path.open("w", :encoding => "binary") do |output|
+    downloaded_path.open("w") do |output|
+      output.set_encoding("binary") if output.respond_to?(:set_encoding)
       buffer = ""
       while input.read(4096, buffer)
         output.print(buffer)
@@ -56,11 +57,11 @@ namespace(:msgpack) do
   directory build_dir.to_s
 
   file(libmsgpack_so_path.to_s) do
-    Rake::Task["msgpack:intall"].invoke
+    Rake::Task["msgpack:install"].invoke
   end
 
-  desc("Intall MessagePack")
-  task(:intall => ["download:prepare", "build:prepare", build_dir.to_s]) do
+  desc("Install MessagePack")
+  task(:install => ["download:prepare", "build:prepare", build_dir.to_s]) do
     base_url = "http://msgpack.org/releases/cpp"
     tar_gz_path = download("#{base_url}/#{tar_gz_basename}")
     source_path = build_dir + source_basename
@@ -87,11 +88,11 @@ namespace(:groonga) do
   directory build_dir.to_s
 
   file(libgroonga_so_path.to_s) do
-    Rake::Task["groonga:intall"].invoke
+    Rake::Task["groonga:install"].invoke
   end
 
-  desc("Intall groonga")
-  task(:intall => [libmsgpack_so_path.to_s, build_dir.to_s]) do
+  desc("Install groonga")
+  task(:install => [libmsgpack_so_path.to_s, build_dir.to_s]) do
     base_url = "http://packages.groonga.org/source/groonga"
     tar_gz_path = download("#{base_url}/#{tar_gz_basename}")
     source_path = build_dir + source_basename
@@ -100,6 +101,11 @@ namespace(:groonga) do
       sh("tar", "xzf", tar_gz_path.to_s) or exit(false)
       Dir.chdir(source_path.to_s) do
         options = ["--prefix=#{@dist_dir}"]
+        options << "--without-mecab"
+        options << "--without-libevent"
+        options << "--disable-zermq"
+        options << "--disable-libedit"
+        options << "--without-cutter"
         options.concat(debug_flags) if build_debug_p
         sh("./configure", *options) or exit(false)
         sh("make", "-j8") or exit(false)
@@ -118,12 +124,12 @@ namespace(:node) do
   directory build_dir.to_s
 
   file(node_path.to_s) do
-    Rake::Task["node:intall"].invoke
+    Rake::Task["node:install"].invoke
   end
 
-  desc("Intall Node.js")
+  desc("Install Node.js")
   depended_libraries = [libmsgpack_so_path.to_s, libgroonga_so_path.to_s]
-  task(:intall => [build_dir.to_s, *depended_libraries]) do
+  task(:install => [build_dir.to_s, *depended_libraries]) do
     base_url = "http://nodejs.org/dist"
     tar_gz_path = download("#{base_url}/v#{version}/#{tar_gz_basename}")
     source_path = build_dir + source_basename
