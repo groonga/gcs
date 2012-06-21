@@ -9,8 +9,6 @@ require "json"
 build_debug_p = ENV["BUILD_DEBUG"] == "yes"
 debug_flags = ["CFLAGS=-ggdb3 -O0", "CXXFLAGS=-ggdb3 -O0"]
 
-shared_object_extension = RbConfig::CONFIG["LIBRUBY_SO"].split(/\./).last
-
 base_dir = Pathname.new(__FILE__).dirname.expand_path
 top_dir = base_dir.parent.parent
 tmp_dir = base_dir + "tmp"
@@ -30,7 +28,19 @@ def detect_make
   end
 end
 
+def detect_shared_object_extension
+  case RUBY_PLATFORM
+  when /linux/, /bsd/
+    "so"
+  when /darwin/
+    "dylib"
+  else
+    RbConfig::CONFIG["LIBRUBY_SO"].split(/\./).last
+  end
+end
+
 make = ENV["MAKE"] || detect_make
+shared_object_extension = detect_shared_object_extension
 
 def download(url)
   url = URI.parse(url) unless url.is_a?(URI::Generic)
