@@ -13,6 +13,17 @@ suiteTeardown(function() {
   temporaryDatabase = undefined;
 });
 
+function createCommonErrorResponse(errorCode, message) {
+  return '<?xml version="1.0"?>\n' +
+         '<Response>' +
+           '<Errors>' +
+             '<Error><Code>' + errorCode +'</Code>' +
+                     '<Message>' + message + '</Message></Error>' +
+             '</Errors>' +
+           '<RequestID></RequestID>' +
+         '</Response>';
+}
+
 suite('Configuration API', function() {
   var database;
   var server;
@@ -123,9 +134,10 @@ suite('Configuration API', function() {
     var path = '/?Version=2011-02-01';
     utils.get(path)
       .next(function(response) {
+        var message = 'The request is missing an action or operation parameter.';
         var expected = {
               statusCode: 400,
-              body: 'Action must be given as the parameter "Action".'
+              body: createCommonErrorResponse('InvalidAction', message)
             };
         assert.deepEqual(response, expected);
         done();
@@ -139,9 +151,10 @@ suite('Configuration API', function() {
     var path = '/?Version=2011-02-01&Action=unknown';
     utils.get(path)
       .next(function(response) {
+        var message = 'The action unknown is not valid for this web service.';
         var expected = {
               statusCode: 400,
-              body: 'Action "unknown" is not supported.'
+              body: createCommonErrorResponse('InvalidAction', message)
             };
         assert.deepEqual(response, expected);
         done();
