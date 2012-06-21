@@ -1,11 +1,14 @@
 # -*- ruby -*-
 
+require "rbconfig"
 require "uri"
 require "pathname"
 require "open-uri"
 
 build_debug_p = ENV["BUILD_DEBUG"] == "yes"
 debug_flags = ["CFLAGS=-ggdb3 -O0", "CXXFLAGS=-ggdb3 -O0"]
+
+shared_object_extension = RbConfig::CONFIG["LIBRUBY_SO"].split(/\./).last
 
 base_dir = Pathname.new(__FILE__).dirname.expand_path
 top_dir = base_dir.parent.parent
@@ -48,7 +51,7 @@ namespace(:build) do
   end
 end
 
-libmsgpack_so_path = @dist_dir + "lib/libmsgpack.so"
+libmsgpack_so_path = @dist_dir + "lib/libmsgpack.#{shared_object_extension}"
 namespace(:msgpack) do
   version = "0.5.7"
   source_basename = "msgpack-#{version}"
@@ -79,7 +82,7 @@ namespace(:msgpack) do
   end
 end
 
-libgroonga_so_path = @dist_dir + "lib/libgroonga.so"
+libgroonga_so_path = @dist_dir + "lib/libgroonga.#{shared_object_extension}"
 namespace(:groonga) do
   version = "2.0.3"
   source_basename = "groonga-#{version}"
