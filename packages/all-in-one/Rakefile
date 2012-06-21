@@ -21,6 +21,17 @@ tmp_dir = base_dir + "tmp"
 directory @download_dir.to_s
 directory @build_dir.to_s
 
+def detect_make
+  case RUBY_PLATFORM
+  when /bsd/
+    "gmake"
+  else
+    "make"
+  end
+end
+
+make = ENV["MAKE"] || detect_make
+
 def download(url)
   url = URI.parse(url) unless url.is_a?(URI::Generic)
   basename = File.basename(url.path)
@@ -76,8 +87,8 @@ namespace(:msgpack) do
         options = ["--prefix=#{@dist_dir}"]
         options.concat(debug_flags) if build_debug_p
         sh("./configure", *options) or exit(false)
-        sh("make", "-j8") or exit(false)
-        sh("make", "install") or exit(false)
+        sh(make, "-j8") or exit(false)
+        sh(make, "install") or exit(false)
       end
     end
   end
@@ -112,8 +123,8 @@ namespace(:groonga) do
         options << "--without-cutter"
         options.concat(debug_flags) if build_debug_p
         sh("./configure", *options) or exit(false)
-        sh("make", "-j8") or exit(false)
-        sh("make", "install") or exit(false)
+        sh(make, "-j8") or exit(false)
+        sh(make, "install") or exit(false)
       end
     end
   end
@@ -144,8 +155,8 @@ namespace(:node) do
         options = ["--prefix=#{@dist_dir}"]
         # options.concat(debug_flags) if build_debug_p
         sh("./configure", *options) or exit(false)
-        sh("make", "-j8") or exit(false)
-        sh("make", "install") or exit(false)
+        sh(make, "-j8") or exit(false)
+        sh(make, "install") or exit(false)
       end
     end
   end
