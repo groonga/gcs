@@ -21,32 +21,32 @@ suite('domain', function() {
     test('too short', function() {
       assert.throw(function() {
         var domain = new Domain('va');
-      }, /too short domain name/)
+      }, /too short domain name/);
     });
 
     test('too long', function() {
       assert.throw(function() {
         var domain = new Domain('abcdefghijklmnopqrstuvwxyz' +
                                 '0123456789');
-      }, /too long domain name/)
+      }, /too long domain name/);
     });
 
     test('hyphen', function() {
       assert.throw(function() {
         var domain = new Domain('domain-name');
-      }, /"-" cannot appear in a domain name/)
+      }, /"-" cannot appear in a domain name/);
     });
 
     test('underscore', function() {
       assert.throw(function() {
         var domain = new Domain('domain_name');
-      }, /"_" cannot appear in a domain name/)
+      }, /"_" cannot appear in a domain name/);
     });
 
     test('upper case', function() {
       assert.throw(function() {
         var domain = new Domain('DomainName');
-      }, /"D", "N" cannot appear in a domain name/)
+      }, /"D", "N" cannot appear in a domain name/);
     });
 
     test('termsTableName', function() {
@@ -65,7 +65,7 @@ suite('domain', function() {
         assert.throw(function() {
           var request = { query: { DomainName: 'domain_name' } };
           var domain = new Domain(request);
-        }, /cannot appear in a domain name/)
+        }, /cannot appear in a domain name/);
       });
     });
 
@@ -82,7 +82,7 @@ suite('domain', function() {
           var host = 'doc-domain_name-id0123.us-east-1.example.com';
           var request = { headers: { host: host } };
           var domain = new Domain(request);
-        }, /cannot appear in a domain name/)
+        }, /cannot appear in a domain name/);
       });
     });
 
@@ -148,7 +148,7 @@ suite('domain', function() {
     test('too short', function() {
       assert.throw(function() {
         var field = new IndexField('va', domain);
-      }, /too short field name/)
+      }, /too short field name/);
     });
 
     test('too long', function() {
@@ -158,19 +158,19 @@ suite('domain', function() {
                         'abcdefghijklmnopqrstuvwxyz' +
                         '0123456789';
         var field = new IndexField(fieldName, domain);
-      }, /too long field name/)
+      }, /too long field name/);
     });
 
     test('hyphen', function() {
       assert.throw(function() {
         var field = new IndexField('field-name', domain);
-      }, /"-" cannot appear in a field name/)
+      }, /"-" cannot appear in a field name/);
     });
 
     test('upper case', function() {
       assert.throw(function() {
         var field = new IndexField('FieldName', domain);
-      }, /"F", "N" cannot appear in a field name/)
+      }, /"F", "N" cannot appear in a field name/);
     });
 
     test('indexColumnName', function() {
