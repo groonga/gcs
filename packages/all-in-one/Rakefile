@@ -198,7 +198,7 @@ esac
 PATH="${bin_dir}:${PATH}"
 export PATH
 
-gcs
+${bin_dir}/gcs
 EOS
   end
   chmod(0755, run_gcs_path.to_s)
@@ -217,7 +217,7 @@ end
 task(:package => gcs_path.to_s) do
   rm_rf(gcs_package_path.to_s)
   cp_r(@dist_dir.to_s, gcs_package_path.to_s)
-  run_gcs_path = @dist_dir + "bin/run-gcs"
+  run_gcs_path = @dist_dir + "gcs"
   create_gcs_wrapper(run_gcs_path)
   Dir.chdir(gcs_package_path.dirname.to_s) do
     sh("tar", "czf", gcs_package_tar_gz_path.to_s, gcs_package_basename)
