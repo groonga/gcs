@@ -4,6 +4,9 @@ require "uri"
 require "pathname"
 require "open-uri"
 
+build_debug_p = ENV["BUILD_DEBUG"] == "yes"
+debug_flags = ["CFLAGS=-ggdb3 -O0", "CXXFLAGS=-ggdb3 -O0"]
+
 base_dir = Pathname.new(__FILE__).dirname.expand_path
 top_dir = base_dir.parent.parent
 tmp_dir = base_dir + "tmp"
@@ -37,6 +40,11 @@ end
 
 namespace(:build) do
   task(:prepare => [@build_dir.to_s])
+
+  desc("Use debug flags for building")
+  task(:debug) do
+    build_debug_p = true
+  end
 end
 
 libmsgpack_so_path = @dist_dir + "lib/libmsgpack.so"
@@ -60,7 +68,9 @@ namespace(:msgpack) do
       rm_rf(source_path.to_s)
       sh("tar", "xzf", tar_gz_path.to_s) or exit(false)
       Dir.chdir(source_path.to_s) do
-        sh("./configure", "--prefix=#{@dist_dir}") or exit(false)
+        options = ["--prefix=#{@dist_dir}"]
+        options.concat(debug_flags) if build_debug_p
+        sh("./configure", *options) or exit(false)
         sh("make", "-j8") or exit(false)
         sh("make", "install") or exit(false)
       end
@@ -89,7 +99,9 @@ namespace(:groonga) do
       rm_rf(source_path.to_s)
       sh("tar", "xzf", tar_gz_path.to_s) or exit(false)
       Dir.chdir(source_path.to_s) do
-        sh("./configure", "--prefix=#{@dist_dir}") or exit(false)
+        options = ["--prefix=#{@dist_dir}"]
+        options.concat(debug_flags) if build_debug_p
+        sh("./configure", *options) or exit(false)
         sh("make", "-j8") or exit(false)
         sh("make", "install") or exit(false)
       end
@@ -119,7 +131,9 @@ namespace(:node) do
       rm_rf(source_path.to_s)
       sh("tar", "xzf", tar_gz_path.to_s) or exit(false)
       Dir.chdir(source_path.to_s) do
-        sh("./configure", "--prefix=#{@dist_dir}") or exit(false)
+        options = ["--prefix=#{@dist_dir}"]
+        options.concat(debug_flags) if build_debug_p
+        sh("./configure", *options) or exit(false)
         sh("make", "-j8") or exit(false)
         sh("make", "install") or exit(false)
       end
