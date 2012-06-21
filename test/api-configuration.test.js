@@ -67,7 +67,7 @@ suite('Configuration API', function() {
                           '<SearchService>' +
                             '<Endpoint>http://search-companies-example.localhost/2011-02-01/search</Endpoint>' +
                           '</SearchService>' +
-                        '</DomainStatus>';
+                        '</DomainStatus>' +
                       '</CreateDomainResult>' +
                       '<ResponseMetadata>' +
                         '<RequestId></RequestId>' +
@@ -122,7 +122,7 @@ suite('Configuration API', function() {
                             '<UpdateDate>...</UpdateDate>' +
                             '<UpdateVersion>0</UpdateVersion>' +
                           '</Status>' +
-                        '</IndexField>';
+                        '</IndexField>' +
                       '</DefineIndexFieldResult>' +
                       '<ResponseMetadata>' +
                         '<RequestId></RequestId>' +
