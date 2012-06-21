@@ -24,6 +24,9 @@ function createCommonErrorResponse(errorCode, message) {
          '</Response>';
 }
 
+var XMLNS = 'http://cloudsearch.amazonaws.com/doc/2011-02-01';
+var FAKE_DOMAIN_ID = 'example';
+
 suite('Configuration API', function() {
   var database;
   var server;
@@ -40,13 +43,38 @@ suite('Configuration API', function() {
 
   test('Get, Action=CreateDomain', function(done) {
     var path = '/?DomainName=companies&Action=CreateDomain&Version=2011-02-01';
-    utils.get(path)
+    utils.get(path, {
+                'Host': 'cloudsearch.localhost'
+              })
       .next(function(response) {
         var expected = {
               statusCode: 200,
-              body: ''
+              body: '<?xml version="1.0"?>\n' +
+                    '<CreateDomainResponse xmlns="' + XMLNS + '">' +
+                      '<CreateDomainResult>' +
+                        '<DomainStatus>' +
+                          '<Created>true</Created>' +
+                          '<Deleted>false</Deleted>' +
+                          '<DocService>' +
+                            '<Endpoint>http://doc-companies-example.localhost/2011-02-01/documents</Endpoint>' +
+                          '</DocService>' +
+                          '<DomainId>' + FAKE_DOMAIN_ID + '</DomainId>' +
+                          '<DomainName>companies</DomainName>' +
+                          '<NumSearchableDocs>0</NumSearchableDocs>' +
+                          '<RequiresIndexDocuments>false</RequiresIndexDocuments>' +
+                          '<SearchInstanceCount>0</SearchInstanceCount>' +
+                          '<SearchPartitionCount>0</SearchPartitionCount>' +
+                          '<SearchService>' +
+                            '<Endpoint>http://search-companies-example.localhost/2011-02-01/search</Endpoint>' +
+                          '</SearchService>' +
+                        '</DomainStatus>';
+                      '</CreateDomainResult>' +
+                      '<ResponseMetadata>' +
+                        '<RequestId></RequestId>' +
+                      '</ResponseMetadata>' +
+                    '</CreateDomainResponse>'
             };
-//        assert.deepEqual(response, expected);
+        assert.deepEqual(response, expected);
 
         var dump = database.commandSync('dump', {
               tables: 'companies'
@@ -75,9 +103,38 @@ suite('Configuration API', function() {
       .next(function(response) {
         var expected = {
               statusCode: 200,
-              body: ''
+              body: '<?xml version="1.0"?>\n' +
+                    '<DefineIndexFieldResponse xmlns="' + XMLNS + '">' +
+                      '<DefineIndexFieldResult>' +
+                        '<IndexField>' +
+                          '<Options>' +
+                            '<IndexFieldName>name</IndexFieldName>' +
+                            '<IndexFieldType>text</IndexFieldType>' +
+                            '<TextOptions>' +
+                              '<DefaultValue/>' +
+                              '<FacetEnabled>false</FacetEnabled>' +
+                              '<ResultEnabled>true</ResultEnabled>' +
+                            '</TextOptions>' +
+                          '</Options>' +
+                          '<Status>' +
+                            '<CreationDate>...</CreationDate>' +
+                            '<State>RequiresIndexDocuments</State>' +
+                            '<UpdateDate>...</UpdateDate>' +
+                            '<UpdateVersion>0</UpdateVersion>' +
+                          '</Status>' +
+                        '</IndexField>';
+                      '</DefineIndexFieldResult>' +
+                      '<ResponseMetadata>' +
+                        '<RequestId></RequestId>' +
+                      '</ResponseMetadata>' +
+                    '</DefineIndexFieldResponse>'
             };
-//        assert.deepEqual(response, expected);
+        var actual = {
+              statusCode: response.statusCode,
+              body: response.body
+                      .replace(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/g, '')
+            };
+        assert.deepEqual(actual, expected);
 
         var dump = database.commandSync('dump', {
               tables: 'companies'

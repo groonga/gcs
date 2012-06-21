@@ -21,41 +21,14 @@ function setupServer(database) {
 }
 exports.setupServer = setupServer;
 
-function get(path) {
-  var deferred = new Deferred();
-
-  var options = {
-        host: testHost,
-        port: testPort,
-        path: path
-      };
-  http.get(options, function(response) {
-    var body = '';
-    response.on('data', function(data) {
-      body += data;
-    });
-    response.on('end', function() {
-      deferred.call({
-        statusCode: response.statusCode,
-        body: body
-      });
-    });
-  }).on('error', function(error) {
-    deferred.fail(error);
-  });
-
-  return deferred;
-}
-exports.get = get;
-
-function post(path, body, headers) {
+function sendRequest(method, path, postData, headers) {
   var deferred = new Deferred();
 
   var options = {
         host: testHost,
         port: testPort,
         path: path,
-        method: 'POST',
+        method: method,
         headers: {}
       };
 
@@ -83,11 +56,20 @@ function post(path, body, headers) {
       deferred.fail(error);
     });
 
-    if (body) request.write(body);
+    if (postData) request.write(postData);
     request.end();
   });
 
   return deferred;
+}
+
+function get(path, headers) {
+  return sendRequest('GET', path, null, headers);
+}
+exports.get = get;
+
+function post(path, body, headers) {
+  return sendRequest('POST', path, body, headers);
 }
 exports.post = post;
 
