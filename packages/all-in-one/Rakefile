@@ -24,7 +24,8 @@ def download(url)
   return downloaded_path if downloaded_path.exist?
 
   url.open do |input|
-    downloaded_path.open("w", :encoding => "binary") do |output|
+    downloaded_path.open("w") do |output|
+      output.set_encoding("binary") if output.respond_to?(:set_encoding)
       buffer = ""
       while input.read(4096, buffer)
         output.print(buffer)
