@@ -168,6 +168,43 @@ namespace(:gcs) do
   end
 end
 
+run_gcs_path = @dist_dir + "bin/run-gcs"
+file(run_gcs_path.to_s => gcs_path.to_s) do
+  run_gcs_path.open("w") do |run_gcs|
+    run_gcs.puts(<<-EOS)
+#!/bin/sh
+
+set -e
+
+top_dir="$(dirname $0)/.."
+top_dir="$(cd \"${top_dir}\" && pwd)"
+
+bin_dir="${top_dir}/bin"
+lib_dir="${top_dir}/lib"
+
+case $(uname) in
+  Darwin)
+    DYLD_LIBRARY_PATH="${lib_dir}${DYLD_LIBRARY_PATH:+:}${DYLD_LIBRARY_PATH}"
+    export DYLD_LIBRARY_PATH
+    ;;
+  Linux|*BSD)
+    LD_LIBRARY_PATH="${lib_dir}${LD_LIBRARY_PATH:+:}${LD_LIBRARY_PATH}"
+    export LD_LIBRARY_PATH
+    ;;
+  *)
+    :
+    ;;
+esac
+
+PATH="${bin_dir}:${PATH}"
+export PATH
+
+gcs
+EOS
+  end
+  chmod(0755, run_gcs_path.to_s)
+end
+
 gcs_package_json = top_dir + "package.json"
 gcs_version = JSON.parse(gcs_package_json.read)["version"]
 gcs_package_basename = "gcs-#{gcs_version}"
@@ -178,7 +215,7 @@ file(gcs_package_tar_gz_path.to_s) do
   Rake::Task["package"]
 end
 
-task(:package => gcs_path.to_s) do
+task(:package => run_gcs_path.to_s) do
   rm_rf(gcs_package_path.to_s)
   cp_r(@dist_dir.to_s, gcs_package_path.to_s)
   Dir.chdir(gcs_package_path.dirname.to_s) do
