@@ -119,9 +119,9 @@ suite('Configuration API', function() {
                             '</TextOptions>' +
                           '</Options>' +
                           '<Status>' +
-                            '<CreationDate>...</CreationDate>' +
+                            '<CreationDate>1970-01-01T00:00:00Z</CreationDate>' +
                             '<State>RequiresIndexDocuments</State>' +
-                            '<UpdateDate>...</UpdateDate>' +
+                            '<UpdateDate>1970-01-01T00:00:00Z</UpdateDate>' +
                             '<UpdateVersion>0</UpdateVersion>' +
                           '</Status>' +
                         '</IndexField>' +
@@ -134,7 +134,8 @@ suite('Configuration API', function() {
         var actual = {
               statusCode: response.statusCode,
               body: response.body
-                      .replace(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/g, '...')
+                      .replace(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/g,
+                               '1970-01-01T00:00:00Z')
             };
         assert.deepEqual(actual, expected);
 
