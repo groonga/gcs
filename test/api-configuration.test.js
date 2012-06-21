@@ -99,7 +99,7 @@ suite('Configuration API', function() {
   });
 
   test('Get, no version', function(done) {
-    var path = '/';
+    var path = '/?Action=unknown';
     utils.get(path)
       .next(function(response) {
         var message = 'An input parameter "Version" that is mandatory for ' +
@@ -117,7 +117,7 @@ suite('Configuration API', function() {
   });
 
   test('Get, invalid version', function(done) {
-    var path = '/?Version=2011-02-02';
+    var path = '/?Version=2011-02-02&Action=unknown';
     utils.get(path)
       .next(function(response) {
         var message = 'A bad or out-of-range value "2011-02-02" was supplied ' +
@@ -125,23 +125,6 @@ suite('Configuration API', function() {
         var expected = {
               statusCode: 400,
               body: createCommonErrorResponse('InvalidParameterValue', message)
-            };
-        assert.deepEqual(response, expected);
-        done();
-      })
-      .error(function(error) {
-        done(error);
-      });
-  });
-
-  test('Get, no action', function(done) {
-    var path = '/?Version=2011-02-01';
-    utils.get(path)
-      .next(function(response) {
-        var message = 'The request is missing an action or operation parameter.';
-        var expected = {
-              statusCode: 400,
-              body: createCommonErrorResponse('MissingAction', message)
             };
         assert.deepEqual(response, expected);
         done();
