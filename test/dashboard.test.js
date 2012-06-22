@@ -27,7 +27,7 @@ suite('dashboard', function() {
         body += data;
       });
       response.on('end', function() {
-        assert.match(body, /<h1>Groonga CloudSearch<\/h1>/);
+        assert.match(body, /Groonga CloudSearch/);
         done();
       });
     });
