@@ -1,22 +1,38 @@
 function renderResults(data) {
-  var template = $('script#table-template').text();
+  var template = $('script#results-template').text();
   var rendered = jade.compile(template)(data);
-  $(results).html(rendered);
+  $('#results').html(rendered);
+}
+
+function renderRequestInformation(data) {
+  var template = $('script#request-information-template').text();
+  var rendered = jade.compile(template)(data);
+  $('#request-information').html(rendered);
+}
+
+function onSearch() {
+  var query = $('form#search input[name="query"]').val();
+  var domain = $('form#domain input[name="domain-name"]').val();
+  var searchEndpoint = 'http://search-' + domain + '-example.localhost:3000/2011-02-01/search'; // TODO
+  var params = {q: query};
+  var urlForRawRequest = searchEndpoint + '?' + jQuery.param(params);
+  renderRequestInformation({urlForRawRequest: urlForRawRequest});
+
+  $('#results').hide();
+  $.ajax({
+    type: 'GET',
+    url: searchEndpoint,
+    data: params,
+    dataType: 'jsonp',
+    success: function(data) {
+      renderResults(data);
+      $('#results').show();
+    }
+  });
+  return false;
 }
 
 $(document).ready(function($) {
-  $('form.search').submit(function() {
-    var query = $('form.search input[name="query"]').val();
-
-    $.ajax({
-      type: 'GET',
-      url: 'http://search-companies-example.localhost:3000/2011-02-01/search', // TODO
-      data: {q: query},
-      dataType: 'jsonp',
-      success: function(data) {
-        renderResults(data);
-      }
-    });
-    return false;
-  });
+  $('form#domain').submit(onSearch);
+  $('form#search').submit(onSearch);
 });

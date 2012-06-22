@@ -1,0 +1,11 @@
+body {
+  margin-top: 60px;
+}
+
+.id-row {
+  background-color: #f4f9fe;
+}
+
+.id-cell {
+  font-weight: bold;
+}

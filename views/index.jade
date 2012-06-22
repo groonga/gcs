@@ -1,20 +1,6 @@
-h2 dashboard
+form#search.form-search
+  input.search-query(type="text", name="query", value="")
+  input.btn(type="submit", value="Search")
 
-script#table-template(type="text/html")
-  |table
-  |  each record, index in hits.hit
-  |    tr
-  |      td= index
-  |      td= record.id
-  |      td
-  |    each value, columnName in record.data
-  |      tr
-  |        td
-  |        td= columnName
-  |        td= value
-
-form.search
-  input(type="text", name="query", value="tokyo")
-  input(type="submit", value="Search")
-
-table#results
+#request-information
+#results
