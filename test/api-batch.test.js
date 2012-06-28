@@ -37,7 +37,7 @@ suite('documents/batch API', function() {
     utils.post(path, batch, {
       'Content-Type': 'application/json',
       'Content-Length': batch.length,
-      'Host': 'doc-companies-example.localhost'
+      'Host': 'doc-companies-00000000000000000000000000.localhost'
     })
       .next(function(response) {
         var expected = {
@@ -66,7 +66,7 @@ suite('documents/batch API', function() {
     var path = '/2011-02-01/documents/batch';
     utils.post(path, 'foobar', {
       'Content-Length': 'foobar'.length,
-      'Host': 'doc-companies-example.localhost'
+      'Host': 'doc-companies-00000000000000000000000000.localhost'
     })
       .next(function(response) {
         var expected = {
@@ -93,7 +93,7 @@ suite('documents/batch API', function() {
     utils.post(path, 'foobar', {
       'Content-Type': 'text/plain',
       'Content-Length': 'foobar'.length,
-      'Host': 'doc-companies-example.localhost'
+      'Host': 'doc-companies-00000000000000000000000000.localhost'
     })
       .next(function(response) {
         var expected = {
@@ -119,7 +119,7 @@ suite('documents/batch API', function() {
     var path = '/2011-02-01/documents/batch';
     utils.post(path, '[]', {
       'Content-Type': 'application/json',
-      'Host': 'doc-companies-example.localhost'
+      'Host': 'doc-companies-00000000000000000000000000.localhost'
     })
       .next(function(response) {
         var expected = {
@@ -147,7 +147,7 @@ suite('documents/batch API', function() {
     utils.post(path, batch, {
       'Content-Type': 'application/json',
       'Content-Length': batch.length,
-      'Host': 'doc-companies-example.localhost'
+      'Host': 'doc-companies-00000000000000000000000000.localhost'
     })
       .next(function(response) {
         var expected = {

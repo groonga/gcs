@@ -25,7 +25,7 @@ function createCommonErrorResponse(errorCode, message) {
 }
 
 var XMLNS = 'http://cloudsearch.amazonaws.com/doc/2011-02-01';
-var FAKE_DOMAIN_ID = 'example';
+var FAKE_DOMAIN_ID = '00000000000000000000000000';
 
 suite('Configuration API', function() {
   var database;
@@ -56,7 +56,7 @@ suite('Configuration API', function() {
                           '<Created>true</Created>' +
                           '<Deleted>false</Deleted>' +
                           '<DocService>' +
-                            '<Endpoint>http://doc-companies-example.localhost/2011-02-01/documents</Endpoint>' +
+                            '<Endpoint>http://doc-companies-00000000000000000000000000.localhost/2011-02-01/documents</Endpoint>' +
                           '</DocService>' +
                           '<DomainId>' + FAKE_DOMAIN_ID + '/companies</DomainId>' +
                           '<DomainName>companies</DomainName>' +
@@ -65,7 +65,7 @@ suite('Configuration API', function() {
                           '<SearchInstanceCount>0</SearchInstanceCount>' +
                           '<SearchPartitionCount>0</SearchPartitionCount>' +
                           '<SearchService>' +
-                            '<Endpoint>http://search-companies-example.localhost/2011-02-01/search</Endpoint>' +
+                            '<Endpoint>http://search-companies-00000000000000000000000000.localhost/2011-02-01/search</Endpoint>' +
                           '</SearchService>' +
                         '</DomainStatus>' +
                       '</CreateDomainResult>' +
