@@ -19,7 +19,7 @@
   "dependencies": {
     "commander": "",
     "nroonga": "0.1.6",
-    "express": "",
+    "express": "2.5.9",
     "jsdeferred": "",
     "mkdirp": "",
     "jade": "",
