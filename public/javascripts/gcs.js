@@ -13,7 +13,7 @@ function renderRequestInformation(data) {
 function onSearch() {
   var query = $('form#search input[name="query"]').val();
   var domain = $('form#domain input[name="domain-name"]').val();
-  var searchEndpoint = 'http://search-' + domain + '-example.localhost:3000/2011-02-01/search'; // TODO
+  var searchEndpoint = 'http://search-' + domain + '-00000000000000000000000000.localhost:3000/2011-02-01/search';
   var params = {q: query};
   var urlForRawRequest = searchEndpoint + '?' + jQuery.param(params);
   renderRequestInformation({urlForRawRequest: urlForRawRequest});
