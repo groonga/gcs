@@ -30,7 +30,8 @@
     "start": "./bin/gcs"
   },
   "bin": {
-    "gcs": "./bin/gcs"
+    "gcs": "./bin/gcs",
+    "gcs-import-examples": "./bin/gcs-import-examples"
   },
   "main": "./lib/server",
   "engines": {
