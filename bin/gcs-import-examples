@@ -10,8 +10,8 @@ Prerequsites:
 
 1) You need to direct 'doc-example-example.localhost' and 'search-example-example.localhost' to 127.0.0.1 before trying this example. To do so:
 
-$ sudo sh -c 'echo "127.0.0.1 doc-companies-example.localhost" >> /etc/hosts'
-$ sudo sh -c 'echo "127.0.0.1 search-companies-example.localhost" >> /etc/hosts'
+$ sudo sh -c 'echo "127.0.0.1 doc-example-example.localhost" >> /etc/hosts'
+$ sudo sh -c 'echo "127.0.0.1 search-example-example.localhost" >> /etc/hosts'
 
 2) You need to run gcs on port 3000. Just run gcs command without any options.
 
