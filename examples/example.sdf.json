@@ -1,0 +1,105 @@
+[
+  {
+    "type": "add",
+    "id": "id1",
+    "version": 1,
+    "lang": "en",
+    "fields": {
+      "name": "Brazil",
+      "address": "Shibuya, Tokyo, Japan",
+      "email_address": "info@razil.jp"
+    }
+  },
+  {
+    "type": "add",
+    "id": "id2",
+    "version": 1,
+    "lang": "en",
+    "fields": {
+      "name": "Enishi Tech Inc.",
+      "address": "Sapporo, Hokkaido, Japan",
+      "email_address": "info@enishi-tech.com"
+    }
+  },
+  {
+    "type": "add",
+    "id": "id3",
+    "version": 1,
+    "lang": "en",
+    "fields": {
+      "name": "ClearCode Inc.",
+      "address": "Hongo, Tokyo, Japan",
+      "email_address": "info@clear-code.com"
+    }
+  },
+  {
+    "type": "add",
+    "id": "id4",
+    "version": 1,
+    "lang": "en",
+    "fields": {
+      "name": "Anaheim Electronics",
+      "address": "Granada, Moon"
+    }
+  },
+  {
+    "type": "add",
+    "id": "id5",
+    "version": 1,
+    "lang": "en",
+    "fields": {
+      "name": "Shinsei Industry",
+      "address": "Earth"
+    }
+  },
+  {
+    "type": "add",
+    "id": "id6",
+    "version": 1,
+    "lang": "en",
+    "fields": {
+      "name": "Omni Consumer Products",
+      "address": "Detroit and Delta City, Michigan, United States"
+    }
+  },
+  {
+    "type": "add",
+    "id": "id7",
+    "version": 1,
+    "lang": "en",
+    "fields": {
+      "name": "Capsule Corporation",
+      "address": "West City"
+    }
+  },
+  {
+    "type": "add",
+    "id": "id8",
+    "version": 1,
+    "lang": "en",
+    "fields": {
+      "name": "Stark Industries",
+      "address": "United States"
+    }
+  },
+  {
+    "type": "add",
+    "id": "id9",
+    "version": 1,
+    "lang": "en",
+    "fields": {
+      "name": "Umbrella Corporation",
+      "address": "Tokyo, Japan"
+    }
+  },
+  {
+    "type": "add",
+    "id": "id10",
+    "version": 1,
+    "lang": "en",
+    "fields": {
+      "name": "U.S. Robots and Mechanical Men",
+      "address": "New York, United States"
+    }
+  }
+]

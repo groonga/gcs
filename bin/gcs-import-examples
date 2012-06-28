@@ -1,0 +1,67 @@
+#!/bin/sh
+
+cat <<EOT
+Groonga CloudSearch example data importer
+-----------------------------------------
+
+This script setup an example domain and import data into the domain.
+
+Prerequsites:
+
+1) You need to direct 'doc-example-example.localhost' and 'search-example-example.localhost' to 127.0.0.1 before trying this example. To do so:
+
+$ sudo sh -c 'echo "127.0.0.1 doc-companies-example.localhost" >> /etc/hosts'
+$ sudo sh -c 'echo "127.0.0.1 search-companies-example.localhost" >> /etc/hosts'
+
+2) You need to run gcs on port 3000. Just run gcs command without any options.
+
+$ gcs
+
+NOTICE:
+
+If you have data in the domain whose name is 'example', it will be updated.
+
+
+EOT
+
+echo "Hit enter to continue. Ctrl-C to break."
+read
+
+
+echo "==== Creating 'example' domain"
+
+curl -s "http://127.0.0.1:3000/?DomainName=example&Action=CreateDomain&Version=2011-02-01"
+echo
+echo
+
+echo "==== Adding index fields"
+echo "== Creating 'name' field"
+curl -s "http://127.0.0.1:3000/?Action=DefineIndexField&DomainName=example&IndexField.IndexFieldName=name&Version=2011-02-01"
+echo
+echo "== Creating 'address' field"
+curl -s "http://127.0.0.1:3000/?Action=DefineIndexField&DomainName=example&IndexField.IndexFieldName=address&Version=2011-02-01"
+echo
+echo "== Creating 'email_address' field"
+curl -s "http://127.0.0.1:3000/?Action=DefineIndexField&DomainName=example&IndexField.IndexFieldName=email_address&Version=2011-02-01"
+echo
+
+echo
+echo "==== Indexing data"
+sdf_path=$(cd $(dirname $0);pwd)/../examples/example.sdf.json
+
+curl -X POST --upload-file $sdf_path --header "Content-Type: application/json" -H "Host: doc-example-example.localhost" http://127.0.0.1:3000/2011-02-01/documents/batch
+echo
+
+echo
+echo "Done."
+
+cat <<EOT
+
+Now you can try searching by
+
+$ curl -H "Host: search-example-example.localhost" "http://127.0.0.1:3000/2011-02-01/search?q=Tokyo"
+
+or, open
+http://127.0.0.1:3000
+for web dashboard.
+EOT
