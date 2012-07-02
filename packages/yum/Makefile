@@ -1,7 +1,7 @@
 REPOSITORIES_PATH = repositories
 DISTRIBUTIONS = fedora centos
 ARCHITECTURES = i386 x86_64
-PACKAGES = nodejs-msgpack2
+PACKAGES = nodejs-msgpack2 nodejs-nroonga
 CHROOT_BASE = /var/lib/chroot
 RSYNC_PATH = packages@packages.groonga.org:public
 HAVE_DEVELOPMENT_BRANCH = no

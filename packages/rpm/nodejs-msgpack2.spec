@@ -19,7 +19,7 @@ Requires:       nodejs
 %{summary}.
 
 %prep
-%setup -q -n %{name}
+%setup -q -n package
 
 %build
 make

@@ -112,9 +112,10 @@ mkdir -p rpm/BUILD
 mkdir -p rpm/RPMS
 mkdir -p rpm/SRPMS
 
+set -x
 cp /tmp/${PACKAGE}.spec rpm/SPECS/
-for source in $(spectool rpm/SPECS/${PACKAGE}.spec | sed -e 's,.*,,'); do
-  if [ ! -f rpm/SOURCES/$source ]; then
+for source in \$(spectool rpm/SPECS/${PACKAGE}.spec | sed -e 's,.*/,,'); do
+  if [ ! -f rpm/SOURCES/\$source ]; then
     spectool -g -R rpm/SPECS/${PACKAGE}.spec
     break
   fi
