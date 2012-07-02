@@ -2,3 +2,4 @@
 /test/tmp
 /packages/all-in-one/tmp/
 /packages/all-in-one/*.tar.gz
+/packages/yum/repositories/
