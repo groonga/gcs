@@ -196,7 +196,7 @@ def create_gcs_wrapper(run_gcs_path)
 
 set -e
 
-top_dir="$(dirname $0)/.."
+top_dir="$(dirname $0)"
 top_dir="$(cd \"${top_dir}\" && pwd)"
 
 bin_dir="${top_dir}/bin"
