@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "commander": "",
-    "nroonga": "0.1.6",
+    "nroonga": "0.1.9",
     "express": "2.5.10",
     "jsdeferred": "",
     "mkdirp": "",
@@ -35,6 +35,6 @@
   },
   "main": "./lib/server",
   "engines": {
-    "node": "~ 0.6.18"
+    "node": "~ 0.6.12"
   }
 }
