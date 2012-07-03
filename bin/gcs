@@ -8,7 +8,7 @@ var defaultDatabasePath = process.env.HOME + '/.gcs/database/gcs';
 program
   .version(require('../package').version)
   .usage('[options]')
-  .option('-p, --port <port>', 'specify port [3000]', Number, 3000)
+  .option('-p, --port <port>', 'specify port [7575]', Number, 7575)
   .option('--database-path <path>', 'database path [' + defaultDatabasePath + ']', String, defaultDatabasePath)
   .parse(process.argv);
 
