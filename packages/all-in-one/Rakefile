@@ -199,9 +199,10 @@ namespace(:gcs) do
   end
 end
 
-def create_gcs_wrapper(run_gcs_path)
-  run_gcs_path.open("w") do |run_gcs|
-    run_gcs.puts(<<-EOS)
+def create_wrapper_script(executable_name, destination_path)
+  wrapper_script_path = destination_path + executable_name
+  wrapper_script_path.open("w") do |wrapper_script|
+    wrapper_script.puts(<<-EOS)
 #!/bin/sh
 
 set -e
@@ -229,14 +230,15 @@ esac
 PATH="${bin_dir}:${PATH}"
 export PATH
 
-"${bin_dir}/gcs" "$@"
+"${bin_dir}/#{executable_name}" "$@"
 EOS
   end
-  chmod(0755, run_gcs_path.to_s)
+  chmod(0755, wrapper_script_path.to_s)
 end
 
 gcs_package_json = top_dir + "package.json"
-gcs_version = JSON.parse(gcs_package_json.read)["version"]
+package_json = JSON.parse(gcs_package_json.read)
+gcs_version = package_json["version"]
 gcs_package_basename = "gcs-#{gcs_version}"
 gcs_package_tar_gz = "#{gcs_package_basename}.tar.gz"
 gcs_package_path = tmp_dir + gcs_package_basename
@@ -244,12 +246,14 @@ gcs_package_tar_gz_path = base_dir + gcs_package_tar_gz
 file(gcs_package_tar_gz_path.to_s) do
   Rake::Task["package"]
 end
+executables_to_wrap = package_json['bin'].keys
 
 task(:package => gcs_path.to_s) do
   rm_rf(gcs_package_path.to_s)
   cp_r(@dist_dir.to_s, gcs_package_path.to_s)
-  run_gcs_path = gcs_package_path + "gcs"
-  create_gcs_wrapper(run_gcs_path)
+  executables_to_wrap.each do |executable_name|
+    create_wrapper_script(executable_name, gcs_package_path)
+  end
   Dir.chdir(gcs_package_path.dirname.to_s) do
     sh("tar", "czf", gcs_package_tar_gz_path.to_s, gcs_package_basename)
   end
