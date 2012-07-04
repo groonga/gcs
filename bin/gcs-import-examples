@@ -10,7 +10,7 @@ Prerequsites:
 
 1) You need to direct 'doc-example-00000000000000000000000000.localhost' and 'search-example-00000000000000000000000000.localhost' to 127.0.0.1 before trying this example. The following command will make these entries on /etc/hosts:
 
-$ sudo gcs-register-domain example
+$ sudo gcs-register-hosts example
 
 2) You need to run gcs on port 7575. Just run gcs command without any options.
 
