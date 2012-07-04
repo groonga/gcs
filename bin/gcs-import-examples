@@ -63,7 +63,7 @@ If you have data in the domain whose name is 'example', it will be updated.
 
 Hit enter to continue. Ctrl-C to break.
 EOT
-read
+read enter
 
 
 echo "==== Creating 'example' domain"
