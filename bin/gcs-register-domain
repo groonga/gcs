@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ "$#" == "0" ]
+if [ $# -eq 0 ]
 then
   echo "Usage: $0 [domain-name] ..."
   echo "Register host entries for the domain [domain-name] to /etc/hosts"
