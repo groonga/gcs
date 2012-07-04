@@ -15,6 +15,6 @@ else
     done
   else
     echo "You don't have write access to /etc/hosts."
-    echo "Try 'sudo $0 [domain-name]'"
+    echo "Try 'sudo $0 $@'"
   fi
 fi
