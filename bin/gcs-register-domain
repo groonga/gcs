@@ -1,0 +1,20 @@
+#!/bin/sh
+
+if [ "$#" == "0" ]
+then
+  echo "Usage: $0 [domain-name]"
+  echo "Add host entries for the domain [domain-name] to /etc/hosts"
+else
+  if [ -w /etc/hosts ]
+  then
+    for domain_name in "$@"
+    do
+      echo "Registering entries for '$domain_name' to /etc/hosts"
+      echo "127.0.0.1 doc-$domain_name-00000000000000000000000000.localhost" >> /etc/hosts
+      echo "127.0.0.1 search-$domain_name-00000000000000000000000000.localhost"  >> /etc/hosts
+    done
+  else
+    echo "You don't have write access to /etc/hosts."
+    echo "Try 'sudo $0 [domain-name]'"
+  fi
+fi
