@@ -46,7 +46,17 @@ echo
 
 echo
 echo "==== Indexing data"
-sdf_path=`npm -g root`/gcs/examples/example.sdf.json
+sdf_path=
+sdf_base_path=examples/example.sdf.json
+for sdf_path_prefix in "`dirname $0`/.." "`npm root`/gcs" "`npm -g root`/gcs"
+do
+    sdf_path="$sdf_path_prefix/$sdf_base_path"
+    if [ -f "$sdf_path" ]; then
+	break
+    else
+	sdf_path=
+    fi
+done
 
 curl -X POST --upload-file $sdf_path --header "Content-Type: application/json" -H "Host: doc-example-00000000000000000000000000.localhost" http://127.0.0.1:7575/2011-02-01/documents/batch
 echo
