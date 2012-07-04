@@ -1,29 +1,68 @@
 #!/bin/sh
 
+GREEN=$'\e[0;32;1m'
+RED=$'\e[0;31;1m'
+YELLOW=$'\e[1;33;1m'
+RESET=$'\e[m'
+
 cat <<EOT
 Groonga CloudSearch example data importer
 -----------------------------------------
 
 This script setup an example domain and import data into the domain.
 
-Prerequsites:
+EOT
 
-1) You need to direct 'doc-example-00000000000000000000000000.localhost' and 'search-example-00000000000000000000000000.localhost' to localhost before trying this example. The following command will make these entries on /etc/hosts:
+echo "Checking prerequsites..."
+echo
 
-$ sudo gcs-register-hosts example
+printf "* Host entries for endpoints..."
 
-2) You need to run gcs on port 7575. Just run gcs command without any options.
+ping -c 1 doc-example-00000000000000000000000000.localhost 1> /dev/null 2>&1
+doc_ping_status=$?
+ping -c 1 search-example-00000000000000000000000000.localhost 1> /dev/null 2>&1
+search_ping_status=$?
 
-$ gcs
+if [ $doc_ping_status -eq 0 -a $search_ping_status -eq 0 ]
+then
+  echo " "$GREEN"OK"$RESET
+else
+  echo " "$RED"not configured"$RESET
+
+  cat << EOT
+$YELLOW
+You need to direct 'doc-example-00000000000000000000000000.localhost' and 'search-example-00000000000000000000000000.localhost' to localhost before trying this example. The following command will make these entries on /etc/hosts:
+
+  $ sudo gcs-register-hosts example
+$RESET
+EOT
+fi
+
+printf "* gcs running..."
+curl --silent "http://localhost:7575" > /dev/null
+if [ $? -eq 0 ]
+then
+  echo " "$GREEN"OK"$RESET
+else
+  echo " "$RED"not running"$RESET
+cat <<EOT
+$YELLOW
+You need to run gcs on port 7575. Just run gcs command without any options on another terminal.
+
+  $ gcs
+$RESET
+EOT
+fi
+
+cat <<EOT
 
 NOTICE:
 
 If you have data in the domain whose name is 'example', it will be updated.
 
 
+Hit enter to continue. Ctrl-C to break.
 EOT
-
-echo "Hit enter to continue. Ctrl-C to break."
 read
 
 
