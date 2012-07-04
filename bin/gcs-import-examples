@@ -8,7 +8,7 @@ This script setup an example domain and import data into the domain.
 
 Prerequsites:
 
-1) You need to direct 'doc-example-00000000000000000000000000.localhost' and 'search-example-00000000000000000000000000.localhost' to 127.0.0.1 before trying this example. The following command will make these entries on /etc/hosts:
+1) You need to direct 'doc-example-00000000000000000000000000.localhost' and 'search-example-00000000000000000000000000.localhost' to localhost before trying this example. The following command will make these entries on /etc/hosts:
 
 $ sudo gcs-register-hosts example
 
@@ -29,19 +29,19 @@ read
 
 echo "==== Creating 'example' domain"
 
-curl -s "http://127.0.0.1:7575/?DomainName=example&Action=CreateDomain&Version=2011-02-01"
+curl -s "http://localhost:7575/?DomainName=example&Action=CreateDomain&Version=2011-02-01"
 echo
 echo
 
 echo "==== Adding index fields"
 echo "== Creating 'name' field"
-curl -s "http://127.0.0.1:7575/?Action=DefineIndexField&DomainName=example&IndexField.IndexFieldName=name&Version=2011-02-01"
+curl -s "http://localhost:7575/?Action=DefineIndexField&DomainName=example&IndexField.IndexFieldName=name&Version=2011-02-01"
 echo
 echo "== Creating 'address' field"
-curl -s "http://127.0.0.1:7575/?Action=DefineIndexField&DomainName=example&IndexField.IndexFieldName=address&Version=2011-02-01"
+curl -s "http://localhost:7575/?Action=DefineIndexField&DomainName=example&IndexField.IndexFieldName=address&Version=2011-02-01"
 echo
 echo "== Creating 'email_address' field"
-curl -s "http://127.0.0.1:7575/?Action=DefineIndexField&DomainName=example&IndexField.IndexFieldName=email_address&Version=2011-02-01"
+curl -s "http://localhost:7575/?Action=DefineIndexField&DomainName=example&IndexField.IndexFieldName=email_address&Version=2011-02-01"
 echo
 
 echo
@@ -71,6 +71,6 @@ Now you can try searching by
 $ curl "http://search-example-00000000000000000000000000.localhost:7575/2011-02-01/search?q=Tokyo"
 
 or, open
-http://127.0.0.1:7575
+http://localhost:7575
 for web dashboard.
 EOT
