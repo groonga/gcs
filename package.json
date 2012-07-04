@@ -31,7 +31,8 @@
   },
   "bin": {
     "gcs": "./bin/gcs",
-    "gcs-import-examples": "./bin/gcs-import-examples"
+    "gcs-import-examples": "./bin/gcs-import-examples",
+    "gcs-register-hosts": "./bin/gcs-register-hosts"
   },
   "main": "./lib/server",
   "engines": {
