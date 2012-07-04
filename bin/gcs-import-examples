@@ -1,9 +1,9 @@
 #!/bin/sh
 
-GREEN=$'\e[0;32;1m'
-RED=$'\e[0;31;1m'
-YELLOW=$'\e[1;33;1m'
-RESET=$'\e[m'
+GREEN="\033[0;32;1m"
+RED="\033[0;31;1m"
+YELLOW="\033[1;33;1m"
+RESET="\033[m"
 
 cat <<EOT
 Groonga CloudSearch example data importer
@@ -29,13 +29,15 @@ then
 else
   echo " "$RED"not configured"$RESET
 
-  cat << EOT
-$YELLOW
+  printf $YELLOW
+  cat <<EOT
+
 You need to direct 'doc-example-00000000000000000000000000.localhost' and 'search-example-00000000000000000000000000.localhost' to localhost before trying this example. The following command will make these entries on /etc/hosts:
 
   $ sudo gcs-register-hosts example
-$RESET
+
 EOT
+  printf $RESET
 fi
 
 printf "* gcs running..."
@@ -45,13 +47,15 @@ then
   echo " "$GREEN"OK"$RESET
 else
   echo " "$RED"not running"$RESET
-cat <<EOT
-$YELLOW
+  printf $YELLOW
+cat <<"EOT"
+
 You need to run gcs on port 7575. Just run gcs command without any options on another terminal.
 
   $ gcs
-$RESET
+
 EOT
+  printf $RESET
 fi
 
 cat <<EOT
