@@ -58,7 +58,7 @@ do
     fi
 done
 
-curl -X POST --upload-file $sdf_path --header "Content-Type: application/json" -H "Host: doc-example-00000000000000000000000000.localhost" http://127.0.0.1:7575/2011-02-01/documents/batch
+curl -X POST --upload-file $sdf_path --header "Content-Type: application/json" http://doc-example-00000000000000000000000000.localhost:7575/2011-02-01/documents/batch
 echo
 
 echo
@@ -68,7 +68,7 @@ cat <<EOT
 
 Now you can try searching by
 
-$ curl -H "Host: search-example-00000000000000000000000000.localhost" "http://127.0.0.1:7575/2011-02-01/search?q=Tokyo"
+$ curl "http://search-example-00000000000000000000000000.localhost:7575/2011-02-01/search?q=Tokyo"
 
 or, open
 http://127.0.0.1:7575
