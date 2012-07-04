@@ -15,6 +15,7 @@ tmp_dir = base_dir + "tmp"
 @download_dir = tmp_dir + "download"
 @build_dir = tmp_dir + "build"
 @dist_dir = tmp_dir + "dist"
+rsync_path = "packages@packages.groonga.org:public"
 
 directory @download_dir.to_s
 directory @build_dir.to_s
@@ -36,6 +37,15 @@ def detect_shared_object_extension
     "dylib"
   else
     RbConfig::CONFIG["LIBRUBY_SO"].split(/\./).last
+  end
+end
+
+def detect_distribution_directory_name
+  case RUBY_PLATFORM
+  when /darwin/
+    "macosx"
+  else
+    raise "direcotry for #{RUBY_PLATFORM} is not defined"
   end
 end
 
@@ -250,4 +260,10 @@ task(:default => :package)
 desc("Remove all auto generated files")
 task(:clean) do
   rm_rf(tmp_dir.to_s)
+end
+
+desc("publish the latest package to #{rsync_path}")
+task(:publish) do
+  destination_path = rsync_path + "/#{detect_distribution_directory_name}/gcs/"
+  sh('rsync', '-avz', gcs_package_tar_gz_path.to_s, destination_path)
 end
