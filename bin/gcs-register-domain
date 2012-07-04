@@ -2,7 +2,7 @@
 
 if [ "$#" == "0" ]
 then
-  echo "Usage: $0 [domain-name]"
+  echo "Usage: $0 [domain-name] ..."
   echo "Add host entries for the domain [domain-name] to /etc/hosts"
 else
   if [ -w /etc/hosts ]
