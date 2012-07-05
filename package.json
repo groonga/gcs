@@ -1,7 +1,7 @@
 {
   "name": "gcs",
   "description": "Groonga CloudSearch",
-  "version": "0.9.0",
+  "version": "1.0.0",
   "author": "Groonga CloudSearch project <gcs@groonga.org>",
   "keywords": ["Amazon CloudSearch", "groonga", "fulltext", "search", "database"],
   "homepage": "http://gcs.groonga.org",
