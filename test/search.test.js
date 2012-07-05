@@ -33,7 +33,10 @@ suite('Search API', function() {
     var options = {
       host: utils.testHost,
       port: utils.testPort,
-      path: '/2011-02-01/search?q=Hongo&DomainName=companies'
+      path: '/2011-02-01/search?q=Hongo',
+      headers: {
+        Host: 'search-companies-00000000000000000000000000.localhost'
+      }
     };
     http.get(options, function(response) {
       assert.equal(response.statusCode, 200);
