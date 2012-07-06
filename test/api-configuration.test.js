@@ -258,6 +258,59 @@ suite('Configuration API', function() {
       });
   });
 
+  test('Get, Action=IndexDocuments', function(done) {
+    var path = '/?DomainName=companies&Action=CreateDomain&Version=2011-02-01';
+    utils.get(path, {
+                'Host': 'cloudsearch.localhost'
+              })
+      .next(function(response) {
+        var path = '/?DomainName=companies&IndexField.IndexFieldName=name&' +
+                   'Action=DefineIndexField&Version=2011-02-01';
+        return utils.get(path);
+      })
+      .next(function(response) {
+        var path = '/?DomainName=companies&' +
+                   'Action=IndexDocuments&Version=2011-02-01';
+        return utils.get(path);
+      })
+      .next(function(response) {
+        var expected = {
+              statusCode: 200,
+              body: '<?xml version="1.0"?>\n' +
+                    '<IndexDocumentsResponse xmlns="' + XMLNS + '">' +
+                      '<IndexDocumentsResult>' +
+                        '<member>name</member>' +
+                      '</IndexDocumentsResult>' +
+                      '<ResponseMetadata>' +
+                        '<RequestId></RequestId>' +
+                      '</ResponseMetadata>' +
+                    '</IndexDocumentsResponse>'
+            };
+        var actual = {
+              statusCode: response.statusCode,
+              body: response.body
+            };
+        assert.deepEqual(actual, expected);
+
+        var dump = database.commandSync('dump', {
+              tables: 'companies'
+            });
+        var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
+                       'column_create companies name COLUMN_SCALAR ShortText\n' +
+                       'table_create companies_BigramTerms ' +
+                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
+                         '--default_tokenizer TokenBigram\n' +
+                       'column_create companies_BigramTerms companies_name ' +
+                         'COLUMN_INDEX|WITH_POSITION companies name';
+        assert.equal(dump, expected);
+
+        done();
+      })
+      .error(function(error) {
+        done(error);
+      });
+  });
+
   test('Get, no version', function(done) {
     var path = '/?Action=unknown';
     utils.get(path, {
