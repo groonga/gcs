@@ -21,11 +21,11 @@ Groonga CloudSearch is an open source software. You can free to use,
 copy, modify Groonga CloudSearch. You can install Groonga CloudSearch
 on your computer and try it without fee.
 
-See http://gcs.groonga.org/install/ to install Groonga CloudSearch.
+See http://gcs.groonga.org/doc/install/ to install Groonga CloudSearch.
 
 ## FAQ
 
-See http://gcs.groonga.org/faq/
+See http://gcs.groonga.org/doc/faq/
 
 ## License
 
