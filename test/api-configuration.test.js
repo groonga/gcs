@@ -56,7 +56,7 @@ suite('Configuration API', function() {
                           '<Created>false</Created>' +
                           '<Deleted>true</Deleted>' +
                           '<DocService>' +
-                            '<Endpoint>http://doc-companies-00000000000000000000000000.localhost/2011-02-01/documents</Endpoint>' +
+                            '<Endpoint>doc-companies-00000000000000000000000000.localhost</Endpoint>' +
                           '</DocService>' +
                           '<DomainId>' + FAKE_DOMAIN_ID + '/companies</DomainId>' +
                           '<DomainName>companies</DomainName>' +
@@ -65,7 +65,7 @@ suite('Configuration API', function() {
                           '<SearchInstanceCount>0</SearchInstanceCount>' +
                           '<SearchPartitionCount>0</SearchPartitionCount>' +
                           '<SearchService>' +
-                            '<Endpoint>http://search-companies-00000000000000000000000000.localhost/2011-02-01/search</Endpoint>' +
+                            '<Endpoint>search-companies-00000000000000000000000000.localhost</Endpoint>' +
                           '</SearchService>' +
                         '</DomainStatus>' +
                       '</DeleteDomainResult>' +
@@ -107,7 +107,7 @@ suite('Configuration API', function() {
                           '<Created>true</Created>' +
                           '<Deleted>false</Deleted>' +
                           '<DocService>' +
-                            '<Endpoint>http://doc-companies-00000000000000000000000000.localhost/2011-02-01/documents</Endpoint>' +
+                            '<Endpoint>doc-companies-00000000000000000000000000.localhost</Endpoint>' +
                           '</DocService>' +
                           '<DomainId>' + FAKE_DOMAIN_ID + '/companies</DomainId>' +
                           '<DomainName>companies</DomainName>' +
@@ -116,7 +116,7 @@ suite('Configuration API', function() {
                           '<SearchInstanceCount>0</SearchInstanceCount>' +
                           '<SearchPartitionCount>0</SearchPartitionCount>' +
                           '<SearchService>' +
-                            '<Endpoint>http://search-companies-00000000000000000000000000.localhost/2011-02-01/search</Endpoint>' +
+                            '<Endpoint>search-companies-00000000000000000000000000.localhost</Endpoint>' +
                           '</SearchService>' +
                         '</DomainStatus>' +
                       '</CreateDomainResult>' +
