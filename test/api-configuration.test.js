@@ -132,13 +132,8 @@ suite('Configuration API', function() {
             };
         assert.deepEqual(response, expected);
 
-        var dump = database.commandSync('dump', {
-              tables: 'companies'
-            });
-        var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
-                       'table_create companies_BigramTerms ' +
-                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
-                         '--default_tokenizer TokenBigram';
+        var dump = database.commandSync('dump');
+        var expected = '';
         assert.equal(dump, expected);
 
         done();
