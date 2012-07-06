@@ -279,7 +279,9 @@ suite('Configuration API', function() {
               body: '<?xml version="1.0"?>\n' +
                     '<IndexDocumentsResponse xmlns="' + XMLNS + '">' +
                       '<IndexDocumentsResult>' +
-                        '<member>name</member>' +
+                        '<FieldNames>' +
+                          '<member>name</member>' +
+                        '</FieldNames>' +
                       '</IndexDocumentsResult>' +
                       '<ResponseMetadata>' +
                         '<RequestId></RequestId>' +
