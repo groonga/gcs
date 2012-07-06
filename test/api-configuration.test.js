@@ -93,11 +93,15 @@ suite('Configuration API', function() {
   });
 
   test('Get, Action=DeleteDomain', function(done) {
-    utils.loadDumpFile(database, __dirname + '/fixture/companies/ddl.grn');
-    var path = '/?DomainName=companies&Action=DeleteDomain&Version=2011-02-01';
-    utils.get(path, {
+    utils.get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
                 'Host': 'cloudsearch.localhost'
               })
+      .next(function() {
+        var path = '/?DomainName=companies&Action=DeleteDomain&Version=2011-02-01';
+        return utils.get(path, {
+                 'Host': 'cloudsearch.localhost'
+               });
+      })
       .next(function(response) {
         var expected = {
               statusCode: 200,
