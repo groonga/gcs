@@ -4,6 +4,10 @@ var fs = require('fs');
 
 var schemeDump = fs.readFileSync(__dirname + '/fixture/companies/ddl.grn', 'UTF-8').replace(/\s+$/, '');
 var loadDump = fs.readFileSync(__dirname + '/fixture/companies/data.grn', 'UTF-8').replace(/\s+$/, '');
+var deletedLoadDump = fs.readFileSync(__dirname + '/fixture/companies/data-deleted.grn', 'UTF-8').replace(/\s+$/, '');
+
+var addBatch = fs.readFileSync(__dirname + '/fixture/companies/add.sdf.json', 'UTF-8');
+var deleteBatch = fs.readFileSync(__dirname + '/fixture/companies/delete.sdf.json', 'UTF-8');
 
 var temporaryDatabase;
 
@@ -32,11 +36,10 @@ suite('documents/batch API', function() {
   });
 
   test('add', function(done) {
-    var batch = fs.readFileSync(__dirname + '/fixture/companies/add.sdf.json', 'UTF-8');
     var path = '/2011-02-01/documents/batch';
-    utils.post(path, batch, {
+    utils.post(path, addBatch, {
       'Content-Type': 'application/json',
-      'Content-Length': batch.length,
+      'Content-Length': addBatch.length,
       'Host': 'doc-companies-00000000000000000000000000.localhost'
     })
       .next(function(response) {
@@ -54,6 +57,43 @@ suite('documents/batch API', function() {
               tables: 'companies'
             });
         assert.equal(dump, schemeDump + '\n' + loadDump);
+
+        done();
+      })
+      .error(function(error) {
+        done(error);
+      });
+  });
+
+  test('delete', function(done) {
+    var path = '/2011-02-01/documents/batch';
+    utils.post(path, addBatch, {
+      'Content-Type': 'application/json',
+      'Content-Length': addBatch.length,
+      'Host': 'doc-companies-00000000000000000000000000.localhost'
+    })
+      .next(function(response) {
+        return utils.post(path, deleteBatch, {
+                 'Content-Type': 'application/json',
+                 'Content-Length': deleteBatch.length,
+                 'Host': 'doc-companies-00000000000000000000000000.localhost'
+               });
+      })
+      .next(function(response) {
+        var expected = {
+              statusCode: 200,
+              body: JSON.stringify({
+                status: 'success',
+                adds: 0,
+                deletes: 1
+              })
+            };
+        assert.deepEqual(response, expected);
+
+        var dump = database.commandSync('dump', {
+              tables: 'companies'
+            });
+        assert.equal(dump, schemeDump + '\n' + deletedLoadDump);
 
         done();
       })
