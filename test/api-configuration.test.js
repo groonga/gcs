@@ -41,57 +41,6 @@ suite('Configuration API', function() {
     temporaryDatabase.clear();
   });
 
-  test('Get, Action=DeleteDomain', function(done) {
-    var path = '/?DomainName=companies&Action=DeleteDomain&Version=2011-02-01';
-    utils.get(path, {
-                'Host': 'cloudsearch.localhost'
-              })
-      .next(function(response) {
-        var expected = {
-              statusCode: 200,
-              body: '<?xml version="1.0"?>\n' +
-                    '<DeleteDomainResponse xmlns="' + XMLNS + '">' +
-                      '<DeleteDomainResult>' +
-                        '<DomainStatus>' +
-                          '<Created>false</Created>' +
-                          '<Deleted>true</Deleted>' +
-                          '<DocService>' +
-                            '<Endpoint>doc-companies-00000000000000000000000000.localhost</Endpoint>' +
-                          '</DocService>' +
-                          '<DomainId>' + FAKE_DOMAIN_ID + '/companies</DomainId>' +
-                          '<DomainName>companies</DomainName>' +
-                          '<NumSearchableDocs>0</NumSearchableDocs>' +
-                          '<RequiresIndexDocuments>false</RequiresIndexDocuments>' +
-                          '<SearchInstanceCount>0</SearchInstanceCount>' +
-                          '<SearchPartitionCount>0</SearchPartitionCount>' +
-                          '<SearchService>' +
-                            '<Endpoint>search-companies-00000000000000000000000000.localhost</Endpoint>' +
-                          '</SearchService>' +
-                        '</DomainStatus>' +
-                      '</DeleteDomainResult>' +
-                      '<ResponseMetadata>' +
-                        '<RequestId></RequestId>' +
-                      '</ResponseMetadata>' +
-                    '</DeleteDomainResponse>'
-            };
-        assert.deepEqual(response, expected);
-
-        var dump = database.commandSync('dump', {
-              tables: 'companies'
-            });
-        var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
-                       'table_create companies_BigramTerms ' +
-                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
-                         '--default_tokenizer TokenBigram';
-        assert.equal(dump, expected);
-
-        done();
-      })
-      .error(function(error) {
-        done(error);
-      });
-  });
-
   test('Get, Action=CreateDomain', function(done) {
     var path = '/?DomainName=companies&Action=CreateDomain&Version=2011-02-01';
     utils.get(path, {
@@ -143,8 +92,59 @@ suite('Configuration API', function() {
       });
   });
 
-  test('Get, Action=DefineIndexField', function(done) {
+  test('Get, Action=DeleteDomain', function(done) {
     utils.loadDumpFile(database, __dirname + '/fixture/companies/ddl.grn');
+    var path = '/?DomainName=companies&Action=DeleteDomain&Version=2011-02-01';
+    utils.get(path, {
+                'Host': 'cloudsearch.localhost'
+              })
+      .next(function(response) {
+        var expected = {
+              statusCode: 200,
+              body: '<?xml version="1.0"?>\n' +
+                    '<DeleteDomainResponse xmlns="' + XMLNS + '">' +
+                      '<DeleteDomainResult>' +
+                        '<DomainStatus>' +
+                          '<Created>false</Created>' +
+                          '<Deleted>true</Deleted>' +
+                          '<DocService>' +
+                            '<Endpoint>doc-companies-00000000000000000000000000.localhost</Endpoint>' +
+                          '</DocService>' +
+                          '<DomainId>' + FAKE_DOMAIN_ID + '/companies</DomainId>' +
+                          '<DomainName>companies</DomainName>' +
+                          '<NumSearchableDocs>0</NumSearchableDocs>' +
+                          '<RequiresIndexDocuments>false</RequiresIndexDocuments>' +
+                          '<SearchInstanceCount>0</SearchInstanceCount>' +
+                          '<SearchPartitionCount>0</SearchPartitionCount>' +
+                          '<SearchService>' +
+                            '<Endpoint>search-companies-00000000000000000000000000.localhost</Endpoint>' +
+                          '</SearchService>' +
+                        '</DomainStatus>' +
+                      '</DeleteDomainResult>' +
+                      '<ResponseMetadata>' +
+                        '<RequestId></RequestId>' +
+                      '</ResponseMetadata>' +
+                    '</DeleteDomainResponse>'
+            };
+        assert.deepEqual(response, expected);
+
+        var dump = database.commandSync('dump', {
+              tables: 'companies'
+            });
+        var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
+                       'table_create companies_BigramTerms ' +
+                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
+                         '--default_tokenizer TokenBigram';
+        assert.equal(dump, expected);
+
+        done();
+      })
+      .error(function(error) {
+        done(error);
+      });
+  });
+
+  test('Get, Action=DefineIndexField', function(done) {
     var path = '/?DomainName=companies&Action=CreateDomain&Version=2011-02-01';
     utils.get(path, {
                 'Host': 'cloudsearch.localhost'
