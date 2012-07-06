@@ -47,7 +47,7 @@ suite('batch/translator/Translator (instance methods)', function() {
             key: batch['id']
           }
         };
-    var translated = translator.addToLoad(batch);
+    var translated = translator.deleteToDelete(batch);
     assert.deepEqual(translated, expected);
   });
 
