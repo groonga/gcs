@@ -218,7 +218,7 @@ suite('Configuration API', function() {
               })
       .next(function(response) {
         var path = '/?DomainName=companies&IndexField.IndexFieldName=age&' +
-                   'IndexField.IndexFieldType=text&' +
+                   'IndexField.IndexFieldType=uint&' +
                    'Action=DefineIndexField&Version=2011-02-01';
         return utils.get(path);
       })
