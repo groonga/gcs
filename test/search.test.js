@@ -4,13 +4,9 @@ var http = require('http');
 var fs = require('fs');
 
 var temporaryDatabase;
-var database;
 
 suiteSetup(function() {
   temporaryDatabase = utils.createTemporaryDatabase();
-  database = temporaryDatabase.get();
-  utils.loadDumpFile(database, __dirname + '/fixture/companies/ddl.grn');
-  utils.loadDumpFile(database, __dirname + '/fixture/companies/data.grn');
 });
 
 suiteTeardown(function() {
@@ -20,13 +16,18 @@ suiteTeardown(function() {
 
 suite('Search API', function() {
   var server;
+  var database;
 
   setup(function() {
+    database = temporaryDatabase.get();
+    utils.loadDumpFile(database, __dirname + '/fixture/companies/ddl.grn');
+    utils.loadDumpFile(database, __dirname + '/fixture/companies/data.grn');
     server = utils.setupServer(database);
   });
 
   teardown(function() {
     server.close();
+    temporaryDatabase.clear();
   });
 
   function testSearch(path, host, callback) {
