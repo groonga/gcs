@@ -93,6 +93,7 @@ suite('Configuration API', function() {
   });
 
   test('Get, Action=CreateDomain', function(done) {
+    utils.loadDumpFile(database, __dirname + '/fixture/companies/ddl.grn');
     var path = '/?DomainName=companies&Action=CreateDomain&Version=2011-02-01';
     utils.get(path, {
                 'Host': 'cloudsearch.localhost'
