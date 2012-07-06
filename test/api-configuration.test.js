@@ -260,7 +260,10 @@ suite('Configuration API', function() {
         var dump = database.commandSync('dump', {
               tables: 'companies'
             });
-        var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
+        var expected = 'table_create companies_BigramTerms ' +
+                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
+                         '--default_tokenizer TokenBigram\n' +
+                       'table_create companies TABLE_HASH_KEY ShortText\n' +
                        'column_create companies age COLUMN_SCALAR UInt32\n' +
                        'table_create companies_age ' +
                          'TABLE_HASH_KEY UInt32\n' +
@@ -275,7 +278,7 @@ suite('Configuration API', function() {
       });
   });
 
-  test('Get, Action=DeleteIndexField', function(done) {
+  test('Get, Action=DeleteIndexField (text)', function(done) {
     var path = '/?DomainName=companies&Action=CreateDomain&Version=2011-02-01';
     utils.get(path, {
                 'Host': 'cloudsearch.localhost'
