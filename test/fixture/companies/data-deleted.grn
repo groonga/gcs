@@ -1,0 +1,13 @@
+load --table companies
+[
+["_key","address","description","email_address","name"],
+["id2","Sapporo, Hokkaido, Japan","","info@enishi-tech.com","Enishi Tech Inc."],
+["id3","Hongo, Tokyo, Japan","","info@clear-code.com","ClearCode Inc."],
+["id4","Granada, Moon","","","Anaheim Electronics"],
+["id5","Earth","","","Shinsei Industry"],
+["id6","Detroit and Delta City, Michigan, United States","","","Omni Consumer Products"],
+["id7","West City","","","Capsule Corporation"],
+["id8","United States","","","Stark Industries"],
+["id9","Tokyo, Japan","","","Umbrella Corporation"],
+["id10","New York, United States","","","U.S. Robots and Mechanical Men"]
+]

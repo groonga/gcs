@@ -8,6 +8,8 @@ var Processor = require('../lib/batch/processor').Processor;
 
 var schemeDump = fs.readFileSync(__dirname + '/fixture/companies/ddl.grn', 'UTF-8').replace(/\s+$/, '');
 var loadDump = fs.readFileSync(__dirname + '/fixture/companies/data.grn', 'UTF-8').replace(/\s+$/, '');
+var deletedLoadDump = fs.readFileSync(__dirname + '/fixture/companies/data-deleted.grn', 'UTF-8').replace(/\s+$/, '');
+var deleteDump = fs.readFileSync(__dirname + '/fixture/companies/delete.grn', 'UTF-8').replace(/\s+$/, '');
 
 var temporaryDatabase;
 
@@ -72,9 +74,37 @@ suite('batch/processor/Processor (instance methods)', function() {
       });
   });
 
-  test('validation, valid batches', function() {
+  test('load delete-batches', function(done) {
     var batches = fs.readFileSync(__dirname + '/fixture/companies/add.sdf.json', 'UTF-8');
     batches = JSON.parse(batches);
+    processor.load(batches)
+      .next(function(result) {
+        var batches = fs.readFileSync(__dirname + '/fixture/companies/delete.sdf.json', 'UTF-8');
+        batches = JSON.parse(batches);
+        return processor.load(batches)
+      })
+      .next(function(result) {
+        var expected = {
+              status: 'success',
+              adds: 0,
+              deletes: 1
+            };
+        assert.deepEqual(result, expected);
+        var dump = database.commandSync('dump', {
+              tables: 'companies'
+            });
+        assert.equal(dump, schemeDump + '\n' + deletedLoadDump);
+        done();
+      })
+      .error(function(error) {
+        done(error);
+      });
+  });
+
+  test('validation, valid batches', function() {
+    var addBatches = fs.readFileSync(__dirname + '/fixture/companies/add.sdf.json', 'UTF-8');
+    var deleteBatches = fs.readFileSync(__dirname + '/fixture/companies/delete.sdf.json', 'UTF-8');
+    var batches = JSON.parse(addBatches).concat(JSON.parse(deleteBatches));
     // assert.notThrow(function() {
       processor.validate(batches);
     // }, Processor.INVALID_BATCH);
