@@ -144,13 +144,14 @@ suite('Configuration API', function() {
       });
   });
 
-  test('Get, Action=DefineIndexField', function(done) {
+  test('Get, Action=DefineIndexField (text)', function(done) {
     var path = '/?DomainName=companies&Action=CreateDomain&Version=2011-02-01';
     utils.get(path, {
                 'Host': 'cloudsearch.localhost'
               })
       .next(function(response) {
         var path = '/?DomainName=companies&IndexField.IndexFieldName=name&' +
+                   'IndexField.IndexFieldType=text&' +
                    'Action=DefineIndexField&Version=2011-02-01';
         return utils.get(path);
       })
@@ -201,6 +202,71 @@ suite('Configuration API', function() {
                          '--default_tokenizer TokenBigram\n' +
                        'column_create companies_BigramTerms companies_name ' +
                          'COLUMN_INDEX|WITH_POSITION companies name';
+        assert.equal(dump, expected);
+
+        done();
+      })
+      .error(function(error) {
+        done(error);
+      });
+  });
+
+  test('Get, Action=DefineIndexField (uint)', function(done) {
+    var path = '/?DomainName=companies&Action=CreateDomain&Version=2011-02-01';
+    utils.get(path, {
+                'Host': 'cloudsearch.localhost'
+              })
+      .next(function(response) {
+        var path = '/?DomainName=companies&IndexField.IndexFieldName=age&' +
+                   'IndexField.IndexFieldType=text&' +
+                   'Action=DefineIndexField&Version=2011-02-01';
+        return utils.get(path);
+      })
+      .next(function(response) {
+        var expected = {
+              statusCode: 200,
+              body: '<?xml version="1.0"?>\n' +
+                    '<DefineIndexFieldResponse xmlns="' + XMLNS + '">' +
+                      '<DefineIndexFieldResult>' +
+                        '<IndexField>' +
+                          '<Options>' +
+                            '<IndexFieldName>age</IndexFieldName>' +
+                            '<IndexFieldType>uint</IndexFieldType>' +
+                            '<UIntOptions>' +
+                              '<DefaultValue/>' +
+                            '</UIntOptions>' +
+                          '</Options>' +
+                          '<Status>' +
+                            '<CreationDate>1970-01-01T00:00:00Z</CreationDate>' +
+                            '<State>RequiresIndexDocuments</State>' +
+                            '<UpdateDate>1970-01-01T00:00:00Z</UpdateDate>' +
+                            '<UpdateVersion>0</UpdateVersion>' +
+                          '</Status>' +
+                        '</IndexField>' +
+                      '</DefineIndexFieldResult>' +
+                      '<ResponseMetadata>' +
+                        '<RequestId></RequestId>' +
+                      '</ResponseMetadata>' +
+                    '</DefineIndexFieldResponse>'
+            };
+        var actual = {
+              statusCode: response.statusCode,
+              body: response.body
+                      .replace(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/g,
+                               '1970-01-01T00:00:00Z')
+            };
+        assert.deepEqual(actual, expected);
+
+        var dump = database.commandSync('dump', {
+              tables: 'companies'
+            });
+        var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
+                       'column_create companies age COLUMN_SCALAR UInt32\n' +
+                       'table_create companies_BigramTerms ' +
+                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
+                         '--default_tokenizer TokenBigram\n' +
+                       'column_create companies_BigramTerms companies_age ' +
+                         'COLUMN_INDEX|WITH_POSITION companies age';
         assert.equal(dump, expected);
 
         done();
