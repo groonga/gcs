@@ -148,7 +148,7 @@ suite('batch/translator/Translator (class methods)', function() {
       var batches = deleteBatches;
       var batch = batches[0];
       var command = {
-            command: 'load',
+            command: 'delete',
             options: {
               table: 'test',
               key: batch['id']
