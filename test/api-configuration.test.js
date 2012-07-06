@@ -133,7 +133,8 @@ suite('Configuration API', function() {
         assert.deepEqual(response, expected);
 
         var dump = database.commandSync('dump');
-        var expected = '';
+        // var expected = '';
+        var expected = undefined; // nroonga returns undefined for a blank database!
         assert.equal(dump, expected);
 
         done();
