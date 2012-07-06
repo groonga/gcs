@@ -223,7 +223,7 @@ suite('Search API', function() {
                 address: ['Tokyo, Japan'],
                 description: [''],
                 email_address: [''],
-                name: ['Umbrella Corporation.']
+                name: ['Umbrella Corporation']
               }
             }
           ]
