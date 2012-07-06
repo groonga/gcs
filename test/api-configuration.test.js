@@ -262,10 +262,9 @@ suite('Configuration API', function() {
             });
         var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
                        'column_create companies age COLUMN_SCALAR UInt32\n' +
-                       'table_create companies_BigramTerms ' +
-                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
-                         '--default_tokenizer TokenBigram\n' +
-                       'column_create companies_BigramTerms companies_age ' +
+                       'table_create companies_age ' +
+                         'TABLE_HASH_KEY UInt32\n' +
+                       'column_create companies_age companies_age ' +
                          'COLUMN_INDEX|WITH_POSITION companies age';
         assert.equal(dump, expected);
 
