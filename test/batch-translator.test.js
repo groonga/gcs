@@ -4,8 +4,10 @@ var fs = require('fs');
 
 var Translator = require('../lib/batch/translator').Translator;
 
-var batches = fs.readFileSync(__dirname + '/fixture/companies/add.sdf.json', 'UTF-8');
-batches = JSON.parse(batches);
+var addBatches = fs.readFileSync(__dirname + '/fixture/companies/add.sdf.json', 'UTF-8');
+addBatches = JSON.parse(addBatches);
+var deleteBatches = fs.readFileSync(__dirname + '/fixture/companies/delete.sdf.json', 'UTF-8');
+deleteBatches = JSON.parse(deleteBatches);
 
 suite('batch/translator/Translator (instance methods)', function() {
   var translator;
@@ -19,7 +21,7 @@ suite('batch/translator/Translator (instance methods)', function() {
   });
 
   test('addToLoad', function() {
-    var batch = batches[0];
+    var batch = addBatches[0];
     var expected = {
           command: 'load',
           options: {
@@ -36,8 +38,21 @@ suite('batch/translator/Translator (instance methods)', function() {
     assert.deepEqual(translated, expected);
   });
 
+  test('deleteToDelete', function() {
+    var batch = deleteBatches[0];
+    var expected = {
+          command: 'delete',
+          options: {
+            table: 'test',
+            key: batch['id']
+          }
+        };
+    var translated = translator.addToLoad(batch);
+    assert.deepEqual(translated, expected);
+  });
+
   test('translateOne for add', function() {
-    var batch = batches[0];
+    var batch = addBatches[0];
     var expected = {
           command: 'load',
           options: {
@@ -54,7 +69,21 @@ suite('batch/translator/Translator (instance methods)', function() {
     assert.deepEqual(translated, expected);
   });
 
+  test('translateOne for delete', function() {
+    var batch = deleteBatches[0];
+    var expected = {
+          command: 'delete',
+          options: {
+            table: 'test',
+            key: batch['id']
+          }
+        };
+    var translated = translator.translateOne(batch);
+    assert.deepEqual(translated, expected);
+  });
+
   test('translate', function() {
+    var batches = addBatches.slice(0, 2).concat(deleteBatches.slice(0, 1));
     var expected = [
           {
             command: 'load',
@@ -79,16 +108,24 @@ suite('batch/translator/Translator (instance methods)', function() {
                 'email_address': batches[1]['fields']['email_address']
               }])
             }
+          },
+          {
+            command: 'delete',
+            options: {
+              table: 'test',
+              key: batches[2]['id']
+            }
           }
         ];
-    var translated = translator.translate(batches.slice(0, 2));
+    var translated = translator.translate(batches);
     assert.deepEqual(translated, expected);
   });
 });
 
 suite('batch/translator/Translator (class methods)', function() {
   suite('commandToString', function() {
-    test('load ', function() {
+    test('load', function() {
+      var batches = addBatches;
       var batch = batches[0];
       var command = {
             command: 'load',
@@ -106,10 +143,26 @@ suite('batch/translator/Translator (class methods)', function() {
       var stringified = Translator.commandToString(command);
       assert.equal(stringified, expected);
     });
+
+    test('delete', function() {
+      var batches = deleteBatches;
+      var batch = batches[0];
+      var command = {
+            command: 'load',
+            options: {
+              table: 'test',
+              key: batch['id']
+            }
+          };
+      var expected = 'delete --table test --key '+command.options.key;
+      var stringified = Translator.commandToString(command);
+      assert.equal(stringified, expected);
+    });
   });
 
   suite('commandsToString', function() {
-    test('load ', function() {
+    test('load and delete', function() {
+      var batches = addBatches.slice(0, 2).concat(deleteBatches.slice(0, 1));
       var commands = [
             {
               command: 'load',
@@ -134,11 +187,19 @@ suite('batch/translator/Translator (class methods)', function() {
                   'email_address': batches[1]['fields']['email_address']
                 }])
               }
+            },
+            {
+              command: 'delete',
+              options: {
+                table: 'test',
+                key: batches[2]['id']
+              }
             }
           ];
       var expected = [
             'load --table test --values ' + commands[0].options.values,
-            'load --table test --values ' + commands[1].options.values
+            'load --table test --values ' + commands[1].options.values,
+            'delete --table test --key ' + commands[2].options.key
           ].join('\n');
       var stringified = Translator.commandsToString(commands);
       assert.equal(stringified, expected);
