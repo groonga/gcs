@@ -2,17 +2,6 @@ var utils = require('./test-utils');
 var assert = require('chai').assert;
 var fs = require('fs');
 
-var temporaryDatabase;
-
-suiteSetup(function() {
-  temporaryDatabase = utils.createTemporaryDatabase();
-});
-
-suiteTeardown(function() {
-  temporaryDatabase.teardown();
-  temporaryDatabase = undefined;
-});
-
 function createCommonErrorResponse(errorCode, message) {
   return '<?xml version="1.0"?>\n' +
          '<Response>' +
@@ -28,17 +17,20 @@ var XMLNS = 'http://cloudsearch.amazonaws.com/doc/2011-02-01';
 var FAKE_DOMAIN_ID = '00000000000000000000000000';
 
 suite('Configuration API', function() {
+  var temporaryDatabase;
   var database;
   var server;
 
   setup(function() {
+    temporaryDatabase = utils.createTemporaryDatabase();
     database = temporaryDatabase.get();
     server = utils.setupServer(database);
   });
 
   teardown(function() {
     server.close();
-    temporaryDatabase.clear();
+    temporaryDatabase.teardown();
+    temporaryDatabase = undefined;
   });
 
   test('Get, Action=CreateDomain', function(done) {
@@ -260,11 +252,11 @@ suite('Configuration API', function() {
         var dump = database.commandSync('dump', {
               tables: 'companies'
             });
-        var expected = 'table_create companies_BigramTerms ' +
+        var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
+                       'column_create companies age COLUMN_SCALAR UInt32\n' +
+                       'table_create companies_BigramTerms ' +
                          'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
                          '--default_tokenizer TokenBigram\n' +
-                       'table_create companies TABLE_HASH_KEY ShortText\n' +
-                       'column_create companies age COLUMN_SCALAR UInt32\n' +
                        'table_create companies_age ' +
                          'TABLE_HASH_KEY UInt32\n' +
                        'column_create companies_age companies_age ' +
@@ -314,10 +306,10 @@ suite('Configuration API', function() {
         var dump = database.commandSync('dump', {
               tables: 'companies'
             });
-        var expected = 'table_create companies_BigramTerms ' +
+        var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
+                       'table_create companies_BigramTerms ' +
                          'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
-                         '--default_tokenizer TokenBigram\n' +
-                       'table_create companies TABLE_HASH_KEY ShortText';
+                         '--default_tokenizer TokenBigram';
         assert.equal(dump, expected);
 
         done();
@@ -363,10 +355,10 @@ suite('Configuration API', function() {
         var dump = database.commandSync('dump', {
               tables: 'companies'
             });
-        var expected = 'table_create companies_BigramTerms ' +
+        var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
+                       'table_create companies_BigramTerms ' +
                          'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
-                         '--default_tokenizer TokenBigram\n' +
-                       'table_create companies TABLE_HASH_KEY ShortText';
+                         '--default_tokenizer TokenBigram';
         assert.equal(dump, expected);
 
         done();
