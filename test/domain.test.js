@@ -184,6 +184,11 @@ suite('domain', function() {
       assert.equal(field.indexColumnName, 'testdomain_valid_123');
     });
 
+    test('alterTableName', function() {
+      var field = new IndexField('valid_123', domain);
+      assert.equal(field.alterTableName, 'testdomain_valid_123');
+    });
+
     test('fieldTypeToColumnType (text)', function() {
       var field = new IndexField('valid_123', domain);
       assert.equal(field.fieldTypeToColumnType('text'),
@@ -199,7 +204,7 @@ suite('domain', function() {
     test('fieldTypeToColumnType (literal)', function() {
       var field = new IndexField('valid_123', domain);
       assert.equal(field.fieldTypeToColumnType('literal'),
-                   domain.tableName + '_valid_123');
+                   'testdomain_valid_123');
     });
   });
 });
