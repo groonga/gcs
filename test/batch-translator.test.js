@@ -139,7 +139,7 @@ suite('batch/translator/Translator (class methods)', function() {
               }])
             }
           };
-      var expected = 'load --table test --values '+command.options.values;
+      var expected = 'load --table test --values ' + command.options.values;
       var stringified = Translator.commandToString(command);
       assert.equal(stringified, expected);
     });
@@ -154,7 +154,7 @@ suite('batch/translator/Translator (class methods)', function() {
               key: batch['id']
             }
           };
-      var expected = 'delete --table test --key '+command.options.key;
+      var expected = 'delete --table test --key ' + command.options.key;
       var stringified = Translator.commandToString(command);
       assert.equal(stringified, expected);
     });
