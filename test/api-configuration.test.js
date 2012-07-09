@@ -39,6 +39,15 @@ suite('Configuration API', function() {
                 'Host': 'cloudsearch.localhost'
               })
       .next(function(response) {
+        var dump = database.commandSync('dump', {
+              tables: 'companies'
+            });
+        var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
+                       'table_create companies_BigramTerms ' +
+                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
+                         '--default_tokenizer TokenBigram';
+        assert.equal(dump, expected);
+
         var expected = {
               statusCode: 200,
               body: '<?xml version="1.0"?>\n' +
@@ -68,15 +77,6 @@ suite('Configuration API', function() {
             };
         assert.deepEqual(response, expected);
 
-        var dump = database.commandSync('dump', {
-              tables: 'companies'
-            });
-        var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
-                       'table_create companies_BigramTerms ' +
-                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
-                         '--default_tokenizer TokenBigram';
-        assert.equal(dump, expected);
-
         done();
       })
       .error(function(error) {
@@ -95,6 +95,11 @@ suite('Configuration API', function() {
                });
       })
       .next(function(response) {
+        var dump = database.commandSync('dump');
+        // var expected = '';
+        var expected = undefined; // nroonga returns undefined for a blank database!
+        assert.equal(dump, expected);
+
         var expected = {
               statusCode: 200,
               body: '<?xml version="1.0"?>\n' +
@@ -124,11 +129,6 @@ suite('Configuration API', function() {
             };
         assert.deepEqual(response, expected);
 
-        var dump = database.commandSync('dump');
-        // var expected = '';
-        var expected = undefined; // nroonga returns undefined for a blank database!
-        assert.equal(dump, expected);
-
         done();
       })
       .error(function(error) {
@@ -148,6 +148,18 @@ suite('Configuration API', function() {
         return utils.get(path);
       })
       .next(function(response) {
+        var dump = database.commandSync('dump', {
+              tables: 'companies'
+            });
+        var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
+                       'column_create companies name COLUMN_SCALAR ShortText\n' +
+                       'table_create companies_BigramTerms ' +
+                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
+                         '--default_tokenizer TokenBigram\n' +
+                       'column_create companies_BigramTerms companies_name ' +
+                         'COLUMN_INDEX|WITH_POSITION companies name';
+        assert.equal(dump, expected);
+
         var expected = {
               statusCode: 200,
               body: '<?xml version="1.0"?>\n' +
@@ -184,18 +196,6 @@ suite('Configuration API', function() {
             };
         assert.deepEqual(actual, expected);
 
-        var dump = database.commandSync('dump', {
-              tables: 'companies'
-            });
-        var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
-                       'column_create companies name COLUMN_SCALAR ShortText\n' +
-                       'table_create companies_BigramTerms ' +
-                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
-                         '--default_tokenizer TokenBigram\n' +
-                       'column_create companies_BigramTerms companies_name ' +
-                         'COLUMN_INDEX|WITH_POSITION companies name';
-        assert.equal(dump, expected);
-
         done();
       })
       .error(function(error) {
@@ -215,6 +215,20 @@ suite('Configuration API', function() {
         return utils.get(path);
       })
       .next(function(response) {
+        var dump = database.commandSync('dump', {
+              tables: 'companies'
+            });
+        var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
+                       'column_create companies age COLUMN_SCALAR UInt32\n' +
+                       'table_create companies_BigramTerms ' +
+                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
+                         '--default_tokenizer TokenBigram\n' +
+                       'table_create companies_age ' +
+                         'TABLE_HASH_KEY UInt32\n' +
+                       'column_create companies_age companies_age ' +
+                         'COLUMN_INDEX|WITH_POSITION companies age';
+        assert.equal(dump, expected);
+
         var expected = {
               statusCode: 200,
               body: '<?xml version="1.0"?>\n' +
@@ -249,20 +263,6 @@ suite('Configuration API', function() {
             };
         assert.deepEqual(actual, expected);
 
-        var dump = database.commandSync('dump', {
-              tables: 'companies'
-            });
-        var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
-                       'column_create companies age COLUMN_SCALAR UInt32\n' +
-                       'table_create companies_BigramTerms ' +
-                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
-                         '--default_tokenizer TokenBigram\n' +
-                       'table_create companies_age ' +
-                         'TABLE_HASH_KEY UInt32\n' +
-                       'column_create companies_age companies_age ' +
-                         'COLUMN_INDEX|WITH_POSITION companies age';
-        assert.equal(dump, expected);
-
         done();
       })
       .error(function(error) {
@@ -282,6 +282,20 @@ suite('Configuration API', function() {
         return utils.get(path);
       })
       .next(function(response) {
+        var dump = database.commandSync('dump', {
+              tables: 'companies'
+            });
+        var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
+                       'table_create companies_BigramTerms ' +
+                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
+                         '--default_tokenizer TokenBigram\n' +
+                       'table_create companies_member ' +
+                         'TABLE_HASH_KEY ShortText\n' +
+                       'column_create companies_member companies_member ' +
+                         'COLUMN_INDEX|WITH_POSITION companies member\n' +
+                       'column_create companies member COLUMN_SCALAR companies_member';
+        assert.equal(dump, expected);
+
         var expected = {
               statusCode: 200,
               body: '<?xml version="1.0"?>\n' +
@@ -319,20 +333,6 @@ suite('Configuration API', function() {
             };
         assert.deepEqual(actual, expected);
 
-        var dump = database.commandSync('dump', {
-              tables: 'companies'
-            });
-        var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
-                       'table_create companies_BigramTerms ' +
-                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
-                         '--default_tokenizer TokenBigram\n' +
-                       'table_create companies_member ' +
-                         'TABLE_HASH_KEY ShortText\n' +
-                       'column_create companies_member companies_member ' +
-                         'COLUMN_INDEX|WITH_POSITION companies member\n' +
-                       'column_create companies member COLUMN_SCALAR companies_member';
-        assert.equal(dump, expected);
-
         done();
       })
       .error(function(error) {
@@ -357,6 +357,15 @@ suite('Configuration API', function() {
         return utils.get(path);
       })
       .next(function(response) {
+        var dump = database.commandSync('dump', {
+              tables: 'companies'
+            });
+        var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
+                       'table_create companies_BigramTerms ' +
+                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
+                         '--default_tokenizer TokenBigram';
+        assert.equal(dump, expected);
+
         var expected = {
               statusCode: 200,
               body: '<?xml version="1.0"?>\n' +
@@ -372,15 +381,6 @@ suite('Configuration API', function() {
               body: response.body
             };
         assert.deepEqual(actual, expected);
-
-        var dump = database.commandSync('dump', {
-              tables: 'companies'
-            });
-        var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
-                       'table_create companies_BigramTerms ' +
-                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
-                         '--default_tokenizer TokenBigram';
-        assert.equal(dump, expected);
 
         done();
       })
@@ -406,6 +406,15 @@ suite('Configuration API', function() {
         return utils.get(path);
       })
       .next(function(response) {
+        var dump = database.commandSync('dump', {
+              tables: 'companies'
+            });
+        var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
+                       'table_create companies_BigramTerms ' +
+                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
+                         '--default_tokenizer TokenBigram';
+        assert.equal(dump, expected);
+
         var expected = {
               statusCode: 200,
               body: '<?xml version="1.0"?>\n' +
@@ -421,15 +430,6 @@ suite('Configuration API', function() {
               body: response.body
             };
         assert.deepEqual(actual, expected);
-
-        var dump = database.commandSync('dump', {
-              tables: 'companies'
-            });
-        var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
-                       'table_create companies_BigramTerms ' +
-                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
-                         '--default_tokenizer TokenBigram';
-        assert.equal(dump, expected);
 
         done();
       })
@@ -455,6 +455,15 @@ suite('Configuration API', function() {
         return utils.get(path);
       })
       .next(function(response) {
+        var dump = database.commandSync('dump', {
+              tables: 'companies'
+            });
+        var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
+                       'table_create companies_BigramTerms ' +
+                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
+                         '--default_tokenizer TokenBigram';
+        assert.equal(dump, expected);
+
         var expected = {
               statusCode: 200,
               body: '<?xml version="1.0"?>\n' +
@@ -470,15 +479,6 @@ suite('Configuration API', function() {
               body: response.body
             };
         assert.deepEqual(actual, expected);
-
-        var dump = database.commandSync('dump', {
-              tables: 'companies'
-            });
-        var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
-                       'table_create companies_BigramTerms ' +
-                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
-                         '--default_tokenizer TokenBigram';
-        assert.equal(dump, expected);
 
         done();
       })
@@ -509,6 +509,22 @@ suite('Configuration API', function() {
         return utils.get(path);
       })
       .next(function(response) {
+        var dump = database.commandSync('dump', {
+              tables: 'companies'
+            });
+        var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
+                       'column_create companies age COLUMN_SCALAR UInt32\n' +
+                       'column_create companies name COLUMN_SCALAR ShortText\n' +
+                       'table_create companies_BigramTerms ' +
+                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
+                         '--default_tokenizer TokenBigram\n' +
+                       'table_create companies_age TABLE_HASH_KEY UInt32\n' +
+                       'column_create companies_age companies_age ' +
+                         'COLUMN_INDEX|WITH_POSITION companies age\n' +
+                       'column_create companies_BigramTerms companies_name ' +
+                         'COLUMN_INDEX|WITH_POSITION companies name';
+        assert.equal(dump, expected);
+
         var expected = {
               statusCode: 200,
               body: '<?xml version="1.0"?>\n' +
@@ -528,22 +544,6 @@ suite('Configuration API', function() {
               body: response.body
             };
         assert.deepEqual(actual, expected);
-
-        var dump = database.commandSync('dump', {
-              tables: 'companies'
-            });
-        var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
-                       'column_create companies age COLUMN_SCALAR UInt32\n' +
-                       'column_create companies name COLUMN_SCALAR ShortText\n' +
-                       'table_create companies_BigramTerms ' +
-                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
-                         '--default_tokenizer TokenBigram\n' +
-                       'table_create companies_age TABLE_HASH_KEY UInt32\n' +
-                       'column_create companies_age companies_age ' +
-                         'COLUMN_INDEX|WITH_POSITION companies age\n' +
-                       'column_create companies_BigramTerms companies_name ' +
-                         'COLUMN_INDEX|WITH_POSITION companies name';
-        assert.equal(dump, expected);
 
         done();
       })
