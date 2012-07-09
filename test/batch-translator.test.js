@@ -205,16 +205,4 @@ suite('batch/translator/Translator (class methods)', function() {
       assert.equal(stringified, expected);
     });
   });
-
-  suite('translateIndexFieldType', function() {
-    test('text', function() {
-      assert.equal(Translator.translateIndexFieldType('text'),
-                   'ShortText');
-    });
-
-    test('uint', function() {
-      assert.equal(Translator.translateIndexFieldType('uint'),
-                   'UInt32');
-    });
-  });
 });

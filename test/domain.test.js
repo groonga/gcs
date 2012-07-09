@@ -183,5 +183,23 @@ suite('domain', function() {
       var field = new IndexField('valid_123', domain);
       assert.equal(field.indexColumnName, 'testdomain_valid_123');
     });
+
+    test('fieldTypeToColumnType (text)', function() {
+      var field = new IndexField('valid_123', domain);
+      assert.equal(field.fieldTypeToColumnType('text'),
+                   'ShortText');
+    });
+
+    test('fieldTypeToColumnType (uint)', function() {
+      var field = new IndexField('valid_123', domain);
+      assert.equal(field.fieldTypeToColumnType('uint'),
+                   'UInt32');
+    });
+
+    test('fieldTypeToColumnType (literal)', function() {
+      var field = new IndexField('valid_123', domain);
+      assert.equal(field.fieldTypeToColumnType('literal'),
+                   domain.tableName + '_valid_123');
+    });
   });
 });
