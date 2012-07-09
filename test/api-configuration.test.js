@@ -270,6 +270,76 @@ suite('Configuration API', function() {
       });
   });
 
+  test('Get, Action=DefineIndexField (literal)', function(done) {
+    var path = '/?DomainName=companies&Action=CreateDomain&Version=2011-02-01';
+    utils.get(path, {
+                'Host': 'cloudsearch.localhost'
+              })
+      .next(function(response) {
+        var path = '/?DomainName=companies&IndexField.IndexFieldName=member&' +
+                   'IndexField.IndexFieldType=literal&' +
+                   'Action=DefineIndexField&Version=2011-02-01';
+        return utils.get(path);
+      })
+      .next(function(response) {
+        var expected = {
+              statusCode: 200,
+              body: '<?xml version="1.0"?>\n' +
+                    '<DefineIndexFieldResponse xmlns="' + XMLNS + '">' +
+                      '<DefineIndexFieldResult>' +
+                        '<IndexField>' +
+                          '<Options>' +
+                            '<IndexFieldName>member</IndexFieldName>' +
+                            '<IndexFieldType>literal</IndexFieldType>' +
+                            '<LiteralOptions>' +
+                              '<DefaultValue/>' +
+                              '<FacetEnabled>false</FacetEnabled>' +
+                              '<ResultEnabled>false</ResultEnabled>' +
+                              '<SearchEnabled>false</SearchEnabled>' +
+                            '</LiteralOptions>' +
+                          '</Options>' +
+                          '<Status>' +
+                            '<CreationDate>1970-01-01T00:00:00Z</CreationDate>' +
+                            '<State>RequiresIndexDocuments</State>' +
+                            '<UpdateDate>1970-01-01T00:00:00Z</UpdateDate>' +
+                            '<UpdateVersion>0</UpdateVersion>' +
+                          '</Status>' +
+                        '</IndexField>' +
+                      '</DefineIndexFieldResult>' +
+                      '<ResponseMetadata>' +
+                        '<RequestId></RequestId>' +
+                      '</ResponseMetadata>' +
+                    '</DefineIndexFieldResponse>'
+            };
+        var actual = {
+              statusCode: response.statusCode,
+              body: response.body
+                      .replace(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/g,
+                               '1970-01-01T00:00:00Z')
+            };
+        assert.deepEqual(actual, expected);
+
+        var dump = database.commandSync('dump', {
+              tables: 'companies'
+            });
+        var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
+                       'table_create companies_BigramTerms ' +
+                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
+                         '--default_tokenizer TokenBigram\n' +
+                       'table_create companies_member ' +
+                         'TABLE_HASH_KEY ShortText\n' +
+                       'column_create companies_member companies_member ' +
+                         'COLUMN_INDEX|WITH_POSITION companies member\n' +
+                       'column_create companies member COLUMN_SCALAR companies_member';
+        assert.equal(dump, expected);
+
+        done();
+      })
+      .error(function(error) {
+        done(error);
+      });
+  });
+
   test('Get, Action=DeleteIndexField (text)', function(done) {
     var path = '/?DomainName=companies&Action=CreateDomain&Version=2011-02-01';
     utils.get(path, {
@@ -368,6 +438,55 @@ suite('Configuration API', function() {
       });
   });
 
+  test('Get, Action=DeleteIndexField (literal)', function(done) {
+    var path = '/?DomainName=companies&Action=CreateDomain&Version=2011-02-01';
+    utils.get(path, {
+                'Host': 'cloudsearch.localhost'
+              })
+      .next(function(response) {
+        var path = '/?DomainName=companies&IndexField.IndexFieldName=member&' +
+                   'IndexField.IndexFieldType=literal&' +
+                   'Action=DefineIndexField&Version=2011-02-01';
+        return utils.get(path);
+      })
+      .next(function(response) {
+        var path = '/?DomainName=companies&IndexFieldName=member&' +
+                   'Action=DeleteIndexField&Version=2011-02-01';
+        return utils.get(path);
+      })
+      .next(function(response) {
+        var expected = {
+              statusCode: 200,
+              body: '<?xml version="1.0"?>\n' +
+                    '<DeleteIndexFieldResponse xmlns="' + XMLNS + '">' +
+                      '<DeleteIndexFieldResult/>' +
+                      '<ResponseMetadata>' +
+                        '<RequestId></RequestId>' +
+                      '</ResponseMetadata>' +
+                    '</DeleteIndexFieldResponse>'
+            };
+        var actual = {
+              statusCode: response.statusCode,
+              body: response.body
+            };
+        assert.deepEqual(actual, expected);
+
+        var dump = database.commandSync('dump', {
+              tables: 'companies'
+            });
+        var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
+                       'table_create companies_BigramTerms ' +
+                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
+                         '--default_tokenizer TokenBigram';
+        assert.equal(dump, expected);
+
+        done();
+      })
+      .error(function(error) {
+        done(error);
+      });
+  });
+
   test('Get, Action=IndexDocuments', function(done) {
     var path = '/?DomainName=companies&Action=CreateDomain&Version=2011-02-01';
     utils.get(path, {
@@ -375,6 +494,12 @@ suite('Configuration API', function() {
               })
       .next(function(response) {
         var path = '/?DomainName=companies&IndexField.IndexFieldName=name&' +
+                   'Action=DefineIndexField&Version=2011-02-01';
+        return utils.get(path);
+      })
+      .next(function(response) {
+        var path = '/?DomainName=companies&IndexField.IndexFieldName=age&' +
+                   'IndexField.IndexFieldType=uint&' +
                    'Action=DefineIndexField&Version=2011-02-01';
         return utils.get(path);
       })
@@ -408,10 +533,14 @@ suite('Configuration API', function() {
               tables: 'companies'
             });
         var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
+                       'column_create companies age COLUMN_SCALAR UInt32\n' +
                        'column_create companies name COLUMN_SCALAR ShortText\n' +
                        'table_create companies_BigramTerms ' +
                          'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
                          '--default_tokenizer TokenBigram\n' +
+                       'table_create companies_age TABLE_HASH_KEY UInt32\n' +
+                       'column_create companies_age companies_age ' +
+                         'COLUMN_INDEX|WITH_POSITION companies age\n' +
                        'column_create companies_BigramTerms companies_name ' +
                          'COLUMN_INDEX|WITH_POSITION companies name';
         assert.equal(dump, expected);
