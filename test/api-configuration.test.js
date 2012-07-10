@@ -96,8 +96,7 @@ suite('Configuration API', function() {
       })
       .next(function(response) {
         var dump = database.commandSync('dump');
-        // var expected = '';
-        var expected = undefined; // nroonga returns undefined for a blank database!
+        var expected = '';
         assert.equal(dump, expected);
 
         var expected = {
