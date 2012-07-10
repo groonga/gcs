@@ -551,6 +551,45 @@ suite('Configuration API', function() {
       });
   });
 
+  test('Get, Action=UpdateSynonymOptions', function(done) {
+    var synonymsObject = {
+      synonyms: {
+        tokio: ["tokyo"],
+        dekkaido: ["hokkaido"]
+      }
+    };
+    var json = JSON.stringify(synonymsObject);
+    var synonyms = encodeURIComponent(json);
+    var path = '/?Version=2011-02-01&Action=UpdateSynonymOptions&DomainName=companies&Synonyms='+synonyms;
+    utils.get(path, {
+                'Host': 'cloudsearch.localhost'
+              })
+      .next(function(response) {
+        assert.equal(response.statusCode, 200);
+        var responseExpected = "OK"; // FIXME;
+
+        assert.equal(response.body, responseExpected);
+        var dumpExpected =
+             'table_create companies_synonyms TABLE_HASH_KEY ShortText\n' +
+             'column_create companies_synonyms synonyms COLUMN_VECTOR ShortText\n' +
+             'load --table companies_synonyms\n' +
+             '[\n' +
+             '["_key","synonyms"],\n' +
+             '["tokio",["tokyo"]],\n' +
+             '["dekkaido",["hokkaido"]]\n' +
+             ']';
+        var dumpActual = database.commandSync('dump', {
+          tables: 'companies_synonyms'
+        });
+        assert.equal(dumpExpected, dumpActual);
+
+        done();
+      })
+      .error(function(error) {
+        done(error);
+      });
+  });
+
   test('Get, no version', function(done) {
     var path = '/?Action=unknown';
     utils.get(path, {
@@ -582,25 +621,6 @@ suite('Configuration API', function() {
         var expected = {
               statusCode: 400,
               body: createCommonErrorResponse('InvalidParameterValue', message)
-            };
-        assert.deepEqual(response, expected);
-        done();
-      })
-      .error(function(error) {
-        done(error);
-      });
-  });
-
-  test('Get, invalid action', function(done) {
-    var path = '/?Version=2011-02-01&Action=unknown';
-    utils.get(path, {
-                'Host': 'cloudsearch.localhost'
-              })
-      .next(function(response) {
-        var message = 'The action unknown is not valid for this web service.';
-        var expected = {
-              statusCode: 400,
-              body: createCommonErrorResponse('InvalidAction', message)
             };
         assert.deepEqual(response, expected);
         done();
