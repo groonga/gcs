@@ -12,11 +12,17 @@ html
       |  span view raw:
       |  a(href=urlForRawRequest, target='_blank')= urlForRawRequest
     script#results-template(type="text/html")
+      |p#showing
+      |.pager#pager
+      |  li.previous
+      |    a(href="#") &larr; Previous
+      |  li.next
+      |    a(href="#") Next &rarr;
       |table.table.table-bordered
       |  if hits.hit.length > 0
       |    each record, index in hits.hit
       |      tr.id-row
-      |        td= index + 1
+      |        td= hits.start + index + 1
       |        td.id-cell(colspan="2")= record.id
       |      each value, columnName in record.data
       |        tr
