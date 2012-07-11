@@ -48,7 +48,7 @@ suite('batch/processor/Processor (instance methods)', function() {
 
   test('getColumns', function() {
     var columns = processor.getColumns();
-    var expected = ['name', 'address', 'email_address', 'description'];
+    var expected = ['name', 'address', 'email_address', 'description', 'age'];
     assert.deepEqual(columns.sort(), expected.sort());
   });
 
