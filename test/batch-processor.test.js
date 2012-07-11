@@ -48,24 +48,24 @@ suite('batch/processor/Processor (instance methods)', function() {
 
   test('getIndexFields', function() {
     var fields = processor.getIndexFields();
+    fields = fields.map(function(field) {
+      return {
+        name: field.name,
+        type: field.name
+      };
+    });
     var expected = [
           { name: 'address',
-            columnName: 'address',
             type: 'text'},
           { name: 'age',
-            columnName: 'age',
             type: 'uint'},
           { name: 'description',
-            columnName: 'description',
             type: 'text'},
           { name: 'email_address',
-            columnName: 'email_address',
             type: 'text'},
           { name: 'name',
-            columnName: 'name',
             type: 'text'},
           { name: 'product',
-            columnName: 'product',
             type: 'literal'}
         ];
     function sortFields(a, b) {
