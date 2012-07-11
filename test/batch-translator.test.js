@@ -31,7 +31,8 @@ suite('batch/translator/Translator (instance methods)', function() {
               'name': batch['fields']['name'],
               'address': batch['fields']['address'],
               'email_address': batch['fields']['email_address'],
-              'age': batch['fields']['age']
+              'age': batch['fields']['age'],
+              'product': batch['fields']['product']
             }])
           }
         };
@@ -63,7 +64,8 @@ suite('batch/translator/Translator (instance methods)', function() {
               'name': batch['fields']['name'],
               'address': batch['fields']['address'],
               'email_address': batch['fields']['email_address'],
-              'age': batch['fields']['age']
+              'age': batch['fields']['age'],
+              'product': batch['fields']['product']
             }])
           }
         };
@@ -96,7 +98,8 @@ suite('batch/translator/Translator (instance methods)', function() {
                 'name': batches[0]['fields']['name'],
                 'address': batches[0]['fields']['address'],
                 'email_address': batches[0]['fields']['email_address'],
-                'age': batches[0]['fields']['age']
+                'age': batches[0]['fields']['age'],
+                'product': batches[0]['fields']['product']
               }])
             }
           },
@@ -109,7 +112,8 @@ suite('batch/translator/Translator (instance methods)', function() {
                 'name': batches[1]['fields']['name'],
                 'address': batches[1]['fields']['address'],
                 'email_address': batches[1]['fields']['email_address'],
-                'age': batches[1]['fields']['age']
+                'age': batches[1]['fields']['age'],
+                'product': batches[1]['fields']['product']
               }])
             }
           },
