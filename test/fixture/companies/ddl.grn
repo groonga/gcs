@@ -1,6 +1,6 @@
+table_create companies_product TABLE_HASH_KEY ShortText
 table_create companies_age TABLE_HASH_KEY UInt32
 table_create companies_BigramTerms TABLE_PAT_KEY|KEY_NORMALIZE ShortText --default_tokenizer TokenBigram
-table_create companies_product TABLE_HASH_KEY ShortText
 table_create companies TABLE_HASH_KEY ShortText
 column_create companies address COLUMN_SCALAR ShortText
 column_create companies age COLUMN_SCALAR UInt32
