@@ -8,7 +8,8 @@
       "name": "Brazil",
       "address": "Shibuya, Tokyo, Japan",
       "email_address": "info@razil.jp",
-      "age": 1
+      "age": 1,
+      "product": "groonga"
     }
   },
   {
@@ -20,7 +21,8 @@
       "name": "Enishi Tech Inc.",
       "address": "Sapporo, Hokkaido, Japan",
       "email_address": "info@enishi-tech.com",
-      "age": 2
+      "age": 2,
+      "product": "groonga"
     }
   },
   {
@@ -32,7 +34,8 @@
       "name": "ClearCode Inc.",
       "address": "Hongo, Tokyo, Japan",
       "email_address": "info@clear-code.com",
-      "age": 3
+      "age": 3,
+      "product": "groonga"
     }
   },
   {
@@ -43,7 +46,8 @@
     "fields": {
       "name": "Anaheim Electronics",
       "address": "Granada, Moon",
-      "age": 4
+      "age": 4,
+      "product": "gundam"
     }
   },
   {
@@ -54,7 +58,8 @@
     "fields": {
       "name": "Shinsei Industry",
       "address": "Earth",
-      "age": 5
+      "age": 5,
+      "product": "valkyrie"
     }
   },
   {
@@ -65,7 +70,8 @@
     "fields": {
       "name": "Omni Consumer Products",
       "address": "Detroit and Delta City, Michigan, United States",
-      "age": 6
+      "age": 6,
+      "product": "robocop"
     }
   },
   {
@@ -76,7 +82,8 @@
     "fields": {
       "name": "Capsule Corporation",
       "address": "West City",
-      "age": 7
+      "age": 7,
+      "product": "time machine"
     }
   },
   {
@@ -87,7 +94,8 @@
     "fields": {
       "name": "Stark Industries",
       "address": "United States",
-      "age": 8
+      "age": 8,
+      "product": "iron man"
     }
   },
   {
@@ -98,7 +106,8 @@
     "fields": {
       "name": "Umbrella Corporation",
       "address": "Tokyo, Japan",
-      "age": 9
+      "age": 9,
+      "product": "tyrant"
     }
   },
   {
@@ -109,7 +118,8 @@
     "fields": {
       "name": "U.S. Robots and Mechanical Men",
       "address": "New York, United States",
-      "age": 10
+      "age": 10,
+      "product": "ndr114"
     }
   }
 ]

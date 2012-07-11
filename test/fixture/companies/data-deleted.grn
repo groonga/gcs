@@ -1,13 +1,13 @@
 load --table companies
 [
 ["_key","address","age","description","email_address","name"],
-["id2","Sapporo, Hokkaido, Japan",2,"","info@enishi-tech.com","Enishi Tech Inc."],
-["id3","Hongo, Tokyo, Japan",3,"","info@clear-code.com","ClearCode Inc."],
-["id4","Granada, Moon",4,"","","Anaheim Electronics"],
-["id5","Earth",5,"","","Shinsei Industry"],
-["id6","Detroit and Delta City, Michigan, United States",6,"","","Omni Consumer Products"],
-["id7","West City",7,"","","Capsule Corporation"],
-["id8","United States",8,"","","Stark Industries"],
-["id9","Tokyo, Japan",9,"","","Umbrella Corporation"],
-["id10","New York, United States",10,"","","U.S. Robots and Mechanical Men"]
+["id2","Sapporo, Hokkaido, Japan",2,"","info@enishi-tech.com","Enishi Tech Inc.","groonga"],
+["id3","Hongo, Tokyo, Japan",3,"","info@clear-code.com","ClearCode Inc.","groonga"],
+["id4","Granada, Moon",4,"","","Anaheim Electronics","gundam"],
+["id5","Earth",5,"","","Shinsei Industry","valkyrie"],
+["id6","Detroit and Delta City, Michigan, United States",6,"","","Omni Consumer Products","robocop"],
+["id7","West City",7,"","","Capsule Corporation","time machine"],
+["id8","United States",8,"","","Stark Industries","iron man"],
+["id9","Tokyo, Japan",9,"","","Umbrella Corporation","tyrant"],
+["id10","New York, United States",10,"","","U.S. Robots and Mechanical Men","ndr114"]
 ]
