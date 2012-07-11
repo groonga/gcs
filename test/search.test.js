@@ -70,7 +70,9 @@ suite('Search API', function() {
               address: ['Hongo, Tokyo, Japan'],
               description: [''],
               email_address: ['info@clear-code.com'],
-              name: ['ClearCode Inc.']
+              name: ['ClearCode Inc.'],
+              age: [3],
+              product: ['groonga']
             }
           }]
         },
@@ -106,7 +108,9 @@ suite('Search API', function() {
                 address: ['Shibuya, Tokyo, Japan'],
                 description: [''],
                 email_address: ['info@razil.jp'],
-                name: ['Brazil']
+                name: ['Brazil'],
+                age: [1],
+                product: ['groonga']
               }
             },
             {
@@ -117,7 +121,9 @@ suite('Search API', function() {
                 address: ['Hongo, Tokyo, Japan'],
                 description: [''],
                 email_address: ['info@clear-code.com'],
-                name: ['ClearCode Inc.']
+                name: ['ClearCode Inc.'],
+                age: [3],
+                product: ['groonga']
               }
             },
             {
@@ -128,7 +134,9 @@ suite('Search API', function() {
                 address: ['Tokyo, Japan'],
                 description: [''],
                 email_address: [''],
-                name: ['Umbrella Corporation']
+                name: ['Umbrella Corporation'],
+                age: [9],
+                product: ['tyrant']
               }
             }
           ]
@@ -165,7 +173,9 @@ suite('Search API', function() {
                 address: ['Shibuya, Tokyo, Japan'],
                 description: [''],
                 email_address: ['info@razil.jp'],
-                name: ['Brazil']
+                name: ['Brazil'],
+                age: [1],
+                product: ['groonga']
               }
             },
             {
@@ -176,7 +186,9 @@ suite('Search API', function() {
                 address: ['Hongo, Tokyo, Japan'],
                 description: [''],
                 email_address: ['info@clear-code.com'],
-                name: ['ClearCode Inc.']
+                name: ['ClearCode Inc.'],
+                age: [3],
+                product: ['groonga']
               }
             }
           ]
@@ -212,7 +224,9 @@ suite('Search API', function() {
                 address: ['Hongo, Tokyo, Japan'],
                 description: [''],
                 email_address: ['info@clear-code.com'],
-                name: ['ClearCode Inc.']
+                name: ['ClearCode Inc.'],
+                age: [3],
+                product: ['groonga']
               }
             },
             {
@@ -223,7 +237,9 @@ suite('Search API', function() {
                 address: ['Tokyo, Japan'],
                 description: [''],
                 email_address: [''],
-                name: ['Umbrella Corporation']
+                name: ['Umbrella Corporation'],
+                age: [9],
+                product: ['tyrant']
               }
             }
           ]
