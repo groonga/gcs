@@ -48,8 +48,66 @@ suite('batch/processor/Processor (instance methods)', function() {
 
   test('getColumns', function() {
     var columns = processor.getColumns();
-    var expected = ['name', 'address', 'email_address', 'description',
-                    'age', 'product'];
+    var expected = [
+          { id: 0,
+            name: 'address',
+            path: '/path/to/database/file',
+            type: 'var',
+            flags: 
+        ];
+
+
+
+[ { id: 265,
+    name: 'address',
+    path: '/home/piro/gcs/test/tmp/database-1/database.0000109',
+    type: 'var',
+    flags: 'COLUMN_SCALAR|PERSISTENT',
+    domain: 'companies',
+    range: 'ShortText',
+    source: [] },
+  { id: 271,
+    name: 'age',
+    path: '/home/piro/gcs/test/tmp/database-1/database.000010F',
+    type: 'fix',
+    flags: 'COLUMN_SCALAR|PERSISTENT',
+    domain: 'companies',
+    range: 'UInt32',
+    source: [] },
+  { id: 264,
+    name: 'description',
+    path: '/home/piro/gcs/test/tmp/database-1/database.0000108',
+    type: 'var',
+    flags: 'COLUMN_SCALAR|PERSISTENT',
+    domain: 'companies',
+    range: 'ShortText',
+    source: [] },
+  { id: 266,
+    name: 'email_address',
+    path: '/home/piro/gcs/test/tmp/database-1/database.000010A',
+    type: 'var',
+    flags: 'COLUMN_SCALAR|PERSISTENT',
+    domain: 'companies',
+    range: 'ShortText',
+    source: [] },
+  { id: 263,
+    name: 'name',
+    path: '/home/piro/gcs/test/tmp/database-1/database.0000107',
+    type: 'var',
+    flags: 'COLUMN_SCALAR|PERSISTENT',
+    domain: 'companies',
+    range: 'ShortText',
+    source: [] },
+  { id: 267,
+    name: 'product',
+    path: '/home/piro/gcs/test/tmp/database-1/database.000010B',
+    type: 'fix',
+    flags: 'COLUMN_SCALAR|PERSISTENT',
+    domain: 'companies',
+    range: 'companies_product',
+    source: [] } ]
+
+
     assert.deepEqual(columns.sort(), expected.sort());
   });
 
