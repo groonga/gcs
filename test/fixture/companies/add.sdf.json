@@ -7,7 +7,8 @@
     "fields": {
       "name": "Brazil",
       "address": "Shibuya, Tokyo, Japan",
-      "email_address": "info@razil.jp"
+      "email_address": "info@razil.jp",
+      "age": 1
     }
   },
   {
@@ -18,7 +19,8 @@
     "fields": {
       "name": "Enishi Tech Inc.",
       "address": "Sapporo, Hokkaido, Japan",
-      "email_address": "info@enishi-tech.com"
+      "email_address": "info@enishi-tech.com",
+      "age": 2
     }
   },
   {
@@ -29,7 +31,8 @@
     "fields": {
       "name": "ClearCode Inc.",
       "address": "Hongo, Tokyo, Japan",
-      "email_address": "info@clear-code.com"
+      "email_address": "info@clear-code.com",
+      "age": 3
     }
   },
   {
@@ -39,7 +42,8 @@
     "lang": "en",
     "fields": {
       "name": "Anaheim Electronics",
-      "address": "Granada, Moon"
+      "address": "Granada, Moon",
+      "age": 4
     }
   },
   {
@@ -49,7 +53,8 @@
     "lang": "en",
     "fields": {
       "name": "Shinsei Industry",
-      "address": "Earth"
+      "address": "Earth",
+      "age": 5
     }
   },
   {
@@ -59,7 +64,8 @@
     "lang": "en",
     "fields": {
       "name": "Omni Consumer Products",
-      "address": "Detroit and Delta City, Michigan, United States"
+      "address": "Detroit and Delta City, Michigan, United States",
+      "age": 6
     }
   },
   {
@@ -69,7 +75,8 @@
     "lang": "en",
     "fields": {
       "name": "Capsule Corporation",
-      "address": "West City"
+      "address": "West City",
+      "age": 7
     }
   },
   {
@@ -79,7 +86,8 @@
     "lang": "en",
     "fields": {
       "name": "Stark Industries",
-      "address": "United States"
+      "address": "United States",
+      "age": 8
     }
   },
   {
@@ -89,7 +97,8 @@
     "lang": "en",
     "fields": {
       "name": "Umbrella Corporation",
-      "address": "Tokyo, Japan"
+      "address": "Tokyo, Japan",
+      "age": 9
     }
   },
   {
@@ -99,7 +108,8 @@
     "lang": "en",
     "fields": {
       "name": "U.S. Robots and Mechanical Men",
-      "address": "New York, United States"
+      "address": "New York, United States",
+      "age": 10
     }
   }
 ]

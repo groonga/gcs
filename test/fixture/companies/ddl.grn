@@ -1,6 +1,8 @@
 table_create companies_BigramTerms TABLE_PAT_KEY|KEY_NORMALIZE ShortText --default_tokenizer TokenBigram
 table_create companies TABLE_HASH_KEY ShortText
+table_create companies_age TABLE_HASH_KEY UInt32
 column_create companies address COLUMN_SCALAR ShortText
+column_create companies age COLUMN_SCALAR UInt32
 column_create companies description COLUMN_SCALAR ShortText
 column_create companies email_address COLUMN_SCALAR ShortText
 column_create companies name COLUMN_SCALAR ShortText
@@ -8,3 +10,4 @@ column_create companies_BigramTerms companies_name COLUMN_INDEX|WITH_POSITION co
 column_create companies_BigramTerms companies_email_address COLUMN_INDEX|WITH_POSITION companies email_address
 column_create companies_BigramTerms companies_description COLUMN_INDEX|WITH_POSITION companies description
 column_create companies_BigramTerms companies_address COLUMN_INDEX|WITH_POSITION companies address
+column_create companies_age companies_age COLUMN_INDEX|WITH_POSITION companies age
