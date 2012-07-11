@@ -95,7 +95,8 @@ suite('batch/translator/Translator (instance methods)', function() {
                 '_key': batches[0]['id'],
                 'name': batches[0]['fields']['name'],
                 'address': batches[0]['fields']['address'],
-                'email_address': batches[0]['fields']['email_address']
+                'email_address': batches[0]['fields']['email_address'],
+                'age': batches[0]['fields']['age']
               }])
             }
           },
@@ -107,7 +108,8 @@ suite('batch/translator/Translator (instance methods)', function() {
                 '_key': batches[1]['id'],
                 'name': batches[1]['fields']['name'],
                 'address': batches[1]['fields']['address'],
-                'email_address': batches[1]['fields']['email_address']
+                'email_address': batches[1]['fields']['email_address'],
+                'age': batches[1]['fields']['age']
               }])
             }
           },
