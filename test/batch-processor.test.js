@@ -51,7 +51,7 @@ suite('batch/processor/Processor (instance methods)', function() {
     fields = fields.map(function(field) {
       return {
         name: field.name,
-        type: field.name
+        type: field.type
       };
     });
     var expected = [
