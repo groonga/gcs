@@ -3,22 +3,13 @@ var assert = require('chai').assert;
 var http = require('http');
 var fs = require('fs');
 
-var temporaryDatabase;
-
-suiteSetup(function() {
-  temporaryDatabase = utils.createTemporaryDatabase();
-});
-
-suiteTeardown(function() {
-  temporaryDatabase.teardown();
-  temporaryDatabase = undefined;
-});
-
 suite('Search API', function() {
   var server;
   var database;
+  var temporaryDatabase;
 
   setup(function() {
+    temporaryDatabase = utils.createTemporaryDatabase();
     database = temporaryDatabase.get();
     utils.loadDumpFile(database, __dirname + '/fixture/companies/ddl.grn');
     utils.loadDumpFile(database, __dirname + '/fixture/companies/data.grn');
@@ -26,8 +17,9 @@ suite('Search API', function() {
   });
 
   teardown(function() {
+    temporaryDatabase.teardown();
+    temporaryDatabase = undefined;
     server.close();
-    temporaryDatabase.clear();
   });
 
   function testSearch(path, host, callback) {
