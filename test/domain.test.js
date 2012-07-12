@@ -159,6 +159,23 @@ suite('domain', function() {
           var domain = new Domain(request);
         }, /cannot appear in a domain name/);
       });
+
+      test('host vs path', function() {
+        var host = 'doc-test0123-id0123.example.com';
+        var request = { headers: { host: host },
+                        url: '/gcs/test4567' };
+        var domain = new Domain(request);
+        assert.equal(domain.name, 'test0123');
+      });
+
+      test('option vs host vs path', function() {
+        var host = 'doc-test0123-id0123.example.com';
+        var request = { headers: { host: host },
+                        url: '/gcs/test4567',
+                        query: { DomainName: 'test890' } };
+        var domain = new Domain(request);
+        assert.equal(domain.name, 'test890');
+      });
     });
   });
 
