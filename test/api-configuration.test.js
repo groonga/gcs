@@ -554,7 +554,7 @@ suite('Configuration API', function() {
     var synonymsObject = {
       synonyms: {
         tokio: ["tokyo"],
-        dekkaido: ["hokkaido"]
+        dekkaido: "hokkaido"
       }
     };
     var json = JSON.stringify(synonymsObject);
@@ -575,7 +575,7 @@ suite('Configuration API', function() {
                 '<State>RequiresIndexDocuments</State>' +
                 '<UpdateDate>1970-01-01T00:00:00Z</UpdateDate>' +
               '</Status>' +
-              '<Options>{&quot;synonyms&quot;:{&quot;tokio&quot;:[&quot;tokyo&quot;],&quot;dekkaido&quot;:[&quot;hokkaido&quot;]}}</Options>' +
+              '<Options>{&quot;synonyms&quot;:{&quot;tokio&quot;:[&quot;tokyo&quot;],&quot;dekkaido&quot;:&quot;hokkaido&quot;}}</Options>' +
             '</Synonyms>' +
           '</UpdateSynonymOptionsResult>' +
           '<ResponseMetadata>' +
