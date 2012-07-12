@@ -566,9 +566,29 @@ suite('Configuration API', function() {
               })
       .next(function(response) {
         assert.equal(response.statusCode, 200);
-        var responseExpected = "OK"; // FIXME;
+        var bodyExpected =
+        '<UpdateSynonymOptionsResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">' +
+          '<UpdateSynonymOptionsResult>' +
+            '<Synonyms>' +
+              '<Status>' +
+                '<CreationDate>1970-01-01T00:00:00Z</CreationDate>' +
+                '<UpdateVersion>0</UpdateVersion>' +
+                '<State>RequiresIndexDocuments</State>' +
+                '<UpdateDate>1970-01-01T00:00:00Z</UpdateDate>' +
+              '</Status>' +
+              '<Options>{&quot;synonyms&quot;:{&quot;tokio&quot;:[&quot;tokyo&quot;],&quot;dekkaido&quot;:[&quot;hokkaido&quot;]}}</Options>' +
+            '</Synonyms>' +
+          '</UpdateSynonymOptionsResult>' +
+          '<ResponseMetadata>' +
+            '<RequestId></RequestId>' +
+          '</ResponseMetadata>' +
+        '</UpdateSynonymOptionsResponse>';
 
-        assert.equal(response.body, responseExpected);
+        assert.match(response.body, /^<UpdateSynonymOptionsResponse xmlns=/);
+        assert.equal(response.body
+                      .replace(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/g,
+                               '1970-01-01T00:00:00Z'),
+                    bodyExpected);
         var dumpExpected =
              'table_create companies_synonyms TABLE_HASH_KEY|KEY_NORMALIZE ShortText\n' +
              'column_create companies_synonyms synonyms COLUMN_VECTOR ShortText\n' +
