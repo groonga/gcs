@@ -69,23 +69,6 @@ suite('domain', function() {
       });
     });
 
-    suite('from host name', function() {
-      test('valid', function() {
-        var host = 'doc-test0123-id0123.example.com';
-        var request = { headers: { host: host } };
-        var domain = new Domain(request);
-        assert.equal(domain.name, 'test0123');
-      });
-
-      test('invalid', function() {
-        assert.throw(function() {
-          var host = 'doc-domain_name-id0123.example.com';
-          var request = { headers: { host: host } };
-          var domain = new Domain(request);
-        }, /cannot appear in a domain name/);
-      });
-    });
-
     suite('getNameFromHost', function() {
       test('valid, doc, lower case and number', function() {
         var host = 'doc-test0123-id0123.example.com';
@@ -124,25 +107,6 @@ suite('domain', function() {
       });
     });
 
-    suite('from path', function() {
-      test('valid', function() {
-        var host = 'example.com';
-        var request = { headers: { host: host },
-                        url: '/gcs/test0123' };
-        var domain = new Domain(request);
-        assert.equal(domain.name, 'test0123');
-      });
-
-      test('invalid', function() {
-        assert.throw(function() {
-          var host = 'example.com';
-        var request = { headers: { host: host },
-                        url: '/gcs/test_01234' };
-          var domain = new Domain(request);
-        }, /cannot appear in a domain name/);
-      });
-    });
-
     suite('getNameFromPath', function() {
       test('valid, lower case and number', function() {
         var path = '/gcs/test0123/';
@@ -160,6 +124,40 @@ suite('domain', function() {
         var path = '/gcs';
         var name = Domain.getNameFromPath(path);
         assert.equal(name, '');
+      });
+    });
+
+    suite('auto detection', function() {
+      test('from host, valid', function() {
+        var host = 'doc-test0123-id0123.example.com';
+        var request = { headers: { host: host } };
+        var domain = new Domain(request);
+        assert.equal(domain.name, 'test0123');
+      });
+
+      test('from host, invalid', function() {
+        assert.throw(function() {
+          var host = 'doc-domain_name-id0123.example.com';
+          var request = { headers: { host: host } };
+          var domain = new Domain(request);
+        }, /cannot appear in a domain name/);
+      });
+
+      test('from path, valid', function() {
+        var host = 'example.com';
+        var request = { headers: { host: host },
+                        url: '/gcs/test0123' };
+        var domain = new Domain(request);
+        assert.equal(domain.name, 'test0123');
+      });
+
+      test('from path, invalid', function() {
+        assert.throw(function() {
+          var host = 'example.com';
+        var request = { headers: { host: host },
+                        url: '/gcs/test_01234' };
+          var domain = new Domain(request);
+        }, /cannot appear in a domain name/);
       });
     });
   });
