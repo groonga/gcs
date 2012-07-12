@@ -179,14 +179,17 @@ suite('database', function() {
     suite('getting data from database', function() {
       var temporaryDatabase;
       var context;
+      var domain;
 
       setup(function() {
         temporaryDatabase = utils.createTemporaryDatabase();
         context = temporaryDatabase.get();
         utils.loadDumpFile(context, __dirname + '/fixture/companies/ddl.grn');
+        domain = new Domain('companies', context);
       });
 
       teardown(function() {
+        domain = undefined;
         temporaryDatabase.teardown();
         temporaryDatabase = undefined;
       });
