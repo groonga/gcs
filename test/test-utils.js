@@ -5,7 +5,7 @@ var gcsServer = require(__dirname + '/../lib/server');
 var http = require('http');
 var Deferred = require('jsdeferred').Deferred;
 var nroonga = require('nroonga');
-var Database = require(__dirname + '/../lib/database').Database;
+var Database = require(__dirname + '/../lib/wrapped-nroonga').Database;
 
 var temporaryDirectory = exports.temporaryDirectory = path.join(__dirname, 'tmp');
 
