@@ -583,7 +583,6 @@ suite('Configuration API', function() {
           '</ResponseMetadata>' +
         '</UpdateSynonymOptionsResponse>';
 
-        assert.match(response.body, /^<UpdateSynonymOptionsResponse xmlns=/);
         assert.equal(replaceXMLDates(response.body), bodyExpected);
         var dumpExpected =
              'table_create companies_synonyms TABLE_HASH_KEY|KEY_NORMALIZE ShortText\n' +
