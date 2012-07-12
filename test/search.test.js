@@ -255,7 +255,7 @@ suite('Search API', function() {
       }
     );
 
-    testSearch('/2011-02-01/search?q=tokio',
+    testSearch('/2011-02-01/search?q=Tokio',
                'should not match with any entry',
                'search-companies-00000000000000000000000000.localhost',
       function(response, body, done) {
@@ -289,7 +289,7 @@ suite('Search API', function() {
       utils.loadDumpFile(database, __dirname + '/fixture/companies/synonyms.grn');
     });
 
-    testSearch('/2011-02-01/search?q=tokio',
+    testSearch('/2011-02-01/search?q=Tokio',
                'should match with using synonyms',
                'search-companies-00000000000000000000000000.localhost',
       function(response, body, done) {

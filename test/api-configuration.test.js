@@ -570,7 +570,7 @@ suite('Configuration API', function() {
 
         assert.equal(response.body, responseExpected);
         var dumpExpected =
-             'table_create companies_synonyms TABLE_HASH_KEY ShortText\n' +
+             'table_create companies_synonyms TABLE_HASH_KEY|KEY_NORMALIZE ShortText\n' +
              'column_create companies_synonyms synonyms COLUMN_VECTOR ShortText\n' +
              'load --table companies_synonyms\n' +
              '[\n' +

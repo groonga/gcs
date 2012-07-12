@@ -1,4 +1,4 @@
-table_create companies_synonyms TABLE_HASH_KEY ShortText
+table_create companies_synonyms TABLE_HASH_KEY|KEY_NORMALIZE ShortText
 column_create companies_synonyms synonyms COLUMN_VECTOR ShortText
 load --table companies_synonyms
 [
