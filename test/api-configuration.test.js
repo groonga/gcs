@@ -16,6 +16,11 @@ function createCommonErrorResponse(errorCode, message) {
 var XMLNS = 'http://cloudsearch.amazonaws.com/doc/2011-02-01';
 var FAKE_DOMAIN_ID = '00000000000000000000000000';
 
+function replaceXMLDates(str) {
+  return str.replace(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/g,
+                     '1970-01-01T00:00:00Z');
+}
+
 suite('Configuration API', function() {
   var temporaryDatabase;
   var database;
@@ -189,9 +194,7 @@ suite('Configuration API', function() {
             };
         var actual = {
               statusCode: response.statusCode,
-              body: response.body
-                      .replace(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/g,
-                               '1970-01-01T00:00:00Z')
+              body: replaceXMLDates(response.body)
             };
         assert.deepEqual(actual, expected);
 
@@ -256,9 +259,7 @@ suite('Configuration API', function() {
             };
         var actual = {
               statusCode: response.statusCode,
-              body: response.body
-                      .replace(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/g,
-                               '1970-01-01T00:00:00Z')
+              body: replaceXMLDates(response.body)
             };
         assert.deepEqual(actual, expected);
 
@@ -326,9 +327,7 @@ suite('Configuration API', function() {
             };
         var actual = {
               statusCode: response.statusCode,
-              body: response.body
-                      .replace(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/g,
-                               '1970-01-01T00:00:00Z')
+              body: replaceXMLDates(response.body)
             };
         assert.deepEqual(actual, expected);
 
@@ -585,10 +584,7 @@ suite('Configuration API', function() {
         '</UpdateSynonymOptionsResponse>';
 
         assert.match(response.body, /^<UpdateSynonymOptionsResponse xmlns=/);
-        assert.equal(response.body
-                      .replace(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/g,
-                               '1970-01-01T00:00:00Z'),
-                    bodyExpected);
+        assert.equal(replaceXMLDates(response.body), bodyExpected);
         var dumpExpected =
              'table_create companies_synonyms TABLE_HASH_KEY|KEY_NORMALIZE ShortText\n' +
              'column_create companies_synonyms synonyms COLUMN_VECTOR ShortText\n' +
