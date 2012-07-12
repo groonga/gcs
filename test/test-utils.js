@@ -4,7 +4,7 @@ var mkdirp = require('mkdirp');
 var gcsServer = require(__dirname + '/../lib/server');
 var http = require('http');
 var Deferred = require('jsdeferred').Deferred;
-var nroonga = require('nroonga');
+var nativeNroonga = require('nroonga');
 var wrappedNroonga = require(__dirname + '/../lib/wrapped-nroonga');
 
 var temporaryDirectory = exports.temporaryDirectory = path.join(__dirname, 'tmp');
@@ -85,7 +85,7 @@ exports.createTemporaryDatabase = function() {
     path: databasePath,
     get: function() {
       return this._context ||
-             (this._context = new nroonga.Database(databasePath));
+             (this._context = new nativeNroonga.Database(databasePath));
     },
     clear: function() {
       var context = this._context;
