@@ -123,6 +123,26 @@ suite('domain', function() {
         assert.equal(name, '');
       });
     });
+
+    suite('getNameFromPath', function() {
+      test('valid, lower case and number', function() {
+        var path = '/gcs/test0123/';
+        var name = Domain.getNameFromPath(path);
+        assert.equal(name, 'test0123');
+      });
+
+      test('valid, lower case, hyphen and number', function() {
+        var path = '/gcs/test-0123/';
+        var name = Domain.getNameFromPath(path);
+        assert.equal(name, 'test-0123');
+      });
+
+      test('invalid', function() {
+        var path = '/gcs';
+        var name = Domain.getNameFromPath(path);
+        assert.equal(name, '');
+      });
+    });
   });
 
   suite('IndexField', function() {
