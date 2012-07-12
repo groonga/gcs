@@ -2,9 +2,8 @@ var utils = require('./test-utils');
 
 var assert = require('chai').assert;
 
-var domain = require('../lib/database/domain');
-var Domain = domain.Domain;
-var IndexField = domain.IndexField;
+var Domain = require('../lib/database/domain').Domain;
+var IndexField = require('../lib/database/index-field').IndexField;
 
 suite('domain', function() {
   suite('Domain', function() {
