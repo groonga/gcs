@@ -529,6 +529,7 @@ suite('Configuration API', function() {
                     '<IndexDocumentsResponse xmlns="' + XMLNS + '">' +
                       '<IndexDocumentsResult>' +
                         '<FieldNames>' +
+                          '<member>age</member>' +
                           '<member>name</member>' +
                         '</FieldNames>' +
                       '</IndexDocumentsResult>' +
