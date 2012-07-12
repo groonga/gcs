@@ -2,7 +2,7 @@ var utils = require('./test-utils');
 
 var assert = require('chai').assert;
 
-var domain = require('../lib/domain');
+var domain = require('../lib/database/domain');
 var Domain = domain.Domain;
 var IndexField = domain.IndexField;
 
