@@ -21,13 +21,13 @@ suiteTeardown(function() {
 });
 
 suite('documents/batch API', function() {
-  var database;
+  var context;
   var server;
 
   setup(function() {
-    database = temporaryDatabase.get();
-    utils.loadDumpFile(database, __dirname + '/fixture/companies/ddl.grn');
-    server = utils.setupServer(database);
+    context = temporaryDatabase.get();
+    utils.loadDumpFile(context, __dirname + '/fixture/companies/ddl.grn');
+    server = utils.setupServer(context);
   });
 
   teardown(function() {
@@ -53,7 +53,7 @@ suite('documents/batch API', function() {
             };
         assert.deepEqual(response, expected);
 
-        var dump = database.commandSync('dump', {
+        var dump = context.commandSync('dump', {
               tables: 'companies'
             });
         assert.equal(dump, schemeDump + '\n' + loadDump);
@@ -90,7 +90,7 @@ suite('documents/batch API', function() {
             };
         assert.deepEqual(response, expected);
 
-        var dump = database.commandSync('dump', {
+        var dump = context.commandSync('dump', {
               tables: 'companies'
             });
         assert.equal(dump, schemeDump + '\n' + deletedLoadDump);

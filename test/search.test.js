@@ -5,13 +5,13 @@ var fs = require('fs');
 
 suite('Search API', function() {
   var server;
-  var database;
+  var context;
   var temporaryDatabase;
 
   setup(function() {
     temporaryDatabase = utils.createTemporaryDatabase();
-    database = temporaryDatabase.get();
-    server = utils.setupServer(database);
+    context = temporaryDatabase.get();
+    server = utils.setupServer(context);
   });
 
   teardown(function() {
@@ -42,8 +42,8 @@ suite('Search API', function() {
 
   suite('with fixture loaded', function() {
     setup(function() {
-      utils.loadDumpFile(database, __dirname + '/fixture/companies/ddl.grn');
-      utils.loadDumpFile(database, __dirname + '/fixture/companies/data.grn');
+      utils.loadDumpFile(context, __dirname + '/fixture/companies/ddl.grn');
+      utils.loadDumpFile(context, __dirname + '/fixture/companies/data.grn');
     });
 
     testSearch('/2011-02-01/search?q=Hongo',
@@ -284,9 +284,9 @@ suite('Search API', function() {
 
   suite('with fixture and synonyms loaded', function() {
     setup(function() {
-      utils.loadDumpFile(database, __dirname + '/fixture/companies/ddl.grn');
-      utils.loadDumpFile(database, __dirname + '/fixture/companies/data.grn');
-      utils.loadDumpFile(database, __dirname + '/fixture/companies/synonyms.grn');
+      utils.loadDumpFile(context, __dirname + '/fixture/companies/ddl.grn');
+      utils.loadDumpFile(context, __dirname + '/fixture/companies/data.grn');
+      utils.loadDumpFile(context, __dirname + '/fixture/companies/synonyms.grn');
     });
 
     testSearch('/2011-02-01/search?q=Tokio',

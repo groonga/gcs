@@ -24,15 +24,15 @@ suiteTeardown(function() {
 
 suite('batch/processor/Processor (instance methods)', function() {
   var processor;
-  var database;
+  var context;
 
   setup(function() {
-    database = temporaryDatabase.get();
-    utils.loadDumpFile(database, __dirname + '/fixture/companies/ddl.grn');
+    context = temporaryDatabase.get();
+    utils.loadDumpFile(context, __dirname + '/fixture/companies/ddl.grn');
 
     processor = new Processor({
       databasePath: temporaryDatabase.path,
-      database: database, // we must reuse the existing connection!
+      context: context, // we must reuse the existing connection!
       domain: 'companies',
     });
   });
@@ -85,7 +85,7 @@ suite('batch/processor/Processor (instance methods)', function() {
               deletes: 0
             };
         assert.deepEqual(result, expected);
-        var dump = database.commandSync('dump', {
+        var dump = context.commandSync('dump', {
               tables: 'companies'
             });
         assert.equal(dump, schemeDump + '\n' + loadDump);
@@ -112,7 +112,7 @@ suite('batch/processor/Processor (instance methods)', function() {
               deletes: 1
             };
         assert.deepEqual(result, expected);
-        var dump = database.commandSync('dump', {
+        var dump = context.commandSync('dump', {
               tables: 'companies'
             });
         assert.equal(dump, schemeDump + '\n' + deletedLoadDump);

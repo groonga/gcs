@@ -5,7 +5,7 @@ var gcsServer = require(__dirname + '/../lib/server');
 var http = require('http');
 var Deferred = require('jsdeferred').Deferred;
 var nroonga = require('nroonga');
-var Database = require(__dirname + '/../lib/wrapped-nroonga').Database;
+var wrappedNroonga = require(__dirname + '/../lib/wrapped-nroonga');
 
 var temporaryDirectory = exports.temporaryDirectory = path.join(__dirname, 'tmp');
 
@@ -14,8 +14,8 @@ var testPort = 3333;
 exports.testHost = testHost;
 exports.testPort = testPort;
 
-function setupServer(database) {
-  var server = gcsServer.createServer({database: database});
+function setupServer(context) {
+  var server = gcsServer.createServer({context: context});
   server.listen(testPort);
   return server;
 }
@@ -84,27 +84,27 @@ exports.createTemporaryDatabase = function() {
   return {
     path: databasePath,
     get: function() {
-      return this._database ||
-             (this._database = new nroonga.Database(databasePath));
+      return this._context ||
+             (this._context = new nroonga.Database(databasePath));
     },
     clear: function() {
-      var database = this._database;
-      var tables = database.commandSync('table_list');
-      Database.formatResults(tables).forEach(function(table) {
-        database.commandSync('table_remove', { name: table.name });
+      var context = this._context;
+      var tables = context.commandSync('table_list');
+      wrappedNroonga.formatResults(tables).forEach(function(table) {
+        context.commandSync('table_remove', { name: table.name });
       });
     },
     teardown: function() {
       rmRSync(databaseDirectory);
-      this._database = undefined;
+      this._context = undefined;
     }
   };
 };
 
-exports.loadDumpFile = function(database, path) {
+exports.loadDumpFile = function(context, path) {
   var dump = fs.readFileSync(path, 'UTF-8');
   dump.split('\n').forEach(function(line) {
-    database.commandSyncString(line);
+    context.commandSyncString(line);
   });
 }
 

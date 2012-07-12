@@ -23,13 +23,13 @@ function replaceXMLDates(str) {
 
 suite('Configuration API', function() {
   var temporaryDatabase;
-  var database;
+  var context;
   var server;
 
   setup(function() {
     temporaryDatabase = utils.createTemporaryDatabase();
-    database = temporaryDatabase.get();
-    server = utils.setupServer(database);
+    context = temporaryDatabase.get();
+    server = utils.setupServer(context);
   });
 
   teardown(function() {
@@ -44,7 +44,7 @@ suite('Configuration API', function() {
                 'Host': 'cloudsearch.localhost'
               })
       .next(function(response) {
-        var dump = database.commandSync('dump', {
+        var dump = context.commandSync('dump', {
               tables: 'companies'
             });
         var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
@@ -100,7 +100,7 @@ suite('Configuration API', function() {
                });
       })
       .next(function(response) {
-        var dump = database.commandSync('dump');
+        var dump = context.commandSync('dump');
         var expected = '';
         assert.equal(dump, expected);
 
@@ -152,7 +152,7 @@ suite('Configuration API', function() {
         return utils.get(path);
       })
       .next(function(response) {
-        var dump = database.commandSync('dump', {
+        var dump = context.commandSync('dump', {
               tables: 'companies'
             });
         var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
@@ -217,7 +217,7 @@ suite('Configuration API', function() {
         return utils.get(path);
       })
       .next(function(response) {
-        var dump = database.commandSync('dump', {
+        var dump = context.commandSync('dump', {
               tables: 'companies'
             });
         var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
@@ -282,7 +282,7 @@ suite('Configuration API', function() {
         return utils.get(path);
       })
       .next(function(response) {
-        var dump = database.commandSync('dump', {
+        var dump = context.commandSync('dump', {
               tables: 'companies'
             });
         var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
@@ -355,7 +355,7 @@ suite('Configuration API', function() {
         return utils.get(path);
       })
       .next(function(response) {
-        var dump = database.commandSync('dump', {
+        var dump = context.commandSync('dump', {
               tables: 'companies'
             });
         var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
@@ -404,7 +404,7 @@ suite('Configuration API', function() {
         return utils.get(path);
       })
       .next(function(response) {
-        var dump = database.commandSync('dump', {
+        var dump = context.commandSync('dump', {
               tables: 'companies'
             });
         var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
@@ -453,7 +453,7 @@ suite('Configuration API', function() {
         return utils.get(path);
       })
       .next(function(response) {
-        var dump = database.commandSync('dump', {
+        var dump = context.commandSync('dump', {
               tables: 'companies'
             });
         var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
@@ -507,7 +507,7 @@ suite('Configuration API', function() {
         return utils.get(path);
       })
       .next(function(response) {
-        var dump = database.commandSync('dump', {
+        var dump = context.commandSync('dump', {
               tables: 'companies'
             });
         var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
@@ -593,7 +593,7 @@ suite('Configuration API', function() {
              '["tokio",["tokyo"]],\n' +
              '["dekkaido",["hokkaido"]]\n' +
              ']';
-        var dumpActual = database.commandSync('dump', {
+        var dumpActual = context.commandSync('dump', {
           tables: 'companies_synonyms'
         });
         assert.equal(dumpExpected, dumpActual);
