@@ -4,7 +4,7 @@ var assert = require('chai').assert;
 
 var Domain = require('../lib/database/domain').Domain;
 
-suite('domain', function() {
+suite('database', function() {
   suite('Domain', function() {
     test('lower case', function() {
       var domain = new Domain('valid');
@@ -173,6 +173,50 @@ suite('domain', function() {
                         query: { DomainName: 'test890' } };
         var domain = new Domain(request);
         assert.equal(domain.name, 'test890');
+      });
+    });
+
+    suite('getting data from database', function() {
+      var temporaryDatabase;
+      var context;
+
+      setup(function() {
+        temporaryDatabase = utils.createTemporaryDatabase();
+        context = temporaryDatabase.get();
+        utils.loadDumpFile(context, __dirname + '/fixture/companies/ddl.grn');
+      });
+
+      teardown(function() {
+        temporaryDatabase.teardown();
+        temporaryDatabase = undefined;
+      });
+
+      test('indexFields', function() {
+        var fields = domain.indexFields;
+        fields = fields.map(function(field) {
+          return {
+            name: field.name,
+            type: field.type
+          };
+        });
+        var expected = [
+              { name: 'address',
+                type: 'text'},
+              { name: 'age',
+                type: 'uint'},
+              { name: 'description',
+                type: 'text'},
+              { name: 'email_address',
+                type: 'text'},
+              { name: 'name',
+                type: 'text'},
+              { name: 'product',
+                type: 'literal'}
+            ];
+        function sortFields(a, b) {
+          return a.name - b.name;
+        }
+        assert.deepEqual(fields.sort(sortFields), expected.sort(sortFields));
       });
     });
   });

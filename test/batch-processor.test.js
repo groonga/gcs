@@ -46,34 +46,6 @@ suite('batch/processor/Processor (instance methods)', function() {
     assert.equal(processor.databasePath, temporaryDatabase.path);
   });
 
-  test('getIndexFields', function() {
-    var fields = processor.getIndexFields();
-    fields = fields.map(function(field) {
-      return {
-        name: field.name,
-        type: field.type
-      };
-    });
-    var expected = [
-          { name: 'address',
-            type: 'text'},
-          { name: 'age',
-            type: 'uint'},
-          { name: 'description',
-            type: 'text'},
-          { name: 'email_address',
-            type: 'text'},
-          { name: 'name',
-            type: 'text'},
-          { name: 'product',
-            type: 'literal'}
-        ];
-    function sortFields(a, b) {
-      return a.name - b.name;
-    }
-    assert.deepEqual(fields.sort(sortFields), expected.sort(sortFields));
-  });
-
   test('load add-batches', function(done) {
     var batches = fs.readFileSync(__dirname + '/fixture/companies/add.sdf.json', 'UTF-8');
     batches = JSON.parse(batches);
