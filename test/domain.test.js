@@ -124,6 +124,25 @@ suite('domain', function() {
       });
     });
 
+    suite('from path', function() {
+      test('valid', function() {
+        var host = 'example.com';
+        var request = { headers: { host: host },
+                        url: '/gcs/test0123' };
+        var domain = new Domain(request);
+        assert.equal(domain.name, 'test0123');
+      });
+
+      test('invalid', function() {
+        assert.throw(function() {
+          var host = 'example.com';
+        var request = { headers: { host: host },
+                        url: '/gcs/test_01234' };
+          var domain = new Domain(request);
+        }, /cannot appear in a domain name/);
+      });
+    });
+
     suite('getNameFromPath', function() {
       test('valid, lower case and number', function() {
         var path = '/gcs/test0123/';
