@@ -143,7 +143,7 @@ function sortAndStringify(object) {
       return JSON.stringify(object);
     default:
       if (Array.isArray(object)) {
-        return '[' + object.map(function(item) { return sortAndStringify(item); }).sort().join(', ') + ']';
+        return '[' + object.map(function(item) { return sortAndStringify(item); }).join(', ') + ']';
       } else if (!object) {
         return JSON.stringify(object);
       } else {
