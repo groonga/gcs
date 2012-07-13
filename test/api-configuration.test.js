@@ -47,6 +47,15 @@ var PATTERN_CreateDomainResponse = {
         ResponseMetadata: PATTERN_ResponseMetadata
       }
     };
+var PATTERN_DeleteDomainResponse = {
+      DeleteDomainResponse: {
+        '@': { xmlns: '' },
+        DeleteDomainResult: {
+          DomainStatus: PATTERN_DomainStatus
+        },
+        ResponseMetadata: PATTERN_ResponseMetadata
+      }
+    };
 
 function toXMLPattern(fragment) {
   switch (typeof fragment) {
@@ -114,7 +123,6 @@ suite('Configuration API', function() {
         assert.equal(dump, expectedDump);
 
         response = toParsedResponse(response);
-        
         assert.deepEqual(response.pattern,
                          { statusCode: 200,
                            body: PATTERN_CreateDomainResponse });
@@ -156,37 +164,31 @@ suite('Configuration API', function() {
       })
       .next(function(response) {
         var dump = context.commandSync('dump');
-        var expected = '';
-        assert.equal(dump, expected);
+        var expectedDump = '';
+        assert.equal(dump, expectedDump);
 
-        var expected = {
-              statusCode: 200,
-              body: '<?xml version="1.0"?>\n' +
-                    '<DeleteDomainResponse xmlns="' + XMLNS + '">' +
-                      '<DeleteDomainResult>' +
-                        '<DomainStatus>' +
-                          '<Created>false</Created>' +
-                          '<Deleted>true</Deleted>' +
-                          '<DocService>' +
-                            '<Endpoint>doc-companies-00000000000000000000000000.localhost</Endpoint>' +
-                          '</DocService>' +
-                          '<DomainId>' + Domain.FAKE_DOMAIN_ID + '/companies</DomainId>' +
-                          '<DomainName>companies</DomainName>' +
-                          '<NumSearchableDocs>0</NumSearchableDocs>' +
-                          '<RequiresIndexDocuments>false</RequiresIndexDocuments>' +
-                          '<SearchInstanceCount>0</SearchInstanceCount>' +
-                          '<SearchPartitionCount>0</SearchPartitionCount>' +
-                          '<SearchService>' +
-                            '<Endpoint>search-companies-00000000000000000000000000.localhost</Endpoint>' +
-                          '</SearchService>' +
-                        '</DomainStatus>' +
-                      '</DeleteDomainResult>' +
-                      '<ResponseMetadata>' +
-                        '<RequestId></RequestId>' +
-                      '</ResponseMetadata>' +
-                    '</DeleteDomainResponse>'
+        response = toParsedResponse(response);
+        assert.deepEqual(response.pattern,
+                         { statusCode: 200,
+                           body: PATTERN_DeleteDomainResponse });
+        var expectedStatus = {
+              Created: 'false',
+              Deleted: 'true',
+              DocService: {
+                Endpoint: 'doc-companies-' + Domain.FAKE_DOMAIN_ID + '.localhost'
+              },
+              DomainId: Domain.FAKE_DOMAIN_ID + '/companies',
+              DomainName: 'companies',
+              NumSearchableDocs: '0',
+              RequiresIndexDocuments: 'false',
+              SearchInstanceCount: '0',
+              SearchPartitionCount: '0',
+              SearchService: {
+                Endpoint: 'search-companies-' + Domain.FAKE_DOMAIN_ID + '.localhost'
+              }
             };
-        assert.deepEqual(response, expected);
+        var status = response.body.CreateDomainResponse.CreateDomainResult.DomainStatus;
+        assert.deepEqual(status, expectedStatus);
 
         done();
       })
