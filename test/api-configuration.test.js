@@ -2,6 +2,8 @@ var utils = require('./test-utils');
 var assert = require('chai').assert;
 var fs = require('fs');
 
+var Domain = require('../lib/database').Domain;
+
 function createCommonErrorResponse(errorCode, message) {
   return '<?xml version="1.0"?>\n' +
          '<Response>' +
@@ -14,7 +16,6 @@ function createCommonErrorResponse(errorCode, message) {
 }
 
 var XMLNS = 'http://cloudsearch.amazonaws.com/doc/2011-02-01';
-var FAKE_DOMAIN_ID = '00000000000000000000000000';
 
 function replaceXMLDates(str) {
   return str.replace(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/g,
@@ -70,16 +71,16 @@ suite('Configuration API', function() {
                       Created: 'true',
                       Deleted: 'false',
                       DocService: {
-                        Endpoint: 'doc-companies-' + FAKE_DOMAIN_ID + '.localhost'
+                        Endpoint: 'doc-companies-' + Domain.FAKE_DOMAIN_ID + '.localhost'
                       },
-                      DomainId: FAKE_DOMAIN_ID + '/companies',
+                      DomainId: Domain.FAKE_DOMAIN_ID + '/companies',
                       DomainName: 'companies',
                       NumSearchableDocs: '0',
                       RequiresIndexDocuments: 'false',
                       SearchInstanceCount: '0',
                       SearchPartitionCount: '0',
                       SearchService: {
-                        Endpoint: 'search-companies-' + FAKE_DOMAIN_ID + '.localhost'
+                        Endpoint: 'search-companies-' + Domain.FAKE_DOMAIN_ID + '.localhost'
                       }
                     }
                   },
@@ -124,7 +125,7 @@ suite('Configuration API', function() {
                           '<DocService>' +
                             '<Endpoint>doc-companies-00000000000000000000000000.localhost</Endpoint>' +
                           '</DocService>' +
-                          '<DomainId>' + FAKE_DOMAIN_ID + '/companies</DomainId>' +
+                          '<DomainId>' + Domain.FAKE_DOMAIN_ID + '/companies</DomainId>' +
                           '<DomainName>companies</DomainName>' +
                           '<NumSearchableDocs>0</NumSearchableDocs>' +
                           '<RequiresIndexDocuments>false</RequiresIndexDocuments>' +
