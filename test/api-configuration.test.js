@@ -134,7 +134,7 @@ suite('Configuration API', function() {
                 Endpoint: 'search-companies-' + Domain.FAKE_DOMAIN_ID + '.localhost'
               }
             };
-        var status = response.CreateDomainResponse.CreateDomainResult.DomainStatus;
+        var status = response.body.CreateDomainResponse.CreateDomainResult.DomainStatus;
         assert.deepEqual(status, expectedStatus);
 
         done();
