@@ -57,6 +57,78 @@ var PATTERN_DeleteDomainResponse = {
       }
     };
 
+var PATTERN_OptionStatus = {
+      CreationDate: '',
+      State: '',
+      UpdateDate: '',
+      UpdateVersion: ''
+    };
+var PATTERN_TextOptions = {
+      DefaultValue: {},
+      FacetEnabled: '',
+      ResultEnabled: ''
+    };
+var PATTERN_IndexField_Text = {
+      IndexFieldName: '',
+      IndexFieldType: '',
+      TextOptions: PATTERN_TextOptions
+    };
+var PATTERN_IndexFieldStatus_Text = {
+      Options: PATTERN_IndexField_Text,
+      Status: PATTERN_OptionStatus
+    };
+var PATTERN_DefineIndexFieldResponse_Text = {
+      DefineIndexFieldResponse: {
+        '@': { xmlns: '' },
+        DefineIndexFieldResult: {
+          IndexField: PATTERN_IndexFieldStatus_Text
+        },
+        ResponseMetadata: PATTERN_ResponseMetadata
+      }
+    };
+var PATTERN_UIntOptions = {
+      DefaultValue: {}
+    };
+var PATTERN_IndexField_UInt = {
+      IndexFieldName: '',
+      IndexFieldType: '',
+      TextOptions: PATTERN_UIntOptions
+    };
+var PATTERN_IndexFieldStatus_UInt = {
+      Options: PATTERN_IndexField_UInt,
+      Status: PATTERN_OptionStatus
+    };
+var PATTERN_DefineIndexFieldResponse_UInt = {
+      DefineIndexFieldResponse: {
+        '@': { xmlns: '' },
+        DefineIndexFieldResult: {
+          IndexField: PATTERN_IndexFieldStatus_UInt
+        },
+        ResponseMetadata: PATTERN_ResponseMetadata
+      }
+    };
+var PATTERN_LiteralOptions = {
+      DefaultValue: {}
+    };
+var PATTERN_IndexField_Literal = {
+      IndexFieldName: '',
+      IndexFieldType: '',
+      TextOptions: PATTERN_LiteralOptions
+    };
+var PATTERN_IndexFieldStatus_Literal = {
+      Options: PATTERN_IndexField_Literal,
+      Status: PATTERN_OptionStatus
+    };
+var PATTERN_DefineIndexFieldResponse_Literal = {
+      DefineIndexFieldResponse: {
+        '@': { xmlns: '' },
+        DefineIndexFieldResult: {
+          IndexField: PATTERN_IndexFieldStatus_Literal
+        },
+        ResponseMetadata: PATTERN_ResponseMetadata
+      }
+    };
+
 function toXMLPattern(fragment) {
   switch (typeof fragment) {
     default:
@@ -221,39 +293,21 @@ suite('Configuration API', function() {
                          'COLUMN_INDEX|WITH_POSITION companies name';
         assert.equal(dump, expected);
 
-        var expected = {
-              statusCode: 200,
-              body: '<?xml version="1.0"?>\n' +
-                    '<DefineIndexFieldResponse xmlns="' + XMLNS + '">' +
-                      '<DefineIndexFieldResult>' +
-                        '<IndexField>' +
-                          '<Options>' +
-                            '<IndexFieldName>name</IndexFieldName>' +
-                            '<IndexFieldType>text</IndexFieldType>' +
-                            '<TextOptions>' +
-                              '<DefaultValue/>' +
-                              '<FacetEnabled>false</FacetEnabled>' +
-                              '<ResultEnabled>true</ResultEnabled>' +
-                            '</TextOptions>' +
-                          '</Options>' +
-                          '<Status>' +
-                            '<CreationDate>1970-01-01T00:00:00Z</CreationDate>' +
-                            '<State>RequiresIndexDocuments</State>' +
-                            '<UpdateDate>1970-01-01T00:00:00Z</UpdateDate>' +
-                            '<UpdateVersion>0</UpdateVersion>' +
-                          '</Status>' +
-                        '</IndexField>' +
-                      '</DefineIndexFieldResult>' +
-                      '<ResponseMetadata>' +
-                        '<RequestId></RequestId>' +
-                      '</ResponseMetadata>' +
-                    '</DefineIndexFieldResponse>'
+        response = toParsedResponse(response);
+        assert.deepEqual(response.pattern,
+                         { statusCode: 200,
+                           body: PATTERN_DefineIndexFieldResponse_Text });
+        var expectedOptions = {
+              IndexFieldName: 'name',
+              IndexFieldType: 'text',
+              TextOptions: {
+                DefaultValue: {},
+                FacetEnabled: false,
+                ResultEnabled: true
+              }
             };
-        var actual = {
-              statusCode: response.statusCode,
-              body: replaceXMLDates(response.body)
-            };
-        assert.deepEqual(actual, expected);
+        var options = response.body.DefineIndexFieldResponse.DefineIndexFieldResult.IndexField.Options;
+        assert.deepEqual(options, expectedOptions);
 
         done();
       })
