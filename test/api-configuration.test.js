@@ -21,6 +21,13 @@ function replaceXMLDates(str) {
                      '1970-01-01T00:00:00Z');
 }
 
+function toParsedResponse(response) {
+  return {
+    statusCode: response.statusCode,
+    body: utils.XMLStringToJSON(response.body)
+  };
+}
+
 suite('Configuration API', function() {
   var temporaryDatabase;
   var context;
@@ -55,32 +62,33 @@ suite('Configuration API', function() {
 
         var expected = {
               statusCode: 200,
-              body: '<?xml version="1.0"?>\n' +
-                    '<CreateDomainResponse xmlns="' + XMLNS + '">' +
-                      '<CreateDomainResult>' +
-                        '<DomainStatus>' +
-                          '<Created>true</Created>' +
-                          '<Deleted>false</Deleted>' +
-                          '<DocService>' +
-                            '<Endpoint>doc-companies-00000000000000000000000000.localhost</Endpoint>' +
-                          '</DocService>' +
-                          '<DomainId>' + FAKE_DOMAIN_ID + '/companies</DomainId>' +
-                          '<DomainName>companies</DomainName>' +
-                          '<NumSearchableDocs>0</NumSearchableDocs>' +
-                          '<RequiresIndexDocuments>false</RequiresIndexDocuments>' +
-                          '<SearchInstanceCount>0</SearchInstanceCount>' +
-                          '<SearchPartitionCount>0</SearchPartitionCount>' +
-                          '<SearchService>' +
-                            '<Endpoint>search-companies-00000000000000000000000000.localhost</Endpoint>' +
-                          '</SearchService>' +
-                        '</DomainStatus>' +
-                      '</CreateDomainResult>' +
-                      '<ResponseMetadata>' +
-                        '<RequestId></RequestId>' +
-                      '</ResponseMetadata>' +
-                    '</CreateDomainResponse>'
+              body: { '@': {
+                        xmlns: XMLNS
+                      },
+                      CreateDomainResult: {
+                        DomainStatus: {
+                          Created: 'true',
+                          Deleted: 'false',
+                          DocService: {
+                            Endpoint: 'doc-companies-' + FAKE_DOMAIN_ID + '.localhost'
+                          },
+                          DomainId: FAKE_DOMAIN_ID + '/companies',
+                          DomainName: 'companies',
+                          NumSearchableDocs: '0',
+                          RequiresIndexDocuments: 'false',
+                          SearchInstanceCount: '0',
+                          SearchPartitionCount: '0',
+                          SearchService: {
+                            Endpoint: 'search-companies-' + FAKE_DOMAIN_ID + '.localhost'
+                          }
+                        }
+                      },
+                      ResponseMetadata: {
+                        RequestId: {}
+                      }
+                    }
             };
-        assert.deepEqual(response, expected);
+        assert.deepEqual(toParsedResponse(response), expected);
 
         done();
       })
