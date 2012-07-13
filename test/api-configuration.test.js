@@ -92,7 +92,7 @@ var PATTERN_UIntOptions = {
 var PATTERN_IndexField_UInt = {
       IndexFieldName: '',
       IndexFieldType: '',
-      TextOptions: PATTERN_UIntOptions
+      UIntOptions: PATTERN_UIntOptions
     };
 var PATTERN_IndexFieldStatus_UInt = {
       Options: PATTERN_IndexField_UInt,
@@ -108,12 +108,15 @@ var PATTERN_DefineIndexFieldResponse_UInt = {
       }
     };
 var PATTERN_LiteralOptions = {
-      DefaultValue: {}
+      DefaultValue: {},
+      FacetEnabled: '',
+      ResultEnabled: '',
+      SearchEnabled: ''
     };
 var PATTERN_IndexField_Literal = {
       IndexFieldName: '',
       IndexFieldType: '',
-      TextOptions: PATTERN_LiteralOptions
+      LiteralOptions: PATTERN_LiteralOptions
     };
 var PATTERN_IndexFieldStatus_Literal = {
       Options: PATTERN_IndexField_Literal,
