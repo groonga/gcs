@@ -62,31 +62,32 @@ suite('Configuration API', function() {
 
         var expected = {
               statusCode: 200,
-              body: { '@': {
-                        xmlns: XMLNS
+              body: {
+                CreateDomainResponse: {
+                  '@': { xmlns: XMLNS },
+                  CreateDomainResult: {
+                    DomainStatus: {
+                      Created: 'true',
+                      Deleted: 'false',
+                      DocService: {
+                        Endpoint: 'doc-companies-' + FAKE_DOMAIN_ID + '.localhost'
                       },
-                      CreateDomainResult: {
-                        DomainStatus: {
-                          Created: 'true',
-                          Deleted: 'false',
-                          DocService: {
-                            Endpoint: 'doc-companies-' + FAKE_DOMAIN_ID + '.localhost'
-                          },
-                          DomainId: FAKE_DOMAIN_ID + '/companies',
-                          DomainName: 'companies',
-                          NumSearchableDocs: '0',
-                          RequiresIndexDocuments: 'false',
-                          SearchInstanceCount: '0',
-                          SearchPartitionCount: '0',
-                          SearchService: {
-                            Endpoint: 'search-companies-' + FAKE_DOMAIN_ID + '.localhost'
-                          }
-                        }
-                      },
-                      ResponseMetadata: {
-                        RequestId: {}
+                      DomainId: FAKE_DOMAIN_ID + '/companies',
+                      DomainName: 'companies',
+                      NumSearchableDocs: '0',
+                      RequiresIndexDocuments: 'false',
+                      SearchInstanceCount: '0',
+                      SearchPartitionCount: '0',
+                      SearchService: {
+                        Endpoint: 'search-companies-' + FAKE_DOMAIN_ID + '.localhost'
                       }
                     }
+                  },
+                  ResponseMetadata: {
+                    RequestId: {}
+                  }
+                }
+              }
             };
         assert.deepEqual(toParsedResponse(response), expected);
 

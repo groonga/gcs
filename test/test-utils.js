@@ -133,7 +133,9 @@ exports.rmRSync = rmRSync;
 
 function XMLStringToJSON(xml) {
   var xml2js = require('xml2js');
-  var parser = new xml2js.Parser();
+  var parser = new xml2js.Parser({
+                 explicitRoot: true
+               });
   var json;
   parser.addListener('end', function(result) {
     json = result;
