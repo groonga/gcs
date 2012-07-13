@@ -302,8 +302,8 @@ suite('Configuration API', function() {
               IndexFieldType: 'text',
               TextOptions: {
                 DefaultValue: {},
-                FacetEnabled: false,
-                ResultEnabled: true
+                FacetEnabled: 'false',
+                ResultEnabled: 'true'
               }
             };
         var options = response.body.DefineIndexFieldResponse.DefineIndexFieldResult.IndexField.Options;
