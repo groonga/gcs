@@ -17,16 +17,68 @@ function createCommonErrorResponse(errorCode, message) {
 
 var XMLNS = 'http://cloudsearch.amazonaws.com/doc/2011-02-01';
 
+var PATTERN_DocService = {
+      Endpoint: ''
+    };
+var PATTERN_SearchService = {
+      Endpoint: ''
+    };
+var PATTERN_ResponseMetadata = {
+      RequestId: {}
+    };
+var PATTERN_DomainStatus = {
+      Created: '',
+      Deleted: '',
+      DocService: PATTERN_DocService,
+      DomainId: '',
+      DomainName: '',
+      NumSearchableDocs: '',
+      RequiresIndexDocuments: '',
+      SearchInstanceCount: '',
+      SearchPartitionCount: '',
+      SearchService: PATTERN_SearchService
+    };
+var PATTERN_CreateDomainResponse = {
+      CreateDomainResponse: {
+        '@': { xmlns: '' },
+        CreateDomainResult: {
+          DomainStatus: PATTERN_DomainStatus
+        },
+        ResponseMetadata: PATTERN_ResponseMetadata
+      }
+    };
+
+function toXMLPattern(fragment) {
+  switch (typeof fragment) {
+    default:
+      return '';
+    case 'object':
+      var format = {};
+      Object.keys(fragment).forEach(function(key) {
+        if (!fragment.hasOwnProperty(key))
+          return;
+        format[key] = toXMLPattern(fragment[key]);
+      });
+      return format;
+  }
+}
+
 function replaceXMLDates(str) {
   return str.replace(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/g,
                      '1970-01-01T00:00:00Z');
 }
 
 function toParsedResponse(response) {
-  return {
-    statusCode: response.statusCode,
-    body: utils.XMLStringToJSON(response.body)
-  };
+  var parsed = {
+        statusCode: response.statusCode,
+        body: utils.XMLStringToJSON(response.body)
+      };
+  var pattern = {
+        statusCode: parsed.statusCode,
+        body: toXMLPattern(parsed.body)
+      };
+  parsed.pattern = pattern;
+  return parsed;
 }
 
 suite('Configuration API', function() {
@@ -55,42 +107,35 @@ suite('Configuration API', function() {
         var dump = context.commandSync('dump', {
               tables: 'companies'
             });
-        var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
-                       'table_create companies_BigramTerms ' +
-                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
-                         '--default_tokenizer TokenBigram';
-        assert.equal(dump, expected);
+        var expectedDump = 'table_create companies TABLE_HASH_KEY ShortText\n' +
+                           'table_create companies_BigramTerms ' +
+                             'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
+                             '--default_tokenizer TokenBigram';
+        assert.equal(dump, expectedDump);
 
-        var expected = {
-              statusCode: 200,
-              body: {
-                CreateDomainResponse: {
-                  '@': { xmlns: XMLNS },
-                  CreateDomainResult: {
-                    DomainStatus: {
-                      Created: 'true',
-                      Deleted: 'false',
-                      DocService: {
-                        Endpoint: 'doc-companies-' + Domain.FAKE_DOMAIN_ID + '.localhost'
-                      },
-                      DomainId: Domain.FAKE_DOMAIN_ID + '/companies',
-                      DomainName: 'companies',
-                      NumSearchableDocs: '0',
-                      RequiresIndexDocuments: 'false',
-                      SearchInstanceCount: '0',
-                      SearchPartitionCount: '0',
-                      SearchService: {
-                        Endpoint: 'search-companies-' + Domain.FAKE_DOMAIN_ID + '.localhost'
-                      }
-                    }
-                  },
-                  ResponseMetadata: {
-                    RequestId: {}
-                  }
-                }
+        response = toParsedResponse(response);
+        
+        assert.deepEqual(response.pattern,
+                         { statusCode: 200,
+                           body: PATTERN_CreateDomainResponse });
+        var expectedStatus = {
+              Created: 'true',
+              Deleted: 'false',
+              DocService: {
+                Endpoint: 'doc-companies-' + Domain.FAKE_DOMAIN_ID + '.localhost'
+              },
+              DomainId: Domain.FAKE_DOMAIN_ID + '/companies',
+              DomainName: 'companies',
+              NumSearchableDocs: '0',
+              RequiresIndexDocuments: 'false',
+              SearchInstanceCount: '0',
+              SearchPartitionCount: '0',
+              SearchService: {
+                Endpoint: 'search-companies-' + Domain.FAKE_DOMAIN_ID + '.localhost'
               }
             };
-        assert.deepEqual(toParsedResponse(response), expected);
+        var status = response.CreateDomainResponse.CreateDomainResult.DomainStatus;
+        assert.deepEqual(status, expectedStatus);
 
         done();
       })
