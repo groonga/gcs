@@ -129,3 +129,41 @@ function rmRSync(directoryPath) {
   fs.rmdirSync(directoryPath);
 }
 exports.rmRSync = rmRSync;
+
+
+// activate diff for chai.assert.deepEqual
+
+var chai_utils = require('chai/lib/chai/utils');
+
+function sortAndStringify(object) {
+  switch (typeof object) {
+    case 'string':
+    case 'number':
+    case 'boolean':
+      return JSON.stringify(object);
+    default:
+      if (Array.isArray(object)) {
+        return '[' + object.map(function(item) { return sortAndStringify(item); }).sort().join(', ') + ']';
+      } else if (!object) {
+        return JSON.stringify(object);
+      } else {
+        var sorted = {};
+        Object.keys(object).sort().forEach(function(key) {
+          if (object.hasOwnProperty(key))
+            sorted[key] = object[key];
+        });
+        return JSON.stringify(sorted);
+      }
+  }
+}
+
+require('chai').Assertion.prototype.eql = function(obj) {
+  var expected = chai_utils.flag(this, 'object');
+  this.assert(
+      chai_utils.eql(obj, expected)
+    , 'expected #{this} to deeply equal #{exp}'
+    , 'expected #{this} to not deeply equal #{exp}'
+    , sortAndStringify(expected)
+    , sortAndStringify(obj)
+  );
+};
