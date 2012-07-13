@@ -399,7 +399,7 @@ suite('Configuration API', function() {
         var expectedOptions = {
               IndexFieldName: 'member',
               IndexFieldType: 'literal',
-              UIntOptions: {
+              LiteralOptions: {
                 DefaultValue: {},
                 FacetEnabled: 'false',
                 ResultEnabled: 'false',
