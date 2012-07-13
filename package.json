@@ -23,7 +23,8 @@
     "jsdeferred": "",
     "mkdirp": "",
     "jade": "",
-    "dateformat": ""
+    "dateformat": "",
+    "xml2js": ""
   },
   "scripts": {
     "test": "./node_modules/.bin/mocha --reporter list --ui tdd",

@@ -6,6 +6,7 @@ var http = require('http');
 var Deferred = require('jsdeferred').Deferred;
 var nativeNroonga = require('nroonga');
 var wrappedNroonga = require(__dirname + '/../lib/wrapped-nroonga');
+var xml2js = require('xml2js');
 
 var temporaryDirectory = exports.temporaryDirectory = path.join(__dirname, 'tmp');
 
@@ -129,6 +130,18 @@ function rmRSync(directoryPath) {
   fs.rmdirSync(directoryPath);
 }
 exports.rmRSync = rmRSync;
+
+function XMLStringToJSON(xml) {
+  var xml2js = require('xml2js');
+  var parser = new xml2js.Parser();
+  var json;
+  parser.addListener('end', function(result) {
+    json = result;
+  });
+  parser.parseString(xml);
+  return json;
+}
+exports.XMLStringToJSON = XMLStringToJSON;
 
 
 // activate diff for chai.assert.deepEqual
