@@ -342,37 +342,19 @@ suite('Configuration API', function() {
                          'COLUMN_INDEX|WITH_POSITION companies age';
         assert.equal(dump, expected);
 
-        var expected = {
-              statusCode: 200,
-              body: '<?xml version="1.0"?>\n' +
-                    '<DefineIndexFieldResponse xmlns="' + XMLNS + '">' +
-                      '<DefineIndexFieldResult>' +
-                        '<IndexField>' +
-                          '<Options>' +
-                            '<IndexFieldName>age</IndexFieldName>' +
-                            '<IndexFieldType>uint</IndexFieldType>' +
-                            '<UIntOptions>' +
-                              '<DefaultValue/>' +
-                            '</UIntOptions>' +
-                          '</Options>' +
-                          '<Status>' +
-                            '<CreationDate>1970-01-01T00:00:00Z</CreationDate>' +
-                            '<State>RequiresIndexDocuments</State>' +
-                            '<UpdateDate>1970-01-01T00:00:00Z</UpdateDate>' +
-                            '<UpdateVersion>0</UpdateVersion>' +
-                          '</Status>' +
-                        '</IndexField>' +
-                      '</DefineIndexFieldResult>' +
-                      '<ResponseMetadata>' +
-                        '<RequestId></RequestId>' +
-                      '</ResponseMetadata>' +
-                    '</DefineIndexFieldResponse>'
+        response = toParsedResponse(response);
+        assert.deepEqual(response.pattern,
+                         { statusCode: 200,
+                           body: PATTERN_DefineIndexFieldResponse_UInt });
+        var expectedOptions = {
+              IndexFieldName: 'age',
+              IndexFieldType: 'uint',
+              UIntOptions: {
+                DefaultValue: {}
+              }
             };
-        var actual = {
-              statusCode: response.statusCode,
-              body: replaceXMLDates(response.body)
-            };
-        assert.deepEqual(actual, expected);
+        var options = response.body.DefineIndexFieldResponse.DefineIndexFieldResult.IndexField.Options;
+        assert.deepEqual(options, expectedOptions);
 
         done();
       })
@@ -407,40 +389,22 @@ suite('Configuration API', function() {
                        'column_create companies member COLUMN_SCALAR companies_member';
         assert.equal(dump, expected);
 
-        var expected = {
-              statusCode: 200,
-              body: '<?xml version="1.0"?>\n' +
-                    '<DefineIndexFieldResponse xmlns="' + XMLNS + '">' +
-                      '<DefineIndexFieldResult>' +
-                        '<IndexField>' +
-                          '<Options>' +
-                            '<IndexFieldName>member</IndexFieldName>' +
-                            '<IndexFieldType>literal</IndexFieldType>' +
-                            '<LiteralOptions>' +
-                              '<DefaultValue/>' +
-                              '<FacetEnabled>false</FacetEnabled>' +
-                              '<ResultEnabled>false</ResultEnabled>' +
-                              '<SearchEnabled>false</SearchEnabled>' +
-                            '</LiteralOptions>' +
-                          '</Options>' +
-                          '<Status>' +
-                            '<CreationDate>1970-01-01T00:00:00Z</CreationDate>' +
-                            '<State>RequiresIndexDocuments</State>' +
-                            '<UpdateDate>1970-01-01T00:00:00Z</UpdateDate>' +
-                            '<UpdateVersion>0</UpdateVersion>' +
-                          '</Status>' +
-                        '</IndexField>' +
-                      '</DefineIndexFieldResult>' +
-                      '<ResponseMetadata>' +
-                        '<RequestId></RequestId>' +
-                      '</ResponseMetadata>' +
-                    '</DefineIndexFieldResponse>'
+        response = toParsedResponse(response);
+        assert.deepEqual(response.pattern,
+                         { statusCode: 200,
+                           body: PATTERN_DefineIndexFieldResponse_Literal });
+        var expectedOptions = {
+              IndexFieldName: 'member',
+              IndexFieldType: 'literal',
+              UIntOptions: {
+                DefaultValue: {},
+                FacetEnabled: 'false',
+                ResultEnabled: 'false',
+                SearchEnabled: 'false'
+              }
             };
-        var actual = {
-              statusCode: response.statusCode,
-              body: replaceXMLDates(response.body)
-            };
-        assert.deepEqual(actual, expected);
+        var options = response.body.DefineIndexFieldResponse.DefineIndexFieldResult.IndexField.Options;
+        assert.deepEqual(options, expectedOptions);
 
         done();
       })
