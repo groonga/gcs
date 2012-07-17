@@ -6,7 +6,7 @@
       "version": "1.0.0"
     },
     "nroonga": {
-      "version": "0.2.0",
+      "version": "0.2.1",
       "dependencies": {
         "msgpack2": {
           "version": "0.1.7"
