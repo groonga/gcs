@@ -9,22 +9,13 @@ var deletedLoadDump = fs.readFileSync(__dirname + '/fixture/companies/data-delet
 var addBatch = fs.readFileSync(__dirname + '/fixture/companies/add.sdf.json', 'UTF-8');
 var deleteBatch = fs.readFileSync(__dirname + '/fixture/companies/delete.sdf.json', 'UTF-8');
 
-var temporaryDatabase;
-
-suiteSetup(function() {
-  temporaryDatabase = utils.createTemporaryDatabase();
-});
-
-suiteTeardown(function() {
-  temporaryDatabase.teardown();
-  temporaryDatabase = undefined;
-});
-
 suite('documents/batch API', function() {
   var context;
   var server;
+  var temporaryDatabase;
 
   setup(function() {
+    temporaryDatabase = utils.createTemporaryDatabase();
     context = temporaryDatabase.get();
     utils.loadDumpFile(context, __dirname + '/fixture/companies/ddl.grn');
     server = utils.setupServer(context);
@@ -33,6 +24,8 @@ suite('documents/batch API', function() {
   teardown(function() {
     server.close();
     temporaryDatabase.clear();
+    temporaryDatabase.teardown();
+    temporaryDatabase = undefined;
   });
 
   test('add', function(done) {

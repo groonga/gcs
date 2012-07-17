@@ -11,22 +11,14 @@ var loadDump = fs.readFileSync(__dirname + '/fixture/companies/data.grn', 'UTF-8
 var deletedLoadDump = fs.readFileSync(__dirname + '/fixture/companies/data-deleted.grn', 'UTF-8').replace(/\s+$/, '');
 var deleteDump = fs.readFileSync(__dirname + '/fixture/companies/delete.grn', 'UTF-8').replace(/\s+$/, '');
 
-var temporaryDatabase;
-
-suiteSetup(function() {
-  temporaryDatabase = utils.createTemporaryDatabase();
-});
-
-suiteTeardown(function() {
-  temporaryDatabase.teardown();
-  temporaryDatabase = undefined;
-});
 
 suite('batch/processor/Processor (instance methods)', function() {
   var processor;
   var context;
+  var temporaryDatabase;
 
   setup(function() {
+    temporaryDatabase = utils.createTemporaryDatabase();
     context = temporaryDatabase.get();
     utils.loadDumpFile(context, __dirname + '/fixture/companies/ddl.grn');
 
@@ -40,6 +32,8 @@ suite('batch/processor/Processor (instance methods)', function() {
   teardown(function() {
     processor = undefined;
     temporaryDatabase.clear();
+    temporaryDatabase.teardown();
+    temporaryDatabase = undefined;
   });
 
   test('initialize', function() {
