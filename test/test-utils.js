@@ -96,6 +96,7 @@ exports.createTemporaryDatabase = function() {
       });
     },
     teardown: function() {
+      this._context.close();
       rmRSync(databaseDirectory);
       this._context = undefined;
     }
