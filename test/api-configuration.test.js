@@ -628,11 +628,14 @@ suite('Configuration API', function() {
         var synonymOptions = response.body.UpdateSynonymOptionsResponse
                                           .UpdateSynonymOptionsResult
                                           .Synonyms.Options;
-        assert.deepEqual('{&quot;synonyms&quot;:' +
-                           '{&quot;tokio&quot;:' +
-                             '[&quot;tokyo&quot;],' +
-                              '&quot;dekkaido&quot;:' +
-                                '&quot;hokkaido&quot;}}', synonymOptions);
+        synonymOptions = JSON.parse(synonymOptions);
+        var expectedSynonymOptions = {
+              synonyms: {
+                tokio: ['tokyo'],
+                dekkaido: 'hokkaido'
+              }
+            };
+        assert.deepEqual(expectedSynonymOptions, synonymOptions);
 
         done();
       })
