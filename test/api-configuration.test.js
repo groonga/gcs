@@ -4,17 +4,6 @@ var fs = require('fs');
 
 var Domain = require('../lib/database').Domain;
 
-function createCommonErrorResponse(errorCode, message) {
-  return '<?xml version="1.0"?>\n' +
-         '<Response>' +
-           '<Errors>' +
-             '<Error><Code>' + errorCode + '</Code>' +
-                     '<Message>' + message + '</Message></Error>' +
-             '</Errors>' +
-           '<RequestID></RequestID>' +
-         '</Response>';
-}
-
 var XMLNS = 'http://cloudsearch.amazonaws.com/doc/2011-02-01';
 
 var PATTERN_DocService = {
@@ -127,6 +116,58 @@ var PATTERN_DefineIndexFieldResponse_Literal = {
         '@': { xmlns: '' },
         DefineIndexFieldResult: {
           IndexField: PATTERN_IndexFieldStatus_Literal
+        },
+        ResponseMetadata: PATTERN_ResponseMetadata
+      }
+    };
+
+var PATTERN_DeleteIndexFieldResponse = {
+      DeleteIndexFieldResponse: {
+        '@': { xmlns: '' },
+        DeleteIndexFieldResult: {},
+        ResponseMetadata: PATTERN_ResponseMetadata
+      }
+    };
+
+function PATTERN_IndexDocumentsResponse(members) {
+  return {
+    IndexDocumentsResponse: {
+      '@': { xmlns: '' },
+      IndexDocumentsResult: {
+        FieldNames: members.map(function(member) {
+          return { member: '' };
+        })
+      },
+      ResponseMetadata: PATTERN_ResponseMetadata
+    }
+  };
+}
+
+var PATTERN_UpdateSynonymOptionsResponse = {
+      UpdateSynonymOptionsResponse: {
+        '@': { xmlns: '' },
+        UpdateSynonymOptionsResult: {
+          Synonyms: {
+            Status: {
+              CreationDate: '',
+              UpdateVersion: '',
+              State: '',
+              UpdateDate: ''
+            },
+            Options: ''
+          },
+        },
+        ResponseMetadata: PATTERN_ResponseMetadata
+      }
+    };
+
+var PATTERN_COMMON_ERROR_RESPONSE = {
+      Response: {
+        Errors: {
+          Error: {
+            Code: '',
+            Message: ''
+          }
         },
         ResponseMetadata: PATTERN_ResponseMetadata
       }
@@ -425,21 +466,10 @@ suite('Configuration API', function() {
                          '--default_tokenizer TokenBigram';
         assert.equal(dump, expected);
 
-        var expected = {
-              statusCode: 200,
-              body: '<?xml version="1.0"?>\n' +
-                    '<DeleteIndexFieldResponse xmlns="' + XMLNS + '">' +
-                      '<DeleteIndexFieldResult/>' +
-                      '<ResponseMetadata>' +
-                        '<RequestId></RequestId>' +
-                      '</ResponseMetadata>' +
-                    '</DeleteIndexFieldResponse>'
-            };
-        var actual = {
-              statusCode: response.statusCode,
-              body: response.body
-            };
-        assert.deepEqual(actual, expected);
+        response = toParsedResponse(response);
+        assert.deepEqual(response.pattern,
+                         { statusCode: 200,
+                           body: PATTERN_DeleteIndexFieldResponse });
 
         done();
       })
@@ -468,21 +498,10 @@ suite('Configuration API', function() {
                          '--default_tokenizer TokenBigram';
         assert.equal(dump, expected);
 
-        var expected = {
-              statusCode: 200,
-              body: '<?xml version="1.0"?>\n' +
-                    '<DeleteIndexFieldResponse xmlns="' + XMLNS + '">' +
-                      '<DeleteIndexFieldResult/>' +
-                      '<ResponseMetadata>' +
-                        '<RequestId></RequestId>' +
-                      '</ResponseMetadata>' +
-                    '</DeleteIndexFieldResponse>'
-            };
-        var actual = {
-              statusCode: response.statusCode,
-              body: response.body
-            };
-        assert.deepEqual(actual, expected);
+        response = toParsedResponse(response);
+        assert.deepEqual(response.pattern,
+                         { statusCode: 200,
+                           body: PATTERN_DeleteIndexFieldResponse });
 
         done();
       })
@@ -511,21 +530,10 @@ suite('Configuration API', function() {
                          '--default_tokenizer TokenBigram';
         assert.equal(dump, expected);
 
-        var expected = {
-              statusCode: 200,
-              body: '<?xml version="1.0"?>\n' +
-                    '<DeleteIndexFieldResponse xmlns="' + XMLNS + '">' +
-                      '<DeleteIndexFieldResult/>' +
-                      '<ResponseMetadata>' +
-                        '<RequestId></RequestId>' +
-                      '</ResponseMetadata>' +
-                    '</DeleteIndexFieldResponse>'
-            };
-        var actual = {
-              statusCode: response.statusCode,
-              body: response.body
-            };
-        assert.deepEqual(actual, expected);
+        response = toParsedResponse(response);
+        assert.deepEqual(response.pattern,
+                         { statusCode: 200,
+                           body: PATTERN_DeleteIndexFieldResponse });
 
         done();
       })
@@ -563,26 +571,18 @@ suite('Configuration API', function() {
                          'COLUMN_INDEX|WITH_POSITION companies name';
         assert.equal(dump, expected);
 
-        var expected = {
-              statusCode: 200,
-              body: '<?xml version="1.0"?>\n' +
-                    '<IndexDocumentsResponse xmlns="' + XMLNS + '">' +
-                      '<IndexDocumentsResult>' +
-                        '<FieldNames>' +
-                          '<member>age</member>' +
-                          '<member>name</member>' +
-                        '</FieldNames>' +
-                      '</IndexDocumentsResult>' +
-                      '<ResponseMetadata>' +
-                        '<RequestId></RequestId>' +
-                      '</ResponseMetadata>' +
-                    '</IndexDocumentsResponse>'
-            };
-        var actual = {
-              statusCode: response.statusCode,
-              body: response.body
-            };
-        assert.deepEqual(actual, expected);
+        var expectedFieldNames = ['age', 'name'];
+        response = toParsedResponse(response);
+        assert.deepEqual(response.pattern,
+                         { statusCode: 200,
+                           body: PATTERN_IndexDocumentsResponse(expectedFieldNames) });
+        var fieldNames = response.body.IndexDocumentsResponse
+                                      .IndexDocumentsResult
+                                      .FieldNames
+                                      .map(function(member) {
+                                        return member.member;
+                                      });
+        assert.deepEqual(fieldNames, expectedFieldNames);
 
         done();
       })
@@ -606,26 +606,6 @@ suite('Configuration API', function() {
         'Host': 'cloudsearch.localhost'
       })
       .next(function(response) {
-        assert.equal(response.statusCode, 200);
-        var bodyExpected =
-        '<UpdateSynonymOptionsResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">' +
-          '<UpdateSynonymOptionsResult>' +
-            '<Synonyms>' +
-              '<Status>' +
-                '<CreationDate>1970-01-01T00:00:00Z</CreationDate>' +
-                '<UpdateVersion>0</UpdateVersion>' +
-                '<State>RequiresIndexDocuments</State>' +
-                '<UpdateDate>1970-01-01T00:00:00Z</UpdateDate>' +
-              '</Status>' +
-              '<Options>{&quot;synonyms&quot;:{&quot;tokio&quot;:[&quot;tokyo&quot;],&quot;dekkaido&quot;:&quot;hokkaido&quot;}}</Options>' +
-            '</Synonyms>' +
-          '</UpdateSynonymOptionsResult>' +
-          '<ResponseMetadata>' +
-            '<RequestId></RequestId>' +
-          '</ResponseMetadata>' +
-        '</UpdateSynonymOptionsResponse>';
-
-        assert.equal(replaceXMLDates(response.body), bodyExpected);
         var dumpExpected =
              'table_create companies_synonyms TABLE_HASH_KEY|KEY_NORMALIZE ShortText\n' +
              'column_create companies_synonyms synonyms COLUMN_VECTOR ShortText\n' +
@@ -640,6 +620,20 @@ suite('Configuration API', function() {
         });
         assert.equal(dumpExpected, dumpActual);
 
+        response = toParsedResponse(response);
+        assert.deepEqual(response.pattern,
+                         { statusCode: 200,
+                           body: PATTERN_UpdateSynonymOptionsResponse) });
+
+        var synonymOptions = response.body.UpdateSynonymOptionsResponse
+                                          .UpdateSynonymOptionsResult
+                                          .Synonyms.Options;
+        assert.deepEqual('{&quot;synonyms&quot;:' +
+                           '{&quot;tokio&quot;:' +
+                             '[&quot;tokyo&quot;],' +
+                              '&quot;dekkaido&quot;:' +
+                                '&quot;hokkaido&quot;}}', synonymOptions);
+
         done();
       })
       .error(function(error) {
@@ -653,13 +647,18 @@ suite('Configuration API', function() {
         'Host': 'cloudsearch.localhost'
       })
       .next(function(response) {
-        var message = 'An input parameter "Version" that is mandatory for ' +
-                      'processing the request is not supplied.';;
-        var expected = {
-              statusCode: 400,
-              body: createCommonErrorResponse('MissingParameter', message)
+        response = toParsedResponse(response);
+        assert.deepEqual(response.pattern,
+                         { statusCode: 400,
+                           body: PATTERN_COMMON_ERROR_RESPONSE });
+
+        var expectedError = {
+              Code: 'MissingParameter',
+              Message: 'An input parameter "Version" that is mandatory for ' +
+                       'processing the request is not supplied.'
             };
-        assert.deepEqual(response, expected);
+        assert.deepEqual(response.body.Response.Errors.Error, expectedError);
+
         done();
       })
       .error(function(error) {
@@ -673,13 +672,18 @@ suite('Configuration API', function() {
         'Host': 'cloudsearch.localhost'
       })
       .next(function(response) {
-        var message = 'A bad or out-of-range value "2011-02-02" was supplied ' +
-                      'for the "Version" input parameter.';
-        var expected = {
-              statusCode: 400,
-              body: createCommonErrorResponse('InvalidParameterValue', message)
+        response = toParsedResponse(response);
+        assert.deepEqual(response.pattern,
+                         { statusCode: 400,
+                           body: PATTERN_COMMON_ERROR_RESPONSE });
+
+        var expectedError = {
+              Code: 'InvalidParameterValue',
+              Message: 'A bad or out-of-range value "2011-02-02" was supplied ' +
+                       'for the "Version" input parameter.'
             };
-        assert.deepEqual(response, expected);
+        assert.deepEqual(response.body.Response.Errors.Error, expectedError);
+
         done();
       })
       .error(function(error) {
