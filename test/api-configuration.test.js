@@ -134,9 +134,13 @@ function PATTERN_IndexDocumentsResponse(members) {
     IndexDocumentsResponse: {
       '@': { xmlns: '' },
       IndexDocumentsResult: {
-        FieldNames: members.map(function(member) {
-          return { member: '' };
-        })
+        FieldNames: (function() {
+          var pattern = {};
+          members.forEach(function(member, index) {
+            pattern[index] = { member: '' };
+          });
+          return pattern;
+        })()
       },
       ResponseMetadata: PATTERN_ResponseMetadata
     }
@@ -578,10 +582,15 @@ suite('Configuration API', function() {
                            body: PATTERN_IndexDocumentsResponse(expectedFieldNames) });
         var fieldNames = response.body.IndexDocumentsResponse
                                       .IndexDocumentsResult
-                                      .FieldNames
-                                      .map(function(member) {
-                                        return member.member;
-                                      });
+                                      .FieldNames;
+        fieldNames = (function() {
+          var names = [];
+          for (var i in fieldNames) {
+            if (fieldNames.hasOwnProperty(i))
+              names.push(fieldNames[i].member);
+          }
+          return names;
+        })();
         assert.deepEqual(fieldNames, expectedFieldNames);
 
         done();
