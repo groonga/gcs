@@ -623,7 +623,7 @@ suite('Configuration API', function() {
         response = toParsedResponse(response);
         assert.deepEqual(response.pattern,
                          { statusCode: 200,
-                           body: PATTERN_UpdateSynonymOptionsResponse) });
+                           body: PATTERN_UpdateSynonymOptionsResponse });
 
         var synonymOptions = response.body.UpdateSynonymOptionsResponse
                                           .UpdateSynonymOptionsResult
