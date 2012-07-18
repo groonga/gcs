@@ -137,9 +137,9 @@ function PATTERN_IndexDocumentsResponse(members) {
         FieldNames: (function() {
           var pattern = {};
           members.forEach(function(member, index) {
-            pattern[index] = { member: '' };
+            pattern[index] = '';
           });
-          return pattern;
+          return { member: pattern };
         })()
       },
       ResponseMetadata: PATTERN_ResponseMetadata
@@ -582,12 +582,13 @@ suite('Configuration API', function() {
                            body: PATTERN_IndexDocumentsResponse(expectedFieldNames) });
         var fieldNames = response.body.IndexDocumentsResponse
                                       .IndexDocumentsResult
-                                      .FieldNames;
+                                      .FieldNames
+                                      .member;
         fieldNames = (function() {
           var names = [];
           for (var i in fieldNames) {
             if (fieldNames.hasOwnProperty(i))
-              names.push(fieldNames[i].member);
+              names.push(fieldNames[i]);
           }
           return names;
         })();
