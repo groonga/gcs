@@ -29,12 +29,12 @@ suite('documents/batch API', function() {
   });
 
   test('add', function(done) {
-    var path = '/2011-02-01/documents/batch';
-    utils.post(path, addBatch, {
-      'Content-Type': 'application/json',
-      'Content-Length': addBatch.length,
-      'Host': 'doc-companies-00000000000000000000000000.localhost'
-    })
+    utils
+      .post('/2011-02-01/documents/batch', addBatch, {
+        'Content-Type': 'application/json',
+        'Content-Length': addBatch.length,
+        'Host': 'doc-companies-00000000000000000000000000.localhost'
+      })
       .next(function(response) {
         var expected = {
               statusCode: 200,
@@ -60,17 +60,16 @@ suite('documents/batch API', function() {
 
   test('delete', function(done) {
     var path = '/2011-02-01/documents/batch';
-    utils.post(path, addBatch, {
-      'Content-Type': 'application/json',
-      'Content-Length': addBatch.length,
-      'Host': 'doc-companies-00000000000000000000000000.localhost'
-    })
-      .next(function(response) {
-        return utils.post(path, deleteBatch, {
-                 'Content-Type': 'application/json',
-                 'Content-Length': deleteBatch.length,
-                 'Host': 'doc-companies-00000000000000000000000000.localhost'
-               });
+    utils
+      .post(path, addBatch, {
+        'Content-Type': 'application/json',
+        'Content-Length': addBatch.length,
+        'Host': 'doc-companies-00000000000000000000000000.localhost'
+      })
+      .post(path, deleteBatch, {
+        'Content-Type': 'application/json',
+        'Content-Length': deleteBatch.length,
+        'Host': 'doc-companies-00000000000000000000000000.localhost'
       })
       .next(function(response) {
         var expected = {
@@ -96,11 +95,11 @@ suite('documents/batch API', function() {
   });
 
   test('no content type', function(done) {
-    var path = '/2011-02-01/documents/batch';
-    utils.post(path, 'foobar', {
-      'Content-Length': 'foobar'.length,
-      'Host': 'doc-companies-00000000000000000000000000.localhost'
-    })
+    utils
+      .post('/2011-02-01/documents/batch', 'foobar', {
+        'Content-Length': 'foobar'.length,
+        'Host': 'doc-companies-00000000000000000000000000.localhost'
+      })
       .next(function(response) {
         var expected = {
               statusCode: 400,
@@ -122,12 +121,12 @@ suite('documents/batch API', function() {
   });
 
   test('invalid content type', function(done) {
-    var path = '/2011-02-01/documents/batch';
-    utils.post(path, 'foobar', {
-      'Content-Type': 'text/plain',
-      'Content-Length': 'foobar'.length,
-      'Host': 'doc-companies-00000000000000000000000000.localhost'
-    })
+    utils
+      .post('/2011-02-01/documents/batch', 'foobar', {
+        'Content-Type': 'text/plain',
+        'Content-Length': 'foobar'.length,
+        'Host': 'doc-companies-00000000000000000000000000.localhost'
+      })
       .next(function(response) {
         var expected = {
               statusCode: 400,
@@ -149,11 +148,11 @@ suite('documents/batch API', function() {
   });
 
   test('no content length', function(done) {
-    var path = '/2011-02-01/documents/batch';
-    utils.post(path, '[]', {
-      'Content-Type': 'application/json',
-      'Host': 'doc-companies-00000000000000000000000000.localhost'
-    })
+    utils
+      .post('/2011-02-01/documents/batch', '[]', {
+        'Content-Type': 'application/json',
+        'Host': 'doc-companies-00000000000000000000000000.localhost'
+      })
       .next(function(response) {
         var expected = {
               statusCode: 401,
@@ -176,12 +175,12 @@ suite('documents/batch API', function() {
 
   test('invalid batches', function(done) {
     var batch = fs.readFileSync(__dirname + '/fixture/companies/invalid.sdf.json', 'UTF-8');
-    var path = '/2011-02-01/documents/batch';
-    utils.post(path, batch, {
-      'Content-Type': 'application/json',
-      'Content-Length': batch.length,
-      'Host': 'doc-companies-00000000000000000000000000.localhost'
-    })
+    utils
+      .post('/2011-02-01/documents/batch', batch, {
+        'Content-Type': 'application/json',
+        'Content-Length': batch.length,
+        'Host': 'doc-companies-00000000000000000000000000.localhost'
+      })
       .next(function(response) {
         var expected = {
               statusCode: 200,

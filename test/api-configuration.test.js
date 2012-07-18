@@ -183,10 +183,10 @@ suite('Configuration API', function() {
   });
 
   test('Get, Action=CreateDomain', function(done) {
-    var path = '/?DomainName=companies&Action=CreateDomain&Version=2011-02-01';
-    utils.get(path, {
-                'Host': 'cloudsearch.localhost'
-              })
+    utils
+      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
+         'Host': 'cloudsearch.localhost'
+       })
       .next(function(response) {
         var dump = context.commandSync('dump', {
               tables: 'companies'
@@ -228,14 +228,12 @@ suite('Configuration API', function() {
   });
 
   test('Get, Action=DeleteDomain', function(done) {
-    utils.get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
-                'Host': 'cloudsearch.localhost'
-              })
-      .next(function() {
-        var path = '/?DomainName=companies&Action=DeleteDomain&Version=2011-02-01';
-        return utils.get(path, {
-                 'Host': 'cloudsearch.localhost'
-               });
+    utils
+      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
+        'Host': 'cloudsearch.localhost'
+      })
+      .get('/?DomainName=companies&Action=DeleteDomain&Version=2011-02-01', {
+        'Host': 'cloudsearch.localhost'
       })
       .next(function(response) {
         var dump = context.commandSync('dump');
@@ -273,16 +271,13 @@ suite('Configuration API', function() {
   });
 
   test('Get, Action=DefineIndexField (text)', function(done) {
-    var path = '/?DomainName=companies&Action=CreateDomain&Version=2011-02-01';
-    utils.get(path, {
-                'Host': 'cloudsearch.localhost'
-              })
-      .next(function(response) {
-        var path = '/?DomainName=companies&IndexField.IndexFieldName=name&' +
-                   'IndexField.IndexFieldType=text&' +
-                   'Action=DefineIndexField&Version=2011-02-01';
-        return utils.get(path);
+    utils
+      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
+        'Host': 'cloudsearch.localhost'
       })
+      .get('/?DomainName=companies&IndexField.IndexFieldName=name&' +
+           'IndexField.IndexFieldType=text&' +
+           'Action=DefineIndexField&Version=2011-02-01')
       .next(function(response) {
         var dump = context.commandSync('dump', {
               tables: 'companies'
@@ -320,16 +315,13 @@ suite('Configuration API', function() {
   });
 
   test('Get, Action=DefineIndexField (uint)', function(done) {
-    var path = '/?DomainName=companies&Action=CreateDomain&Version=2011-02-01';
-    utils.get(path, {
-                'Host': 'cloudsearch.localhost'
-              })
-      .next(function(response) {
-        var path = '/?DomainName=companies&IndexField.IndexFieldName=age&' +
-                   'IndexField.IndexFieldType=uint&' +
-                   'Action=DefineIndexField&Version=2011-02-01';
-        return utils.get(path);
+    utils
+      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
+        'Host': 'cloudsearch.localhost'
       })
+      .get('/?DomainName=companies&IndexField.IndexFieldName=age&' +
+           'IndexField.IndexFieldType=uint&' +
+           'Action=DefineIndexField&Version=2011-02-01')
       .next(function(response) {
         var dump = context.commandSync('dump', {
               tables: 'companies'
@@ -367,16 +359,13 @@ suite('Configuration API', function() {
   });
 
   test('Get, Action=DefineIndexField (literal)', function(done) {
-    var path = '/?DomainName=companies&Action=CreateDomain&Version=2011-02-01';
-    utils.get(path, {
-                'Host': 'cloudsearch.localhost'
-              })
-      .next(function(response) {
-        var path = '/?DomainName=companies&IndexField.IndexFieldName=member&' +
-                   'IndexField.IndexFieldType=literal&' +
-                   'Action=DefineIndexField&Version=2011-02-01';
-        return utils.get(path);
+    utils
+      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
+        'Host': 'cloudsearch.localhost'
       })
+      .get('/?DomainName=companies&IndexField.IndexFieldName=member&' +
+           'IndexField.IndexFieldType=literal&' +
+           'Action=DefineIndexField&Version=2011-02-01')
       .next(function(response) {
         var dump = context.commandSync('dump', {
               tables: 'companies'
@@ -417,21 +406,15 @@ suite('Configuration API', function() {
   });
 
   test('Get, Action=DeleteIndexField (text)', function(done) {
-    var path = '/?DomainName=companies&Action=CreateDomain&Version=2011-02-01';
-    utils.get(path, {
-                'Host': 'cloudsearch.localhost'
-              })
-      .next(function(response) {
-        var path = '/?DomainName=companies&IndexField.IndexFieldName=name&' +
-                   'IndexField.IndexFieldType=text&' +
-                   'Action=DefineIndexField&Version=2011-02-01';
-        return utils.get(path);
+    utils
+      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
+        'Host': 'cloudsearch.localhost'
       })
-      .next(function(response) {
-        var path = '/?DomainName=companies&IndexFieldName=name&' +
-                   'Action=DeleteIndexField&Version=2011-02-01';
-        return utils.get(path);
-      })
+      .get('/?DomainName=companies&IndexField.IndexFieldName=name&' +
+           'IndexField.IndexFieldType=text&' +
+           'Action=DefineIndexField&Version=2011-02-01')
+      .get('/?DomainName=companies&IndexFieldName=name&' +
+           'Action=DeleteIndexField&Version=2011-02-01')
       .next(function(response) {
         var dump = context.commandSync('dump', {
               tables: 'companies'
@@ -466,21 +449,15 @@ suite('Configuration API', function() {
   });
 
   test('Get, Action=DeleteIndexField (uint)', function(done) {
-    var path = '/?DomainName=companies&Action=CreateDomain&Version=2011-02-01';
-    utils.get(path, {
-                'Host': 'cloudsearch.localhost'
-              })
-      .next(function(response) {
-        var path = '/?DomainName=companies&IndexField.IndexFieldName=age&' +
-                   'IndexField.IndexFieldType=uint&' +
-                   'Action=DefineIndexField&Version=2011-02-01';
-        return utils.get(path);
+    utils
+      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
+        'Host': 'cloudsearch.localhost'
       })
-      .next(function(response) {
-        var path = '/?DomainName=companies&IndexFieldName=age&' +
-                   'Action=DeleteIndexField&Version=2011-02-01';
-        return utils.get(path);
-      })
+      .get('/?DomainName=companies&IndexField.IndexFieldName=age&' +
+           'IndexField.IndexFieldType=uint&' +
+           'Action=DefineIndexField&Version=2011-02-01')
+      .get('/?DomainName=companies&IndexFieldName=age&' +
+           'Action=DeleteIndexField&Version=2011-02-01')
       .next(function(response) {
         var dump = context.commandSync('dump', {
               tables: 'companies'
@@ -515,21 +492,15 @@ suite('Configuration API', function() {
   });
 
   test('Get, Action=DeleteIndexField (literal)', function(done) {
-    var path = '/?DomainName=companies&Action=CreateDomain&Version=2011-02-01';
-    utils.get(path, {
-                'Host': 'cloudsearch.localhost'
-              })
-      .next(function(response) {
-        var path = '/?DomainName=companies&IndexField.IndexFieldName=member&' +
-                   'IndexField.IndexFieldType=literal&' +
-                   'Action=DefineIndexField&Version=2011-02-01';
-        return utils.get(path);
+    utils
+      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
+        'Host': 'cloudsearch.localhost'
       })
-      .next(function(response) {
-        var path = '/?DomainName=companies&IndexFieldName=member&' +
-                   'Action=DeleteIndexField&Version=2011-02-01';
-        return utils.get(path);
-      })
+      .get('/?DomainName=companies&IndexField.IndexFieldName=member&' +
+           'IndexField.IndexFieldType=literal&' +
+           'Action=DefineIndexField&Version=2011-02-01')
+      .get('/?DomainName=companies&IndexFieldName=member&' +
+           'Action=DeleteIndexField&Version=2011-02-01')
       .next(function(response) {
         var dump = context.commandSync('dump', {
               tables: 'companies'
@@ -564,26 +535,17 @@ suite('Configuration API', function() {
   });
 
   test('Get, Action=IndexDocuments', function(done) {
-    var path = '/?DomainName=companies&Action=CreateDomain&Version=2011-02-01';
-    utils.get(path, {
-                'Host': 'cloudsearch.localhost'
-              })
-      .next(function(response) {
-        var path = '/?DomainName=companies&IndexField.IndexFieldName=name&' +
-                   'Action=DefineIndexField&Version=2011-02-01';
-        return utils.get(path);
+    utils
+      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
+        'Host': 'cloudsearch.localhost'
       })
-      .next(function(response) {
-        var path = '/?DomainName=companies&IndexField.IndexFieldName=age&' +
-                   'IndexField.IndexFieldType=uint&' +
-                   'Action=DefineIndexField&Version=2011-02-01';
-        return utils.get(path);
-      })
-      .next(function(response) {
-        var path = '/?DomainName=companies&' +
-                   'Action=IndexDocuments&Version=2011-02-01';
-        return utils.get(path);
-      })
+      .get('/?DomainName=companies&IndexField.IndexFieldName=name&' +
+           'Action=DefineIndexField&Version=2011-02-01')
+      .get('/?DomainName=companies&IndexField.IndexFieldName=age&' +
+           'IndexField.IndexFieldType=uint&' +
+           'Action=DefineIndexField&Version=2011-02-01')
+      .get('/?DomainName=companies&' +
+           'Action=IndexDocuments&Version=2011-02-01')
       .next(function(response) {
         var dump = context.commandSync('dump', {
               tables: 'companies'
@@ -638,10 +600,11 @@ suite('Configuration API', function() {
     };
     var json = JSON.stringify(synonymsObject);
     var synonyms = encodeURIComponent(json);
-    var path = '/?Version=2011-02-01&Action=UpdateSynonymOptions&DomainName=companies&Synonyms='+synonyms;
-    utils.get(path, {
-                'Host': 'cloudsearch.localhost'
-              })
+    utils
+      .get('/?Version=2011-02-01&Action=UpdateSynonymOptions&' +
+           'DomainName=companies&Synonyms='+synonyms, {
+        'Host': 'cloudsearch.localhost'
+      })
       .next(function(response) {
         assert.equal(response.statusCode, 200);
         var bodyExpected =
@@ -685,10 +648,10 @@ suite('Configuration API', function() {
   });
 
   test('Get, no version', function(done) {
-    var path = '/?Action=unknown';
-    utils.get(path, {
-                'Host': 'cloudsearch.localhost'
-              })
+    utils
+      .get('/?Action=unknown', {
+        'Host': 'cloudsearch.localhost'
+      })
       .next(function(response) {
         var message = 'An input parameter "Version" that is mandatory for ' +
                       'processing the request is not supplied.';;
@@ -705,10 +668,10 @@ suite('Configuration API', function() {
   });
 
   test('Get, invalid version', function(done) {
-    var path = '/?Version=2011-02-02&Action=unknown';
-    utils.get(path, {
-                'Host': 'cloudsearch.localhost'
-              })
+    utils
+      .get('/?Version=2011-02-02&Action=unknown', {
+        'Host': 'cloudsearch.localhost'
+      })
       .next(function(response) {
         var message = 'A bad or out-of-range value "2011-02-02" was supplied ' +
                       'for the "Version" input parameter.';

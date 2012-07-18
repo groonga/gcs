@@ -68,11 +68,13 @@ function get(path, headers) {
   return sendRequest('GET', path, null, headers);
 }
 exports.get = get;
+Deferred.register('get', function() { return get.apply(this, arguments); });
 
 function post(path, body, headers) {
   return sendRequest('POST', path, body, headers);
 }
 exports.post = post;
+Deferred.register('post', function() { return post.apply(this, arguments); });
 
 var databaseCount = 0;
 
@@ -96,7 +98,6 @@ exports.createTemporaryDatabase = function() {
       });
     },
     teardown: function() {
-      this._context.close();
       rmRSync(databaseDirectory);
       this._context = undefined;
     }
