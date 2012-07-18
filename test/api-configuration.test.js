@@ -169,7 +169,7 @@ var PATTERN_COMMON_ERROR_RESPONSE = {
             Message: ''
           }
         },
-        ResponseMetadata: PATTERN_ResponseMetadata
+        RequestID: {}
       }
     };
 
