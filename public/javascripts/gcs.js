@@ -1,6 +1,5 @@
 function renderResults(data, perPage) {
-  var template = $('script#results-template').text();
-  var rendered = jade.compile(template)(data);
+  var rendered = JST['results'](data);
   var found = data.hits.found;
   var start = data.hits.start;
   var returned = data.hits.hit.length;
@@ -34,8 +33,7 @@ function renderResults(data, perPage) {
 }
 
 function renderRequestInformation(data) {
-  var template = $('script#request-information-template').text();
-  var rendered = jade.compile(template)(data);
+  var rendered = JST['request_information'](data);
   $('#request-information').html(rendered);
 }
 

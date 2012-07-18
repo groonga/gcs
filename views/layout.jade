@@ -3,35 +3,11 @@ html
   head
     title Groonga CloudSearch
     script(src="/javascripts/jquery-1.7.2.min.js", type="text/javascript")
-    script(src="/javascripts/jade.min.js", type="text/javascript")
+    script(src="/javascripts/runtime.min.js", type="text/javascript")
     script(src="/javascripts/gcs.js", type="text/javascript")
+    script(src="/javascripts/templates.js", type="text/javascript")
     link(href="/stylesheets/bootstrap.min.css", rel="stylesheet")
     link(href="/stylesheets/gcs.css", rel="stylesheet")
-    script#request-information-template(type="text/html")
-      |p
-      |  span view raw:
-      |  a(href=urlForRawRequest, target='_blank')= urlForRawRequest
-    script#results-template(type="text/html")
-      |p#showing
-      |.pager#pager
-      |  li.previous
-      |    a(href="#") &larr; Previous
-      |  li.next
-      |    a(href="#") Next &rarr;
-      |table.table.table-bordered
-      |  if hits.hit.length > 0
-      |    each record, index in hits.hit
-      |      tr.id-row
-      |        td= hits.start + index + 1
-      |        td.id-cell(colspan="2")= record.id
-      |      each value, columnName in record.data
-      |        tr
-      |          td
-      |          td= columnName
-      |          td= value
-      |  else
-      |    tr
-      |      td No record matched for the query.
 
   body
     .navbar.navbar-fixed-top

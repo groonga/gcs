@@ -32,4 +32,23 @@ suite('dashboard', function() {
       });
     });
   });
+
+  test('GET /javascripts/templates.js', function(done) {
+    var options = {
+      host: utils.testHost,
+      port: utils.testPort,
+      path: '/javascripts/templates.js'
+    };
+    http.get(options, function(response) {
+      assert.equal(response.statusCode, 200);
+      var body = '';
+      response.on('data', function(data) {
+        body += data;
+      });
+      response.on('end', function() {
+        assert.include(body, "this.JST");
+        done();
+      });
+    });
+  });
 });
