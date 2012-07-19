@@ -40,6 +40,10 @@ suite('Search API', function() {
     });
   }
 
+  function normalizeSearchResult(str) {
+    return str.replace(/"time-ms":\s*(?:[1-9]\d*|0)([,\}])/, '"time-ms":0$1');
+  }
+
   suite('with fixture loaded', function() {
     setup(function() {
       utils.loadDumpFile(context, __dirname + '/fixture/companies/ddl.grn');
@@ -50,9 +54,8 @@ suite('Search API', function() {
                'should hit one entry',
                'search-companies-00000000000000000000000000.localhost',
       function(response, body, done) {
-        var actual = JSON.parse(body);
-        assert.operator(actual.info['time-ms'], '>=', 0, 'time-ms is ok');
-        actual.info['time-ms'] = 0; // always set 0 for test
+        var normalizedBody = normalizeSearchResult(body);
+        var actual = JSON.parse(normalizedBody);
         var expected = { // FIXME
           rank: '-text_relevance',
           'match-expr': '',
@@ -88,9 +91,8 @@ suite('Search API', function() {
                'should hit three entries',
                'search-companies-00000000000000000000000000.localhost',
       function(response, body, done) {
-        var actual = JSON.parse(body);
-        assert.operator(actual.info['time-ms'], '>=', 0, 'time-ms is ok');
-        actual.info['time-ms'] = 0; // always set 0 for test
+        var normalizedBody = normalizeSearchResult(body);
+        var actual = JSON.parse(normalizedBody);
         var expected = {
           rank: '-text_relevance',
           'match-expr': '',
@@ -154,9 +156,8 @@ suite('Search API', function() {
                'should return two hit entries',
                'search-companies-00000000000000000000000000.localhost',
       function(response, body, done) {
-        var actual = JSON.parse(body);
-        assert.operator(actual.info['time-ms'], '>=', 0, 'time-ms is ok');
-        actual.info['time-ms'] = 0; // always set 0 for test
+        var normalizedBody = normalizeSearchResult(body);
+        var actual = JSON.parse(normalizedBody);
         var expected = {
           rank: '-text_relevance',
           'match-expr': '',
@@ -207,8 +208,8 @@ suite('Search API', function() {
                'should return offseted hit result',
                'search-companies-00000000000000000000000000.localhost',
       function(response, body, done) {
-        var actual = JSON.parse(body);
-        actual.info['time-ms'] = 0; // always set 0 for test
+        var normalizedBody = normalizeSearchResult(body);
+        var actual = JSON.parse(normalizedBody);
         var expected = {
           rank: '-text_relevance',
           'match-expr': '',
@@ -259,8 +260,8 @@ suite('Search API', function() {
                'should not match with any entry',
                'search-companies-00000000000000000000000000.localhost',
       function(response, body, done) {
-        var actual = JSON.parse(body);
-        actual.info['time-ms'] = 0; // always set 0 for test
+        var normalizedBody = normalizeSearchResult(body);
+        var actual = JSON.parse(normalizedBody);
         var expected = {
           rank: '-text_relevance',
           'match-expr': '',
@@ -293,8 +294,8 @@ suite('Search API', function() {
                'should match with using synonyms',
                'search-companies-00000000000000000000000000.localhost',
       function(response, body, done) {
-        var actual = JSON.parse(body);
-        actual.info['time-ms'] = 0; // always set 0 for test
+        var normalizedBody = normalizeSearchResult(body);
+        var actual = JSON.parse(normalizedBody);
         var expected = {
           rank: '-text_relevance',
           'match-expr': '',
