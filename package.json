@@ -24,7 +24,8 @@
     "mkdirp": "",
     "jade": "",
     "dateformat": "",
-    "xml2js": ""
+    "xml2js": "",
+    "xmlbuilder": ""
   },
   "scripts": {
     "test": "./node_modules/.bin/mocha --reporter list --ui tdd",
