@@ -40,8 +40,8 @@ suite('Search API', function() {
     });
   }
 
-  function normalizeSearchResult(str) {
-    return str.replace(/"time-ms":\s*(?:[1-9]\d*|0)([,\}])/, '"time-ms":0$1');
+  function normalizeSearchResult(searchResult) {
+    return searchResult.replace(/"time-ms":\s*(?:[1-9]\d*|0)([,\}])/, '"time-ms":0$1');
   }
 
   suite('with fixture loaded', function() {
