@@ -13,32 +13,8 @@ This script setup an example domain and import data into the domain.
 
 EOT
 
-echo "Checking prerequsites..."
+echo "Checking prerequisites..."
 echo
-
-printf "* Host entries for endpoints..."
-
-ping -c 1 doc-example-00000000000000000000000000.localhost 1> /dev/null 2>&1
-doc_ping_status=$?
-ping -c 1 search-example-00000000000000000000000000.localhost 1> /dev/null 2>&1
-search_ping_status=$?
-
-if [ $doc_ping_status -eq 0 -a $search_ping_status -eq 0 ]
-then
-  echo " "$GREEN"OK"$RESET
-else
-  echo " "$RED"not configured"$RESET
-
-  printf $YELLOW
-  cat <<EOT
-
-You need to direct 'doc-example-00000000000000000000000000.localhost' and 'search-example-00000000000000000000000000.localhost' to localhost before trying this example. The following command will make these entries on /etc/hosts:
-
-  $ sudo gcs-register-hosts example
-
-EOT
-  printf $RESET
-fi
 
 printf "* gcs running..."
 curl --silent "http://localhost:7575" > /dev/null
@@ -101,7 +77,7 @@ do
     fi
 done
 
-curl -X POST --upload-file $sdf_path --header "Content-Type: application/json" http://doc-example-00000000000000000000000000.localhost:7575/2011-02-01/documents/batch
+curl -X POST --upload-file $sdf_path --header "Content-Type: application/json" http://doc-example-00000000000000000000000000.127.0.0.1.xip.io:7575/2011-02-01/documents/batch
 echo
 
 echo
@@ -111,7 +87,7 @@ cat <<EOT
 
 Now you can try searching by
 
-$ curl "http://search-example-00000000000000000000000000.localhost:7575/2011-02-01/search?q=Tokyo"
+$ curl "http://search-example-00000000000000000000000000.127.0.0.1.xip.io:7575/2011-02-01/search?q=Tokyo"
 
 or, open
 http://localhost:7575
