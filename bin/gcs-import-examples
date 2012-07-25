@@ -46,6 +46,11 @@ EOT
 read enter
 
 
+
+echo "==== Deleting 'example' domain (if exists)"
+curl -s "http://localhost:7575/?DomainName=example&Action=DeleteDomain&Version=2011-02-01" > /dev/null
+echo
+
 echo "==== Creating 'example' domain"
 
 curl -s "http://localhost:7575/?DomainName=example&Action=CreateDomain&Version=2011-02-01"
