@@ -87,7 +87,7 @@
       }
     },
     "xmlbuilder": {
-      "version": "0.3.1"
+      "version": "0.3.2"
     },
     "chai": {
       "version": "1.1.1"
