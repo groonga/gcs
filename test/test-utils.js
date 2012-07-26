@@ -143,7 +143,12 @@ function XMLStringToJSON(xml) {
   parser.addListener('end', function(result) {
     json = result;
   });
-  parser.parseString(xml);
+  try {
+    parser.parseString(xml);
+  } catch(e) {
+    console.log(xml);
+    throw e;
+  }
   return json;
 }
 exports.XMLStringToJSON = XMLStringToJSON;
