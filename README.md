@@ -10,7 +10,7 @@ Groonga CloudSearch has the following features.
 ### Amazon CloudSearch compatible API
 
 Groonga CloudSearch provides Amazon CloudSearch compatible API. You
-can switch between Groonga CloudSearch and AmazonCloudSearch without
+can switch between Groonga CloudSearch and Amazon CloudSearch without
 changing your application. It means that you can use Groonga
 CloudSearch for development on your computer and Amazon CloudSearch
 for production.
