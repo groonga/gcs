@@ -70,6 +70,10 @@ suite('BoolanQueryTranslator', function() {
             "field1 @ \"keyword1\"",
             "(field field1 'keyword1')".length,
             "(field field1 'keyword1') (other group)");
+  testGroup("filter",
+            "field1 == 29",
+            "(filter field1 29)".length,
+            "(filter field1 29) (other group)");
   testGroup("and",
             "(field1 @ \"keyword1\" && field2 @ \"keyword2\")",
             "(and field1:'keyword1' field2:'keyword2')".length,
