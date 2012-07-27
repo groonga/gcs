@@ -13,6 +13,22 @@ function testQuery(label, expected, query) {
   });
 }
 
+function testQueryError(label, detail, context, query) {
+  test('error: query: ' + label + ': ' + '<' + query + '>', function() {
+    var translator = new BooleanQueryTranslator();
+    var actualError;
+    assert.throw(function() {
+      try {
+        translator.translate(query, "field");
+      } catch (error) {
+        actualError = error;
+        throw error;
+      }
+    });
+    assert.equal(actualError.message, "<" + context + ">" + ": " + detail);
+  });
+}
+
 function testGroup(label, expectedScriptGrnExpr, expectedOffset, group) {
   test('gorup: ' + label + ': ' +
        '<' + group + '> -> <' + expectedScriptGrnExpr + '>', function() {
@@ -65,6 +81,11 @@ suite('BoolanQueryTranslator', function() {
   testQuery("group: quoted expression",
             '(field @ "keyword1" && field @ "keyword2" && type @ "ModelName")',
             "(and 'keyword1 keyword2' type:'ModelName')");
+
+  testQueryError("garbage",
+                 "garbages exist after valid boolean query",
+                 "(and 'keyword' type:'ModelName')| |garbage1 garbage2",
+                 "(and 'keyword' type:'ModelName') garbage1 garbage2");
 
   testGroup("field",
             "field1 @ \"keyword1\"",
