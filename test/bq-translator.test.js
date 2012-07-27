@@ -12,6 +12,26 @@ function testQuery(label, expected, query) {
   });
 }
 
+function testGroup(label, expectedScriptGrnExpr, expectedOffset, group) {
+  test('gorup: ' + label + ': ' +
+       '<' + group + '> -> <' + expectedScriptGrnExpr + '>', function() {
+    var translator = new BooleanQueryTranslator();
+    var context = {
+      defaultField: "field",
+      offset: 0
+    };
+    var actualScriptGrnExpr = translator.translateGroup(group, context);
+    assert.deepEqual({
+                       scriptGrnExpr: expectedScriptGrnExpr,
+                       offset: expectedOffset
+                     },
+                     {
+                       scriptGrnExpr: actualScriptGrnExpr,
+                       offset: context.offset
+                     });
+  });
+}
+
 function testExpression(label, expectedScriptGrnExpr, expectedOffset,
                         expression) {
   test('expression: ' + label + ': ' +
@@ -44,6 +64,11 @@ suite('BoolanQueryTranslator', function() {
   testQuery("group: quoted expression",
             '"query query" type:"ModelName"',
             "(and 'query query' type:'ModelName')");
+
+  testGroup("and",
+            "field1 @ \"keyword1\" && field2 @ \"keyword2\"",
+            "(and field1:'keyword1' field2:'keyword2')".length,
+            "(and field1:'keyword1' field2:'keyword2') (other group)");
 
   testExpression("value only: stirng: keywords",
                  "field @ \"keyword1\" && field @ \"keyword2\"",
