@@ -12,14 +12,23 @@ function testQuery(label, expected, query) {
   });
 }
 
-function testExpression(label, expected, expression) {
+function testExpression(label, expectedQueryGrnExpr, expectedOffset,
+                        expression) {
   test('expression: ' + label + ': ' +
-       '<' + expression + '> -> <' + expected + '>', function() {
+       '<' + expression + '> -> <' + expectedQueryGrnExpr + '>', function() {
     var translator = new BooleanQueryTranslator();
     var context = {
       offset: 0
     };
-    assert.equal(expected, translator.translateExpression(expression, context));
+    var actualQueryGrnExpr = translator.translateExpression(expression, context);
+    assert.deepEqual({
+                       queryGrnExpr: expectedQueryGrnExpr,
+                       offset: expectedOffset
+                     },
+                     {
+                       queryGrnExpr: actualQueryGrnExpr,
+                       offset: context.offset
+                     });
   });
 }
 
@@ -36,5 +45,6 @@ suite('BoolanQueryTranslator', function() {
 
   testExpression("value only: stirng",
                  "keyword1 keyword2",
-                 "'keyword1 keyword2'");
+                 "'keyword1 keyword2'".length,
+                 "'keyword1 keyword2' 'other keyword'");
 })
