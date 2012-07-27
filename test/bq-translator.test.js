@@ -10,7 +10,10 @@ function testBooleanQueryTranslator(expected, query) {
 }
 
 suite('BoolanQueryTranslator', function() {
-  testBooleanQueryTranslator('type:"ModelName"', "type:'ModelName'");
-  testBooleanQueryTranslator('query query type:"ModelName"', "(and query query type:'ModelName')");
-  testBooleanQueryTranslator('"query query" type:"ModelName"', "(and 'query query' type:'ModelName')");
+  testBooleanQueryTranslator('type:"ModelName"',
+			     "type:'ModelName'");
+  testBooleanQueryTranslator('query query type:"ModelName"',
+			     "(and query query type:'ModelName')");
+  testBooleanQueryTranslator('"query query" type:"ModelName"',
+			     "(and 'query query' type:'ModelName')");
 })
