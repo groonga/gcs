@@ -95,8 +95,25 @@ suite('BoolanQueryTranslator', function() {
                  "field == 29",
                  "29".length,
                  "29 75");
+  testExpression("value only: unsigned integer range: min only",
+                 "field >= 29",
+                 "29..".length,
+                 "29.. 75");
+  testExpression("value only: unsigned integer range: max only",
+                 "field <= 29",
+                 "..29".length,
+                 "..29 75");
+  testExpression("value only: unsigned integer range: min and max",
+                 "(field >= 14 && field <= 29)",
+                 "14..29".length,
+                 "14..29 75");
+
   testExpression("field value: string",
                  "field1 @ \"keyword1\" && field1 @ \"keyword2\"",
                  "field1:'keyword1 keyword2'".length,
                  "field1:'keyword1 keyword2' field2:'other keyword'");
+  testExpression("field value: unsigned integer",
+                 "field1 == 29",
+                 "field1:29".length,
+                 "field1:29 field2:75");
 });
