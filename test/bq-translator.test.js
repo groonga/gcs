@@ -69,6 +69,10 @@ suite('BoolanQueryTranslator', function() {
             "field1 @ \"keyword1\" && field2 @ \"keyword2\"",
             "(and field1:'keyword1' field2:'keyword2')".length,
             "(and field1:'keyword1' field2:'keyword2') (other group)");
+  testGroup("or",
+            "(field1 @ \"keyword1\" || field2 @ \"keyword2\")",
+            "(or field1:'keyword1' field2:'keyword2')".length,
+            "(or field1:'keyword1' field2:'keyword2') (other group)");
 
   testExpression("value only: stirng: keywords",
                  "field @ \"keyword1\" && field @ \"keyword2\"",
