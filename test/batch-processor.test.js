@@ -106,7 +106,7 @@ suite('batch/processor/Processor (instance methods)', function() {
     assert.throw(function() {
       try {
         processor.validate(batches);
-      } catch(error) {
+      } catch (error) {
         actualError = error;
         throw error;
       }

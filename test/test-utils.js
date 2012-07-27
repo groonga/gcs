@@ -145,7 +145,7 @@ function XMLStringToJSON(xml) {
   });
   try {
     parser.parseString(xml);
-  } catch(e) {
+  } catch (e) {
     console.log(xml);
     throw e;
   }
