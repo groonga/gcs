@@ -47,4 +47,8 @@ suite('BoolanQueryTranslator', function() {
                  "keyword1 keyword2",
                  "'keyword1 keyword2'".length,
                  "'keyword1 keyword2' 'other keyword'");
+  testExpression("value only: unsigned integer",
+                 "29",
+                 "29".length,
+                 "29 29");
 })
