@@ -12,21 +12,23 @@ function testQuery(label, expected, query) {
   });
 }
 
-function testExpression(label, expectedQueryGrnExpr, expectedOffset,
+function testExpression(label, expectedScriptGrnExpr, expectedOffset,
                         expression) {
   test('expression: ' + label + ': ' +
-       '<' + expression + '> -> <' + expectedQueryGrnExpr + '>', function() {
+       '<' + expression + '> -> <' + expectedScriptGrnExpr + '>', function() {
     var translator = new BooleanQueryTranslator();
     var context = {
+      defaultField: "field",
       offset: 0
     };
-    var actualQueryGrnExpr = translator.translateExpression(expression, context);
+    var actualScriptGrnExpr =
+          translator.translateExpression(expression, context);
     assert.deepEqual({
-                       queryGrnExpr: expectedQueryGrnExpr,
+                       scriptGrnExpr: expectedScriptGrnExpr,
                        offset: expectedOffset
                      },
                      {
-                       queryGrnExpr: actualQueryGrnExpr,
+                       scriptGrnExpr: actualScriptGrnExpr,
                        offset: context.offset
                      });
   });
@@ -44,11 +46,11 @@ suite('BoolanQueryTranslator', function() {
             "(and 'query query' type:'ModelName')");
 
   testExpression("value only: stirng",
-                 "keyword1 keyword2",
+                 "field @ \"keyword1 keyword2\"",
                  "'keyword1 keyword2'".length,
                  "'keyword1 keyword2' 'other keyword'");
   testExpression("value only: unsigned integer",
-                 "29",
+                 "field == 29",
                  "29".length,
                  "29 29");
 })
