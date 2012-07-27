@@ -4,18 +4,22 @@ var assert = require('chai').assert;
 
 var BooleanQueryTranslator = require('../lib/bq-translator').BooleanQueryTranslator;
 
-function testQuery(expected, query) {
-  test('query: <' + query + '> -> <' + expected + '>', function() {
+function testQuery(label, expected, query) {
+  test('query: ' + label + ': ' +
+       '<' + query + '> -> <' + expected + '>', function() {
     var translator = new BooleanQueryTranslator();
     assert.equal(expected, translator.translate(query));
   });
 }
 
 suite('BoolanQueryTranslator', function() {
-  testQuery('type:"ModelName"',
+  testQuery("expression",
+            'type:"ModelName"',
             "type:'ModelName'");
-  testQuery('query query type:"ModelName"',
-                "(and query query type:'ModelName')");
-  testQuery('"query query" type:"ModelName"',
+  testQuery("group: raw expressions",
+            'query query type:"ModelName"',
+            "(and query query type:'ModelName')");
+  testQuery("group: quoted expression",
+            '"query query" type:"ModelName"',
             "(and 'query query' type:'ModelName')");
 })
