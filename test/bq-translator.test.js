@@ -66,7 +66,7 @@ suite('BoolanQueryTranslator', function() {
             "(and 'query query' type:'ModelName')");
 
   testGroup("and",
-            "field1 @ \"keyword1\" && field2 @ \"keyword2\"",
+            "(field1 @ \"keyword1\" && field2 @ \"keyword2\")",
             "(and field1:'keyword1' field2:'keyword2')".length,
             "(and field1:'keyword1' field2:'keyword2') (other group)");
   testGroup("or",
