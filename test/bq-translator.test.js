@@ -5,7 +5,7 @@ var assert = require('chai').assert;
 var BooleanQueryTranslator = require('../lib/bq-translator').BooleanQueryTranslator;
 
 function testQuery(expected, query) {
-  test('translate: <' + query + '> -> <' + expected + '>', function() {
+  test('query: <' + query + '> -> <' + expected + '>', function() {
     var translator = new BooleanQueryTranslator();
     assert.equal(expected, translator.translate(query));
   });
