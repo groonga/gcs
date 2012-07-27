@@ -45,10 +45,14 @@ suite('BoolanQueryTranslator', function() {
             '"query query" type:"ModelName"',
             "(and 'query query' type:'ModelName')");
 
-  testExpression("value only: stirng",
-                 "field @ \"keyword1 keyword2\"",
+  testExpression("value only: stirng: keywords",
+                 "field @ \"keyword1\" && field @ \"keyword2\"",
                  "'keyword1 keyword2'".length,
                  "'keyword1 keyword2' 'other keyword'");
+  testExpression("value only: stirng: phrase",
+                 "field @ \"keyword1 keyword2\"",
+                 "'\"keyword1 keyword2\"'".length,
+                 "'\"keyword1 keyword2\"' 'other keyword'");
   testExpression("value only: unsigned integer",
                  "field == 29",
                  "29".length,
