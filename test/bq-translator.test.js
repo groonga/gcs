@@ -12,6 +12,17 @@ function testQuery(label, expected, query) {
   });
 }
 
+function testExpression(label, expected, expression) {
+  test('expression: ' + label + ': ' +
+       '<' + expression + '> -> <' + expected + '>', function() {
+    var translator = new BooleanQueryTranslator();
+    var context = {
+      offset: 0
+    };
+    assert.equal(expected, translator.translateExpression(expression, context));
+  });
+}
+
 suite('BoolanQueryTranslator', function() {
   testQuery("expression",
             'type:"ModelName"',
@@ -22,4 +33,8 @@ suite('BoolanQueryTranslator', function() {
   testQuery("group: quoted expression",
             '"query query" type:"ModelName"',
             "(and 'query query' type:'ModelName')");
+
+  testExpression("value only: stirng",
+                 "keyword1 keyword2",
+                 "'keyword1 keyword2'");
 })
