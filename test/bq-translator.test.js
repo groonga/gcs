@@ -7,7 +7,7 @@ var BooleanQueryTranslator = require('../lib/bq-translator').BooleanQueryTransla
 function testTranslate(expected, query) {
   test('translate: <' + query + '> -> <' + expected + '>', function() {
     var translator = new BooleanQueryTranslator();
-    assert.equal(expected, translator.translateTinia(query));
+    assert.equal(expected, translator.translate(query));
   });
 }
 
