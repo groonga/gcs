@@ -9,7 +9,7 @@ function testQuery(label, expected, query) {
   test('query: ' + label + ': ' +
        '<' + query + '> -> <' + expected + '>', function() {
     var translator = new BooleanQueryTranslator();
-    assert.equal(expected, translator.translate(query));
+    assert.equal(expected, translator.translate(query, "field"));
   });
 }
 
@@ -57,14 +57,14 @@ function testExpression(label, expectedScriptGrnExpr, expectedOffset,
 
 suite('BoolanQueryTranslator', function() {
   testQuery("expression",
-            'type:"ModelName"',
+            'type @ "ModelName"',
             "type:'ModelName'");
   testQuery("group: raw expressions",
-            'query query type:"ModelName"',
-            "(and query query type:'ModelName')");
+            '(field1 @ "keyword1" && field2 @ "keyword2" && type @ "ModelName")',
+            "(and field1:'keyword1' field2:'keyword2' type:'ModelName')");
   testQuery("group: quoted expression",
-            '"query query" type:"ModelName"',
-            "(and 'query query' type:'ModelName')");
+            '(field @ "keyword1" && field @ "keyword2" && type @ "ModelName")',
+            "(and 'keyword1 keyword2' type:'ModelName')");
 
   testGroup("field",
             "field1 @ \"keyword1\"",
