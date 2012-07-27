@@ -57,4 +57,8 @@ suite('BoolanQueryTranslator', function() {
                  "field == 29",
                  "29".length,
                  "29 75");
-})
+  testExpression("field value: string",
+                 "field1 @ \"keyword1\" && field1 @ \"keyword2\"",
+                 "field1:'keyword1 keyword2'".length,
+                 "field1:'keyword1 keyword2' field2:'other keyword'");
+});
