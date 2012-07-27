@@ -52,5 +52,5 @@ suite('BoolanQueryTranslator', function() {
   testExpression("value only: unsigned integer",
                  "field == 29",
                  "29".length,
-                 "29 29");
+                 "29 75");
 })
