@@ -6,7 +6,7 @@
       "version": "1.0.0"
     },
     "nroonga": {
-      "version": "0.2.1",
+      "version": "0.2.2",
       "dependencies": {
         "msgpack2": {
           "version": "0.1.7"
@@ -25,6 +25,14 @@
             },
             "growl": {
               "version": "1.5.1"
+            },
+            "jade": {
+              "version": "0.26.3",
+              "dependencies": {
+                "mkdirp": {
+                  "version": "0.3.0"
+                }
+              }
             },
             "diff": {
               "version": "1.0.2"
@@ -65,7 +73,7 @@
       "version": "0.3.3"
     },
     "jade": {
-      "version": "0.26.3",
+      "version": "0.27.0",
       "dependencies": {
         "commander": {
           "version": "0.6.1"
@@ -82,12 +90,12 @@
       "version": "0.1.14",
       "dependencies": {
         "sax": {
-          "version": "0.4.1"
+          "version": "0.4.2"
         }
       }
     },
     "xmlbuilder": {
-      "version": "0.3.2"
+      "version": "0.3.3"
     },
     "chai": {
       "version": "1.1.1"
@@ -100,6 +108,14 @@
         },
         "growl": {
           "version": "1.5.1"
+        },
+        "jade": {
+          "version": "0.26.3",
+          "dependencies": {
+            "mkdirp": {
+              "version": "0.3.0"
+            }
+          }
         },
         "diff": {
           "version": "1.0.2"
