@@ -103,6 +103,10 @@ suite('BoolanQueryTranslator', function() {
             "(field1 @ \"keyword1\" || field2 @ \"keyword2\")",
             "(or field1:'keyword1' field2:'keyword2')".length,
             "(or field1:'keyword1' field2:'keyword2') (other group)");
+  testGroup("nested",
+            "((f1 @ \"k1\" || f2 @ \"k2\") && f3 @ \"k3\")",
+            "(and (or f1:'k1' f2:'k2') f3:'k3')".length,
+            "(and (or f1:'k1' f2:'k2') f3:'k3') (other group)");
 
   testExpression("value only: stirng: keywords",
                  "field @ \"keyword1\" && field @ \"keyword2\"",
