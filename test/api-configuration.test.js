@@ -435,9 +435,9 @@ suite('Configuration API', function() {
               IndexFieldType: 'literal',
               LiteralOptions: {
                 DefaultValue: {},
-                FacetEnabled: 'false',
-                ResultEnabled: 'false',
-                SearchEnabled: 'false'
+                FacetEnabled: 'true',
+                ResultEnabled: 'true',
+                SearchEnabled: 'true'
               }
             };
         var options = response.body.DefineIndexFieldResponse.DefineIndexFieldResult.IndexField.Options;
