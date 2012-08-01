@@ -7,7 +7,7 @@ var QueryTranslator = require('../lib/q-translator').QueryTranslator;
 
 function testIndividualTerm(label, individualTerm, expectedBooleanQuery,
                             expectedOffset) {
-  test('term: ' + label + ': ' +
+  test('individual term: ' + label + ': ' +
        '<' + individualTerm + '> -> <' + expectedBooleanQuery + '>', function() {
     var translator = new QueryTranslator();
     var context = {
