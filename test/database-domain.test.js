@@ -82,61 +82,61 @@ suite('database', function() {
       });
     });
 
-    suite('getNameFromHost', function() {
+    suite('getNameAndIdFromHost', function() {
       test('valid, doc, lower case and number', function() {
         var host = 'doc-test0123-id0123.example.com';
-        var name = Domain.getNameFromHost(host);
-        assert.equal(name, 'test0123');
+        var nameAndId = Domain.getNameAndIdFromHost(host);
+        assert.deepEqual(nameAndId, { name: 'test0123', id: 'id0123' });
       });
 
       test('valid, search, lower case and number', function() {
         var host = 'search-test0123-id0123.example.com';
-        var name = Domain.getNameFromHost(host);
-        assert.equal(name, 'test0123');
+        var nameAndId = Domain.getNameAndIdFromHost(host);
+        assert.deepEqual(nameAndId, { name: 'test0123', id: 'id0123' });
       });
 
       test('valid, doc, lower case, hyphen and number', function() {
         var host = 'doc-test-0123-id0123.example.com';
-        var name = Domain.getNameFromHost(host);
-        assert.equal(name, 'test-0123');
+        var nameAndId = Domain.getNameAndIdFromHost(host);
+        assert.deepEqual(nameAndId, { name: 'test-0123', id: 'id0123' });
       });
 
       test('valid, search, lower case, hyphen and number', function() {
         var host = 'search-test-0123-id0123.example.com';
-        var name = Domain.getNameFromHost(host);
-        assert.equal(name, 'test-0123');
+        var nameAndId = Domain.getNameAndIdFromHost(host);
+        assert.deepEqual(nameAndId, { name: 'test-0123', id: 'id0123' });
       });
 
       test('valid, search, lower case, hyphen and number, deep subdomain including region identifier', function() {
         var host = 'search-test-0123-id0123.us-east-1.example.com';
-        var name = Domain.getNameFromHost(host);
-        assert.equal(name, 'test-0123');
+        var nameAndId = Domain.getNameAndIdFromHost(host);
+        assert.deepEqual(nameAndId, { name: 'test-0123', id: 'id0123' });
       });
 
       test('invalid', function() {
         var host = 'cloudsearch.example.com';
-        var name = Domain.getNameFromHost(host);
-        assert.equal(name, '');
+        var nameAndId = Domain.getNameAndIdFromHost(host);
+        assert.deepEqual(nameAndId, { name: '', id: '' });
       });
     });
 
-    suite('getNameFromPath', function() {
+    suite('getNameAndIdFromPath', function() {
       test('valid, lower case and number', function() {
-        var path = '/gcs/test0123/';
-        var name = Domain.getNameFromPath(path);
-        assert.equal(name, 'test0123');
+        var path = '/gcs/test0123-id0123/';
+        var nameAndId = Domain.getNameAndIdFromPath(path);
+        assert.deepEqual(nameAndId, { name: 'test0123', id: 'id0123' });
       });
 
       test('valid, lower case, hyphen and number', function() {
-        var path = '/gcs/test-0123/';
-        var name = Domain.getNameFromPath(path);
-        assert.equal(name, 'test-0123');
+        var path = '/gcs/test-0123-id0123/';
+        var nameAndId = Domain.getNameAndIdFromPath(path);
+        assert.deepEqual(nameAndId, { name: 'test-0123', id: 'id0123' });
       });
 
       test('invalid', function() {
         var path = '/gcs';
-        var name = Domain.getNameFromPath(path);
-        assert.equal(name, '');
+        var nameAndId = Domain.getNameAndIdFromPath(path);
+        assert.deepEqual(nameAndId, { name: '', id: '' });
       });
     });
 
@@ -145,7 +145,8 @@ suite('database', function() {
         var host = 'doc-test0123-id0123.example.com';
         var request = { headers: { host: host } };
         var domain = new Domain(request);
-        assert.equal(domain.name, 'test0123');
+        assert.deepEqual({ name: domain.name, id: domain.id },
+                         { name: 'test0123', id: 'id0123' });
       });
 
       test('from host, invalid', function() {
@@ -159,16 +160,17 @@ suite('database', function() {
       test('from path, valid', function() {
         var host = 'example.com';
         var request = { headers: { host: host },
-                        url: '/gcs/test0123' };
+                        url: '/gcs/test0123-id0123' };
         var domain = new Domain(request);
-        assert.equal(domain.name, 'test0123');
+        assert.deepEqual({ name: domain.name, id: domain.id },
+                         { name: 'test0123', id: 'id0123' });
       });
 
       test('from path, invalid', function() {
         assert.throw(function() {
           var host = 'example.com';
         var request = { headers: { host: host },
-                        url: '/gcs/test_01234' };
+                        url: '/gcs/test_0123-id0123' };
           var domain = new Domain(request);
         }, /cannot appear in a domain name/);
       });
@@ -176,15 +178,16 @@ suite('database', function() {
       test('host vs path', function() {
         var host = 'doc-test0123-id0123.example.com';
         var request = { headers: { host: host },
-                        url: '/gcs/test4567' };
+                        url: '/gcs/test4567-id4567' };
         var domain = new Domain(request);
-        assert.equal(domain.name, 'test0123');
+        assert.deepEqual({ name: domain.name, id: domain.id },
+                         { name: 'test0123', id: 'id0123' });
       });
 
       test('option vs host vs path', function() {
         var host = 'doc-test0123-id0123.example.com';
         var request = { headers: { host: host },
-                        url: '/gcs/test4567',
+                        url: '/gcs/test4567-id4567',
                         query: { DomainName: 'test890' } };
         var domain = new Domain(request);
         assert.equal(domain.name, 'test890');
