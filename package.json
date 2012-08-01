@@ -18,12 +18,12 @@
   },
   "dependencies": {
     "commander": "",
-    "nroonga": "",
+    "dateformat": "",
     "express": "~ 2.5.10",
+    "jade": "",
     "jsdeferred": "",
     "mkdirp": "",
-    "jade": "",
-    "dateformat": "",
+    "nroonga": "",
     "xml2js": "",
     "xmlbuilder": ""
   },
