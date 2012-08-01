@@ -27,6 +27,26 @@ function testIndividualTerm(label, individualTerm, expectedBooleanQuery,
   });
 }
 
+function testTerm(label, term, expectedBooleanQuery, expectedOffset) {
+  test('term: ' + label + ': ' +
+       '<' + term + '> -> <' + expectedBooleanQuery + '>', function() {
+    var translator = new QueryTranslator();
+    var context = {
+      offset: 0,
+      defaultField: 'field'
+    };
+    var actualBooleanQuery = translator.translateTerm(term, context);
+    assert.deepEqual({
+                       booleanQuery: actualBooleanQuery,
+                       offset: context.offset
+                     },
+                     {
+                       booleanQuery: expectedBooleanQuery,
+                       offset: expectedOffset
+                     });
+  });
+}
+
 suite('QueryTranslator', function() {
   testIndividualTerm("an individual term",
                      "star wars",
@@ -36,4 +56,9 @@ suite('QueryTranslator', function() {
                      "let's go",
                      "field:'let\\'s'",
                      "let's".length);
+
+  testTerm("a term",
+           "  star wars",
+           "field:'star'",
+           "  star".length);
 });
