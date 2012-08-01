@@ -32,4 +32,8 @@ suite('QueryTranslator', function() {
                      "star wars",
                      "field:'star'",
                      "star".length);
+  testIndividualTerm("an individual term: single quote",
+                     "let's go",
+                     "field:'let\\'s'",
+                     "let's".length);
 });
