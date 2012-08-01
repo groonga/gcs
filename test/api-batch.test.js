@@ -47,7 +47,7 @@ suite('documents/batch API', function() {
         assert.deepEqual(response, expected);
 
         var dump = context.commandSync('dump', {
-              tables: 'companies'
+              tables: 'companies_00000000000000000000000000'
             });
         assert.equal(dump, schemeDump + '\n' + loadDump);
 
@@ -83,7 +83,7 @@ suite('documents/batch API', function() {
         assert.deepEqual(response, expected);
 
         var dump = context.commandSync('dump', {
-              tables: 'companies'
+              tables: 'companies_00000000000000000000000000'
             });
         assert.equal(dump, schemeDump + '\n' + deletedLoadDump);
 

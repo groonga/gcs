@@ -236,8 +236,8 @@ suite('Configuration API', function() {
         var dump = context.commandSync('dump', {
               tables: 'companies'
             });
-        var expectedDump = 'table_create companies TABLE_HASH_KEY ShortText\n' +
-                           'table_create companies_BigramTerms ' +
+        var expectedDump = 'table_create companies_00000000000000000000000000 TABLE_HASH_KEY ShortText\n' +
+                           'table_create companies_00000000000000000000000000_BigramTerms ' +
                              'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
                              '--default_tokenizer TokenBigram';
         assert.equal(dump, expectedDump);
@@ -250,16 +250,16 @@ suite('Configuration API', function() {
               Created: 'true',
               Deleted: 'false',
               DocService: {
-                Endpoint: 'doc-companies-' + Domain.FAKE_DOMAIN_ID + '.localhost'
+                Endpoint: 'doc-companies-' + Domain.DEFAULT_DOMAIN_ID + '.localhost'
               },
-              DomainId: Domain.FAKE_DOMAIN_ID + '/companies',
+              DomainId: Domain.DEFAULT_DOMAIN_ID + '/companies',
               DomainName: 'companies',
               NumSearchableDocs: '0',
               RequiresIndexDocuments: 'false',
               SearchInstanceCount: '0',
               SearchPartitionCount: '0',
               SearchService: {
-                Endpoint: 'search-companies-' + Domain.FAKE_DOMAIN_ID + '.localhost'
+                Endpoint: 'search-companies-' + Domain.DEFAULT_DOMAIN_ID + '.localhost'
               }
             };
         var status = response.body.CreateDomainResponse.CreateDomainResult.DomainStatus;
@@ -293,16 +293,16 @@ suite('Configuration API', function() {
               Created: 'false',
               Deleted: 'true',
               DocService: {
-                Endpoint: 'doc-companies-' + Domain.FAKE_DOMAIN_ID + '.localhost'
+                Endpoint: 'doc-companies-' + Domain.DEFAULT_DOMAIN_ID + '.localhost'
               },
-              DomainId: Domain.FAKE_DOMAIN_ID + '/companies',
+              DomainId: Domain.DEFAULT_DOMAIN_ID + '/companies',
               DomainName: 'companies',
               NumSearchableDocs: '0',
               RequiresIndexDocuments: 'false',
               SearchInstanceCount: '0',
               SearchPartitionCount: '0',
               SearchService: {
-                Endpoint: 'search-companies-' + Domain.FAKE_DOMAIN_ID + '.localhost'
+                Endpoint: 'search-companies-' + Domain.DEFAULT_DOMAIN_ID + '.localhost'
               }
             };
         var status = response.body.DeleteDomainResponse.DeleteDomainResult.DomainStatus;
@@ -327,13 +327,13 @@ suite('Configuration API', function() {
         var dump = context.commandSync('dump', {
               tables: 'companies'
             });
-        var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
-                       'column_create companies name COLUMN_SCALAR ShortText\n' +
-                       'table_create companies_BigramTerms ' +
+        var expected = 'table_create companies_00000000000000000000000000 TABLE_HASH_KEY ShortText\n' +
+                       'column_create companies_00000000000000000000000000 name COLUMN_SCALAR ShortText\n' +
+                       'table_create companies_00000000000000000000000000_BigramTerms ' +
                          'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
                          '--default_tokenizer TokenBigram\n' +
-                       'column_create companies_BigramTerms companies_name ' +
-                         'COLUMN_INDEX|WITH_POSITION companies name';
+                       'column_create companies_00000000000000000000000000_BigramTerms companies_00000000000000000000000000_name ' +
+                         'COLUMN_INDEX|WITH_POSITION companies_00000000000000000000000000 name';
         assert.equal(dump, expected);
 
         response = toParsedResponse(response);
@@ -371,15 +371,15 @@ suite('Configuration API', function() {
         var dump = context.commandSync('dump', {
               tables: 'companies'
             });
-        var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
-                       'column_create companies age COLUMN_SCALAR UInt32\n' +
-                       'table_create companies_BigramTerms ' +
+        var expected = 'table_create companies_00000000000000000000000000 TABLE_HASH_KEY ShortText\n' +
+                       'column_create companies_00000000000000000000000000 age COLUMN_SCALAR UInt32\n' +
+                       'table_create companies_00000000000000000000000000_BigramTerms ' +
                          'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
                          '--default_tokenizer TokenBigram\n' +
-                       'table_create companies_age ' +
+                       'table_create companies_00000000000000000000000000_age ' +
                          'TABLE_HASH_KEY UInt32\n' +
-                       'column_create companies_age companies_age ' +
-                         'COLUMN_INDEX|WITH_POSITION companies age';
+                       'column_create companies_00000000000000000000000000_age companies_00000000000000000000000000_age ' +
+                         'COLUMN_INDEX|WITH_POSITION companies_00000000000000000000000000 age';
         assert.equal(dump, expected);
 
         response = toParsedResponse(response);
@@ -415,15 +415,15 @@ suite('Configuration API', function() {
         var dump = context.commandSync('dump', {
               tables: 'companies'
             });
-        var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
-                       'table_create companies_BigramTerms ' +
+        var expected = 'table_create companies_00000000000000000000000000 TABLE_HASH_KEY ShortText\n' +
+                       'table_create companies_00000000000000000000000000_BigramTerms ' +
                          'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
                          '--default_tokenizer TokenBigram\n' +
-                       'table_create companies_member ' +
+                       'table_create companies_00000000000000000000000000_member ' +
                          'TABLE_HASH_KEY ShortText\n' +
-                       'column_create companies_member companies_member ' +
-                         'COLUMN_INDEX|WITH_POSITION companies member\n' +
-                       'column_create companies member COLUMN_SCALAR companies_member';
+                       'column_create companies_00000000000000000000000000_member companies_00000000000000000000000000_member ' +
+                         'COLUMN_INDEX|WITH_POSITION companies_00000000000000000000000000 member\n' +
+                       'column_create companies_00000000000000000000000000 member COLUMN_SCALAR companies_00000000000000000000000000_member';
         assert.equal(dump, expected);
 
         response = toParsedResponse(response);
@@ -464,8 +464,8 @@ suite('Configuration API', function() {
         var dump = context.commandSync('dump', {
               tables: 'companies'
             });
-        var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
-                       'table_create companies_BigramTerms ' +
+        var expected = 'table_create companies_00000000000000000000000000 TABLE_HASH_KEY ShortText\n' +
+                       'table_create companies_00000000000000000000000000_BigramTerms ' +
                          'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
                          '--default_tokenizer TokenBigram';
         assert.equal(dump, expected);
@@ -496,8 +496,8 @@ suite('Configuration API', function() {
         var dump = context.commandSync('dump', {
               tables: 'companies'
             });
-        var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
-                       'table_create companies_BigramTerms ' +
+        var expected = 'table_create companies_00000000000000000000000000 TABLE_HASH_KEY ShortText\n' +
+                       'table_create companies_00000000000000000000000000_BigramTerms ' +
                          'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
                          '--default_tokenizer TokenBigram';
         assert.equal(dump, expected);
@@ -528,8 +528,8 @@ suite('Configuration API', function() {
         var dump = context.commandSync('dump', {
               tables: 'companies'
             });
-        var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
-                       'table_create companies_BigramTerms ' +
+        var expected = 'table_create companies_00000000000000000000000000 TABLE_HASH_KEY ShortText\n' +
+                       'table_create companies_00000000000000000000000000_BigramTerms ' +
                          'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
                          '--default_tokenizer TokenBigram';
         assert.equal(dump, expected);
@@ -562,17 +562,17 @@ suite('Configuration API', function() {
         var dump = context.commandSync('dump', {
               tables: 'companies'
             });
-        var expected = 'table_create companies TABLE_HASH_KEY ShortText\n' +
-                       'column_create companies age COLUMN_SCALAR UInt32\n' +
-                       'column_create companies name COLUMN_SCALAR ShortText\n' +
-                       'table_create companies_BigramTerms ' +
+        var expected = 'table_create companies_00000000000000000000000000 TABLE_HASH_KEY ShortText\n' +
+                       'column_create companies_00000000000000000000000000 age COLUMN_SCALAR UInt32\n' +
+                       'column_create companies_00000000000000000000000000 name COLUMN_SCALAR ShortText\n' +
+                       'table_create companies_00000000000000000000000000_BigramTerms ' +
                          'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
                          '--default_tokenizer TokenBigram\n' +
-                       'table_create companies_age TABLE_HASH_KEY UInt32\n' +
-                       'column_create companies_age companies_age ' +
-                         'COLUMN_INDEX|WITH_POSITION companies age\n' +
-                       'column_create companies_BigramTerms companies_name ' +
-                         'COLUMN_INDEX|WITH_POSITION companies name';
+                       'table_create companies_00000000000000000000000000_age TABLE_HASH_KEY UInt32\n' +
+                       'column_create companies_00000000000000000000000000_age companies_00000000000000000000000000_age ' +
+                         'COLUMN_INDEX|WITH_POSITION companies_00000000000000000000000000 age\n' +
+                       'column_create companies_00000000000000000000000000_BigramTerms companies_00000000000000000000000000_name ' +
+                         'COLUMN_INDEX|WITH_POSITION companies_00000000000000000000000000 name';
         assert.equal(dump, expected);
 
         var expectedFieldNames = ['age', 'name'];
@@ -617,16 +617,16 @@ suite('Configuration API', function() {
       })
       .next(function(response) {
         var dumpExpected =
-             'table_create companies_synonyms TABLE_HASH_KEY|KEY_NORMALIZE ShortText\n' +
-             'column_create companies_synonyms synonyms COLUMN_VECTOR ShortText\n' +
-             'load --table companies_synonyms\n' +
+             'table_create companies_00000000000000000000000000_synonyms TABLE_HASH_KEY|KEY_NORMALIZE ShortText\n' +
+             'column_create companies_00000000000000000000000000_synonyms synonyms COLUMN_VECTOR ShortText\n' +
+             'load --table companies_00000000000000000000000000_synonyms\n' +
              '[\n' +
              '["_key","synonyms"],\n' +
              '["tokio",["tokyo"]],\n' +
              '["dekkaido",["hokkaido"]]\n' +
              ']';
         var dumpActual = context.commandSync('dump', {
-          tables: 'companies_synonyms'
+          tables: 'companies_00000000000000000000000000_synonyms'
         });
         assert.equal(dumpExpected, dumpActual);
 

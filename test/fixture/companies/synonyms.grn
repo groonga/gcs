@@ -1,6 +1,6 @@
-table_create companies_synonyms TABLE_HASH_KEY|KEY_NORMALIZE ShortText
-column_create companies_synonyms synonyms COLUMN_VECTOR ShortText
-load --table companies_synonyms
+table_create companies_00000000000000000000000000_synonyms TABLE_HASH_KEY|KEY_NORMALIZE ShortText
+column_create companies_00000000000000000000000000_synonyms synonyms COLUMN_VECTOR ShortText
+load --table companies_00000000000000000000000000_synonyms
 [
 ["_key","synonyms"],
 ["tokio",["tokyo"]],

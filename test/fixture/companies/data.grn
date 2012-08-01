@@ -1,4 +1,4 @@
-load --table companies
+load --table companies_00000000000000000000000000
 [
 ["_key","address","age","description","email_address","name","product"],
 ["id1","Shibuya, Tokyo, Japan",1,"","info@razil.jp","Brazil","groonga"],

@@ -5,7 +5,7 @@ var assert = require('chai').assert;
 var Domain = require('../lib/database/domain').Domain;
 var IndexField = require('../lib/database/index-field').IndexField;
 
-suite('domain', function() {
+suite('database', function() {
   suite('IndexField', function() {
     var domain;
 
@@ -62,12 +62,12 @@ suite('domain', function() {
 
     test('indexColumnName', function() {
       var field = new IndexField('valid_123', domain);
-      assert.equal(field.indexColumnName, 'testdomain_valid_123');
+      assert.equal(field.indexColumnName, 'testdomain_00000000000000000000000000_valid_123');
     });
 
     test('alterTableName', function() {
       var field = new IndexField('valid_123', domain);
-      assert.equal(field.alterTableName, 'testdomain_valid_123');
+      assert.equal(field.alterTableName, 'testdomain_00000000000000000000000000_valid_123');
     });
 
     test('fieldTypeToColumnType (text)', function() {
@@ -85,7 +85,7 @@ suite('domain', function() {
     test('fieldTypeToColumnType (literal)', function() {
       var field = new IndexField('valid_123', domain);
       assert.equal(field.fieldTypeToColumnType('literal'),
-                   'testdomain_valid_123');
+                   'testdomain_00000000000000000000000000_valid_123');
     });
 
     test('initial status (text)', function() {
