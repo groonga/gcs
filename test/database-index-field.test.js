@@ -87,5 +87,54 @@ suite('domain', function() {
       assert.equal(field.fieldTypeToColumnType('literal'),
                    'testdomain_valid_123');
     });
+
+    test('initial status (text)', function() {
+      var field = new IndexField('text', domain);
+      field.type = 'text';
+      assert.deepEqual({
+        facetEnabled:  field.facetEnabled,
+        resultEnabled: field.resultEnabled,
+        searchEnabled: field.searchEnabled,
+        state:         field.state
+      }, {
+        facetEnabled:  false,
+        resultEnabled: true,
+        searchEnabled: true,
+        state:         'RequiresIndexDocuments'
+      });
+    });
+
+    test('initial status (uint)', function() {
+      var field = new IndexField('uint', domain);
+      field.type = 'uint';
+      assert.deepEqual({
+        facetEnabled:  field.facetEnabled,
+        resultEnabled: field.resultEnabled,
+        searchEnabled: field.searchEnabled,
+        state:         field.state
+      }, {
+        facetEnabled:  true,
+        resultEnabled: true,
+        searchEnabled: true,
+        state:         'RequiresIndexDocuments'
+      });
+    });
+
+    test('initial status (literal)', function() {
+      var field = new IndexField('literal', domain);
+      field.type = 'literal';
+      assert.deepEqual({
+        facetEnabled:  field.facetEnabled,
+        resultEnabled: field.resultEnabled,
+        searchEnabled: field.searchEnabled,
+        state:         field.state
+      }, {
+        facetEnabled:  true,
+        resultEnabled: true,
+        searchEnabled: true,
+        state:         'RequiresIndexDocuments'
+      });
+    });
+
   });
 });

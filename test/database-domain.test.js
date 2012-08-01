@@ -6,6 +6,21 @@ var Domain = require('../lib/database/domain').Domain;
 
 suite('database', function() {
   suite('Domain', function() {
+    test('initial status', function() {
+      var domain = new Domain('newdomain');
+      assert.deepEqual({
+        searchableDocumentsCount: domain.searchableDocumentsCount,
+        requiresIndexDocuments:   domain.requiresIndexDocuments,
+        searchInstanceCount:      domain.searchInstanceCount,
+        searchPartitionCount:     domain.searchPartitionCount
+      }, {
+        searchableDocumentsCount: 0,
+        requiresIndexDocuments:   false,
+        searchInstanceCount:      0,
+        searchPartitionCount:     0
+      });
+    });
+
     test('lower case', function() {
       var domain = new Domain('valid');
       assert.equal(domain.tableName, 'valid');
