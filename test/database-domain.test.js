@@ -202,7 +202,7 @@ suite('database', function() {
       setup(function() {
         temporaryDatabase = utils.createTemporaryDatabase();
         context = temporaryDatabase.get();
-        utils.loadDumpFile(context, __dirname + '/fixture/companies/ddl.grn');
+        utils.loadDumpFile(context, __dirname + '/fixture/companies/ddl-custom-id.grn');
         domain = new Domain('companies', context);
       });
 
@@ -210,6 +210,15 @@ suite('database', function() {
         domain = undefined;
         temporaryDatabase.teardown();
         temporaryDatabase = undefined;
+      });
+
+      test('id from database (known table)', function() {
+        assert.equal(domain.id, 'id0123');
+      });
+
+      test('id from database (unknown table)', function() {
+        domain = new Domain('unknown', context);
+        assert.equal(domain.id, Domain.DEFAULT_DOMAIN_ID);
       });
 
       test('indexFields', function() {
