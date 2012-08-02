@@ -25,7 +25,7 @@ suite('batch/translator/Translator (instance methods)', function() {
     var expected = {
           command: 'load',
           options: {
-            table: 'test_00000000000000000000000000',
+            table: translator.domain.tableName,
             values: JSON.stringify([{
               '_key': batch['id'],
               'name': batch['fields']['name'],
@@ -45,7 +45,7 @@ suite('batch/translator/Translator (instance methods)', function() {
     var expected = {
           command: 'delete',
           options: {
-            table: 'test_00000000000000000000000000',
+            table: translator.domain.tableName,
             key: batch['id']
           }
         };
@@ -58,7 +58,7 @@ suite('batch/translator/Translator (instance methods)', function() {
     var expected = {
           command: 'load',
           options: {
-            table: 'test_00000000000000000000000000',
+            table: translator.domain.tableName,
             values: JSON.stringify([{
               '_key': batch['id'],
               'name': batch['fields']['name'],
@@ -78,7 +78,7 @@ suite('batch/translator/Translator (instance methods)', function() {
     var expected = {
           command: 'delete',
           options: {
-            table: 'test_00000000000000000000000000',
+            table: translator.domain.tableName,
             key: batch['id']
           }
         };
@@ -92,7 +92,7 @@ suite('batch/translator/Translator (instance methods)', function() {
           {
             command: 'load',
             options: {
-              table: 'test_00000000000000000000000000',
+              table: translator.domain.tableName,
               values: JSON.stringify([{
                 '_key': batches[0]['id'],
                 'name': batches[0]['fields']['name'],
@@ -106,7 +106,7 @@ suite('batch/translator/Translator (instance methods)', function() {
           {
             command: 'load',
             options: {
-              table: 'test_00000000000000000000000000',
+              table: translator.domain.tableName,
               values: JSON.stringify([{
                 '_key': batches[1]['id'],
                 'name': batches[1]['fields']['name'],
@@ -120,7 +120,7 @@ suite('batch/translator/Translator (instance methods)', function() {
           {
             command: 'delete',
             options: {
-              table: 'test_00000000000000000000000000',
+              table: translator.domain.tableName,
               key: batches[2]['id']
             }
           }
@@ -138,7 +138,7 @@ suite('batch/translator/Translator (class methods)', function() {
       var command = {
             command: 'load',
             options: {
-              table: 'test_00000000000000000000000000',
+              table: translator.domain.tableName,
               values: JSON.stringify([{
                 '_key': batch['id'],
                 'name': batch['fields']['name'],
@@ -147,7 +147,7 @@ suite('batch/translator/Translator (class methods)', function() {
               }])
             }
           };
-      var expected = 'load --table test_00000000000000000000000000 --values ' + command.options.values;
+      var expected = 'load --table ' + translator.domain.tableName + ' --values ' + command.options.values;
       var stringified = Translator.commandToString(command);
       assert.equal(stringified, expected);
     });
@@ -158,11 +158,11 @@ suite('batch/translator/Translator (class methods)', function() {
       var command = {
             command: 'delete',
             options: {
-              table: 'test_00000000000000000000000000',
+              table: translator.domain.tableName,
               key: batch['id']
             }
           };
-      var expected = 'delete --table test_00000000000000000000000000 --key ' + command.options.key;
+      var expected = 'delete --table ' + translator.domain.tableName + ' --key ' + command.options.key;
       var stringified = Translator.commandToString(command);
       assert.equal(stringified, expected);
     });
@@ -175,7 +175,7 @@ suite('batch/translator/Translator (class methods)', function() {
             {
               command: 'load',
               options: {
-                table: 'test_00000000000000000000000000',
+                table: translator.domain.tableName,
                 values: JSON.stringify([{
                   '_key': batches[0]['id'],
                   'name': batches[0]['fields']['name'],
@@ -187,7 +187,7 @@ suite('batch/translator/Translator (class methods)', function() {
             {
               command: 'load',
               options: {
-                table: 'test_00000000000000000000000000',
+                table: translator.domain.tableName,
                 values: JSON.stringify([{
                   '_key': batches[1]['id'],
                   'name': batches[1]['fields']['name'],
@@ -199,15 +199,15 @@ suite('batch/translator/Translator (class methods)', function() {
             {
               command: 'delete',
               options: {
-                table: 'test_00000000000000000000000000',
+                table: translator.domain.tableName,
                 key: batches[2]['id']
               }
             }
           ];
       var expected = [
-            'load --table test_00000000000000000000000000 --values ' + commands[0].options.values,
-            'load --table test_00000000000000000000000000 --values ' + commands[1].options.values,
-            'delete --table test_00000000000000000000000000 --key ' + commands[2].options.key
+            'load --table ' + translator.domain.tableName + ' --values ' + commands[0].options.values,
+            'load --table ' + translator.domain.tableName + ' --values ' + commands[1].options.values,
+            'delete --table ' + translator.domain.tableName + ' --key ' + commands[2].options.key
           ].join('\n');
       var stringified = Translator.commandsToString(commands);
       assert.equal(stringified, expected);
