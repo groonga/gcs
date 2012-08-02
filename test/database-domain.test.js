@@ -223,7 +223,7 @@ suite('database', function() {
         domain = new Domain('unknown', context);
         assert.equal(typeof domain.id, 'string');
         assert.deepEqual({ length:     domain.id.length,
-                           normalized: domain.id.replace(/[0-9][a-z]/g, '0') },
+                           normalized: domain.id.replace(/[1-9a-z]/g, '0') },
                          { length:     26,
                            normalized: Domain.DEFAULT_ID });
       });
