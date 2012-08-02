@@ -431,7 +431,7 @@ suite('Configuration API', function() {
       .next(function() {
         domain = new Domain('companies', context);
         field = domain.getIndexField('name');
-      }),
+      })
       .get('/?DomainName=companies&IndexFieldName=name&' +
            'Action=DeleteIndexField&Version=2011-02-01')
       .next(function(response) {
@@ -464,7 +464,7 @@ suite('Configuration API', function() {
       .next(function() {
         domain = new Domain('companies', context);
         field = domain.getIndexField('age');
-      }),
+      })
       .get('/?DomainName=companies&IndexFieldName=age&' +
            'Action=DeleteIndexField&Version=2011-02-01')
       .next(function(response) {
