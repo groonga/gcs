@@ -216,8 +216,8 @@ suite('database', function() {
       });
 
       test('id for database (known table)', function() {
-        assert.equal({ id: domain.id, exists: domain.exists() },
-                     { id: 'id0123', exists: true });
+        assert.deepEqual({ id: domain.id, exists: domain.exists() },
+                         { id: 'id0123', exists: true });
       });
 
       test('id for database (unknown, new table)', function() {
