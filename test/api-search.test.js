@@ -151,6 +151,78 @@ suite('Search API', function() {
         done();
       }
     );
+    testSearch('/2011-02-01/search?q=Tokyo&facet=product',
+               'with facet "domain"',
+               'search-companies-00000000000000000000000000.localhost',
+      function(response, body, done) {
+        var normalizedBody = normalizeSearchResult(body);
+        var actual = JSON.parse(normalizedBody);
+        var expected = {
+          rank: '-text_relevance',
+          'match-expr': '',
+          hits: {
+            found: 3,
+            start: 0,
+            hit: [
+              {
+                id: 'id1',
+                data: {
+                  _id: [1],
+                  _key: ['id1'],
+                  address: ['Shibuya, Tokyo, Japan'],
+                  description: [''],
+                  email_address: ['info@razil.jp'],
+                  name: ['Brazil'],
+                  age: [1],
+                  product: ['groonga']
+                }
+              },
+              {
+                id: 'id3',
+                data: {
+                  _id: [3],
+                  _key: ['id3'],
+                  address: ['Hongo, Tokyo, Japan'],
+                  description: [''],
+                  email_address: ['info@clear-code.com'],
+                  name: ['ClearCode Inc.'],
+                  age: [3],
+                  product: ['groonga']
+                }
+              },
+              {
+                id: 'id9',
+                data: {
+                  _id: [9],
+                  _key: ['id9'],
+                  address: ['Tokyo, Japan'],
+                  description: [''],
+                  email_address: [''],
+                  name: ['Umbrella Corporation'],
+                  age: [9],
+                  product: ['tyrant']
+                }
+              }
+            ]
+          },
+          facets: {
+            product: {
+              constraints: [
+                {value: 'groonga', count: 2},
+                {value: 'tyrant', count: 1}
+              ]
+            }
+          },
+          info: {
+            rid: '000000000000000000000000000000000000000000000000000000000000000',
+            'time-ms': 0, // always 0
+            'cpu-time-ms': 0
+          }
+        };
+        assert.deepEqual(actual, expected);
+        done();
+      }
+    );
 
     testSearch('/2011-02-01/search?q=Tokyo&size=2',
                'should return two hit entries',
