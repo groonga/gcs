@@ -71,17 +71,11 @@ suite('database', function() {
     });
 
     suite('from query parameter', function() {
-      test('valid', function() {
-        var request = { query: { DomainName: 'test0123' } };
-        var domain = new Domain(request);
-        assert.equal(domain.name, 'test0123');
-      });
-
-      test('invalid', function() {
+      test('not supported', function() {
         assert.throw(function() {
-          var request = { query: { DomainName: 'domain_name' } };
+          var request = { query: { DomainName: 'test0123' } };
           var domain = new Domain(request);
-        }, /cannot appear in a domain name/);
+        }, /no domain name/);
       });
     });
 
@@ -193,7 +187,7 @@ suite('database', function() {
                         url: '/gcs/test4567-id4567',
                         query: { DomainName: 'test890' } };
         var domain = new Domain(request);
-        assert.equal(domain.name, 'test890');
+        assert.equal(domain.name, 'test0123');
       });
     });
 
