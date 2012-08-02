@@ -243,16 +243,16 @@ suite('Configuration API', function() {
               Created: 'true',
               Deleted: 'false',
               DocService: {
-                Endpoint: 'doc-companies-' + Domain.DEFAULT_ID + '.localhost'
+                Endpoint: domain.getDocumentsEndpoint('localhost')
               },
-              DomainId: Domain.DEFAULT_ID + '/companies',
-              DomainName: 'companies',
-              NumSearchableDocs: '0',
-              RequiresIndexDocuments: 'false',
-              SearchInstanceCount: '0',
-              SearchPartitionCount: '0',
+              DomainId: domain.domainId,
+              DomainName: domain.name,
+              NumSearchableDocs: String(domain.searchableDocumentsCount),
+              RequiresIndexDocuments: String(domain.requiresIndexDocuments),
+              SearchInstanceCount: String(domain.searchInstanceCount),
+              SearchPartitionCount: String(domain.searchPartitionCount),
               SearchService: {
-                Endpoint: 'search-companies-' + Domain.DEFAULT_ID + '.localhost'
+                Endpoint: domain.getSearchEndpoint('localhost')
               }
             };
         var status = response.body.CreateDomainResponse.CreateDomainResult.DomainStatus;
@@ -274,7 +274,8 @@ suite('Configuration API', function() {
         'Host': 'cloudsearch.localhost'
       })
       .next(function(response) {
-        assert.isFalse((new Domain('companies', context).exists()));
+        var domain = new Domain('companies', context);
+        assert.isFalse(domain.exists());
 
         response = toParsedResponse(response);
         assert.deepEqual(response.pattern,
@@ -284,16 +285,16 @@ suite('Configuration API', function() {
               Created: 'false',
               Deleted: 'true',
               DocService: {
-                Endpoint: 'doc-companies-' + Domain.DEFAULT_ID + '.localhost'
+                Endpoint: domain.getDocumentsEndpoint('localhost')
               },
-              DomainId: Domain.DEFAULT_ID + '/companies',
-              DomainName: 'companies',
-              NumSearchableDocs: '0',
-              RequiresIndexDocuments: 'false',
-              SearchInstanceCount: '0',
-              SearchPartitionCount: '0',
+              DomainId: domain.domainId,
+              DomainName: domain.name,
+              NumSearchableDocs: String(domain.searchableDocumentsCount),
+              RequiresIndexDocuments: String(domain.requiresIndexDocuments),
+              SearchInstanceCount: String(domain.searchInstanceCount),
+              SearchPartitionCount: String(domain.searchPartitionCount),
               SearchService: {
-                Endpoint: 'search-companies-' + Domain.DEFAULT_ID + '.localhost'
+                Endpoint: domain.getSearchEndpoint('localhost')
               }
             };
         var status = response.body.DeleteDomainResponse.DeleteDomainResult.DomainStatus;
