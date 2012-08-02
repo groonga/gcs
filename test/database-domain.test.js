@@ -218,7 +218,7 @@ suite('database', function() {
 
       test('id from database (unknown table)', function() {
         domain = new Domain('unknown', context);
-        assert.equal(domain.id, Domain.DEFAULT_DOMAIN_ID);
+        assert.equal(domain.id, Domain.DEFAULT_ID);
       });
 
       test('indexFields', function() {

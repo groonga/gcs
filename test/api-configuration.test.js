@@ -250,16 +250,16 @@ suite('Configuration API', function() {
               Created: 'true',
               Deleted: 'false',
               DocService: {
-                Endpoint: 'doc-companies-' + Domain.DEFAULT_DOMAIN_ID + '.localhost'
+                Endpoint: 'doc-companies-' + Domain.DEFAULT_ID + '.localhost'
               },
-              DomainId: Domain.DEFAULT_DOMAIN_ID + '/companies',
+              DomainId: Domain.DEFAULT_ID + '/companies',
               DomainName: 'companies',
               NumSearchableDocs: '0',
               RequiresIndexDocuments: 'false',
               SearchInstanceCount: '0',
               SearchPartitionCount: '0',
               SearchService: {
-                Endpoint: 'search-companies-' + Domain.DEFAULT_DOMAIN_ID + '.localhost'
+                Endpoint: 'search-companies-' + Domain.DEFAULT_ID + '.localhost'
               }
             };
         var status = response.body.CreateDomainResponse.CreateDomainResult.DomainStatus;
@@ -293,16 +293,16 @@ suite('Configuration API', function() {
               Created: 'false',
               Deleted: 'true',
               DocService: {
-                Endpoint: 'doc-companies-' + Domain.DEFAULT_DOMAIN_ID + '.localhost'
+                Endpoint: 'doc-companies-' + Domain.DEFAULT_ID + '.localhost'
               },
-              DomainId: Domain.DEFAULT_DOMAIN_ID + '/companies',
+              DomainId: Domain.DEFAULT_ID + '/companies',
               DomainName: 'companies',
               NumSearchableDocs: '0',
               RequiresIndexDocuments: 'false',
               SearchInstanceCount: '0',
               SearchPartitionCount: '0',
               SearchService: {
-                Endpoint: 'search-companies-' + Domain.DEFAULT_DOMAIN_ID + '.localhost'
+                Endpoint: 'search-companies-' + Domain.DEFAULT_ID + '.localhost'
               }
             };
         var status = response.body.DeleteDomainResponse.DeleteDomainResult.DomainStatus;
