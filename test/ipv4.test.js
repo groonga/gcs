@@ -41,12 +41,12 @@ suite('ipv4', function() {
   }
   testIsInRange('127.0.0.0',       '127.0.0.0/8');
   testIsInRange('127.0.255.255',   '127.0.0.0/8');
-  testIsInRange('192.168.0.0',     '192.169.0.0/16');
-  testIsInRange('192.168.255.255', '192.169.0.0/16');
-  testIsInRange('192.168.0.0',     '192.169.0.0/24');
-  testIsInRange('192.168.0.255',   '192.169.0.0/24');
-  testIsInRange('192.168.0.0',     '192.169.0.0/255.255.255.0');
-  testIsInRange('192.168.0.255',   '192.169.0.0/255.255.255.0');
+  testIsInRange('192.168.0.0',     '192.168.0.0/16');
+  testIsInRange('192.168.255.255', '192.168.0.0/16');
+  testIsInRange('192.168.0.0',     '192.168.0.0/24');
+  testIsInRange('192.168.0.255',   '192.168.0.0/24');
+  testIsInRange('192.168.0.0',     '192.168.0.0/255.255.255.0');
+  testIsInRange('192.168.0.255',   '192.168.0.0/255.255.255.0');
 
   function testIsOutOfRange(address, network) {
     test('is out of range: ' + address + ' vs ' + network, function() {
@@ -54,11 +54,11 @@ suite('ipv4', function() {
     });
   }
   testIsOutOfRange('126.255.0.0',     '127.0.0.0/8');
-  testIsOutOfRange('127.1.0.0',       '127.0.0.0/8');
-  testIsOutOfRange('192.167.255.0',   '192.169.0.0/16');
-  testIsOutOfRange('192.169.0.0',     '192.169.0.0/16');
-  testIsOutOfRange('192.167.255.255', '192.169.0.0/24');
-  testIsOutOfRange('192.168.1.0',     '192.169.0.0/24');
-  testIsOutOfRange('192.168.0.0',     '192.169.0.0/255.255.255.0');
-  testIsOutOfRange('192.168.0.255',   '192.169.0.0/255.255.255.0');
+  testIsOutOfRange('128.0.0.0',       '127.0.0.0/8');
+  testIsOutOfRange('192.167.255.0',   '192.168.0.0/16');
+  testIsOutOfRange('192.169.0.0',     '192.168.0.0/16');
+  testIsOutOfRange('192.167.255.255', '192.168.0.0/24');
+  testIsOutOfRange('192.168.1.0',     '192.168.0.0/24');
+  testIsOutOfRange('192.167.255.0',   '192.168.0.0/255.255.255.0');
+  testIsOutOfRange('192.169.0.1',     '192.168.0.0/255.255.255.0');
 });
