@@ -563,6 +563,7 @@ suite('Configuration API', function() {
   });
 
   test('Get, Action=UpdateSynonymOptions', function(done) {
+    var domain;
     var synonymsObject = {
       synonyms: {
         tokio: ["tokyo"],
@@ -572,12 +573,18 @@ suite('Configuration API', function() {
     var json = JSON.stringify(synonymsObject);
     var synonyms = encodeURIComponent(json);
     utils
+      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
+        'Host': 'cloudsearch.localhost'
+      })
+      .next(function() {
+        domain = new Domain('companies', context);
+        assert.isFalse(domain.isSynonymTableAvailableSync());
+      })
       .get('/?Version=2011-02-01&Action=UpdateSynonymOptions&' +
            'DomainName=companies&Synonyms='+synonyms, {
         'Host': 'cloudsearch.localhost'
       })
       .next(function(response) {
-        var domain = new Domain('companies', context);
         assert.isTrue(domain.isSynonymTableAvailableSync());
 
         response = toParsedResponse(response);
