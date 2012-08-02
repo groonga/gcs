@@ -215,13 +215,17 @@ suite('database', function() {
         temporaryDatabase = undefined;
       });
 
-      test('id from database (known table)', function() {
+      test('id for database (known table)', function() {
         assert.equal(domain.id, 'id0123');
       });
 
-      test('id from database (unknown table)', function() {
+      test('id for database (unknown, new table)', function() {
         domain = new Domain('unknown', context);
-        assert.equal(domain.id, Domain.DEFAULT_ID);
+        assert.equal(typeof domain.id, 'string');
+        assert.deepEqual({ length:     domain.id.length,
+                           normalized: domain.id.replace(/[0-9][a-z]/g, '0') },
+                         { length:     26,
+                           normalized: Domain.DEFAULT_ID });
       });
 
       test('indexFields', function() {
