@@ -335,7 +335,7 @@ suite('Configuration API', function() {
               TextOptions: {
                 DefaultValue: {},
                 FacetEnabled: String(field.facetEnabled),
-                ResultEnabled: String(field.fresultEnabled)
+                ResultEnabled: String(field.resultEnabled)
               }
             };
         var options = response.body.DefineIndexFieldResponse.DefineIndexFieldResult.IndexField.Options;
@@ -405,7 +405,7 @@ suite('Configuration API', function() {
               LiteralOptions: {
                 DefaultValue: {},
                 FacetEnabled: String(field.facetEnabled),
-                ResultEnabled: String(field.fresultEnabled),
+                ResultEnabled: String(field.resultEnabled),
                 SearchEnabled: String(field.searchEnabled)
               }
             };
