@@ -234,7 +234,7 @@ suite('Configuration API', function() {
        })
       .next(function(response) {
         var domain = new Domain('companies', context);
-        assert.isTrue(.exists());
+        assert.isTrue(domain.exists());
 
         response = toParsedResponse(response);
         assert.deepEqual(response.pattern,
