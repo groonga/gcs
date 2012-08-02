@@ -308,7 +308,7 @@ suite('database', function() {
         var domain = new Domain('companies', context);
         assert.isFalse(domain.isSynonymTableAvailableSync());
 
-        domain.updateSynonymsSync(
+        domain.updateSynonymsSync({
           synonyms: {
             tokio: ['tokyo'],
             dekkaido: 'hokkaido'
