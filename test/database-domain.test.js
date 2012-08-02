@@ -303,6 +303,33 @@ suite('database', function() {
         var expectedDump = '';
         assert.equal(dump, expectedDump);
       });
+
+      test('updateSynonymsSync', function() {
+        var domain = new Domain('companies', context);
+        assert.isFalse(domain.isSynonymTableAvailableSync());
+
+        domain.updateSynonymsSync(
+          synonyms: {
+            tokio: ['tokyo'],
+            dekkaido: 'hokkaido'
+          }
+        });
+        assert.isTrue(domain.isSynonymTableAvailableSync());
+
+        var dumpExpected =
+             'table_create ' + domain.synonymTableName + ' TABLE_HASH_KEY|KEY_NORMALIZE ShortText\n' +
+             'column_create ' + domain.synonymTableName + ' synonyms COLUMN_VECTOR ShortText\n' +
+             'load --table ' + domain.synonymTableName + '\n' +
+             '[\n' +
+             '["_key","synonyms"],\n' +
+             '["tokio",["tokyo"]],\n' +
+             '["dekkaido",["hokkaido"]]\n' +
+             ']';
+        var dumpActual = context.commandSync('dump', {
+              tables: domain.synonymTableName
+            });
+        assert.equal(dumpExpected, dumpActual);
+      });
     });
   });
 });

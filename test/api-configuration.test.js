@@ -577,19 +577,8 @@ suite('Configuration API', function() {
         'Host': 'cloudsearch.localhost'
       })
       .next(function(response) {
-        var dumpExpected =
-             'table_create companies_00000000000000000000000000_synonyms TABLE_HASH_KEY|KEY_NORMALIZE ShortText\n' +
-             'column_create companies_00000000000000000000000000_synonyms synonyms COLUMN_VECTOR ShortText\n' +
-             'load --table companies_00000000000000000000000000_synonyms\n' +
-             '[\n' +
-             '["_key","synonyms"],\n' +
-             '["tokio",["tokyo"]],\n' +
-             '["dekkaido",["hokkaido"]]\n' +
-             ']';
-        var dumpActual = context.commandSync('dump', {
-          tables: 'companies_00000000000000000000000000_synonyms'
-        });
-        assert.equal(dumpExpected, dumpActual);
+        var domain = new Domain('companies', context);
+        assert.isTrue(domain.isSynonymTableAvailableSync());
 
         response = toParsedResponse(response);
         assert.deepEqual(response.pattern,
