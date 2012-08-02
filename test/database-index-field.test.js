@@ -162,7 +162,7 @@ suite('database', function() {
 
       test('exists, for non-existing field', function() {
         var field = new IndexField('unknown', domain);
-        assert.isTrue(field.exists());
+        assert.isFalse(field.exists());
       });
 
       test('type detection (text)', function() {
