@@ -17,7 +17,7 @@ program
           'database path [' + defaultDatabasePath + ']',
           String,
           defaultDatabasePath)
-  .option('--privilege',
+  .option('--privilege <ip range>',
           'IP range for privileged clients [' + defaultPrivilegedRange + ']',
           String,
           defaultPrivilegedRange)
@@ -33,4 +33,5 @@ server = gcsServer.createServer({
 server.listen(program.port, function() {
   console.log('gcs listening at %d', program.port);
   console.log('database is at %s', program.databasePath);
+  console.log('privileged IP range is %s', program.privilege);
 });
