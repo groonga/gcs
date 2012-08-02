@@ -226,7 +226,7 @@ suite('database', function() {
         assert.deepEqual({ idLength:     domain.id.length,
                            normalizedId: domain.id.replace(/[1-9a-z]/g, '0'),
                            exists:       domain.exists() },
-                         { idLength:     26,
+                         { idLength:     Domain.DEFAULT_ID.length,
                            normalizedId: Domain.DEFAULT_ID,
                            exists:       false });
       });
