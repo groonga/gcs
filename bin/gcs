@@ -4,7 +4,7 @@ var gcsServer = require(__dirname + '/../lib/server');
 var program = require('commander');
 
 var defaultDatabasePath = process.env.HOME + '/.gcs/database/gcs';
-var defaultPrivilegedRange = '127.0.0.0/8';
+var defaultPrivilegedRanges = '127.0.0.0/8';
 
 program
   .version(require('../package').version)
@@ -18,16 +18,17 @@ program
           String,
           defaultDatabasePath)
   .option('--privilege <ip range>',
-          'IP range for privileged clients [' + defaultPrivilegedRange + ']',
+          'list of IP ranges for privileged client '+
+            '[' + defaultPrivilegedRanges + ']',
           String,
-          defaultPrivilegedRange)
+          defaultPrivilegedRanges)
   .parse(process.argv);
 
 var server;
 
 server = gcsServer.createServer({
-  databasePath:    program.databasePath,
-  privilegedRange: program.privilege
+  databasePath:     program.databasePath,
+  privilegedRanges: program.privilege
 });
 
 server.listen(program.port, function() {
