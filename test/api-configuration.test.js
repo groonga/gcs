@@ -531,21 +531,10 @@ suite('Configuration API', function() {
       .get('/?DomainName=companies&' +
            'Action=IndexDocuments&Version=2011-02-01')
       .next(function(response) {
-        var dump = context.commandSync('dump', {
-              tables: 'companies'
-            });
-        var expected = 'table_create companies_00000000000000000000000000 TABLE_HASH_KEY ShortText\n' +
-                       'column_create companies_00000000000000000000000000 age COLUMN_SCALAR UInt32\n' +
-                       'column_create companies_00000000000000000000000000 name COLUMN_SCALAR ShortText\n' +
-                       'table_create companies_00000000000000000000000000_BigramTerms ' +
-                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
-                         '--default_tokenizer TokenBigram\n' +
-                       'table_create companies_00000000000000000000000000_age TABLE_HASH_KEY UInt32\n' +
-                       'column_create companies_00000000000000000000000000_age companies_00000000000000000000000000_age ' +
-                         'COLUMN_INDEX|WITH_POSITION companies_00000000000000000000000000 age\n' +
-                       'column_create companies_00000000000000000000000000_BigramTerms companies_00000000000000000000000000_name ' +
-                         'COLUMN_INDEX|WITH_POSITION companies_00000000000000000000000000 name';
-        assert.equal(dump, expected);
+        var domain = new Domain('companies', context);
+        assert.isTrue(domain.exists());
+        assert.isTrue(domain.getIndexField('name').exists());
+        assert.isTrue(domain.getIndexField('age').exists());
 
         var expectedFieldNames = ['age', 'name'];
         response = toParsedResponse(response);
