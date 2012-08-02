@@ -11,6 +11,7 @@ suite('database', function() {
 
     setup(function() {
       domain = new Domain('testdomain');
+      domain.id = Domain.DEFAULT_ID;
     });
 
     teardown(function() {
@@ -146,6 +147,7 @@ suite('database', function() {
         context = temporaryDatabase.get();
         utils.loadDumpFile(context, __dirname + '/fixture/companies/ddl.grn');
         domain = new Domain('companies', context);
+        domain.id = Domain.DEFAULT_ID;
       });
 
       teardown(function() {
