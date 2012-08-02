@@ -436,9 +436,9 @@ suite('Configuration API', function() {
            'Action=DeleteIndexField&Version=2011-02-01')
       .next(function(response) {
         assert.deepEqual({ domain: domain.exists(),
-                           field:  domain.field() },
+                           field:  field.exists() },
                          { domain: true,
-                           field:  faldomain.field() });
+                           field:  false });
 
         response = toParsedResponse(response);
         assert.deepEqual(response.pattern,
@@ -469,9 +469,9 @@ suite('Configuration API', function() {
            'Action=DeleteIndexField&Version=2011-02-01')
       .next(function(response) {
         assert.deepEqual({ domain: domain.exists(),
-                           field:  domain.field() },
+                           field:  field.exists() },
                          { domain: true,
-                           field:  faldomain.field() });
+                           field:  false });
 
         response = toParsedResponse(response);
         assert.deepEqual(response.pattern,
@@ -502,9 +502,9 @@ suite('Configuration API', function() {
            'Action=DeleteIndexField&Version=2011-02-01')
       .next(function(response) {
         assert.deepEqual({ domain: domain.exists(),
-                           field:  domain.field() },
+                           field:  field.exists() },
                          { domain: true,
-                           field:  faldomain.field() });
+                           field:  false });
 
         response = toParsedResponse(response);
         assert.deepEqual(response.pattern,
