@@ -233,14 +233,7 @@ suite('Configuration API', function() {
          'Host': 'cloudsearch.localhost'
        })
       .next(function(response) {
-        var dump = context.commandSync('dump', {
-              tables: 'companies'
-            });
-        var expectedDump = 'table_create companies_00000000000000000000000000 TABLE_HASH_KEY ShortText\n' +
-                           'table_create companies_00000000000000000000000000_BigramTerms ' +
-                             'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
-                             '--default_tokenizer TokenBigram';
-        assert.equal(dump, expectedDump);
+        assert.isTrue((new Domain('companies', context).exists()));
 
         response = toParsedResponse(response);
         assert.deepEqual(response.pattern,
@@ -281,9 +274,7 @@ suite('Configuration API', function() {
         'Host': 'cloudsearch.localhost'
       })
       .next(function(response) {
-        var dump = context.commandSync('dump');
-        var expectedDump = '';
-        assert.equal(dump, expectedDump);
+        assert.isFalse((new Domain('companies', context).exists()));
 
         response = toParsedResponse(response);
         assert.deepEqual(response.pattern,

@@ -259,5 +259,52 @@ suite('database', function() {
         assert.deepEqual(fields.sort(sortFields), expected.sort(sortFields));
       });
     });
+
+    suite('database modifications', function() {
+      var temporaryDatabase;
+      var context;
+
+      setup(function() {
+        temporaryDatabase = utils.createTemporaryDatabase();
+        context = temporaryDatabase.get();
+      });
+
+      teardown(function() {
+        temporaryDatabase.teardown();
+        temporaryDatabase = undefined;
+      });
+
+      test('createSync', function() {
+        var domain = new Domain('companies', context);
+        domain.id = Domain.DEFAULT_ID;
+        assert.isFalse(domain.exists());
+
+        domain.createSync();
+        assert.isTrue(domain.exists());
+
+        var dump = context.commandSync('dump', {
+              tables: domain.tableName
+            });
+        var expectedDump = 'table_create ' + domain.tableName + ' TABLE_HASH_KEY ShortText\n' +
+                           'table_create ' + domain.termsTableName + ' ' +
+                             'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
+                             '--default_tokenizer TokenBigram';
+        assert.equal(dump, expectedDump);
+      });
+
+      test('deleteSync', function() {
+        var domain = new Domain('companies', context);
+        domain.id = Domain.DEFAULT_ID;
+        domain.createSync();
+        assert.isTrue(domain.exists());
+
+        domain.deleteSync();
+        assert.isFalse(domain.exists());
+
+        var dump = context.commandSync('dump');
+        var expectedDump = '';
+        assert.equal(dump, expectedDump);
+      });
+    });
   });
 });
