@@ -233,7 +233,8 @@ suite('Configuration API', function() {
          'Host': 'cloudsearch.localhost'
        })
       .next(function(response) {
-        assert.isTrue((new Domain('companies', context).exists()));
+        var domain = new Domain('companies', context);
+        assert.isTrue(.exists());
 
         response = toParsedResponse(response);
         assert.deepEqual(response.pattern,
