@@ -420,6 +420,7 @@ suite('Configuration API', function() {
   });
 
   test('Get, Action=DeleteIndexField (text)', function(done) {
+    var domain, field;
     utils
       .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
         'Host': 'cloudsearch.localhost'
@@ -427,17 +428,17 @@ suite('Configuration API', function() {
       .get('/?DomainName=companies&IndexField.IndexFieldName=name&' +
            'IndexField.IndexFieldType=text&' +
            'Action=DefineIndexField&Version=2011-02-01')
+      .next(function() {
+        domain = new Domain('companies', context);
+        field = domain.getIndexField('name');
+      }),
       .get('/?DomainName=companies&IndexFieldName=name&' +
            'Action=DeleteIndexField&Version=2011-02-01')
       .next(function(response) {
-        var dump = context.commandSync('dump', {
-              tables: 'companies'
-            });
-        var expected = 'table_create companies_00000000000000000000000000 TABLE_HASH_KEY ShortText\n' +
-                       'table_create companies_00000000000000000000000000_BigramTerms ' +
-                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
-                         '--default_tokenizer TokenBigram';
-        assert.equal(dump, expected);
+        assert.deepEqual({ domain: domain.exists(),
+                           field:  domain.field() },
+                         { domain: true,
+                           field:  faldomain.field() });
 
         response = toParsedResponse(response);
         assert.deepEqual(response.pattern,
@@ -452,6 +453,7 @@ suite('Configuration API', function() {
   });
 
   test('Get, Action=DeleteIndexField (uint)', function(done) {
+    var domain, field;
     utils
       .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
         'Host': 'cloudsearch.localhost'
@@ -459,17 +461,17 @@ suite('Configuration API', function() {
       .get('/?DomainName=companies&IndexField.IndexFieldName=age&' +
            'IndexField.IndexFieldType=uint&' +
            'Action=DefineIndexField&Version=2011-02-01')
+      .next(function() {
+        domain = new Domain('companies', context);
+        field = domain.getIndexField('age');
+      }),
       .get('/?DomainName=companies&IndexFieldName=age&' +
            'Action=DeleteIndexField&Version=2011-02-01')
       .next(function(response) {
-        var dump = context.commandSync('dump', {
-              tables: 'companies'
-            });
-        var expected = 'table_create companies_00000000000000000000000000 TABLE_HASH_KEY ShortText\n' +
-                       'table_create companies_00000000000000000000000000_BigramTerms ' +
-                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
-                         '--default_tokenizer TokenBigram';
-        assert.equal(dump, expected);
+        assert.deepEqual({ domain: domain.exists(),
+                           field:  domain.field() },
+                         { domain: true,
+                           field:  faldomain.field() });
 
         response = toParsedResponse(response);
         assert.deepEqual(response.pattern,
@@ -484,24 +486,25 @@ suite('Configuration API', function() {
   });
 
   test('Get, Action=DeleteIndexField (literal)', function(done) {
+    var domain, field;
     utils
       .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
         'Host': 'cloudsearch.localhost'
       })
-      .get('/?DomainName=companies&IndexField.IndexFieldName=member&' +
+      .get('/?DomainName=companies&IndexField.IndexFieldName=product&' +
            'IndexField.IndexFieldType=literal&' +
            'Action=DefineIndexField&Version=2011-02-01')
-      .get('/?DomainName=companies&IndexFieldName=member&' +
+      .next(function() {
+        domain = new Domain('companies', context);
+        field = domain.getIndexField('product');
+      }),
+      .get('/?DomainName=companies&IndexFieldName=product&' +
            'Action=DeleteIndexField&Version=2011-02-01')
       .next(function(response) {
-        var dump = context.commandSync('dump', {
-              tables: 'companies'
-            });
-        var expected = 'table_create companies_00000000000000000000000000 TABLE_HASH_KEY ShortText\n' +
-                       'table_create companies_00000000000000000000000000_BigramTerms ' +
-                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
-                         '--default_tokenizer TokenBigram';
-        assert.equal(dump, expected);
+        assert.deepEqual({ domain: domain.exists(),
+                           field:  domain.field() },
+                         { domain: true,
+                           field:  faldomain.field() });
 
         response = toParsedResponse(response);
         assert.deepEqual(response.pattern,
