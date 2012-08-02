@@ -63,12 +63,12 @@ suite('database', function() {
 
     test('indexColumnName', function() {
       var field = new IndexField('valid_123', domain);
-      assert.equal(field.indexColumnName, 'testdomain_00000000000000000000000000_valid_123');
+      assert.equal(field.indexColumnName, 'testdomain_' + Domain.DEFAULT_ID + '_valid_123');
     });
 
     test('alterTableName', function() {
       var field = new IndexField('valid_123', domain);
-      assert.equal(field.alterTableName, 'testdomain_00000000000000000000000000_valid_123');
+      assert.equal(field.alterTableName, 'testdomain_' + Domain.DEFAULT_ID + '_valid_123');
     });
 
     test('fieldTypeToColumnType (text)', function() {
@@ -86,7 +86,7 @@ suite('database', function() {
     test('fieldTypeToColumnType (literal)', function() {
       var field = new IndexField('valid_123', domain);
       assert.equal(field.fieldTypeToColumnType('literal'),
-                   'testdomain_00000000000000000000000000_valid_123');
+                   'testdomain_' + Domain.DEFAULT_ID + '_valid_123');
     });
 
     test('initial status (text)', function() {

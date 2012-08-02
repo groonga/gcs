@@ -24,13 +24,13 @@ suite('database', function() {
     test('lower case', function() {
       var domain = new Domain('valid');
       domain.id = Domain.DEFAULT_ID;
-      assert.equal(domain.tableName, 'valid_00000000000000000000000000');
+      assert.equal(domain.tableName, 'valid_' + Domain.DEFAULT_ID);
     });
 
     test('lower case and number', function() {
       var domain = new Domain('valid123');
       domain.id = Domain.DEFAULT_ID;
-      assert.equal(domain.tableName, 'valid123_00000000000000000000000000');
+      assert.equal(domain.tableName, 'valid123_' + Domain.DEFAULT_ID);
     });
 
     test('too short', function() {
@@ -67,7 +67,7 @@ suite('database', function() {
     test('termsTableName', function() {
       var domain = new Domain('valid123');
       domain.id = Domain.DEFAULT_ID;
-      assert.equal(domain.termsTableName, 'valid123_00000000000000000000000000_BigramTerms');
+      assert.equal(domain.termsTableName, 'valid123_' + Domain.DEFAULT_ID + '_BigramTerms');
     });
 
     suite('from query parameter', function() {
