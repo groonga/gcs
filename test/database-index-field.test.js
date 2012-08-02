@@ -147,13 +147,22 @@ suite('database', function() {
         context = temporaryDatabase.get();
         utils.loadDumpFile(context, __dirname + '/fixture/companies/ddl.grn');
         domain = new Domain('companies', context);
-        domain.id = Domain.DEFAULT_ID;
       });
 
       teardown(function() {
         domain = undefined;
         temporaryDatabase.teardown();
         temporaryDatabase = undefined;
+      });
+
+      test('exists, for existing field', function() {
+        var field = new IndexField('name', domain);
+        assert.isTrue(field.exists());
+      });
+
+      test('exists, for non-existing field', function() {
+        var field = new IndexField('unknown', domain);
+        assert.isTrue(field.exists());
       });
 
       test('type detection (text)', function() {
@@ -169,6 +178,152 @@ suite('database', function() {
       test('type detection (literal)', function() {
         var field = new IndexField('product', domain);
         assert.equal(field.type, 'literal');
+      });
+    });
+
+    suite('database modifications', function() {
+      var temporaryDatabase;
+      var context;
+      var domain;
+
+      setup(function() {
+        temporaryDatabase = utils.createTemporaryDatabase();
+        context = temporaryDatabase.get();
+        domain = new Domain('companies', context);
+        domain.createSync();
+      });
+
+      teardown(function() {
+        temporaryDatabase.teardown();
+        temporaryDatabase = undefined;
+      });
+
+      function getNoColumnDump() {
+        return 'table_create ' + domain.tableName + ' TABLE_HASH_KEY ShortText\n' +
+               'table_create ' + domain.termsTableName + ' ' +
+                 'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
+                 '--default_tokenizer TokenBigram';
+      }                       
+
+      test('createSync for text field', function() {
+        var field = new IndexField('name', domain);
+        assert.isFalse(field.exists());
+
+        field.type = 'text';
+        assert.isFalse(field.exists());
+
+        field.createSync();
+        assert.isTrue(field.exists());
+
+        var dump = context.commandSync('dump', {
+              tables: domain.tableName
+            });
+        var expected = 'table_create ' + domain.tableName + ' TABLE_HASH_KEY ShortText\n' +
+                       'column_create ' + domain.tableName + ' ' + field.columnName + ' COLUMN_SCALAR ShortText\n' +
+                       'table_create ' + domain.termsTableName + ' ' +
+                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
+                         '--default_tokenizer TokenBigram\n' +
+                       'column_create ' + domain.termsTableName + ' ' + field.indexColumnName + ' ' +
+                         'COLUMN_INDEX|WITH_POSITION ' + domain.tableName + ' ' + field.columnName;
+        assert.equal(dump, expected);
+      });
+
+      test('deleteSync for text field', function() {
+        var field = new IndexField('name', domain);
+        field.type = 'text';
+        field.createSync();
+        assert.isTrue(field.exists());
+
+        field.deleteSync();
+        assert.isFalse(field.exists());
+
+        var dump = context.commandSync('dump', {
+              tables: domain.tableName
+            });
+        var expected = getNoColumnDump();
+        assert.equal(dump, expected);
+      });
+
+      test('createSync for uint field', function() {
+        var field = new IndexField('age', domain);
+        assert.isFalse(field.exists());
+
+        field.type = 'uint';
+        assert.isFalse(field.exists());
+
+        field.createSync();
+        assert.isTrue(field.exists());
+
+        var dump = context.commandSync('dump', {
+              tables: domain.tableName
+            });
+        var expected = 'table_create ' + domain.tableName + ' TABLE_HASH_KEY ShortText\n' +
+                       'column_create ' + domain.tableName + ' ' + field.columnName + ' COLUMN_SCALAR UInt32\n' +
+                       'table_create ' + domain.termsTableName + ' ' +
+                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
+                         '--default_tokenizer TokenBigram\n' +
+                       'table_create ' + field.alterTableName + ' ' +
+                         'TABLE_HASH_KEY UInt32\n' +
+                       'column_create ' + field.alterTableName + ' ' + field.indexColumnName + ' ' +
+                         'COLUMN_INDEX|WITH_POSITION ' + domain.tableName + ' ' + field.columnName;
+        assert.equal(dump, expected);
+      });
+
+      test('deleteSync for uint field', function() {
+        var field = new IndexField('age', domain);
+        field.type = 'uint';
+        field.createSync();
+        assert.isTrue(field.exists());
+
+        field.deleteSync();
+        assert.isFalse(field.exists());
+
+        var dump = context.commandSync('dump', {
+              tables: domain.tableName
+            });
+        var expected = getNoColumnDump();
+        assert.equal(dump, expected);
+      });
+
+      test('createSync for literal field', function() {
+        var field = new IndexField('product', domain);
+        assert.isFalse(field.exists());
+
+        field.type = 'literal';
+        assert.isFalse(field.exists());
+
+        field.createSync();
+        assert.isTrue(field.exists());
+
+        var dump = context.commandSync('dump', {
+              tables: 'companies'
+            });
+        var expected = 'table_create ' + domain.tableName + ' TABLE_HASH_KEY ShortText\n' +
+                       'table_create ' + domain.termsTableName + ' ' +
+                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
+                         '--default_tokenizer TokenBigram\n' +
+                       'table_create ' + field.alterTableName + ' ' +
+                         'TABLE_HASH_KEY ShortText\n' +
+                       'column_create ' + field.alterTableName + ' ' + field.indexColumnName + ' ' +
+                         'COLUMN_INDEX|WITH_POSITION ' + domain.tableName + ' ' + field.columnName + '\n' +
+                       'column_create ' + domain.tableName + ' ' + field.columnName + ' COLUMN_SCALAR ' + field.alterTableName;
+        assert.equal(dump, expected);
+      });
+
+      test('deleteSync for literal field', function() {
+        var field = new IndexField('product', domain);
+        field.type = 'literal';
+        field.createSync();
+        assert.isTrue(field.exists());
+
+        field.deleteSync();
+        assert.isFalse(field.exists());
+
+        var dump = context.commandSync('dump', {
+              tables: domain.tableName
+            });
+        var expected = getNoColumnDump();
+        assert.equal(dump, expected);
       });
     });
   });

@@ -321,29 +321,21 @@ suite('Configuration API', function() {
            'IndexField.IndexFieldType=text&' +
            'Action=DefineIndexField&Version=2011-02-01')
       .next(function(response) {
-        var dump = context.commandSync('dump', {
-              tables: 'companies'
-            });
-        var expected = 'table_create companies_00000000000000000000000000 TABLE_HASH_KEY ShortText\n' +
-                       'column_create companies_00000000000000000000000000 name COLUMN_SCALAR ShortText\n' +
-                       'table_create companies_00000000000000000000000000_BigramTerms ' +
-                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
-                         '--default_tokenizer TokenBigram\n' +
-                       'column_create companies_00000000000000000000000000_BigramTerms companies_00000000000000000000000000_name ' +
-                         'COLUMN_INDEX|WITH_POSITION companies_00000000000000000000000000 name';
-        assert.equal(dump, expected);
+        var domain = new Domain('companies', context);
+        var field = domain.getIndexField('name');
+        assert.isTrue(field.exists());
 
         response = toParsedResponse(response);
         assert.deepEqual(response.pattern,
                          { statusCode: 200,
                            body: PATTERN_DefineIndexFieldResponse_Text });
         var expectedOptions = {
-              IndexFieldName: 'name',
-              IndexFieldType: 'text',
+              IndexFieldName: field.name,
+              IndexFieldType: field.type,
               TextOptions: {
                 DefaultValue: {},
-                FacetEnabled: 'false',
-                ResultEnabled: 'true'
+                FacetEnabled: String(field.facetEnabled),
+                ResultEnabled: String(field.fresultEnabled)
               }
             };
         var options = response.body.DefineIndexFieldResponse.DefineIndexFieldResult.IndexField.Options;
@@ -365,27 +357,17 @@ suite('Configuration API', function() {
            'IndexField.IndexFieldType=uint&' +
            'Action=DefineIndexField&Version=2011-02-01')
       .next(function(response) {
-        var dump = context.commandSync('dump', {
-              tables: 'companies'
-            });
-        var expected = 'table_create companies_00000000000000000000000000 TABLE_HASH_KEY ShortText\n' +
-                       'column_create companies_00000000000000000000000000 age COLUMN_SCALAR UInt32\n' +
-                       'table_create companies_00000000000000000000000000_BigramTerms ' +
-                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
-                         '--default_tokenizer TokenBigram\n' +
-                       'table_create companies_00000000000000000000000000_age ' +
-                         'TABLE_HASH_KEY UInt32\n' +
-                       'column_create companies_00000000000000000000000000_age companies_00000000000000000000000000_age ' +
-                         'COLUMN_INDEX|WITH_POSITION companies_00000000000000000000000000 age';
-        assert.equal(dump, expected);
+        var domain = new Domain('companies', context);
+        var field = domain.getIndexField('age');
+        assert.isTrue(field.exists());
 
         response = toParsedResponse(response);
         assert.deepEqual(response.pattern,
                          { statusCode: 200,
                            body: PATTERN_DefineIndexFieldResponse_UInt });
         var expectedOptions = {
-              IndexFieldName: 'age',
-              IndexFieldType: 'uint',
+              IndexFieldName: field.name,
+              IndexFieldType: field.type,
               UIntOptions: {
                 DefaultValue: {}
               }
@@ -405,36 +387,26 @@ suite('Configuration API', function() {
       .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
         'Host': 'cloudsearch.localhost'
       })
-      .get('/?DomainName=companies&IndexField.IndexFieldName=member&' +
+      .get('/?DomainName=companies&IndexField.IndexFieldName=product&' +
            'IndexField.IndexFieldType=literal&' +
            'Action=DefineIndexField&Version=2011-02-01')
       .next(function(response) {
-        var dump = context.commandSync('dump', {
-              tables: 'companies'
-            });
-        var expected = 'table_create companies_00000000000000000000000000 TABLE_HASH_KEY ShortText\n' +
-                       'table_create companies_00000000000000000000000000_BigramTerms ' +
-                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
-                         '--default_tokenizer TokenBigram\n' +
-                       'table_create companies_00000000000000000000000000_member ' +
-                         'TABLE_HASH_KEY ShortText\n' +
-                       'column_create companies_00000000000000000000000000_member companies_00000000000000000000000000_member ' +
-                         'COLUMN_INDEX|WITH_POSITION companies_00000000000000000000000000 member\n' +
-                       'column_create companies_00000000000000000000000000 member COLUMN_SCALAR companies_00000000000000000000000000_member';
-        assert.equal(dump, expected);
+        var domain = new Domain('companies', context);
+        var field = domain.getIndexField('product');
+        assert.isTrue(field.exists());
 
         response = toParsedResponse(response);
         assert.deepEqual(response.pattern,
                          { statusCode: 200,
                            body: PATTERN_DefineIndexFieldResponse_Literal });
         var expectedOptions = {
-              IndexFieldName: 'member',
-              IndexFieldType: 'literal',
+              IndexFieldName: field.name,
+              IndexFieldType: field.type,
               LiteralOptions: {
                 DefaultValue: {},
-                FacetEnabled: 'true',
-                ResultEnabled: 'true',
-                SearchEnabled: 'true'
+                FacetEnabled: String(field.facetEnabled),
+                ResultEnabled: String(field.fresultEnabled),
+                SearchEnabled: String(field.searchEnabled)
               }
             };
         var options = response.body.DefineIndexFieldResponse.DefineIndexFieldResult.IndexField.Options;
