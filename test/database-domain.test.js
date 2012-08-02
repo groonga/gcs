@@ -276,7 +276,6 @@ suite('database', function() {
 
       test('createSync', function() {
         var domain = new Domain('companies', context);
-        domain.id = Domain.DEFAULT_ID;
         assert.isFalse(domain.exists());
 
         domain.createSync();
@@ -294,7 +293,6 @@ suite('database', function() {
 
       test('deleteSync', function() {
         var domain = new Domain('companies', context);
-        domain.id = Domain.DEFAULT_ID;
         domain.createSync();
         assert.isTrue(domain.exists());
 
