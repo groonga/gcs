@@ -497,7 +497,7 @@ suite('Configuration API', function() {
       .next(function() {
         domain = new Domain('companies', context);
         field = domain.getIndexField('product');
-      }),
+      })
       .get('/?DomainName=companies&IndexFieldName=product&' +
            'Action=DeleteIndexField&Version=2011-02-01')
       .next(function(response) {
