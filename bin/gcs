@@ -17,12 +17,17 @@ program
           'database path [' + defaultDatabasePath + ']',
           String,
           defaultDatabasePath)
+  .option('--privilege',
+          'IP range for privileged clients [' + defaultPrivilegedRange + ']',
+          String,
+          defaultPrivilegedRange)
   .parse(process.argv);
 
 var server;
 
 server = gcsServer.createServer({
-  databasePath: program.databasePath
+  databasePath:    program.databasePath,
+  privilegedRange: program.privilege
 });
 
 server.listen(program.port, function() {
