@@ -216,16 +216,19 @@ suite('database', function() {
       });
 
       test('id for database (known table)', function() {
-        assert.equal(domain.id, 'id0123');
+        assert.equal({ id: domain.id, exists: domain.exists() },
+                     { id: 'id0123', exists: true });
       });
 
       test('id for database (unknown, new table)', function() {
         domain = new Domain('unknown', context);
         assert.equal(typeof domain.id, 'string');
-        assert.deepEqual({ length:     domain.id.length,
-                           normalized: domain.id.replace(/[1-9a-z]/g, '0') },
-                         { length:     26,
-                           normalized: Domain.DEFAULT_ID });
+        assert.deepEqual({ idLength:     domain.id.length,
+                           normalizedId: domain.id.replace(/[1-9a-z]/g, '0'),
+                           exists:       domain.exists() },
+                         { idLength:     26,
+                           normalizedId: Domain.DEFAULT_ID,
+                           exists:       false });
       });
 
       test('indexFields', function() {
