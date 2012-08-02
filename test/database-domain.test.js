@@ -67,7 +67,8 @@ suite('database', function() {
     test('termsTableName', function() {
       var domain = new Domain('valid123');
       domain.id = Domain.DEFAULT_ID;
-      assert.equal(domain.termsTableName, 'valid123_' + Domain.DEFAULT_ID + '_BigramTerms');
+      assert.equal(domain.termsTableName,
+                   'valid123_' + Domain.DEFAULT_ID + '_BigramTerms');
     });
 
     suite('from query parameter', function() {
@@ -278,8 +279,9 @@ suite('database', function() {
         var dump = context.commandSync('dump', {
               tables: domain.tableName
             });
-        var expectedDump = 'table_create ' + domain.tableName + ' TABLE_HASH_KEY ShortText\n' +
-                           'table_create ' + domain.termsTableName + ' ' +
+        var expectedDump = 'table_create ' + domain.tableName +  ' ' +
+                             'TABLE_HASH_KEY ShortText\n' +
+                           'table_create ' + domain.termsTableName +  ' ' +
                              'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
                              '--default_tokenizer TokenBigram';
         assert.equal(dump, expectedDump);
@@ -311,8 +313,10 @@ suite('database', function() {
         assert.isTrue(domain.isSynonymTableAvailableSync());
 
         var dumpExpected =
-             'table_create ' + domain.synonymTableName + ' TABLE_HASH_KEY|KEY_NORMALIZE ShortText\n' +
-             'column_create ' + domain.synonymTableName + ' synonyms COLUMN_VECTOR ShortText\n' +
+             'table_create ' + domain.synonymTableName +  ' ' +
+               'TABLE_HASH_KEY|KEY_NORMALIZE ShortText\n' +
+             'column_create ' + domain.synonymTableName + ' ' +
+               'synonyms COLUMN_VECTOR ShortText\n' +
              'load --table ' + domain.synonymTableName + '\n' +
              '[\n' +
              '["_key","synonyms"],\n' +

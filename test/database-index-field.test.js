@@ -63,12 +63,14 @@ suite('database', function() {
 
     test('indexColumnName', function() {
       var field = new IndexField('valid_123', domain);
-      assert.equal(field.indexColumnName, 'testdomain_' + Domain.DEFAULT_ID + '_valid_123');
+      assert.equal(field.indexColumnName,
+                   'testdomain_' + Domain.DEFAULT_ID + '_valid_123');
     });
 
     test('alterTableName', function() {
       var field = new IndexField('valid_123', domain);
-      assert.equal(field.alterTableName, 'testdomain_' + Domain.DEFAULT_ID + '_valid_123');
+      assert.equal(field.alterTableName,
+                   'testdomain_' + Domain.DEFAULT_ID + '_valid_123');
     });
 
     test('fieldTypeToColumnType (text)', function() {
@@ -199,7 +201,8 @@ suite('database', function() {
       });
 
       function getNoColumnDump() {
-        return 'table_create ' + domain.tableName + ' TABLE_HASH_KEY ShortText\n' +
+        return 'table_create ' + domain.tableName +  ' ' +
+                 'TABLE_HASH_KEY ShortText\n' +
                'table_create ' + domain.termsTableName + ' ' +
                  'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
                  '--default_tokenizer TokenBigram';
@@ -218,13 +221,17 @@ suite('database', function() {
         var dump = context.commandSync('dump', {
               tables: domain.tableName
             });
-        var expected = 'table_create ' + domain.tableName + ' TABLE_HASH_KEY ShortText\n' +
-                       'column_create ' + domain.tableName + ' ' + field.columnName + ' COLUMN_SCALAR ShortText\n' +
+        var expected = 'table_create ' + domain.tableName +  ' ' +
+                         'TABLE_HASH_KEY ShortText\n' +
+                       'column_create ' + domain.tableName + ' ' +
+                         field.columnName + ' COLUMN_SCALAR ShortText\n' +
                        'table_create ' + domain.termsTableName + ' ' +
                          'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
                          '--default_tokenizer TokenBigram\n' +
-                       'column_create ' + domain.termsTableName + ' ' + field.indexColumnName + ' ' +
-                         'COLUMN_INDEX|WITH_POSITION ' + domain.tableName + ' ' + field.columnName;
+                       'column_create ' + domain.termsTableName + ' ' +
+                         field.indexColumnName + ' ' +
+                         'COLUMN_INDEX|WITH_POSITION ' + domain.tableName +
+                         ' ' + field.columnName;
         assert.equal(dump, expected);
       });
 
@@ -257,15 +264,19 @@ suite('database', function() {
         var dump = context.commandSync('dump', {
               tables: domain.tableName
             });
-        var expected = 'table_create ' + domain.tableName + ' TABLE_HASH_KEY ShortText\n' +
-                       'column_create ' + domain.tableName + ' ' + field.columnName + ' COLUMN_SCALAR UInt32\n' +
+        var expected = 'table_create ' + domain.tableName + ' ' +
+                         'TABLE_HASH_KEY ShortText\n' +
+                       'column_create ' + domain.tableName + ' ' +
+                         field.columnName + ' COLUMN_SCALAR UInt32\n' +
                        'table_create ' + domain.termsTableName + ' ' +
                          'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
                          '--default_tokenizer TokenBigram\n' +
                        'table_create ' + field.alterTableName + ' ' +
                          'TABLE_HASH_KEY UInt32\n' +
-                       'column_create ' + field.alterTableName + ' ' + field.indexColumnName + ' ' +
-                         'COLUMN_INDEX|WITH_POSITION ' + domain.tableName + ' ' + field.columnName;
+                       'column_create ' + field.alterTableName + ' ' +
+                         field.indexColumnName + ' ' +
+                         'COLUMN_INDEX|WITH_POSITION ' + domain.tableName +
+                         ' ' + field.columnName;
         assert.equal(dump, expected);
       });
 
@@ -298,15 +309,20 @@ suite('database', function() {
         var dump = context.commandSync('dump', {
               tables: 'companies'
             });
-        var expected = 'table_create ' + domain.tableName + ' TABLE_HASH_KEY ShortText\n' +
+        var expected = 'table_create ' + domain.tableName + ' ' +
+                         'TABLE_HASH_KEY ShortText\n' +
                        'table_create ' + domain.termsTableName + ' ' +
                          'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
                          '--default_tokenizer TokenBigram\n' +
                        'table_create ' + field.alterTableName + ' ' +
                          'TABLE_HASH_KEY ShortText\n' +
-                       'column_create ' + field.alterTableName + ' ' + field.indexColumnName + ' ' +
-                         'COLUMN_INDEX|WITH_POSITION ' + domain.tableName + ' ' + field.columnName + '\n' +
-                       'column_create ' + domain.tableName + ' ' + field.columnName + ' COLUMN_SCALAR ' + field.alterTableName;
+                       'column_create ' + field.alterTableName + ' ' +
+                         field.indexColumnName + ' ' +
+                         'COLUMN_INDEX|WITH_POSITION ' + domain.tableName +
+                         ' ' + field.columnName + '\n' +
+                       'column_create ' + domain.tableName + ' ' +
+                         field.columnName + ' COLUMN_SCALAR ' +
+                         field.alterTableName;
         assert.equal(dump, expected);
       });
 
