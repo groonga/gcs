@@ -267,15 +267,19 @@ suite('Configuration API', function() {
   });
 
   test('Get, Action=DeleteDomain', function(done) {
+    var domain;
     utils
       .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
         'Host': 'cloudsearch.localhost'
+      })
+      .next(function() {
+        domain = new Domain('companies', context);
+        assert.isTrue(domain.exists());
       })
       .get('/?DomainName=companies&Action=DeleteDomain&Version=2011-02-01', {
         'Host': 'cloudsearch.localhost'
       })
       .next(function(response) {
-        var domain = new Domain('companies', context);
         assert.isFalse(domain.exists());
 
         response = toParsedResponse(response);
