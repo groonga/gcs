@@ -46,6 +46,24 @@ var PATTERN_DeleteDomainResponse = {
       }
     };
 
+function PATTERN_DescribeDomainsResponse(members) {
+  return {
+    DescribeDomainsResponse: {
+      '@': { xmlns: '' },
+      DescribeDomainsResult: {
+        DomainStatusList: (function() {
+          var pattern = {};
+          members.forEach(function(member, index) {
+            pattern[index] = PATTERN_DomainStatus;
+          });
+          return { member: pattern };
+        })()
+      },
+      ResponseMetadata: PATTERN_ResponseMetadata
+    }
+  };
+}
+
 var PATTERN_OptionStatus = {
       CreationDate: '',
       State: '',
@@ -304,6 +322,51 @@ suite('Configuration API', function() {
             };
         var status = response.body.DeleteDomainResponse.DeleteDomainResult.DomainStatus;
         assert.deepEqual(status, expectedStatus);
+
+        done();
+      })
+      .error(function(error) {
+        done(error);
+      });
+  });
+
+  test('Get, Action=DescribeDomains', function(done) {
+    var domain;
+    utils
+      .get('/?DomainName=domain3&Action=CreateDomain&Version=2011-02-01', {
+        'Host': 'cloudsearch.localhost'
+      })
+      .get('/?DomainName=domain1&Action=CreateDomain&Version=2011-02-01', {
+        'Host': 'cloudsearch.localhost'
+      })
+      .get('/?DomainName=domain2&Action=CreateDomain&Version=2011-02-01', {
+        'Host': 'cloudsearch.localhost'
+      })
+      .get('/?Action=DescribeDomains&Version=2011-02-01' +
+             '&DomainNames.member.1=domain2' +
+             '&DomainNames.member.2=domain1', {
+        'Host': 'cloudsearch.localhost'
+      })
+      .next(function(response) {
+        response = toParsedResponse(response);
+        var expectedDomains = ['domain2', 'domain1'];
+        assert.deepEqual(response.pattern,
+                         { statusCode: 200,
+                           body: PATTERN_DescribeDomainsResponse(expectedDomains) });
+
+        var actualDomains = response.body.DescribeDomainsResponse
+                                         .DescribeDomainsResult
+                                         .DomainStatus
+                                         .member;
+        actualDomains = (function() {
+          var domains = [];
+          for (var i in actualDomains) {
+            if (actualDomains.hasOwnProperty(i))
+              domains.push(actualDomains[i]).name;
+          }
+          return domains;
+        })();
+        assert.deepEqual(actualDomains, expectedDomains);
 
         done();
       })
