@@ -661,7 +661,8 @@ suite('Configuration API', function() {
       .get('/?DomainName=companies&IndexField.IndexFieldName=product&' +
            'IndexField.IndexFieldType=literal&' +
            'Action=DefineIndexField&Version=2011-02-01')
-      .get('/?Action=DescribeIndexFields&Version=2011-02-01', {
+      .get('/?Action=DescribeIndexFields&Version=2011-02-01' +
+             '&DomainName=companies', {
         'Host': 'cloudsearch.localhost'
       })
       .next(function(response) {
@@ -700,6 +701,7 @@ suite('Configuration API', function() {
            'IndexField.IndexFieldType=literal&' +
            'Action=DefineIndexField&Version=2011-02-01')
       .get('/?Action=DescribeIndexFields&Version=2011-02-01' +
+             '&DomainName=companies' +
              '&FieldNames.member.1=name' +
              '&FieldNames.member.2=age', {
         'Host': 'cloudsearch.localhost'
