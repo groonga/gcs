@@ -31,5 +31,5 @@ if (domain.exists()) {
 
 domain.createSync();
 
-consoole.log('Domain endpoints are currently being created. ' +
-             'Use cs-describe-domain to check for endpoints.');
+console.log('Domain endpoints are currently being created. ' +
+            'Use cs-describe-domain to check for endpoints.');
