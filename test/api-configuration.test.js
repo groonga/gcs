@@ -641,7 +641,7 @@ suite('Configuration API', function() {
     var domains = [];
     for (var i in members) {
       if (members.hasOwnProperty(i))
-        domains.push(members[i].FieldName);
+        domains.push(members[i].IndexFieldName);
     }
     return domains;
   }
