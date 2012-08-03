@@ -70,8 +70,7 @@ suite('database', function() {
       var domain = new Domain('valid123');
       domain.id = Domain.DEFAULT_ID;
       assert.equal(domain.termsTableName,
-                   Domain.REFERENCE_TABLE_PREFIX + '_valid123_' +
-                     Domain.DEFAULT_ID + '_BigramTerms');
+                   'valid123_' + Domain.DEFAULT_ID + '_index_BigramTerms');
     });
 
     suite('from query parameter', function() {
