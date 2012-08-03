@@ -8,19 +8,21 @@ var BooleanQueryTranslator = require('../lib/bq-translator').BooleanQueryTransla
 function testQuery(label, query, expected) {
   test('query: ' + label + ': ' +
        '<' + query + '> -> <' + expected + '>', function() {
-    var translator = new BooleanQueryTranslator();
-    assert.equal(translator.translate(query, "field"),
+    var translator = new BooleanQueryTranslator(query);
+    translator.defaultField = "field";
+    assert.equal(translator.translate(),
                  expected);
   });
 }
 
 function testQueryError(label, query, context, detail) {
   test('error: query: ' + label + ': ' + '<' + query + '>', function() {
-    var translator = new BooleanQueryTranslator();
+    var translator = new BooleanQueryTranslator(query);
+    translator.defaultField = "field";
     var actualError;
     assert.throw(function() {
       try {
-        translator.translate(query, "field");
+        translator.translate();
       } catch (error) {
         actualError = error;
         throw error;
@@ -33,15 +35,12 @@ function testQueryError(label, query, context, detail) {
 function testGroup(label, group, expectedOffset, expectedScriptGrnExpr) {
   test('gorup: ' + label + ': ' +
        '<' + group + '> -> <' + expectedScriptGrnExpr + '>', function() {
-    var translator = new BooleanQueryTranslator();
-    var context = {
-      defaultField: "field",
-      offset: 0
-    };
-    var actualScriptGrnExpr = translator.translateGroup(group, context);
+    var translator = new BooleanQueryTranslator(group);
+    translator.defaultField = "field";
+    var actualScriptGrnExpr = translator.translateGroup();
     assert.deepEqual({
                        scriptGrnExpr: actualScriptGrnExpr,
-                       offset: context.offset
+                       offset: translator.offset
                      },
                      {
                        scriptGrnExpr: expectedScriptGrnExpr,
@@ -54,16 +53,13 @@ function testExpression(label, expression,
                         expectedOffset, expectedScriptGrnExpr) {
   test('expression: ' + label + ': ' +
        '<' + expression + '> -> <' + expectedScriptGrnExpr + '>', function() {
-    var translator = new BooleanQueryTranslator();
-    var context = {
-      defaultField: "field",
-      offset: 0
-    };
+    var translator = new BooleanQueryTranslator(expression);
+    translator.defaultField = "field";
     var actualScriptGrnExpr =
-          translator.translateExpression(expression, context);
+          translator.translateExpression();
     assert.deepEqual({
                        scriptGrnExpr: actualScriptGrnExpr,
-                       offset: context.offset
+                       offset: translator.offset
                      },
                      {
                        scriptGrnExpr: expectedScriptGrnExpr,
