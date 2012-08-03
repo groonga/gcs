@@ -5,8 +5,8 @@ var assert = require('chai').assert;
 
 var QueryTranslator = require('../lib/q-translator').QueryTranslator;
 
-function testIndividualTerm(label, individualTerm, expectedBooleanQuery,
-                            expectedOffset) {
+function testIndividualTerm(label, individualTerm,
+                            expectedOffset, expectedBooleanQuery) {
   test('individual term: ' + label + ': ' +
        '<' + individualTerm + '> -> <' + expectedBooleanQuery + '>', function() {
     var translator = new QueryTranslator(individualTerm);
@@ -23,7 +23,7 @@ function testIndividualTerm(label, individualTerm, expectedBooleanQuery,
   });
 }
 
-function testTerm(label, term, expectedBooleanQuery, expectedOffset) {
+function testTerm(label, term, expectedOffset, expectedBooleanQuery) {
   test('term: ' + label + ': ' +
        '<' + term + '> -> <' + expectedBooleanQuery + '>', function() {
     var translator = new QueryTranslator(term);
@@ -43,15 +43,15 @@ function testTerm(label, term, expectedBooleanQuery, expectedOffset) {
 suite('QueryTranslator', function() {
   testIndividualTerm("an individual term",
                      "star wars",
-                     "field:'star'",
-                     "star".length);
+                     "star".length,
+                     "field:'star'");
   testIndividualTerm("an individual term: single quote",
                      "let's go",
-                     "field:'let\\'s'",
-                     "let's".length);
+                     "let's".length,
+                     "field:'let\\'s'");
 
   testTerm("a term",
            "  star wars",
-           "field:'star'",
-           "  star".length);
+           "  star".length,
+           "field:'star'");
 });
