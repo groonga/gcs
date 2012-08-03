@@ -330,7 +330,52 @@ suite('Configuration API', function() {
       });
   });
 
-  test('Get, Action=DescribeDomains', function(done) {
+  function getActualDescribedDomains(response) {
+    var actualDomains = response.body.DescribeDomainsResponse
+                                     .DescribeDomainsResult
+                                     .DomainStatusList
+                                     .member;
+    var domains = [];
+    for (var i in actualDomains) {
+      if (actualDomains.hasOwnProperty(i))
+        domains.push(actualDomains[i].DomainName);
+    }
+    return domains;
+  }
+
+  test('Get, Action=DescribeDomains (all domains)', function(done) {
+    var domain;
+    utils
+      .get('/?DomainName=domain3&Action=CreateDomain&Version=2011-02-01', {
+        'Host': 'cloudsearch.localhost'
+      })
+      .get('/?DomainName=domain1&Action=CreateDomain&Version=2011-02-01', {
+        'Host': 'cloudsearch.localhost'
+      })
+      .get('/?DomainName=domain2&Action=CreateDomain&Version=2011-02-01', {
+        'Host': 'cloudsearch.localhost'
+      })
+      .get('/?Action=DescribeDomains&Version=2011-02-01', {
+        'Host': 'cloudsearch.localhost'
+      })
+      .next(function(response) {
+        response = toParsedResponse(response);
+        var expectedDomains = ['domain1', 'domain2', 'domain3'];
+        assert.deepEqual(response.pattern,
+                         { statusCode: 200,
+                           body: PATTERN_DescribeDomainsResponse(expectedDomains) });
+
+        var actualDomains = getActualDescribedDomains(response);
+        assert.deepEqual(actualDomains, expectedDomains);
+
+        done();
+      })
+      .error(function(error) {
+        done(error);
+      });
+  });
+
+  test('Get, Action=DescribeDomains (specified domains)', function(done) {
     var domain;
     utils
       .get('/?DomainName=domain3&Action=CreateDomain&Version=2011-02-01', {
@@ -354,18 +399,7 @@ suite('Configuration API', function() {
                          { statusCode: 200,
                            body: PATTERN_DescribeDomainsResponse(expectedDomains) });
 
-        var actualDomains = response.body.DescribeDomainsResponse
-                                         .DescribeDomainsResult
-                                         .DomainStatusList
-                                         .member;
-        actualDomains = (function() {
-          var domains = [];
-          for (var i in actualDomains) {
-            if (actualDomains.hasOwnProperty(i))
-              domains.push(actualDomains[i].DomainName);
-          }
-          return domains;
-        })();
+        var actualDomains = getActualDescribedDomains(response);
         assert.deepEqual(actualDomains, expectedDomains);
 
         done();
