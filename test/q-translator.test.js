@@ -23,6 +23,24 @@ function testIndividualTerm(label, individualTerm,
   });
 }
 
+function testPhraseTerm(label, phraseTerm,
+                        expectedOffset, expectedBooleanQuery) {
+  test('phrase term: ' + label + ': ' +
+       '<' + phraseTerm + '> -> <' + expectedBooleanQuery + '>', function() {
+    var translator = new QueryTranslator(phraseTerm);
+    translator.defaultField = "field";
+    var actualBooleanQuery = translator.translatePhraseTerm();
+    assert.deepEqual({
+                       booleanQuery: actualBooleanQuery,
+                       offset: translator.offset
+                     },
+                     {
+                       booleanQuery: expectedBooleanQuery,
+                       offset: expectedOffset
+                     });
+  });
+}
+
 function testTerm(label, term, expectedOffset, expectedBooleanQuery) {
   test('term: ' + label + ': ' +
        '<' + term + '> -> <' + expectedBooleanQuery + '>', function() {
@@ -49,6 +67,11 @@ suite('QueryTranslator', function() {
                      "let's go",
                      "let's".length,
                      "field:'let\\'s'");
+
+  testPhraseTerm("no special character",
+                 '"star wars" luke',
+                 '"star wars"'.length,
+                 "'\"star wars\"'");
 
   testTerm("a term",
            "  star wars",
