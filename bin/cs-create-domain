@@ -1,0 +1,35 @@
+#!/usr/bin/env node
+
+var program = require('commander');
+var commandLine = require(__dirname + '/../lib/command-line');
+
+program
+  .version(require('../package').version)
+  .usage('[options] --domain-name <domain name>')
+  .option('-d, --domain-name <domain name>',
+          'name for the new domain',
+          String)
+  .option('--database-path <path>',
+          'database path [' + commandLine.defaultDatabasePath + ']',
+          String,
+          commandLine.defaultDatabasePath)
+  .parse(process.argv);
+
+if (!program.domainName) {
+  console.log('You must specify the domain name.');
+  return false;
+}
+
+console.log('Creating domain [' + program.domainName + ']');
+
+var context = commandLine.getContext(program.databasePath);
+var domain = new commandLine.Domain(program.domainName, context);
+if (domain.exists()) {
+  console.log('The domain [' + program.domainName + '] already exists.');
+  return false;
+}
+
+domain.createSync();
+
+consoole.log('Domain endpoints are currently being created. ' +
+             'Use cs-describe-domain to check for endpoints.');
