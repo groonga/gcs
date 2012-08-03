@@ -32,7 +32,7 @@ function report(domain) {
 
 var context = commandLine.getContext(program.databasePath);
 if (program.domainName) {
-  var domain = new Domain(program.domainName, context);
+  var domain = new commandLine.Domain(program.domainName, context);
   report(domain);
 } else {
   Domain.getAll(context).forEach(function(domain, index) {
