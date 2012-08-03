@@ -149,9 +149,9 @@ var PATTERN_DeleteIndexFieldResponse = {
 
 function PATTERN_DescribeIndexFieldsResponse(members) {
   return {
-    IndexFieldsResponse: {
+    DescribeIndexFieldsResponse: {
       '@': { xmlns: '' },
-      IndexFieldsResult: {
+      DescribeIndexFieldsResult: {
         IndexFields: (function() {
           var pattern = {};
           members.forEach(function(member, index) {
