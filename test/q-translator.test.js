@@ -72,6 +72,10 @@ suite('QueryTranslator', function() {
                  '"star wars" luke',
                  '"star wars"'.length,
                  "'\"star wars\"'");
+  testPhraseTerm("escape",
+                 '"star \\" wars" luke',
+                 '"star \\" wars"'.length,
+                 "'\"star \\\" wars\"'");
 
   testTerm("a term",
            "  star wars",
