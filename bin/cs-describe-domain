@@ -7,10 +7,11 @@ program
   .version(require('../package').version)
   .usage('[options]')
   .option('-d, --domain-name <domain name>',
-          'name for the new domain',
+          'The name of the domain that you are creating. Required.',
           String)
   .option('-all, --show-all',
-          'name for the new domain',
+          'Display all available information for the domain, '
+             'including configured fields.',
           String)
   .option('--database-path <path>',
           'database path [' + commandLine.defaultDatabasePath + ']',

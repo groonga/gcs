@@ -5,9 +5,9 @@ var commandLine = require(__dirname + '/../lib/command-line');
 
 program
   .version(require('../package').version)
-  .usage('[options] --domain-name <domain name>')
+  .usage('--domain-name <domain name> [options]')
   .option('-d, --domain-name <domain name>',
-          'name for the new domain',
+          'The name of the domain that you are creating. Required.',
           String)
   .option('--database-path <path>',
           'database path [' + commandLine.defaultDatabasePath + ']',

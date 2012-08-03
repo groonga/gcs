@@ -1,0 +1,54 @@
+#!/usr/bin/env node
+
+var program = require('commander');
+var commandLine = require(__dirname + '/../lib/command-line');
+
+program
+  .version(require('../package').version)
+  .usage('--name <field name> --type <field type> [options]')
+  .option('--name <field name>',
+          'The name of the field you are configuring or deleting. Required.',
+          String)
+  .option('--type <field type>',
+          'The type of the field that you are configuring or deleting: ' +
+            'text, literal, uint. Required.',
+          String)
+  .option('-d, --type <field type>',
+          'The name of the domain that you are configuring. Required.',
+          String)
+  .option('--delete',
+          'Delete the field specified by the --name and --type options.')
+  .option('--database-path <path>',
+          'database path [' + commandLine.defaultDatabasePath + ']',
+          String,
+          commandLine.defaultDatabasePath)
+  .parse(process.argv);
+
+if (!program.domainName) {
+  console.log('You must specify the domain name.');
+  return false;
+}
+
+var context = commandLine.getContext(program.databasePath);
+var domain = new commandLine.Domain(program.domainName, context);
+if (!domain.exists()) {
+  console.log('You must specify an existing domain name.');
+  return false;
+}
+
+if (!program.name) {
+  console.log('You must specify the field name.');
+  return false;
+}
+if (!program.type) {
+  console.log('You must specify the field type.');
+  return false;
+}
+
+var field = domain.getIndexField(program.name);
+field.type = program.type;
+
+field.createSync();
+
+console.log('Updated 1 Index Field:');
+console.log(field.name + ' ' + field.state + ' ' + field.type + '()');
