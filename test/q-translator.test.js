@@ -41,6 +41,24 @@ function testPhraseTerm(label, phraseTerm,
   });
 }
 
+function testPhraseTermError(label, phraseTerm, context, detail) {
+  test('error: phrase term: ' + label + ': ' +
+       '<' + phraseTerm + '>', function() {
+    var translator = new QueryTranslator(phraseTerm);
+    translator.defaultField = "field";
+    var actualError;
+    assert.throw(function() {
+      try {
+        translator.translatePhraseTerm();
+      } catch (error) {
+        actualError = error;
+        throw error;
+      }
+    });
+    assert.equal(actualError.message, "<" + context + ">" + ": " + detail);
+  });
+}
+
 function testTerm(label, term, expectedOffset, expectedBooleanQuery) {
   test('term: ' + label + ': ' +
        '<' + term + '> -> <' + expectedBooleanQuery + '>', function() {
@@ -76,6 +94,10 @@ suite('QueryTranslator', function() {
                  '"star \\" wars" luke',
                  '"star \\" wars"'.length,
                  "'\"star \\\" wars\"'");
+  testPhraseTermError("not start with <\">",
+                      'star wars"',
+                      '|s|tar wars"',
+                      "phrase must start with <\">");
 
   testTerm("a term",
            "  star wars",
