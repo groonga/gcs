@@ -10,7 +10,6 @@ function testIndividualTerm(label, individualTerm,
   test('individual term: ' + label + ': ' +
        '<' + individualTerm + '> -> <' + expectedBooleanQuery + '>', function() {
     var translator = new QueryTranslator(individualTerm);
-    translator.defaultField = "field";
     var actualBooleanQuery = translator.translateIndividualTerm();
     assert.deepEqual({
                        booleanQuery: actualBooleanQuery,
@@ -28,7 +27,6 @@ function testPhraseTerm(label, phraseTerm,
   test('phrase term: ' + label + ': ' +
        '<' + phraseTerm + '> -> <' + expectedBooleanQuery + '>', function() {
     var translator = new QueryTranslator(phraseTerm);
-    translator.defaultField = "field";
     var actualBooleanQuery = translator.translatePhraseTerm();
     assert.deepEqual({
                        booleanQuery: actualBooleanQuery,
@@ -45,7 +43,6 @@ function testPhraseTermError(label, phraseTerm, context, detail) {
   test('error: phrase term: ' + label + ': ' +
        '<' + phraseTerm + '>', function() {
     var translator = new QueryTranslator(phraseTerm);
-    translator.defaultField = "field";
     var actualError;
     assert.throw(function() {
       try {
@@ -63,7 +60,6 @@ function testTerm(label, term, expectedOffset, expectedBooleanQuery) {
   test('term: ' + label + ': ' +
        '<' + term + '> -> <' + expectedBooleanQuery + '>', function() {
     var translator = new QueryTranslator(term);
-    translator.defaultField = "field";
     var actualBooleanQuery = translator.translateTerm();
     assert.deepEqual({
                        booleanQuery: actualBooleanQuery,
@@ -80,11 +76,11 @@ suite('QueryTranslator', function() {
   testIndividualTerm("an individual term",
                      "star wars",
                      "star".length,
-                     "field:'star'");
+                     "'star'");
   testIndividualTerm("an individual term: single quote",
                      "let's go",
                      "let's".length,
-                     "field:'let\\'s'");
+                     "'let\\'s'");
 
   testPhraseTerm("no special character",
                  '"star wars" luke',
@@ -110,5 +106,5 @@ suite('QueryTranslator', function() {
   testTerm("a term",
            "  star wars",
            "  star".length,
-           "field:'star'");
+           "'star'");
 });
