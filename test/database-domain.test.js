@@ -231,6 +231,27 @@ suite('database', function() {
                            exists:       false });
       });
 
+      test('getAll', function() {
+        var domain3 = new Domain('domain3', context);
+        domain3.createSync();
+
+        var domain1 = new Domain('domain1', context);
+        domain1.createSync();
+
+        var domain2 = new Domain('domain2', context);
+        domain2.createSync();
+
+        var allDomains = Domain.getAll(context);
+        assert.deepEqual(allDomains.map(function(domain) {
+                           return domain.tableName;
+                         }),
+                         [
+                           domain1.tableName,
+                           domain2.tableName,
+                           domain3.tableName
+                         ]);
+      });
+
       test('indexFields', function() {
         var fields = domain.indexFields;
         fields = fields.map(function(field) {
