@@ -9,6 +9,8 @@ var deletedLoadDump = fs.readFileSync(__dirname + '/fixture/companies/data-delet
 var addBatch = fs.readFileSync(__dirname + '/fixture/companies/add.sdf.json', 'UTF-8');
 var deleteBatch = fs.readFileSync(__dirname + '/fixture/companies/delete.sdf.json', 'UTF-8');
 
+var Domain = require('../lib/database/domain').Domain;
+
 suite('documents/batch API', function() {
   var context;
   var server;
@@ -47,7 +49,8 @@ suite('documents/batch API', function() {
         assert.deepEqual(response, expected);
 
         var dump = context.commandSync('dump', {
-              tables: 'companies_00000000000000000000000000'
+              tables: Domain.DOMAIN_TABLE_PREFIX +
+                        '_companies_00000000000000000000000000'
             });
         assert.equal(dump, schemeDump + '\n' + loadDump);
 
@@ -83,7 +86,8 @@ suite('documents/batch API', function() {
         assert.deepEqual(response, expected);
 
         var dump = context.commandSync('dump', {
-              tables: 'companies_00000000000000000000000000'
+              tables: Domain.DOMAIN_TABLE_PREFIX +
+                        '_companies_00000000000000000000000000'
             });
         assert.equal(dump, schemeDump + '\n' + deletedLoadDump);
 

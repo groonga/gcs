@@ -5,6 +5,7 @@ var fs = require('fs');
 var path = require('path');
 
 var Processor = require('../lib/batch/processor').Processor;
+var Domain = require('../lib/database/domain').Domain;
 
 var schemeDump = fs.readFileSync(__dirname + '/fixture/companies/ddl.grn', 'UTF-8').replace(/\s+$/, '');
 var loadDump = fs.readFileSync(__dirname + '/fixture/companies/data.grn', 'UTF-8').replace(/\s+$/, '');
@@ -52,7 +53,8 @@ suite('batch/processor/Processor (instance methods)', function() {
             };
         assert.deepEqual(result, expected);
         var dump = context.commandSync('dump', {
-              tables: 'companies_00000000000000000000000000'
+              tables: Domain.DOMAIN_TABLE_PREFIX +
+                        '_companies_00000000000000000000000000'
             });
         assert.equal(dump, schemeDump + '\n' + loadDump);
         done();
@@ -79,7 +81,8 @@ suite('batch/processor/Processor (instance methods)', function() {
             };
         assert.deepEqual(result, expected);
         var dump = context.commandSync('dump', {
-              tables: 'companies_00000000000000000000000000'
+              tables: Domain.DOMAIN_TABLE_PREFIX +
+                        '_companies_00000000000000000000000000'
             });
         assert.equal(dump, schemeDump + '\n' + deletedLoadDump);
         done();
