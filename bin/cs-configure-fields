@@ -46,9 +46,13 @@ if (!program.type) {
 }
 
 var field = domain.getIndexField(program.name);
-field.type = program.type;
 
-field.createSync();
-
-console.log('Updated 1 Index Field:');
-console.log(field.name + ' ' + field.state + ' ' + field.type + '()');
+if (program.delete) {
+  field.deleteSync();
+  console.log('Updated 1 Index Field:');
+} else {
+  field.type = program.type;
+  field.createSync();
+  console.log('Updated 1 Index Field:');
+  console.log(field.name + ' ' + field.state + ' ' + field.type + ' ()');
+}
