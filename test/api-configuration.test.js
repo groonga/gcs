@@ -356,13 +356,13 @@ suite('Configuration API', function() {
 
         var actualDomains = response.body.DescribeDomainsResponse
                                          .DescribeDomainsResult
-                                         .DomainStatus
+                                         .DomainStatusList
                                          .member;
         actualDomains = (function() {
           var domains = [];
           for (var i in actualDomains) {
             if (actualDomains.hasOwnProperty(i))
-              domains.push(actualDomains[i]).name;
+              domains.push(actualDomains[i].DomainName);
           }
           return domains;
         })();
