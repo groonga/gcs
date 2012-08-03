@@ -1,4 +1,4 @@
-load --table companies_00000000000000000000000000
+load --table domain_companies_00000000000000000000000000
 [
 ["_key","address","age","description","email_address","name","product"],
 ["id2","Sapporo, Hokkaido, Japan",2,"","info@enishi-tech.com","Enishi Tech Inc.","groonga"],

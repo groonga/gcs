@@ -1,1 +1,1 @@
-delete --table companies_00000000000000000000000000 --key id1
+delete --table domain_companies_00000000000000000000000000 --key id1
