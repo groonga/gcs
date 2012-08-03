@@ -147,6 +147,24 @@ var PATTERN_DeleteIndexFieldResponse = {
       }
     };
 
+function PATTERN_DescribeIndexFieldsResponse(members) {
+  return {
+    IndexFieldsResponse: {
+      '@': { xmlns: '' },
+      IndexFieldsResult: {
+        IndexFields: (function() {
+          var pattern = {};
+          members.forEach(function(member, index) {
+            pattern[index] = member;
+          });
+          return { member: pattern };
+        })()
+      },
+      ResponseMetadata: PATTERN_ResponseMetadata
+    }
+  };
+}
+
 function PATTERN_IndexDocumentsResponse(members) {
   return {
     IndexDocumentsResponse: {
@@ -331,14 +349,14 @@ suite('Configuration API', function() {
   });
 
   function getActualDescribedDomains(response) {
-    var actualDomains = response.body.DescribeDomainsResponse
-                                     .DescribeDomainsResult
-                                     .DomainStatusList
-                                     .member;
+    var members = response.body.DescribeDomainsResponse
+                               .DescribeDomainsResult
+                               .DomainStatusList
+                               .member;
     var domains = [];
-    for (var i in actualDomains) {
-      if (actualDomains.hasOwnProperty(i))
-        domains.push(actualDomains[i].DomainName);
+    for (var i in members) {
+      if (members.hasOwnProperty(i))
+        domains.push(members[i].DomainName);
     }
     return domains;
   }
@@ -607,6 +625,97 @@ suite('Configuration API', function() {
         assert.deepEqual(response.pattern,
                          { statusCode: 200,
                            body: PATTERN_DeleteIndexFieldResponse });
+
+        done();
+      })
+      .error(function(error) {
+        done(error);
+      });
+  });
+
+  function getActualDescribedIndexFields(response) {
+    var members = response.body.DescribeIndexFieldsResponse
+                               .DescribeIndexFieldsResult
+                               .IndexFields
+                               .member;
+    var domains = [];
+    for (var i in members) {
+      if (members.hasOwnProperty(i))
+        domains.push(members[i].FieldName);
+    }
+    return domains;
+  }
+
+  test('Get, Action=DescribeIndexFields (all fields)', function(done) {
+    var domain;
+    utils
+      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
+        'Host': 'cloudsearch.localhost'
+      })
+      .get('/?DomainName=companies&IndexField.IndexFieldName=name&' +
+           'IndexField.IndexFieldType=text&' +
+           'Action=DefineIndexField&Version=2011-02-01')
+      .get('/?DomainName=companies&IndexField.IndexFieldName=age&' +
+           'IndexField.IndexFieldType=uint&' +
+           'Action=DefineIndexField&Version=2011-02-01')
+      .get('/?DomainName=companies&IndexField.IndexFieldName=product&' +
+           'IndexField.IndexFieldType=literal&' +
+           'Action=DefineIndexField&Version=2011-02-01')
+      .get('/?Action=DescribeIndexFields&Version=2011-02-01', {
+        'Host': 'cloudsearch.localhost'
+      })
+      .next(function(response) {
+        response = toParsedResponse(response);
+        assert.deepEqual(response.pattern,
+                         { statusCode: 200,
+                           body: PATTERN_DescribeIndexFieldsResponse([
+                             PATTERN_IndexFieldStatus_UInt,
+                             PATTERN_IndexFieldStatus_Literal,
+                             PATTERN_IndexFieldStatus_Text
+                           ]) });
+
+        var expectedFields = ['age', 'name', 'product'];
+        var actualFields = getActualDescribedIndexFields(response);
+        assert.deepEqual(actualFields, expectedFields);
+
+        done();
+      })
+      .error(function(error) {
+        done(error);
+      });
+  });
+
+  test('Get, Action=DescribeIndexFields (specified fields)', function(done) {
+    utils
+      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
+        'Host': 'cloudsearch.localhost'
+      })
+      .get('/?DomainName=companies&IndexField.IndexFieldName=name&' +
+           'IndexField.IndexFieldType=text&' +
+           'Action=DefineIndexField&Version=2011-02-01')
+      .get('/?DomainName=companies&IndexField.IndexFieldName=age&' +
+           'IndexField.IndexFieldType=uint&' +
+           'Action=DefineIndexField&Version=2011-02-01')
+      .get('/?DomainName=companies&IndexField.IndexFieldName=product&' +
+           'IndexField.IndexFieldType=literal&' +
+           'Action=DefineIndexField&Version=2011-02-01')
+      .get('/?Action=DescribeIndexFields&Version=2011-02-01' +
+             '&FieldNames.member.1=name' +
+             '&FieldNames.member.2=age', {
+        'Host': 'cloudsearch.localhost'
+      })
+      .next(function(response) {
+        response = toParsedResponse(response);
+        assert.deepEqual(response.pattern,
+                         { statusCode: 200,
+                           body: PATTERN_DescribeIndexFieldsResponse([
+                             PATTERN_IndexFieldStatus_Text,
+                             PATTERN_IndexFieldStatus_UInt
+                           ]) });
+
+        var expectedFields = ['name', 'age'];
+        var actualFields = getActualDescribedIndexFields(response);
+        assert.deepEqual(actualFields, expectedFields);
 
         done();
       })
