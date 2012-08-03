@@ -98,6 +98,10 @@ suite('QueryTranslator', function() {
                       'star wars"',
                       '|s|tar wars"',
                       "phrase must start with <\">");
+  testPhraseTermError("not terminated",
+                      '"star wars',
+                      '"star wars||',
+                      "phrase is unterminated: <star wars>");
 
   testTerm("a term",
            "  star wars",
