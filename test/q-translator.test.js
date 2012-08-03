@@ -94,7 +94,7 @@ suite('QueryTranslator', function() {
                  '"star \\" wars" luke',
                  '"star \\" wars"'.length,
                  "'\"star \\\" wars\"'");
-  testPhraseTermError("not start with <\">",
+  testPhraseTermError("not started with <\">",
                       'star wars"',
                       '|s|tar wars"',
                       "phrase must start with <\">");
