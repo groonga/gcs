@@ -9,16 +9,12 @@ function testIndividualTerm(label, individualTerm, expectedBooleanQuery,
                             expectedOffset) {
   test('individual term: ' + label + ': ' +
        '<' + individualTerm + '> -> <' + expectedBooleanQuery + '>', function() {
-    var translator = new QueryTranslator();
-    var context = {
-      offset: 0,
-      defaultField: 'field'
-    };
-    var actualBooleanQuery =
-          translator.translateIndividualTerm(individualTerm, context);
+    var translator = new QueryTranslator(individualTerm);
+    translator.defaultField = "field";
+    var actualBooleanQuery = translator.translateIndividualTerm();
     assert.deepEqual({
                        booleanQuery: actualBooleanQuery,
-                       offset: context.offset
+                       offset: translator.offset
                      },
                      {
                        booleanQuery: expectedBooleanQuery,
@@ -30,15 +26,12 @@ function testIndividualTerm(label, individualTerm, expectedBooleanQuery,
 function testTerm(label, term, expectedBooleanQuery, expectedOffset) {
   test('term: ' + label + ': ' +
        '<' + term + '> -> <' + expectedBooleanQuery + '>', function() {
-    var translator = new QueryTranslator();
-    var context = {
-      offset: 0,
-      defaultField: 'field'
-    };
-    var actualBooleanQuery = translator.translateTerm(term, context);
+    var translator = new QueryTranslator(term);
+    translator.defaultField = "field";
+    var actualBooleanQuery = translator.translateTerm();
     assert.deepEqual({
                        booleanQuery: actualBooleanQuery,
-                       offset: context.offset
+                       offset: translator.offset
                      },
                      {
                        booleanQuery: expectedBooleanQuery,
