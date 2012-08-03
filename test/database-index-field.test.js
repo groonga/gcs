@@ -67,9 +67,9 @@ suite('database', function() {
                    'testdomain_' + Domain.DEFAULT_ID + '_valid_123');
     });
 
-    test('alterTableName', function() {
+    test('referenceTableName', function() {
       var field = new IndexField('valid_123', domain);
-      assert.equal(field.alterTableName,
+      assert.equal(field.referenceTableName,
                    'testdomain_' + Domain.DEFAULT_ID + '_valid_123');
     });
 
@@ -271,9 +271,9 @@ suite('database', function() {
                        'table_create ' + domain.termsTableName + ' ' +
                          'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
                          '--default_tokenizer TokenBigram\n' +
-                       'table_create ' + field.alterTableName + ' ' +
+                       'table_create ' + field.referenceTableName + ' ' +
                          'TABLE_HASH_KEY UInt32\n' +
-                       'column_create ' + field.alterTableName + ' ' +
+                       'column_create ' + field.referenceTableName + ' ' +
                          field.indexColumnName + ' ' +
                          'COLUMN_INDEX|WITH_POSITION ' + domain.tableName +
                          ' ' + field.columnName;
@@ -314,15 +314,15 @@ suite('database', function() {
                        'table_create ' + domain.termsTableName + ' ' +
                          'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
                          '--default_tokenizer TokenBigram\n' +
-                       'table_create ' + field.alterTableName + ' ' +
+                       'table_create ' + field.referenceTableName + ' ' +
                          'TABLE_HASH_KEY ShortText\n' +
-                       'column_create ' + field.alterTableName + ' ' +
+                       'column_create ' + field.referenceTableName + ' ' +
                          field.indexColumnName + ' ' +
                          'COLUMN_INDEX|WITH_POSITION ' + domain.tableName +
                          ' ' + field.columnName + '\n' +
                        'column_create ' + domain.tableName + ' ' +
                          field.columnName + ' COLUMN_SCALAR ' +
-                         field.alterTableName;
+                         field.referenceTableName;
         assert.equal(dump, expected);
       });
 
