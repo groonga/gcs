@@ -98,6 +98,10 @@ suite('QueryTranslator', function() {
                       'star wars"',
                       '|s|tar wars"',
                       "phrase must start with <\">");
+  testPhraseTermError("ended with <\\>",
+                      '"star wars\\',
+                      '"star wars\\||',
+                      "escaped character is missing");
   testPhraseTermError("not terminated",
                       '"star wars',
                       '"star wars||',
