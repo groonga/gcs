@@ -373,9 +373,7 @@ suite('Configuration API', function() {
       .get('/?DomainName=domain2&Action=CreateDomain&Version=2011-02-01', {
         'Host': 'cloudsearch.localhost'
       })
-      .get('/?Action=DescribeDomains&Version=2011-02-01', {
-        'Host': 'cloudsearch.localhost'
-      })
+      .get('/?Action=DescribeDomains&Version=2011-02-01')
       .next(function(response) {
         response = toParsedResponse(response);
         var expectedDomains = ['domain1', 'domain2', 'domain3'];
@@ -394,7 +392,6 @@ suite('Configuration API', function() {
   });
 
   test('Get, Action=DescribeDomains (specified domains)', function(done) {
-    var domain;
     utils
       .get('/?DomainName=domain3&Action=CreateDomain&Version=2011-02-01', {
         'Host': 'cloudsearch.localhost'
@@ -407,9 +404,7 @@ suite('Configuration API', function() {
       })
       .get('/?Action=DescribeDomains&Version=2011-02-01' +
              '&DomainNames.member.1=domain2' +
-             '&DomainNames.member.2=domain1', {
-        'Host': 'cloudsearch.localhost'
-      })
+             '&DomainNames.member.2=domain1')
       .next(function(response) {
         response = toParsedResponse(response);
         var expectedDomains = ['domain2', 'domain1'];
@@ -641,7 +636,7 @@ suite('Configuration API', function() {
     var domains = [];
     for (var i in members) {
       if (members.hasOwnProperty(i))
-        domains.push(members[i].IndexFieldName);
+        domains.push(members[i].Options.IndexFieldName);
     }
     return domains;
   }
@@ -662,17 +657,15 @@ suite('Configuration API', function() {
            'IndexField.IndexFieldType=literal&' +
            'Action=DefineIndexField&Version=2011-02-01')
       .get('/?Action=DescribeIndexFields&Version=2011-02-01' +
-             '&DomainName=companies', {
-        'Host': 'cloudsearch.localhost'
-      })
+             '&DomainName=companies')
       .next(function(response) {
         response = toParsedResponse(response);
         assert.deepEqual(response.pattern,
                          { statusCode: 200,
                            body: PATTERN_DescribeIndexFieldsResponse([
                              PATTERN_IndexFieldStatus_UInt,
-                             PATTERN_IndexFieldStatus_Literal,
-                             PATTERN_IndexFieldStatus_Text
+                             PATTERN_IndexFieldStatus_Text,
+                             PATTERN_IndexFieldStatus_Literal
                            ]) });
 
         var expectedFields = ['age', 'name', 'product'];
@@ -703,9 +696,7 @@ suite('Configuration API', function() {
       .get('/?Action=DescribeIndexFields&Version=2011-02-01' +
              '&DomainName=companies' +
              '&FieldNames.member.1=name' +
-             '&FieldNames.member.2=age', {
-        'Host': 'cloudsearch.localhost'
-      })
+             '&FieldNames.member.2=age')
       .next(function(response) {
         response = toParsedResponse(response);
         assert.deepEqual(response.pattern,
