@@ -40,17 +40,25 @@ if (!program.name) {
   console.log('You must specify the field name.');
   return false;
 }
-if (!program.type) {
-  console.log('You must specify the field type.');
-  return false;
-}
 
 var field = domain.getIndexField(program.name);
 
 if (program.delete) {
+  if (!field.exists()) {
+    console.log('You must specify an existing field.');
+    return false;
+  }
   field.deleteSync();
   console.log('Updated 1 Index Field:');
 } else {
+  if (!program.type) {
+    console.log('You must specify the field type.');
+    return false;
+  }
+  if (field.exists()) {
+    console.log('You must specify not-existing field name.');
+    return false;
+  }
   field.type = program.type;
   field.createSync();
   console.log('Updated 1 Index Field:');
