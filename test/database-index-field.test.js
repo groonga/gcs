@@ -64,13 +64,15 @@ suite('database', function() {
     test('indexColumnName', function() {
       var field = new IndexField('valid_123', domain);
       assert.equal(field.indexColumnName,
-                   'testdomain_' + Domain.DEFAULT_ID + '_valid_123');
+                   Domain.REFERENCE_TABLE_PREFIX + '_testdomain_' +
+                     Domain.DEFAULT_ID + '_valid_123');
     });
 
     test('referenceTableName', function() {
       var field = new IndexField('valid_123', domain);
       assert.equal(field.referenceTableName,
-                   'testdomain_' + Domain.DEFAULT_ID + '_valid_123');
+                   Domain.REFERENCE_TABLE_PREFIX + '_testdomain_' +
+                     Domain.DEFAULT_ID + '_valid_123');
     });
 
     test('fieldTypeToColumnType (text)', function() {
@@ -88,7 +90,8 @@ suite('database', function() {
     test('fieldTypeToColumnType (literal)', function() {
       var field = new IndexField('valid_123', domain);
       assert.equal(field.fieldTypeToColumnType('literal'),
-                   'testdomain_' + Domain.DEFAULT_ID + '_valid_123');
+                   Domain.REFERENCE_TABLE_PREFIX + '_testdomain_' +
+                     Domain.DEFAULT_ID + '_valid_123');
     });
 
     test('initial status (text)', function() {
