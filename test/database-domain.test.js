@@ -25,16 +25,14 @@ suite('database', function() {
       var domain = new Domain('valid');
       domain.id = Domain.DEFAULT_ID;
       assert.equal(domain.tableName,
-                   Domain.DOMAIN_TABLE_PREFIX + '_valid_' +
-                     Domain.DEFAULT_ID);
+                   'valid_' + Domain.DEFAULT_ID);
     });
 
     test('lower case and number', function() {
       var domain = new Domain('valid123');
       domain.id = Domain.DEFAULT_ID;
       assert.equal(domain.tableName,
-                   Domain.DOMAIN_TABLE_PREFIX + '_valid123_' +
-                     Domain.DEFAULT_ID);
+                   'valid123_' + Domain.DEFAULT_ID);
     });
 
     test('too short', function() {

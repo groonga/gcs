@@ -53,8 +53,7 @@ suite('batch/processor/Processor (instance methods)', function() {
             };
         assert.deepEqual(result, expected);
         var dump = context.commandSync('dump', {
-              tables: Domain.DOMAIN_TABLE_PREFIX +
-                        '_companies_00000000000000000000000000'
+              tables: 'companies_00000000000000000000000000'
             });
         assert.equal(dump, schemeDump + '\n' + loadDump);
         done();
@@ -81,8 +80,7 @@ suite('batch/processor/Processor (instance methods)', function() {
             };
         assert.deepEqual(result, expected);
         var dump = context.commandSync('dump', {
-              tables: Domain.DOMAIN_TABLE_PREFIX +
-                        '_companies_00000000000000000000000000'
+              tables: 'companies_00000000000000000000000000'
             });
         assert.equal(dump, schemeDump + '\n' + deletedLoadDump);
         done();

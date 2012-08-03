@@ -64,15 +64,15 @@ suite('database', function() {
     test('indexColumnName', function() {
       var field = new IndexField('valid_123', domain);
       assert.equal(field.indexColumnName,
-                   Domain.REFERENCE_TABLE_PREFIX + '_testdomain_' +
-                     Domain.DEFAULT_ID + '_valid_123');
+                   'testdomain_' + Domain.DEFAULT_ID + '_' +
+                     Domain.INDEX_SUFFIX + '_valid_123');
     });
 
-    test('referenceTableName', function() {
+    test('indexTableName', function() {
       var field = new IndexField('valid_123', domain);
-      assert.equal(field.referenceTableName,
-                   Domain.REFERENCE_TABLE_PREFIX + '_testdomain_' +
-                     Domain.DEFAULT_ID + '_valid_123');
+      assert.equal(field.indexTableName,
+                   'testdomain_' + Domain.DEFAULT_ID + '_' +
+                     Domain.INDEX_SUFFIX + '_valid_123');
     });
 
     test('fieldTypeToColumnType (text)', function() {
@@ -90,8 +90,8 @@ suite('database', function() {
     test('fieldTypeToColumnType (literal)', function() {
       var field = new IndexField('valid_123', domain);
       assert.equal(field.fieldTypeToColumnType('literal'),
-                   Domain.REFERENCE_TABLE_PREFIX + '_testdomain_' +
-                     Domain.DEFAULT_ID + '_valid_123');
+                   'testdomain_' + Domain.DEFAULT_ID + '_' +
+                     Domain.INDEX_SUFFIX + '_valid_123');
     });
 
     test('initial status (text)', function() {
@@ -274,9 +274,9 @@ suite('database', function() {
                        'table_create ' + domain.termsTableName + ' ' +
                          'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
                          '--default_tokenizer TokenBigram\n' +
-                       'table_create ' + field.referenceTableName + ' ' +
+                       'table_create ' + field.indexTableName + ' ' +
                          'TABLE_HASH_KEY UInt32\n' +
-                       'column_create ' + field.referenceTableName + ' ' +
+                       'column_create ' + field.indexTableName + ' ' +
                          field.indexColumnName + ' ' +
                          'COLUMN_INDEX|WITH_POSITION ' + domain.tableName +
                          ' ' + field.columnName;
@@ -317,15 +317,15 @@ suite('database', function() {
                        'table_create ' + domain.termsTableName + ' ' +
                          'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
                          '--default_tokenizer TokenBigram\n' +
-                       'table_create ' + field.referenceTableName + ' ' +
+                       'table_create ' + field.indexTableName + ' ' +
                          'TABLE_HASH_KEY ShortText\n' +
-                       'column_create ' + field.referenceTableName + ' ' +
+                       'column_create ' + field.indexTableName + ' ' +
                          field.indexColumnName + ' ' +
                          'COLUMN_INDEX|WITH_POSITION ' + domain.tableName +
                          ' ' + field.columnName + '\n' +
                        'column_create ' + domain.tableName + ' ' +
                          field.columnName + ' COLUMN_SCALAR ' +
-                         field.referenceTableName;
+                         field.indexTableName;
         assert.equal(dump, expected);
       });
 
