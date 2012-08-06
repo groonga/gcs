@@ -158,21 +158,23 @@ function run() {
   var deferred = new Deferred();
   var options = Array.prototype.slice.call(arguments, 0)
 
-  var commandName = options.shift();
-  var commandPath = __dirname + '/../bin/' + commandName;
-  var command = spawn(commandPath, options);
-  var output = {
-        stdout: '',
-        stderr: ''
-      };
-  command.stdout.on('data', function(data) {
-    output.stdout += data;
-  });
-  command.stderr.on('data', function(data) {
-    output.stderr += data;
-  });
-  command.on('exit', function(code) {
-    deferred.call({ code: code, output: output });
+  Deferred.next(function() {
+    var commandName = options.shift();
+    var commandPath = __dirname + '/../bin/' + commandName;
+    var command = spawn(commandPath, options);
+    var output = {
+          stdout: '',
+          stderr: ''
+        };
+    command.stdout.on('data', function(data) {
+      output.stdout += data;
+    });
+    command.stderr.on('data', function(data) {
+      output.stderr += data;
+    });
+    command.on('exit', function(code) {
+      deferred.call({ code: code, output: output });
+    });
   });
 
   return deferred;
