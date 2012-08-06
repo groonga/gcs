@@ -52,9 +52,10 @@ suite('cs-create-domain', function() {
            '--domain-name', 'test',
            '--database-path', temporaryDatabase.path)
       .next(function(result) {
-        assert.equal(result.code, 1);
-        assert.include(result.output.stdout,
-                       'The domain [test] already exists.');
+        assert.deepEqual({ code:    result.code,
+                           message: result.output.stdout },
+                         { code:    1,
+                           message: 'The domain [test] already exists.\n' });
 
         context.reopen();
         var domains = Domain.getAll(context).map(function(domain) {
@@ -74,9 +75,10 @@ suite('cs-create-domain', function() {
       .run('cs-create-domain',
            '--database-path', temporaryDatabase.path)
       .next(function(result) {
-        assert.equal(result.code, 1);
-        assert.include(result.output.stdout,
-                       'You must specify the domain name.');
+        assert.deepEqual({ code:    result.code,
+                           message: result.output.stdout },
+                         { code:    1,
+                           message: 'You must specify the domain name.\n' });
 
         context.reopen();
         assert.deepEqual(Domain.getAll(context), []);
@@ -103,14 +105,33 @@ suite('cs-delete-domain', function() {
            '--force',
            '--database-path', temporaryDatabase.path)
       .next(function(result) {
-        assert.equal(result.code, 0);
-        assert.include(result.output.stdout,
-                       'Domain [test] has been deleted successfully.');
+        assert.deepEqual({ code:    result.code,
+                           message: result.output.stdout },
+                         { code:    0,
+                           message: 'Domain [test] has been deleted successfully.\n' });
 
         context.reopen();
         var domain = new Domain('test', context);
         assert.isFalse(domain.exists());
 
+        done();
+      })
+      .error(function(e) {
+        done(e);
+      });
+  });
+
+  test('delete unexisting domain', function(done) {
+    utils
+      .run('cs-delete-domain',
+           '--domain-name', 'test',
+           '--force',
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        assert.deepEqual({ code:    result.code,
+                           message: result.output.stdout },
+                         { code:    1,
+                           message: 'You must specify the domain name\n' });
         done();
       })
       .error(function(e) {
