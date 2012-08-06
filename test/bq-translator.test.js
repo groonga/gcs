@@ -130,9 +130,13 @@ suite('BoolanQueryTranslator', function() {
                  "(nonexistent f1:'k1' f2:'k2')",
                  "(nonexistent| |f1:'k1' f2:'k2')",
                  "unknown operator: <nonexistent>");
-  testGroupError("missing close parentheis",
+  testGroupError("missing close parentheis: after operator",
                  "(and f1:'k1' f2:'k2'",
                  "(and f1:'k1' f2:'k2'||",
+                 "close parenthesis is missing for operator: <and>");
+  testGroupError("missing close parentheis: in operator",
+                 "(an",
+                 "(an||",
                  "close parenthesis is missing");
   testGroupError("missing operator",
                  "()",
