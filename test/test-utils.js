@@ -89,7 +89,7 @@ exports.createTemporaryDatabase = function() {
     path: databasePath,
     get: function() {
       return this._context ||
-             (this._context = new nativeNroonga.Database(databasePath));
+             (this._context = new wrappedNroonga.Database(databasePath));
     },
     clear: function() {
       var context = this._context;
