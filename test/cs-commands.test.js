@@ -154,3 +154,95 @@ suite('cs-describe-domain', function() {
       });
   });
 });
+
+suite('cs-configure-fields', function() {
+  setup(commonSetup);
+  teardown(commonTeardown);
+
+  test('create text field', function(done) {
+    utils
+      .run('cs-create-domain',
+           '--domain-name', 'companies',
+           '--database-path', temporaryDatabase.path)
+      .run('cs-configure-fields',
+           '--domain-name', 'companies',
+           '--name', 'name',
+           '--type', 'text',
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        assert.equal(result.code, 0);
+        assert.equal(result.output.stdout,
+                     'Updated 1 Index Field:\n' +
+                     'name RequiresIndexDocuments text ()\n');
+
+        context.reopen();
+        var domain = new Domain('companies', context);
+        var field = domain.getIndexField('name');
+        assert.deepEqual({ type: field.type, exists: field.exists() },
+                         { type: 'text', exists: true });
+
+        done();
+      })
+      .error(function(e) {
+        done(e);
+      });
+  });
+
+  test('create uint field', function(done) {
+    utils
+      .run('cs-create-domain',
+           '--domain-name', 'companies',
+           '--database-path', temporaryDatabase.path)
+      .run('cs-configure-fields',
+           '--domain-name', 'companies',
+           '--name', 'age',
+           '--type', 'uint',
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        assert.equal(result.code, 0);
+        assert.equal(result.output.stdout,
+                     'Updated 1 Index Field:\n' +
+                     'age RequiresIndexDocuments uint ()\n');
+
+        context.reopen();
+        var domain = new Domain('companies', context);
+        var field = domain.getIndexField('age');
+        assert.deepEqual({ type: field.type, exists: field.exists() },
+                         { type: 'uint', exists: true });
+
+        done();
+      })
+      .error(function(e) {
+        done(e);
+      });
+  });
+
+  test('create literal field', function(done) {
+    utils
+      .run('cs-create-domain',
+           '--domain-name', 'companies',
+           '--database-path', temporaryDatabase.path)
+      .run('cs-configure-fields',
+           '--domain-name', 'companies',
+           '--name', 'product',
+           '--type', 'literal',
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        assert.equal(result.code, 0);
+        assert.equal(result.output.stdout,
+                     'Updated 1 Index Field:\n' +
+                     'product RequiresIndexDocuments literal ()\n');
+
+        context.reopen();
+        var domain = new Domain('companies', context);
+        var field = domain.getIndexField('product');
+        assert.deepEqual({ type: field.type, exists: field.exists() },
+                         { type: 'uint', exists: true });
+
+        done();
+      })
+      .error(function(e) {
+        done(e);
+      });
+  });
+});
