@@ -131,7 +131,7 @@ suite('cs-delete-domain', function() {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
                          { code:    1,
-                           message: 'You must specify an existing domain name\n' });
+                           message: 'You must specify an existing domain name.\n' });
         done();
       })
       .error(function(e) {
@@ -148,7 +148,7 @@ suite('cs-delete-domain', function() {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
                          { code:    1,
-                           message: 'You must specify the domain name\n' });
+                           message: 'You must specify the domain name.\n' });
         done();
       })
       .error(function(e) {
