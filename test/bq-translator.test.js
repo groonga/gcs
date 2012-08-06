@@ -147,6 +147,11 @@ suite('BoolanQueryTranslator', function() {
                  "(operat|0|r f1:'k1' f2:'k2')",
                  "invalid operator character: <0>");
 
+  testGroupError("field: garbage after value",
+                 "(field f1 'k1' 'garbage')",
+                 "(field f1 'k1' |'|garbage')",
+                 "a garbage character after value: <'>");
+
   testExpression("value only: stirng: and: space",
                  "'keyword1 keyword2' 'other keyword'",
                  "'keyword1 keyword2'".length,
