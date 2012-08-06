@@ -109,6 +109,10 @@ suite('BoolanQueryTranslator', function() {
                  "'keyword1 keyword2' 'other keyword'",
                  "'keyword1 keyword2'".length,
                  "field @ \"keyword1\" && field @ \"keyword2\"");
+  testExpression("value only: stirng: and: +",
+                 "'keyword1+keyword2' 'other keyword'",
+                 "'keyword1+keyword2'".length,
+                 "field @ \"keyword1\" && field @ \"keyword2\"");
   testExpression("value only: stirng: phrase",
                  "'\"keyword1 keyword2\"' 'other keyword'",
                  "'\"keyword1 keyword2\"'".length,
