@@ -35,7 +35,7 @@ function report(domain) {
 if (program.domainName) {
   report(commandLine.domain);
 } else {
-  var domains = commandLine.Domain.getAll(commandLine.context);
+  var domains = CLI.Domain.getAll(commandLine.context);
   domains.forEach(function(domain, index) {
     if (index) console.log('========================================');
     report(domain);
