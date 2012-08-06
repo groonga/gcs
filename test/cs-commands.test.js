@@ -1,6 +1,8 @@
 var utils = require('./test-utils');
 var assert = require('chai').assert;
 
+var Domain = require('../lib/database/domain').Domain;
+
 var context;
 var temporaryDatabase;
 
@@ -29,6 +31,11 @@ suite('cs-create-domain', function() {
         assert.equal(result.code, 0);
         assert.include(result.output.stdout,
                        'Domain endpoints are currently being created.');
+
+        context.reopen();
+        var domain = new Domain('test', context);
+        assert.isTrue(domain.exists());
+
         done();
       });
   });
