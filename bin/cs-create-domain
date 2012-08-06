@@ -3,7 +3,7 @@
 var CLI = require(__dirname + '/../lib/command-line').CommandLineInterface;
 var commandLine = new CLI();
 
-program
+commandLine
   .usage('--domain-name <domain name> [options]')
   .option('-d, --domain-name <domain name>',
           'The name of the domain that you are creating. Required.',
