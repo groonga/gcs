@@ -134,6 +134,10 @@ suite('BoolanQueryTranslator', function() {
                  "(and f1:'k1' f2:'k2'",
                  "(and f1:'k1' f2:'k2'||",
                  "close parenthesis is missing");
+  testGroupError("missing operator",
+                 "()",
+                 "(|)|",
+                 "operator is missing");
 
   testExpression("value only: stirng: and: space",
                  "'keyword1 keyword2' 'other keyword'",
