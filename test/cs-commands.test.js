@@ -216,7 +216,7 @@ suite('cs-configure-fields', function() {
       .next(function(result) {
         assert.equal(result.code, 0);
         assert.equal(result.output.stdout,
-                     'Updated 1 Index Field:\n';
+                     'Updated 1 Index Field:\n');
 
         context.reopen();
         var domain = new Domain('companies', context);
