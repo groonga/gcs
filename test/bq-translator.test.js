@@ -49,6 +49,23 @@ function testGroup(label, group, expectedOffset, expectedScriptGrnExpr) {
   });
 }
 
+function testGroupError(label, group, context, detail) {
+  test('error: group: ' + label + ': ' + '<' + group + '>', function() {
+    var translator = new BooleanQueryTranslator(group);
+    translator.defaultField = "field";
+    var actualError;
+    assert.throw(function() {
+      try {
+        translator.translateGroup();
+      } catch (error) {
+        actualError = error;
+        throw error;
+      }
+    });
+    assert.equal(actualError.message, "<" + context + ">" + ": " + detail);
+  });
+}
+
 function testExpression(label, expression,
                         expectedOffset, expectedScriptGrnExpr) {
   test('expression: ' + label + ': ' +
@@ -105,6 +122,11 @@ suite('BoolanQueryTranslator', function() {
             "(and (or f1:'k1' f2:'k2') f3:'k3')".length,
             "((f1 @ \"k1\" || f2 @ \"k2\") && f3 @ \"k3\")");
 
+  testGroupError("missing open parentheis",
+                 "and f1:'k1' f2:'k2')",
+                 "|a|nd f1:'k1' f2:'k2')",
+                 "not started with <(>");
+
   testExpression("value only: stirng: and: space",
                  "'keyword1 keyword2' 'other keyword'",
                  "'keyword1 keyword2'".length,
@@ -117,6 +139,10 @@ suite('BoolanQueryTranslator', function() {
                  "'keyword1|keyword2' 'other keyword'",
                  "'keyword1|keyword2'".length,
                  "field @ \"keyword1\" || field @ \"keyword2\"");
+  testExpression("value only: stirng: prefix search",
+                 "'keyword*' 'other keyword'",
+                 "'keyword*'".length,
+                 "field @^ \"keyword\"");
   testExpression("value only: stirng: phrase",
                  "'\"keyword1 keyword2\"' 'other keyword'",
                  "'\"keyword1 keyword2\"'".length,
