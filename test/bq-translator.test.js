@@ -126,6 +126,10 @@ suite('BoolanQueryTranslator', function() {
                  "and f1:'k1' f2:'k2')",
                  "|a|nd f1:'k1' f2:'k2')",
                  "not started with <(>");
+  testGroupError("unknown operator",
+                 "(nonexistent f1:'k1' f2:'k2')",
+                 "(nonexistent| |f1:'k1' f2:'k2')",
+                 "unknown operator: <nonexistent>");
 
   testExpression("value only: stirng: and: space",
                  "'keyword1 keyword2' 'other keyword'",
