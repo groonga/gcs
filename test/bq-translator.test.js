@@ -280,4 +280,12 @@ suite('BoolanQueryTranslator', function() {
                       "'keyword1\"keyword2\"' 'other keyword'",
                       "'keyword1|\"|keyword2\"' 'other keyword'",
                       "operator is missing: keyword:<keyword1>");
+  testExpressionError("value only: stirng: missing escaped value",
+                      "'keyword1\\",
+                      "'keyword1\\||",
+                      "escaped character is missing in string value");
+  testExpressionError("value only: phrase: missing escaped value",
+                      "'\"keyword1\\",
+                      "'\"keyword1\\||",
+                      "escaped character is missing in phrase");
 });
