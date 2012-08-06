@@ -19,7 +19,7 @@ if (commandLine.options.force) {
   commandLine.domain.deleteSync();
   console.log('Domain [' + commandLine.domain.name + '] has been deleted successfully.');
 } else {
-  program.confirm('Really delete? [' + commandLine.domain.name + '] (y/N)', function(ok){
+  commandLine.confirm('Really delete? [' + commandLine.domain.name + '] (y/N)', function(ok){
     if (ok) {
       commandLine.domain.deleteSync();
       console.log('Successfully deleted.');
