@@ -458,7 +458,7 @@ suite('cs-index-documents', function() {
                                     'age\n' +
                                     'name\n' +
                                     'product\n' +
-                                    '===========================================\n',
+                                    '===========================================\n' },
                          result.output.stderr);
         done();
       })
