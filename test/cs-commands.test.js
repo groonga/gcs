@@ -170,10 +170,11 @@ suite('cs-configure-fields', function() {
            '--type', type,
            '--database-path', temporaryDatabase.path)
       .next(function(result) {
-        assert.equal(result.code, 0);
-        assert.equal(result.output.stdout,
-                     'Updated 1 Index Field:\n' +
-                     name + ' RequiresIndexDocuments ' + type + ' ()\n');
+        assert.deepEqual({ code:    result.code,
+                           message: result.output.stdout },
+                         { code:    0,
+                           message: 'Updated 1 Index Field:\n' +
+                                    name + ' RequiresIndexDocuments ' + type + ' ()\n' });
 
         context.reopen();
         var domain = new Domain('companies', context);
@@ -214,9 +215,10 @@ suite('cs-configure-fields', function() {
            '--delete',
            '--database-path', temporaryDatabase.path)
       .next(function(result) {
-        assert.equal(result.code, 0);
-        assert.equal(result.output.stdout,
-                     'Updated 1 Index Field:\n');
+        assert.deepEqual({ code:    result.code,
+                           message: result.output.stdout },
+                         { code:    0,
+                           message: 'Updated 1 Index Field:\n' });
 
         context.reopen();
         var domain = new Domain('companies', context);
@@ -256,9 +258,10 @@ suite('cs-configure-fields', function() {
            '--type', type,
            '--database-path', temporaryDatabase.path)
       .next(function(result) {
-        assert.equal(result.code, 1);
-        assert.equal(result.output.stdout,
-                     'You must specify not-existing field name.\n');
+        assert.deepEqual({ code:    result.code,
+                           message: result.output.stdout },
+                         { code:    1,
+                           message: 'You must specify not-existing field name.\n' });
         done();
       })
       .error(function(e) {
@@ -287,9 +290,10 @@ suite('cs-configure-fields', function() {
            '--delete',
            '--database-path', temporaryDatabase.path)
       .next(function(result) {
-        assert.equal(result.code, 1);
-        assert.equal(result.output.stdout,
-                     'You must specify an existing field.\n');
+        assert.deepEqual({ code:    result.code,
+                           message: result.output.stdout },
+                         { code:    1,
+                           message: 'You must specify an existing field.\n' });
         done();
       })
       .error(function(e) {
@@ -307,9 +311,27 @@ suite('cs-configure-fields', function() {
            '--name', 'name',
            '--database-path', temporaryDatabase.path)
       .next(function(result) {
-        assert.equal(result.code, 1);
-        assert.equal(result.output.stdout,
-                     'You must specify the field type.\n');
+        assert.deepEqual({ code:    result.code,
+                           message: result.output.stdout },
+                         { code:    1,
+                           message: 'You must specify the field type.\n' });
+        done();
+      })
+      .error(function(e) {
+        done(e);
+      });
+  });
+
+  test('create field without domain', function(done) {
+    utils
+      .run('cs-configure-fields',
+           '--name', 'name',
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        assert.deepEqual({ code:    result.code,
+                           message: result.output.stdout },
+                         { code:    1,
+                           message: 'You must specify an existing domain name.\n' });
         done();
       })
       .error(function(e) {
