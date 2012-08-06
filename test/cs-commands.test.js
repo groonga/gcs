@@ -99,6 +99,7 @@ suite('cs-delete-domain', function() {
            '--domain-name', 'test',
            '--database-path', temporaryDatabase.path)
       .run('cs-delete-domain',
+           '--domain-name', 'test',
            '--force',
            '--database-path', temporaryDatabase.path)
       .next(function(result) {
