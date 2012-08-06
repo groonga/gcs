@@ -105,7 +105,7 @@ suite('BoolanQueryTranslator', function() {
             "(and (or f1:'k1' f2:'k2') f3:'k3')".length,
             "((f1 @ \"k1\" || f2 @ \"k2\") && f3 @ \"k3\")");
 
-  testExpression("value only: stirng: keywords",
+  testExpression("value only: stirng: and: space",
                  "'keyword1 keyword2' 'other keyword'",
                  "'keyword1 keyword2'".length,
                  "field @ \"keyword1\" && field @ \"keyword2\"");
