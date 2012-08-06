@@ -293,4 +293,9 @@ suite('BoolanQueryTranslator', function() {
                       "'\"keyword",
                       "'\"keyword||",
                       "close double quote for phrase is missing");
+
+  testExpressionError("value only: unsigned integer range: no min and max",
+                      "..",
+                      "..||",
+                      "both min and max are missing");
 });
