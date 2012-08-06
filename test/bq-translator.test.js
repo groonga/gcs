@@ -258,4 +258,8 @@ suite('BoolanQueryTranslator', function() {
                       "f1 'k1'",
                       "f1| |'k1'",
                       "field value separator is missing");
+  testExpressionError("invalid value",
+                      "f1:value",
+                      "f1:|v|alue",
+                      "invalid value: field:<f1>");
 });
