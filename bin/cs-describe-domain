@@ -11,7 +11,7 @@ program
           String)
   .option('-all, --show-all',
           'Display all available information for the domain, '
-             'including configured fields.',
+             + 'including configured fields.',
           String)
   .option('--database-path <path>',
           'database path [' + commandLine.defaultDatabasePath + ']',
