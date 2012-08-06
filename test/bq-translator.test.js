@@ -151,6 +151,14 @@ suite('BoolanQueryTranslator', function() {
                  "(field f1 'k1' 'garbage')",
                  "(field f1 'k1' |'|garbage')",
                  "a garbage character after value: <'>");
+  testGroupError("field: no field",
+                 "(field )",
+                 "(field |)|",
+                 "field is missing");
+  testGroupError("field: no value",
+                 "(field f1)",
+                 "(field f1|)|",
+                 "field value is missing: field:<f1>");
 
   testExpression("value only: stirng: and: space",
                  "'keyword1 keyword2' 'other keyword'",
