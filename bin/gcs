@@ -5,7 +5,6 @@ var CLI = require(__dirname + '/../lib/command-line').CommandLineInterface;
 var commandLine = new CLI();
 
 commandLine
-  .usage('[options]')
   .option('-p, --port <port>',
           'specify port [7575]',
           Number,
