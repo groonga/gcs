@@ -173,6 +173,10 @@ suite('BoolanQueryTranslator', function() {
                  "(field f1)",
                  "(field f1|)|",
                  "field value is missing: field:<f1>");
+  testGroupError("field: not string value",
+                 "(field f1 29)",
+                 "(field f1 |2|9)",
+                 "open single quote for string value is missing");
   testGroupError("field: invalid field name",
                  "(field fIeld 'value')",
                  "(field f|I|eld 'value')",
