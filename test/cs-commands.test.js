@@ -237,7 +237,7 @@ suite('cs-configure-fields', function() {
         var domain = new Domain('companies', context);
         var field = domain.getIndexField('product');
         assert.deepEqual({ type: field.type, exists: field.exists() },
-                         { type: 'uint', exists: true });
+                         { type: 'literal', exists: true });
 
         done();
       })
