@@ -106,10 +106,37 @@ suite('cs-describe-domain', function() {
     ].join('\n');
   }
 
-  test('describe all', function(done) {
-    new Domain('domain2', context).createSync();
-    new Domain('domain1', context).createSync();
+  test('describe one', function(done) {
     utils
+      .run('cs-create-domain',
+           '--domain-name', 'domain2',
+           '--database-path', temporaryDatabase.path)
+      .run('cs-create-domain',
+           '--domain-name', 'domain1',
+           '--database-path', temporaryDatabase.path)
+      .run('cs-describe-domain',
+           '--domain-name', 'domain1',
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        assert.equal(result.code, 0);
+        assert.include(result.output.stdout,
+                       report(new Domain('domain1', context), 'localhost'));
+
+        done();
+      })
+      .error(function(e) {
+        done(e);
+      });
+  });
+
+  test('describe all', function(done) {
+    utils
+      .run('cs-create-domain',
+           '--domain-name', 'domain2',
+           '--database-path', temporaryDatabase.path)
+      .run('cs-create-domain',
+           '--domain-name', 'domain1',
+           '--database-path', temporaryDatabase.path)
       .run('cs-describe-domain',
            '--show-all',
            '--database-path', temporaryDatabase.path)
