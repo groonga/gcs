@@ -271,8 +271,13 @@ suite('BoolanQueryTranslator', function() {
                       "f1:|v|alue",
                       "invalid value: field:<f1>");
 
-  testExpressionError("field value: string: missing close quote",
-                      "f1:'k1",
-                      "f1:'k1||",
+  testExpressionError("value only: string: missing close quote",
+                      "'k1",
+                      "'k1||",
                       "close single quote for string value is missing");
+  testExpressionError("value only: stirng: " +
+                      "missing operator between keyword and phrase",
+                      "'keyword1\"keyword2\"' 'other keyword'",
+                      "'keyword1|\"|keyword2\"' 'other keyword'",
+                      "operator is missing: keyword:<keyword1>");
 });
