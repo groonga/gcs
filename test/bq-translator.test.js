@@ -284,8 +284,13 @@ suite('BoolanQueryTranslator', function() {
                       "'keyword1\\",
                       "'keyword1\\||",
                       "escaped character is missing in string value");
+
   testExpressionError("value only: phrase: missing escaped value",
                       "'\"keyword1\\",
                       "'\"keyword1\\||",
                       "escaped character is missing in phrase");
+  testExpressionError("value only: phrase: missing close quote",
+                      "'\"keyword",
+                      "'\"keyword||",
+                      "close double quote for phrase is missing");
 });
