@@ -11,9 +11,8 @@ commandLine
   .option('-all, --show-all',
           'Display all available information for the domain, '
              + 'including configured fields.',
-          String);
-
-commandLine.parse();
+          String)
+  .parse();
 
 function report(domain) {
   console.log('Domain Name               %s', domain.name);

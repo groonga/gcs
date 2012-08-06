@@ -9,9 +9,8 @@ commandLine
           'The name of the domain that you are deleting. Required.',
           String)
   .option('-f, --force',
-          'Delete the domain without prompting for confirmation.');
-
-commandLine.parse();
+          'Delete the domain without prompting for confirmation.')
+  .parse();
 
 commandLine.assertHaveDomainName();
 commandLine.assertDomainExists();

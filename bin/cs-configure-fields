@@ -16,9 +16,9 @@ commandLine
           'The name of the domain that you are configuring. Required.',
           String)
   .option('--delete',
-          'Delete the field specified by the --name and --type options.');
+          'Delete the field specified by the --name and --type options.')
+  .parse();
 
-commandLine.parse();
 commandLine.assertHaveDomainName();
 commandLine.assertDomainExists();
 

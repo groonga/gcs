@@ -14,9 +14,8 @@ commandLine
           'list of IP ranges for privileged client '+
             '[' + CLI.defaultPrivilegedRanges + ']',
           String,
-          CLI.defaultPrivilegedRanges);
-
-commandLine.parse();
+          CLI.defaultPrivilegedRanges)
+  .parse();
 
 var server = gcsServer.createServer({
       databasePath:     commandLine.options.databasePath,
