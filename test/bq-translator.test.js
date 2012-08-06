@@ -176,6 +176,14 @@ suite('BoolanQueryTranslator', function() {
                  "(filter f1)",
                  "(filter f1|)|",
                  "field value is missing: field:<f1>");
+  testGroupError("filter: invalid field name",
+                 "(filter fIeld 'value')",
+                 "(filter f|I|eld 'value')",
+                 "invalid field character: <I>");
+  testGroupError("filter: missing close parenthesis",
+                 "(filter ",
+                 "(filter ||",
+                 "close parenthesis is missing: operator:<filter>");
 
   // testGroupError("and: missing close parentheis",
   //                "(and f1:'k1' f2:'k2'",
