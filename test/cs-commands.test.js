@@ -37,6 +37,9 @@ suite('cs-create-domain', function() {
         assert.isTrue(domain.exists());
 
         done();
+      })
+      .error(function(e) {
+        done(e);
       });
   });
 
@@ -60,6 +63,9 @@ suite('cs-create-domain', function() {
         assert.deepEqual(domains, ['test']);
 
         done();
+      })
+      .error(function(e) {
+        done(e);
       });
   });
 
@@ -76,6 +82,47 @@ suite('cs-create-domain', function() {
         assert.deepEqual(Domain.getAll(context), []);
 
         done();
+      })
+      .error(function(e) {
+        done(e);
+      });
+  });
+});
+
+suite('cs-describe-domain', function() {
+  setup(commonSetup);
+  teardown(commonTeardown);
+
+  function report(domain, hostname) {
+    return [
+      'Domain Name               ' + domain.name,
+      'Document Service Endpoint ' + domain.getDocumentsEndpoint(hostname)),
+      'Search Endpoint           ' + domain.searchableDocumentsCount,
+      'Index Fields              ' + domain.name,
+      'SearchPartitionCount      ' + domain.searchPartitionCount,
+      'SearchInstanceCount       ' + domain.searchInstanceCount,
+      'SearchInstanceType        ' + domain.searchInstanceType
+    ].join('\n');
+  }
+
+  test('describe all', function(done) {
+    new Domain('domain2', context).createSync();
+    new Domain('domain1', context).createSync();
+    utils
+      .run('cs-describe-domain',
+           '--show-all',
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        assert.equal(result.code, 0);
+        assert.include(result.output.stdout,
+                       report(new Domain('domain2', context), 'localhost'));
+        assert.include(result.output.stdout,
+                       report(new Domain('domain1', context), 'localhost'));
+
+        done();
+      })
+      .error(function(e) {
+        done(e);
       });
   });
 });

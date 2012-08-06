@@ -27,7 +27,7 @@ function report(domain) {
   console.log('Index Fields              %s', domain.name);
 //  console.log('Ranking Fields            %s', ;
   console.log('SearchPartitionCount      %s', domain.searchPartitionCount);
-  console.log('SearchInstanceCount       %s', domain.searchPartitionCount);
+  console.log('SearchInstanceCount       %s', domain.searchInstanceCount);
   console.log('SearchInstanceType        %s', domain.searchInstanceType);
 }
 
