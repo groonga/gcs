@@ -130,10 +130,6 @@ suite('BoolanQueryTranslator', function() {
                  "(nonexistent f1:'k1' f2:'k2')",
                  "(nonexistent| |f1:'k1' f2:'k2')",
                  "unknown operator: <nonexistent>");
-  testGroupError("missing close parentheis: after operator",
-                 "(and f1:'k1' f2:'k2'",
-                 "(and f1:'k1' f2:'k2'||",
-                 "close parenthesis is missing for operator: <and>");
   testGroupError("missing close parentheis: in operator",
                  "(an",
                  "(an||",
@@ -163,6 +159,15 @@ suite('BoolanQueryTranslator', function() {
                  "(field fIeld 'value')",
                  "(field f|I|eld 'value')",
                  "invalid field character: <I>");
+  testGroupError("field: missing close parenthesis",
+                 "(field ",
+                 "(field ||",
+                 "close parenthesis is missing: operator:<field>");
+
+  // testGroupError("and: missing close parentheis",
+  //                "(and f1:'k1' f2:'k2'",
+  //                "(and f1:'k1' f2:'k2'||",
+  //                "close parenthesis is missing: operator:<and>");
 
   testExpression("value only: stirng: and: space",
                  "'keyword1 keyword2' 'other keyword'",
