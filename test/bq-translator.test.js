@@ -266,4 +266,9 @@ suite('BoolanQueryTranslator', function() {
                       "f1:value",
                       "f1:|v|alue",
                       "invalid value: field:<f1>");
+
+  testExpressionError("field value: string: missing close quote",
+                      "f1:'k1",
+                      "f1:'k1||",
+                      "close single quote for string value is missing");
 });
