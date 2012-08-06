@@ -178,6 +178,7 @@ function run() {
   return deferred;
 }
 exports.run = run;
+Deferred.register('run', function() { return run.apply(this, arguments); });
 
 
 // activate diff for chai.assert.deepEqual
