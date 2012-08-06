@@ -7,6 +7,7 @@ var Deferred = require('jsdeferred').Deferred;
 var nativeNroonga = require('nroonga');
 var wrappedNroonga = require(__dirname + '/../lib/wrapped-nroonga');
 var xml2js = require('xml2js');
+var spawn = require('child_process').spawn;
 
 var temporaryDirectory = exports.temporaryDirectory = path.join(__dirname, 'tmp');
 
@@ -152,6 +153,31 @@ function XMLStringToJSON(xml) {
   return json;
 }
 exports.XMLStringToJSON = XMLStringToJSON;
+
+function run() {
+  var deferred = new Deferred();
+  var options = Array.prototype.slice.call(arguments, 0)
+
+  var commandName = options.shift();
+  var commandPath = __dirname + '/../bin/' + commandName;
+  var command = spawn(commandPath, options);
+  var output = {
+        stdout: '',
+        stderr: ''
+      };
+  command.stdout.on('data', function(data) {
+    output.stdout += data;
+  });
+  command.stderr.on('data', function(data) {
+    output.stderr += data;
+  });
+  command.on('exit', function(code) {
+    deferred.call({ code: code, output: output });
+  });
+
+  return deferred;
+}
+exports.run = run;
 
 
 // activate diff for chai.assert.deepEqual
