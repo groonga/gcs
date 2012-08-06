@@ -121,10 +121,27 @@ suite('cs-delete-domain', function() {
       });
   });
 
-  test('delete unexisting domain', function(done) {
+  test('delete not-existing domain', function(done) {
     utils
       .run('cs-delete-domain',
            '--domain-name', 'test',
+           '--force',
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        assert.deepEqual({ code:    result.code,
+                           message: result.output.stdout },
+                         { code:    1,
+                           message: 'You must specify an existing domain name\n' });
+        done();
+      })
+      .error(function(e) {
+        done(e);
+      });
+  });
+
+  test('delete without domain', function(done) {
+    utils
+      .run('cs-delete-domain',
            '--force',
            '--database-path', temporaryDatabase.path)
       .next(function(result) {
