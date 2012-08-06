@@ -331,7 +331,7 @@ suite('cs-configure-fields', function() {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
                          { code:    1,
-                           message: 'You must specify an existing domain name.\n' });
+                           message: 'You must specify the domain name.\n' });
         done();
       })
       .error(function(e) {
