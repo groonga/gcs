@@ -228,10 +228,14 @@ suite('BoolanQueryTranslator', function() {
                  "'keyword*' 'other keyword'",
                  "'keyword*'".length,
                  "field @^ \"keyword\"");
-  testExpression("value only: stirng: phrase",
+  testExpression("value only: stirng: phrase: one",
                  "'\"keyword1 keyword2\"' 'other keyword'",
                  "'\"keyword1 keyword2\"'".length,
                  "field @ \"keyword1 keyword2\"");
+  testExpression("value only: stirng: phrase: multi",
+                 "'\"keyword1 keyword2\"|\"keyword3\"' 'other keyword'",
+                 "'\"keyword1 keyword2\"|\"keyword3\"'".length,
+                 "field @ \"keyword1 keyword2\" || field @ \"keyword3\"");
   testExpression("value only: unsigned integer",
                  "29 75",
                  "29".length,
