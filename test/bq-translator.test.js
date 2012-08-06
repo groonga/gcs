@@ -125,11 +125,15 @@ suite('BoolanQueryTranslator', function() {
   testGroupError("missing open parentheis",
                  "and f1:'k1' f2:'k2')",
                  "|a|nd f1:'k1' f2:'k2')",
-                 "not started with <(>");
+                 "open parenthesis is missing");
   testGroupError("unknown operator",
                  "(nonexistent f1:'k1' f2:'k2')",
                  "(nonexistent| |f1:'k1' f2:'k2')",
                  "unknown operator: <nonexistent>");
+  testGroupError("missing close parentheis",
+                 "(and f1:'k1' f2:'k2'",
+                 "(and f1:'k1' f2:'k2'||",
+                 "close parenthesis is missing");
 
   testExpression("value only: stirng: and: space",
                  "'keyword1 keyword2' 'other keyword'",
