@@ -1,11 +1,9 @@
 #!/usr/bin/env node
 
-var program = require('commander');
 var CLI = require(__dirname + '/../lib/command-line').CommandLineInterface;
-var commandLine = new CLI(program);
+var commandLine = new CLI();
 
-program
-  .version(require('../package').version)
+commandLine
   .usage('[options]')
   .option('-d, --domain-name <domain name>',
           'The name of the domain that you are creating. Required.',
@@ -13,12 +11,9 @@ program
   .option('-all, --show-all',
           'Display all available information for the domain, '
              + 'including configured fields.',
-          String)
-  .option('--database-path <path>',
-          'database path [' + CLI.defaultDatabasePath + ']',
-          String,
-          CLI.defaultDatabasePath)
-  .parse(process.argv);
+          String);
+
+commandLine.parse();
 
 function report(domain) {
   console.log('Domain Name               %s', domain.name);
@@ -32,7 +27,7 @@ function report(domain) {
   console.log('SearchInstanceType        %s', domain.searchInstanceType);
 }
 
-if (program.domainName) {
+if (commandLine.options.domainName) {
   report(commandLine.domain);
 } else {
   var domains = CLI.Domain.getAll(commandLine.context);

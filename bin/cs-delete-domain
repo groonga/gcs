@@ -1,27 +1,22 @@
 #!/usr/bin/env node
 
-var program = require('commander');
 var CLI = require(__dirname + '/../lib/command-line').CommandLineInterface;
-var commandLine = new CLI(program);
+var commandLine = new CLI();
 
-program
-  .version(require('../package').version)
+commandLine
   .usage('--domain-name <domain name> [options]')
   .option('-d, --domain-name <domain name>',
           'The name of the domain that you are deleting. Required.',
           String)
   .option('-f, --force',
-          'Delete the domain without prompting for confirmation.')
-  .option('--database-path <path>',
-          'database path [' + CLI.defaultDatabasePath + ']',
-          String,
-          CLI.defaultDatabasePath)
-  .parse(process.argv);
+          'Delete the domain without prompting for confirmation.');
+
+commandLine.parse();
 
 commandLine.assertHaveDomainName();
 commandLine.assertDomainExists();
 
-if (program.force) {
+if (commandLine.options.force) {
   commandLine.domain.deleteSync();
   console.log('Domain [' + commandLine.domain.name + '] has been deleted successfully.');
 } else {

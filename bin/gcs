@@ -1,34 +1,30 @@
 #!/usr/bin/env node
 
 var gcsServer = require(__dirname + '/../lib/server');
-var program = require('commander');
 var CLI = require(__dirname + '/../lib/command-line').CommandLineInterface;
+var commandLine = new CLI();
 
-program
-  .version(require('../package').version)
+commandLine
   .usage('[options]')
   .option('-p, --port <port>',
           'specify port [7575]',
           Number,
           7575)
-  .option('--database-path <path>',
-          'database path [' + CLI.defaultDatabasePath + ']',
-          String,
-          CLI.defaultDatabasePath)
   .option('--privilege <ip range>',
           'list of IP ranges for privileged client '+
             '[' + CLI.defaultPrivilegedRanges + ']',
           String,
-          CLI.defaultPrivilegedRanges)
-  .parse(process.argv);
+          CLI.defaultPrivilegedRanges);
+
+commandLine.parse();
 
 var server = gcsServer.createServer({
-      databasePath:     program.databasePath,
-      privilegedRanges: program.privilege
+      databasePath:     commandLine.options.databasePath,
+      privilegedRanges: commandLine.options.privilege
     });
 
-server.listen(program.port, function() {
-  console.log('gcs listening at %d', program.port);
-  console.log('database is at %s', program.databasePath);
-  console.log('privileged IP ranges are %s', program.privilege);
+server.listen(commandLine.options.port, function() {
+  console.log('gcs listening at %d', commandLine.options.port);
+  console.log('database is at %s', commandLine.options.databasePath);
+  console.log('privileged IP ranges are %s', commandLine.options.privilege);
 });

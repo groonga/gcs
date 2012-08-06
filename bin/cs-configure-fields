@@ -1,11 +1,9 @@
 #!/usr/bin/env node
 
-var program = require('commander');
 var CLI = require(__dirname + '/../lib/command-line').CommandLineInterface;
-var commandLine = new CLI(program);
+var commandLine = new CLI();
 
-program
-  .version(require('../package').version)
+commandLine
   .usage('--name <field name> --type <field type> [options]')
   .option('--name <field name>',
           'The name of the field you are configuring or deleting. Required.',
@@ -18,24 +16,20 @@ program
           'The name of the domain that you are configuring. Required.',
           String)
   .option('--delete',
-          'Delete the field specified by the --name and --type options.')
-  .option('--database-path <path>',
-          'database path [' + CLI.defaultDatabasePath + ']',
-          String,
-          CLI.defaultDatabasePath)
-  .parse(process.argv);
+          'Delete the field specified by the --name and --type options.');
 
+commandLine.parse();
 commandLine.assertHaveDomainName();
 commandLine.assertDomainExists();
 
-if (!program.name) {
+if (!commandLine.options.name) {
   console.log('You must specify the field name.');
   return process.exit(1);
 }
 
-var field = commandLine.domain.getIndexField(program.name);
+var field = commandLine.domain.getIndexField(commandLine.options.name);
 
-if (program.delete) {
+if (commandLine.options.delete) {
   if (!field.exists()) {
     console.log('You must specify an existing field.');
     return process.exit(1);
@@ -43,7 +37,7 @@ if (program.delete) {
   field.deleteSync();
   console.log('Updated 1 Index Field:');
 } else {
-  if (!program.type) {
+  if (!commandLine.options.type) {
     console.log('You must specify the field type.');
     return process.exit(1);
   }
@@ -51,7 +45,7 @@ if (program.delete) {
     console.log('You must specify not-existing field name.');
     return process.exit(1);
   }
-  field.type = program.type;
+  field.type = commandLine.options.type;
   field.createSync();
   console.log('Updated 1 Index Field:');
   console.log(field.name + ' ' + field.state + ' ' + field.type + ' ()');
