@@ -164,6 +164,11 @@ suite('BoolanQueryTranslator', function() {
                  "(field ||",
                  "close parenthesis is missing: operator:<field>");
 
+  testGroupError("filter: garbage after value",
+                 "(filter field1 29 'garbage')",
+                 "(filter field1 29 |'|garbage')",
+                 "a garbage character after value: <'>");
+
   // testGroupError("and: missing close parentheis",
   //                "(and f1:'k1' f2:'k2'",
   //                "(and f1:'k1' f2:'k2'||",
