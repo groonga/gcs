@@ -97,7 +97,7 @@ suite('cs-describe-domain', function() {
     return [
       'Domain Name               ' + domain.name,
       'Document Service Endpoint ' + domain.getDocumentsEndpoint(hostname),
-      'Search Endpoint           ' + domain.getSearchEndpoint(hostname));
+      'Search Endpoint           ' + domain.getSearchEndpoint(hostname),
       'Searchable Documents      ' + domain.searchableDocumentsCount,
       'Index Fields              ' + domain.name,
       'SearchPartitionCount      ' + domain.searchPartitionCount,
