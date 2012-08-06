@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
 var program = require('commander');
-var commandLine = require(__dirname + '/../lib/command-line');
+var CLI = require(__dirname + '/../lib/command-line').CommandLineInterface;
+var commandLine = new CLI(program);
 
 program
   .version(require('../package').version)
@@ -12,30 +13,21 @@ program
   .option('-f, --force',
           'Delete the domain without prompting for confirmation.')
   .option('--database-path <path>',
-          'database path [' + commandLine.defaultDatabasePath + ']',
+          'database path [' + CLI.defaultDatabasePath + ']',
           String,
-          commandLine.defaultDatabasePath)
+          CLI.defaultDatabasePath)
   .parse(process.argv);
 
-if (!program.domainName) {
-  console.log('You must specify the domain name.');
-  return process.exit(1);
-}
-
-var context = commandLine.getContext(program.databasePath);
-var domain = new commandLine.Domain(program.domainName, context);
-if (!domain.exists()) {
-  console.log('You must specify an existing domain name.');
-  return process.exit(1);
-}
+commandLine.assertHaveDomainName();
+commandLine.assertDomainExists();
 
 if (program.force) {
-  domain.deleteSync();
-  console.log('Domain [' + domain.name + '] has been deleted successfully.');
+  commandLine.domain.deleteSync();
+  console.log('Domain [' + commandLine.domain.name + '] has been deleted successfully.');
 } else {
-  program.confirm('Really delete? [' + domain.name + '] (y/N)', function(ok){
+  program.confirm('Really delete? [' + commandLine.domain.name + '] (y/N)', function(ok){
     if (ok) {
-      domain.deleteSync();
+      commandLine.domain.deleteSync();
       console.log('Successfully deleted.');
       process.exit(0);
     } else {

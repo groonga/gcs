@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
 var program = require('commander');
-var commandLine = require(__dirname + '/../lib/command-line');
+var CLI = require(__dirname + '/../lib/command-line').CommandLineInterface;
+var commandLine = new CLI(program);
 
 program
   .version(require('../package').version)
@@ -19,29 +20,20 @@ program
   .option('--delete',
           'Delete the field specified by the --name and --type options.')
   .option('--database-path <path>',
-          'database path [' + commandLine.defaultDatabasePath + ']',
+          'database path [' + CLI.defaultDatabasePath + ']',
           String,
-          commandLine.defaultDatabasePath)
+          CLI.defaultDatabasePath)
   .parse(process.argv);
 
-if (!program.domainName) {
-  console.log('You must specify the domain name.');
-  return process.exit(1);
-}
-
-var context = commandLine.getContext(program.databasePath);
-var domain = new commandLine.Domain(program.domainName, context);
-if (!domain.exists()) {
-  console.log('You must specify an existing domain name.');
-  return process.exit(1);
-}
+commandLine.assertHaveDomainName();
+commandLine.assertDomainExists();
 
 if (!program.name) {
   console.log('You must specify the field name.');
   return process.exit(1);
 }
 
-var field = domain.getIndexField(program.name);
+var field = commandLine.domain.getIndexField(program.name);
 
 if (program.delete) {
   if (!field.exists()) {

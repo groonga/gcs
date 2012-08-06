@@ -2,7 +2,7 @@
 
 var gcsServer = require(__dirname + '/../lib/server');
 var program = require('commander');
-var commandLine = require(__dirname + '/../lib/command-line');
+var CLI = require(__dirname + '/../lib/command-line').CommandLineInterface;
 
 program
   .version(require('../package').version)
@@ -12,22 +12,20 @@ program
           Number,
           7575)
   .option('--database-path <path>',
-          'database path [' + commandLine.defaultDatabasePath + ']',
+          'database path [' + CLI.defaultDatabasePath + ']',
           String,
-          commandLine.defaultDatabasePath)
+          CLI.defaultDatabasePath)
   .option('--privilege <ip range>',
           'list of IP ranges for privileged client '+
-            '[' + commandLine.defaultPrivilegedRanges + ']',
+            '[' + CLI.defaultPrivilegedRanges + ']',
           String,
-          commandLine.defaultPrivilegedRanges)
+          CLI.defaultPrivilegedRanges)
   .parse(process.argv);
 
-var server;
-
-server = gcsServer.createServer({
-  databasePath:     program.databasePath,
-  privilegedRanges: program.privilege
-});
+var server = gcsServer.createServer({
+      databasePath:     program.databasePath,
+      privilegedRanges: program.privilege
+    });
 
 server.listen(program.port, function() {
   console.log('gcs listening at %d', program.port);

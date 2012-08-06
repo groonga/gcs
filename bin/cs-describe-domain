@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
 var program = require('commander');
-var commandLine = require(__dirname + '/../lib/command-line');
+var CLI = require(__dirname + '/../lib/command-line').CommandLineInterface;
+var commandLine = new CLI(program);
 
 program
   .version(require('../package').version)
@@ -14,9 +15,9 @@ program
              + 'including configured fields.',
           String)
   .option('--database-path <path>',
-          'database path [' + commandLine.defaultDatabasePath + ']',
+          'database path [' + CLI.defaultDatabasePath + ']',
           String,
-          commandLine.defaultDatabasePath)
+          CLI.defaultDatabasePath)
   .parse(process.argv);
 
 function report(domain) {
@@ -31,12 +32,10 @@ function report(domain) {
   console.log('SearchInstanceType        %s', domain.searchInstanceType);
 }
 
-var context = commandLine.getContext(program.databasePath);
 if (program.domainName) {
-  var domain = new commandLine.Domain(program.domainName, context);
-  report(domain);
+  report(commandLine.domain);
 } else {
-  var domains = commandLine.Domain.getAll(context);
+  var domains = commandLine.Domain.getAll(commandLine.context);
   domains.forEach(function(domain, index) {
     if (index) console.log('========================================');
     report(domain);
