@@ -418,3 +418,87 @@ suite('cs-configure-fields', function() {
       });
   });
 });
+
+suite('cs-index-documents', function() {
+  setup(commonSetup);
+  teardown(commonTeardown);
+
+  test('reindex', function(done) {
+    utils
+      .run('cs-create-domain',
+           '--domain-name', 'companies',
+           '--database-path', temporaryDatabase.path)
+      .run('cs-configure-fields',
+           '--domain-name', 'companies',
+           '--name', 'name',
+           '--type', 'text',
+           '--database-path', temporaryDatabase.path)
+      .run('cs-configure-fields',
+           '--domain-name', 'companies',
+           '--name', 'age',
+           '--type', 'uint',
+           '--database-path', temporaryDatabase.path)
+      .run('cs-configure-fields',
+           '--domain-name', 'companies',
+           '--name', 'product',
+           '--type', 'literal',
+           '--database-path', temporaryDatabase.path)
+      .run('cs-index-documents',
+           '--domain-name', 'companies',
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        assert.deepEqual({ code:    result.code,
+                           message: result.output.stdout },
+                         { code:    0,
+                           message: '===========================================\n' +
+                                    'Indexing documents for domain [companies]\n' +
+                                    '\n' +
+                                    'Now indexing fields:\n' +
+                                    '===========================================\n' +
+                                    'age\n' +
+                                    'name\n' +
+                                    'product\n' +
+                                    '===========================================\n',
+                         result.output.stderr);
+        done();
+      })
+      .error(function(e) {
+        done(e);
+      });
+  });
+
+  test('reindex not-existing domain', function(done) {
+    utils
+      .run('cs-index-documents',
+           '--domain-name', 'test',
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        assert.deepEqual({ code:    result.code,
+                           message: result.output.stdout },
+                         { code:    1,
+                           message: 'You must specify an existing domain name.\n' },
+                         result.output.stderr);
+        done();
+      })
+      .error(function(e) {
+        done(e);
+      });
+  });
+
+  test('reindex without domain', function(done) {
+    utils
+      .run('cs-index-documents',
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        assert.deepEqual({ code:    result.code,
+                           message: result.output.stdout },
+                         { code:    1,
+                           message: 'You must specify the domain name.\n' },
+                         result.output.stderr);
+        done();
+      })
+      .error(function(e) {
+        done(e);
+      });
+  });
+});

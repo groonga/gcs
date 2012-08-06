@@ -1,0 +1,26 @@
+#!/usr/bin/env node
+
+var CLI = require(__dirname + '/../lib/command-line').CommandLineInterface;
+var commandLine = new CLI();
+
+commandLine
+  .usage('--domain-name <domain name> [options]')
+  .option('-d, --domain-name <domain name>',
+          'The name of the domain that you are indexing. Required.',
+          String)
+  .parse();
+
+commandLine.assertHaveDomainName();
+commandLine.assertDomainExists();
+
+commandLine.domain.reindexSync();
+
+console.log('===========================================');
+console.log('Indexing documents for domain [' + commandLine.domain.name + ']');
+console.log('');
+console.log('Now indexing fields:');
+console.log('===========================================');
+commandLine.domain.indexFields.forEach(function(field) {
+  console.log(field.name);
+});
+console.log('===========================================');
