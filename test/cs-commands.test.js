@@ -239,4 +239,81 @@ suite('cs-configure-fields', function() {
   test('delete literal field', function(done) {
     testDeleteField(done, 'product', 'literal');
   });
+
+  function testRecreateField(done, name, type) {
+    utils
+      .run('cs-create-domain',
+           '--domain-name', 'companies',
+           '--database-path', temporaryDatabase.path)
+      .run('cs-configure-fields',
+           '--domain-name', 'companies',
+           '--name', name,
+           '--type', type,
+           '--database-path', temporaryDatabase.path)
+      .run('cs-configure-fields',
+           '--domain-name', 'companies',
+           '--name', name,
+           '--type', type,
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        assert.equal(result.code, 1);
+        assert.equal(result.output.stdout,
+                     'You must specify not-existing field name.\n');
+        done();
+      })
+      .error(function(e) {
+        done(e);
+      });
+  }
+
+  test('re-create text field', function(done) {
+    testRecreateField(done, 'name', 'text');
+  });
+  test('re-create uint field', function(done) {
+    testRecreateField(done, 'age', 'uint');
+  });
+  test('re-create literal field', function(done) {
+    testRecreateField(done, 'product', 'literal');
+  });
+
+  test('delete not-existing field', function(done) {
+    utils
+      .run('cs-create-domain',
+           '--domain-name', 'companies',
+           '--database-path', temporaryDatabase.path)
+      .run('cs-configure-fields',
+           '--domain-name', 'companies',
+           '--name', 'name',
+           '--delete',
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        assert.equal(result.code, 1);
+        assert.equal(result.output.stdout,
+                     'You must specify an existing field.\n');
+        done();
+      })
+      .error(function(e) {
+        done(e);
+      });
+  });
+
+  test('create field without type', function(done) {
+    utils
+      .run('cs-create-domain',
+           '--domain-name', 'companies',
+           '--database-path', temporaryDatabase.path)
+      .run('cs-configure-fields',
+           '--domain-name', 'companies',
+           '--name', 'name',
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        assert.equal(result.code, 1);
+        assert.equal(result.output.stdout,
+                     'You must specify the field type.\n');
+        done();
+      })
+      .error(function(e) {
+        done(e);
+      });
+  });
 });
