@@ -20,14 +20,14 @@ if (!program.domainName) {
   return process.exit(1);
 }
 
-console.log('Creating domain [' + program.domainName + ']');
-
 var context = commandLine.getContext(program.databasePath);
 var domain = new commandLine.Domain(program.domainName, context);
 if (domain.exists()) {
   console.log('The domain [' + program.domainName + '] already exists.');
   return process.exit(1);
 }
+
+console.log('Creating domain [' + program.domainName + ']');
 
 domain.createSync();
 
