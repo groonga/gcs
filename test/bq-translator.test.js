@@ -85,6 +85,24 @@ function testExpression(label, expression,
   });
 }
 
+function testExpressionError(label, expression, context, detail) {
+  test('error: expression: ' + label + ': ' + '<' + expression + '>',
+       function() {
+    var translator = new BooleanQueryTranslator(expression);
+    translator.defaultField = "field";
+    var actualError;
+    assert.throw(function() {
+      try {
+        translator.translateExpression();
+      } catch (error) {
+        actualError = error;
+        throw error;
+      }
+    });
+    assert.equal(actualError.message, "<" + context + ">" + ": " + detail);
+  });
+}
+
 suite('BoolanQueryTranslator', function() {
   testQuery("expression",
             "type:'ModelName'",
@@ -235,4 +253,9 @@ suite('BoolanQueryTranslator', function() {
                  "field1:29 field2:75",
                  "field1:29".length,
                  "field1 == 29");
+
+  testExpressionError("missing field value separator",
+                      "f1 'k1'",
+                      "f1| |'k1'",
+                      "field value separator is missing");
 });
