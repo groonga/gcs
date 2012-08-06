@@ -28,7 +28,7 @@ suite('cs-create-domain', function() {
            '--domain-name', 'test',
            '--database-path', temporaryDatabase.path)
       .next(function(result) {
-        assert.equal(result.code, 0);
+        assert.equal(result.code, 0, result.output.stderr);
         assert.include(result.output.stdout,
                        'Domain endpoints are currently being created.');
 
@@ -55,7 +55,8 @@ suite('cs-create-domain', function() {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
                          { code:    1,
-                           message: 'The domain [test] already exists.\n' });
+                           message: 'The domain [test] already exists.\n' },
+                         result.output.stderr);
 
         context.reopen();
         var domains = Domain.getAll(context).map(function(domain) {
@@ -78,7 +79,8 @@ suite('cs-create-domain', function() {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
                          { code:    1,
-                           message: 'You must specify the domain name.\n' });
+                           message: 'You must specify the domain name.\n' },
+                         result.output.stderr);
 
         context.reopen();
         assert.deepEqual(Domain.getAll(context), []);
@@ -108,7 +110,8 @@ suite('cs-delete-domain', function() {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
                          { code:    0,
-                           message: 'Domain [test] has been deleted successfully.\n' });
+                           message: 'Domain [test] has been deleted successfully.\n' },
+                         result.output.stderr);
 
         context.reopen();
         var domain = new Domain('test', context);
@@ -131,7 +134,8 @@ suite('cs-delete-domain', function() {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
                          { code:    1,
-                           message: 'You must specify an existing domain name.\n' });
+                           message: 'You must specify an existing domain name.\n' },
+                         result.output.stderr);
         done();
       })
       .error(function(e) {
@@ -148,7 +152,8 @@ suite('cs-delete-domain', function() {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
                          { code:    1,
-                           message: 'You must specify the domain name.\n' });
+                           message: 'You must specify the domain name.\n' },
+                         result.output.stderr);
         done();
       })
       .error(function(e) {
@@ -186,7 +191,7 @@ suite('cs-describe-domain', function() {
            '--domain-name', 'domain1',
            '--database-path', temporaryDatabase.path)
       .next(function(result) {
-        assert.equal(result.code, 0);
+        assert.equal(result.code, 0, result.output.stderr);
         assert.include(result.output.stdout,
                        report(new Domain('domain1', context), 'localhost'));
 
@@ -209,7 +214,7 @@ suite('cs-describe-domain', function() {
            '--show-all',
            '--database-path', temporaryDatabase.path)
       .next(function(result) {
-        assert.equal(result.code, 0);
+        assert.equal(result.code, 0, result.output.stderr);
         assert.include(result.output.stdout,
                        report(new Domain('domain2', context), 'localhost'));
         assert.include(result.output.stdout,
@@ -242,7 +247,8 @@ suite('cs-configure-fields', function() {
                            message: result.output.stdout },
                          { code:    0,
                            message: 'Updated 1 Index Field:\n' +
-                                    name + ' RequiresIndexDocuments ' + type + ' ()\n' });
+                                    name + ' RequiresIndexDocuments ' + type + ' ()\n' },
+                         result.output.stderr);
 
         context.reopen();
         var domain = new Domain('companies', context);
@@ -286,7 +292,8 @@ suite('cs-configure-fields', function() {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
                          { code:    0,
-                           message: 'Updated 1 Index Field:\n' });
+                           message: 'Updated 1 Index Field:\n' },
+                         result.output.stderr);
 
         context.reopen();
         var domain = new Domain('companies', context);
@@ -329,7 +336,8 @@ suite('cs-configure-fields', function() {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
                          { code:    1,
-                           message: 'You must specify not-existing field name.\n' });
+                           message: 'You must specify not-existing field name.\n' },
+                         result.output.stderr);
         done();
       })
       .error(function(e) {
@@ -361,7 +369,8 @@ suite('cs-configure-fields', function() {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
                          { code:    1,
-                           message: 'You must specify an existing field.\n' });
+                           message: 'You must specify an existing field.\n' },
+                         result.output.stderr);
         done();
       })
       .error(function(e) {
@@ -382,7 +391,8 @@ suite('cs-configure-fields', function() {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
                          { code:    1,
-                           message: 'You must specify the field type.\n' });
+                           message: 'You must specify the field type.\n' },
+                         result.output.stderr);
         done();
       })
       .error(function(e) {
@@ -399,7 +409,8 @@ suite('cs-configure-fields', function() {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
                          { code:    1,
-                           message: 'You must specify the domain name.\n' });
+                           message: 'You must specify the domain name.\n' },
+                         result.output.stderr);
         done();
       })
       .error(function(e) {
