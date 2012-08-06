@@ -159,6 +159,10 @@ suite('BoolanQueryTranslator', function() {
                  "(field f1)",
                  "(field f1|)|",
                  "field value is missing: field:<f1>");
+  testGroupError("field: invalid field name",
+                 "(field fIeld 'value')",
+                 "(field f|I|eld 'value')",
+                 "invalid field character: <I>");
 
   testExpression("value only: stirng: and: space",
                  "'keyword1 keyword2' 'other keyword'",
