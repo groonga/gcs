@@ -168,6 +168,14 @@ suite('BoolanQueryTranslator', function() {
                  "(filter field1 29 'garbage')",
                  "(filter field1 29 |'|garbage')",
                  "a garbage character after value: <'>");
+  testGroupError("filter: no field",
+                 "(filter )",
+                 "(filter |)|",
+                 "field is missing");
+  testGroupError("filter: no value",
+                 "(filter f1)",
+                 "(filter f1|)|",
+                 "field value is missing: field:<f1>");
 
   // testGroupError("and: missing close parentheis",
   //                "(and f1:'k1' f2:'k2'",
