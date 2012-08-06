@@ -39,4 +39,43 @@ suite('cs-create-domain', function() {
         done();
       });
   });
+
+  test('create again', function(done) {
+    utils
+      .run('cs-create-domain',
+           '--domain-name', 'test',
+           '--database-path', temporaryDatabase.path)
+      .run('cs-create-domain',
+           '--domain-name', 'test',
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        assert.equal(result.code, 1);
+        assert.include(result.output.stdout,
+                       'The domain [test] already exists.');
+
+        context.reopen();
+        var domains = Domain.getAll(context).map(function(domain) {
+              return domain.name;
+            });
+        assert.deepEqual(domains, ['test']);
+
+        done();
+      });
+  });
+
+  test('missing domain name', function(done) {
+    utils
+      .run('cs-create-domain',
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        assert.equal(result.code, 1);
+        assert.include(result.output.stdout,
+                       'You must specify the domain name.');
+
+        context.reopen();
+        assert.deepEqual(Domain.getAll(context), []);
+
+        done();
+      });
+  });
 });
