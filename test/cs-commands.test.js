@@ -89,6 +89,35 @@ suite('cs-create-domain', function() {
   });
 });
 
+suite('cs-delete-domain', function() {
+  setup(commonSetup);
+  teardown(commonTeardown);
+
+  test('delete force', function(done) {
+    utils
+      .run('cs-create-domain',
+           '--domain-name', 'test',
+           '--database-path', temporaryDatabase.path)
+      .run('cs-delete-domain',
+           '--force',
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        assert.equal(result.code, 0);
+        assert.include(result.output.stdout,
+                       'Domain [test] has been deleted successfully.');
+
+        context.reopen();
+        var domain = new Domain('test', context);
+        assert.isFalse(domain.exists());
+
+        done();
+      })
+      .error(function(e) {
+        done(e);
+      });
+  });
+});
+
 suite('cs-describe-domain', function() {
   setup(commonSetup);
   teardown(commonTeardown);
