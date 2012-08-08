@@ -18,13 +18,13 @@ function commonTeardown() {
   temporaryDatabase = undefined;
 }
 
-suite('cs-create-domain', function() {
+suite('gcs-create-domain', function() {
   setup(commonSetup);
   teardown(commonTeardown);
 
   test('create', function(done) {
     utils
-      .run('cs-create-domain',
+      .run('gcs-create-domain',
            '--domain-name', 'test',
            '--database-path', temporaryDatabase.path)
       .next(function(result) {
@@ -45,10 +45,10 @@ suite('cs-create-domain', function() {
 
   test('create again', function(done) {
     utils
-      .run('cs-create-domain',
+      .run('gcs-create-domain',
            '--domain-name', 'test',
            '--database-path', temporaryDatabase.path)
-      .run('cs-create-domain',
+      .run('gcs-create-domain',
            '--domain-name', 'test',
            '--database-path', temporaryDatabase.path)
       .next(function(result) {
@@ -73,7 +73,7 @@ suite('cs-create-domain', function() {
 
   test('missing domain name', function(done) {
     utils
-      .run('cs-create-domain',
+      .run('gcs-create-domain',
            '--database-path', temporaryDatabase.path)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
@@ -93,16 +93,16 @@ suite('cs-create-domain', function() {
   });
 });
 
-suite('cs-delete-domain', function() {
+suite('gcs-delete-domain', function() {
   setup(commonSetup);
   teardown(commonTeardown);
 
   test('delete force', function(done) {
     utils
-      .run('cs-create-domain',
+      .run('gcs-create-domain',
            '--domain-name', 'test',
            '--database-path', temporaryDatabase.path)
-      .run('cs-delete-domain',
+      .run('gcs-delete-domain',
            '--domain-name', 'test',
            '--force',
            '--database-path', temporaryDatabase.path)
@@ -126,7 +126,7 @@ suite('cs-delete-domain', function() {
 
   test('delete not-existing domain', function(done) {
     utils
-      .run('cs-delete-domain',
+      .run('gcs-delete-domain',
            '--domain-name', 'test',
            '--force',
            '--database-path', temporaryDatabase.path)
@@ -145,7 +145,7 @@ suite('cs-delete-domain', function() {
 
   test('delete without domain', function(done) {
     utils
-      .run('cs-delete-domain',
+      .run('gcs-delete-domain',
            '--force',
            '--database-path', temporaryDatabase.path)
       .next(function(result) {
@@ -162,7 +162,7 @@ suite('cs-delete-domain', function() {
   });
 });
 
-suite('cs-describe-domain', function() {
+suite('gcs-describe-domain', function() {
   setup(commonSetup);
   teardown(commonTeardown);
 
@@ -181,13 +181,13 @@ suite('cs-describe-domain', function() {
 
   test('describe one', function(done) {
     utils
-      .run('cs-create-domain',
+      .run('gcs-create-domain',
            '--domain-name', 'domain2',
            '--database-path', temporaryDatabase.path)
-      .run('cs-create-domain',
+      .run('gcs-create-domain',
            '--domain-name', 'domain1',
            '--database-path', temporaryDatabase.path)
-      .run('cs-describe-domain',
+      .run('gcs-describe-domain',
            '--domain-name', 'domain1',
            '--database-path', temporaryDatabase.path)
       .next(function(result) {
@@ -204,13 +204,13 @@ suite('cs-describe-domain', function() {
 
   test('describe all', function(done) {
     utils
-      .run('cs-create-domain',
+      .run('gcs-create-domain',
            '--domain-name', 'domain2',
            '--database-path', temporaryDatabase.path)
-      .run('cs-create-domain',
+      .run('gcs-create-domain',
            '--domain-name', 'domain1',
            '--database-path', temporaryDatabase.path)
-      .run('cs-describe-domain',
+      .run('gcs-describe-domain',
            '--show-all',
            '--database-path', temporaryDatabase.path)
       .next(function(result) {
@@ -228,16 +228,16 @@ suite('cs-describe-domain', function() {
   });
 });
 
-suite('cs-configure-fields', function() {
+suite('gcs-configure-fields', function() {
   setup(commonSetup);
   teardown(commonTeardown);
 
   function testCreateField(done, name, type) {
     utils
-      .run('cs-create-domain',
+      .run('gcs-create-domain',
            '--domain-name', 'companies',
            '--database-path', temporaryDatabase.path)
-      .run('cs-configure-fields',
+      .run('gcs-configure-fields',
            '--domain-name', 'companies',
            '--name', name,
            '--type', type,
@@ -275,15 +275,15 @@ suite('cs-configure-fields', function() {
 
   function testDeleteField(done, name, type) {
     utils
-      .run('cs-create-domain',
+      .run('gcs-create-domain',
            '--domain-name', 'companies',
            '--database-path', temporaryDatabase.path)
-      .run('cs-configure-fields',
+      .run('gcs-configure-fields',
            '--domain-name', 'companies',
            '--name', name,
            '--type', type,
            '--database-path', temporaryDatabase.path)
-      .run('cs-configure-fields',
+      .run('gcs-configure-fields',
            '--domain-name', 'companies',
            '--name', name,
            '--delete',
@@ -319,15 +319,15 @@ suite('cs-configure-fields', function() {
 
   function testRecreateField(done, name, type) {
     utils
-      .run('cs-create-domain',
+      .run('gcs-create-domain',
            '--domain-name', 'companies',
            '--database-path', temporaryDatabase.path)
-      .run('cs-configure-fields',
+      .run('gcs-configure-fields',
            '--domain-name', 'companies',
            '--name', name,
            '--type', type,
            '--database-path', temporaryDatabase.path)
-      .run('cs-configure-fields',
+      .run('gcs-configure-fields',
            '--domain-name', 'companies',
            '--name', name,
            '--type', type,
@@ -357,10 +357,10 @@ suite('cs-configure-fields', function() {
 
   test('delete not-existing field', function(done) {
     utils
-      .run('cs-create-domain',
+      .run('gcs-create-domain',
            '--domain-name', 'companies',
            '--database-path', temporaryDatabase.path)
-      .run('cs-configure-fields',
+      .run('gcs-configure-fields',
            '--domain-name', 'companies',
            '--name', 'name',
            '--delete',
@@ -380,10 +380,10 @@ suite('cs-configure-fields', function() {
 
   test('create field without type', function(done) {
     utils
-      .run('cs-create-domain',
+      .run('gcs-create-domain',
            '--domain-name', 'companies',
            '--database-path', temporaryDatabase.path)
-      .run('cs-configure-fields',
+      .run('gcs-configure-fields',
            '--domain-name', 'companies',
            '--name', 'name',
            '--database-path', temporaryDatabase.path)
@@ -402,7 +402,7 @@ suite('cs-configure-fields', function() {
 
   test('create field without domain', function(done) {
     utils
-      .run('cs-configure-fields',
+      .run('gcs-configure-fields',
            '--name', 'name',
            '--database-path', temporaryDatabase.path)
       .next(function(result) {
@@ -419,31 +419,31 @@ suite('cs-configure-fields', function() {
   });
 });
 
-suite('cs-index-documents', function() {
+suite('gcs-index-documents', function() {
   setup(commonSetup);
   teardown(commonTeardown);
 
   test('reindex', function(done) {
     utils
-      .run('cs-create-domain',
+      .run('gcs-create-domain',
            '--domain-name', 'companies',
            '--database-path', temporaryDatabase.path)
-      .run('cs-configure-fields',
+      .run('gcs-configure-fields',
            '--domain-name', 'companies',
            '--name', 'name',
            '--type', 'text',
            '--database-path', temporaryDatabase.path)
-      .run('cs-configure-fields',
+      .run('gcs-configure-fields',
            '--domain-name', 'companies',
            '--name', 'age',
            '--type', 'uint',
            '--database-path', temporaryDatabase.path)
-      .run('cs-configure-fields',
+      .run('gcs-configure-fields',
            '--domain-name', 'companies',
            '--name', 'product',
            '--type', 'literal',
            '--database-path', temporaryDatabase.path)
-      .run('cs-index-documents',
+      .run('gcs-index-documents',
            '--domain-name', 'companies',
            '--database-path', temporaryDatabase.path)
       .next(function(result) {
@@ -469,7 +469,7 @@ suite('cs-index-documents', function() {
 
   test('reindex not-existing domain', function(done) {
     utils
-      .run('cs-index-documents',
+      .run('gcs-index-documents',
            '--domain-name', 'test',
            '--database-path', temporaryDatabase.path)
       .next(function(result) {
@@ -487,7 +487,7 @@ suite('cs-index-documents', function() {
 
   test('reindex without domain', function(done) {
     utils
-      .run('cs-index-documents',
+      .run('gcs-index-documents',
            '--database-path', temporaryDatabase.path)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
