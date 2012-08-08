@@ -33,6 +33,11 @@
   },
   "bin": {
     "gcs": "./bin/gcs",
+    "gcs-create-domain": "./bin/gcs-create-domain",
+    "gcs-delete-domain": "./bin/gcs-delete-domain",
+    "gcs-describe-domain": "./bin/gcs-describe-domain",
+    "gcs-configure-fields": "./bin/gcs-configure-fields",
+    "gcs-index-documents": "./bin/gcs-index-documents",
     "gcs-import-examples": "./bin/gcs-import-examples"
   },
   "main": "./lib/server",
