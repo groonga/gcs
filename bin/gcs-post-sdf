@@ -52,8 +52,7 @@ try {
   processor.validate(batches);
 } catch (error) {
   console.log('Validation failed.');
-  var errors = error.errors.map(function(error) { return error.message; });
-  console.log(errors.join('\n'));
+  console.log(error.errors.join('\n'));
   return process.exit(1);
 }
 
