@@ -43,6 +43,10 @@ commandLine
 commandLine.assertHaveDomainName();
 commandLine.assertDomainExists();
 
+function strip(string) {
+  return string.replace(/^\s+|\s+$/g, '');
+}
+
 if (commandLine.options.printStems) {
 } else if (commandLine.options.printStopwords) {
 } else if (commandLine.options.printSynonyms) {
@@ -60,11 +64,12 @@ if (commandLine.options.printStems) {
     var synonymsCSV = fs.readFileSync(synonymsFile, 'UTF-8');
     var synonyms = {};
     synonymsCSV.split('\n').forEach(function(synonym) {
+      synonym = strip(synonym);
       if (!synonym) return;
       var terms = synonym.split(',');
-      var key = terms.shift();
+      var key = strip(terms.shift());
       var previousTerms = synonyms[key] || [];
-      synonyms[key] = previousTerms.concat(terms);
+      synonyms[key] = previousTerms.concat(terms.map(strip));
     });
     commandLine.domain.updateSynonymsSync(synonyms);
     console.log('%s synonyms are loaded.', Object.keys(synonyms).length);
