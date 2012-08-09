@@ -64,5 +64,5 @@ try {
 } catch(error) {
   console.log('Fatal error!');
   console.log(error.message + '\n' + error.stack);
-  process.exit(1);
+  return process.exit(1);
 }
