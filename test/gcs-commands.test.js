@@ -424,7 +424,7 @@ suite('gcs-configure-text-options', function() {
   setup(commonSetup);
   teardown(commonTeardown);
 
-  test('load synonyms', {
+  test('load synonyms', function() {
     utils
       .run('gcs-create-domain',
            '--domain-name', 'companies',
