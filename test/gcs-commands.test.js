@@ -633,7 +633,7 @@ suite('gcs-post-sdf', function() {
     domain.getIndexField('product').setType('literal').createSync();
   }
 
-  test('post add sdf', function(done) {
+  test('post add sdf json', function(done) {
     setupDomain();
     var batchFile = path.join(fixturesDirectory, 'add.sdf.json');
     utils
@@ -660,7 +660,7 @@ suite('gcs-post-sdf', function() {
       });
   });
 
-  test('post delete sdf', function(done) {
+  test('post delete sdf json', function(done) {
     setupDomain();
     var batchFile = path.join(fixturesDirectory, 'delete.sdf.json');
     utils
@@ -691,7 +691,7 @@ suite('gcs-post-sdf', function() {
       });
   });
 
-  test('post invalid sdf', function(done) {
+  test('post invalid sdf json', function(done) {
     setupDomain();
     var batchFile = path.join(fixturesDirectory, 'invalid.sdf.json');
     utils
@@ -718,6 +718,69 @@ suite('gcs-post-sdf', function() {
                              'nofields: You must specify "fields".\n' +
                              'emptyfields: You must specify one or ' +
                                'more fields to "fields".\n' },
+                         result.output.stderr);
+        done();
+      })
+      .error(function(e) {
+        done(e);
+      });
+  });
+
+  test('post no source', function(done) {
+    setupDomain();
+    utils
+      .run('gcs-post-sdf',
+           '--domain-name', 'companies',
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        assert.deepEqual({ code:    result.code,
+                           message: result.output.stdout },
+                         { code:    1,
+                           message: 'You must specify the source SDF.\n' },
+                         result.output.stderr);
+        done();
+      })
+      .error(function(e) {
+        done(e);
+      });
+  });
+
+  test('post unknown format file', function(done) {
+    setupDomain();
+    var batchFile = path.join(__dirname, 'fixtures', 'synonyms.txt');
+    utils
+      .run('gcs-post-sdf',
+           '--domain-name', 'companies',
+           '--source', batchFile,
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        assert.deepEqual({ code:    result.code,
+                           message: result.output.stdout },
+                         { code:    1,
+                           message: 'Processing: ' + batchFile + '\n' +
+                                    'Unknown format\n' },
+                         result.output.stderr);
+        done();
+      })
+      .error(function(e) {
+        done(e);
+      });
+  });
+
+  test('post missing file', function(done) {
+    setupDomain();
+    var batchFile = path.join(__dirname, 'fixtures', 'not-exists.json');
+    utils
+      .run('gcs-post-sdf',
+           '--domain-name', 'companies',
+           '--source', batchFile,
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        assert.deepEqual({ code:    result.code,
+                           message: result.output.stdout },
+                         { code:    1,
+                           message: 'Processing: ' + batchFile + '\n' +
+                                    'No such file\n' },
                          result.output.stderr);
         done();
       })
