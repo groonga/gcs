@@ -122,7 +122,7 @@ suite('database', function() {
         facetEnabled:  true,
         resultEnabled: true,
         searchEnabled: true,
-        state:         'RequiresIndexDocuments'
+        state:         'Active'
       });
     });
 
@@ -138,7 +138,7 @@ suite('database', function() {
         facetEnabled:  true,
         resultEnabled: true,
         searchEnabled: true,
-        state:         'RequiresIndexDocuments'
+        state:         'Active'
       });
     });
 
