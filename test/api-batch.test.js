@@ -191,8 +191,12 @@ suite('documents/batch API', function() {
                 adds: 0,
                 deletes: 0,
                 errors: [
-                  { message: 'invalidfield: The field "unknown1" is unknown.' },
-                  { message: 'invalidfield: The field "unknown2" is unknown.' },
+                  { message: 'invalidfield: The field "unknown1" is unknown. ' +
+                               '(available: address,age,description,' +
+                               'email_address,name,product)' },
+                  { message: 'invalidfield: The field "unknown2" is unknown. ' +
+                               '(available: address,age,description,' +
+                               'email_address,name,product)' },
                   { message: 'invalidfield: The field "name" is null.' },
                   { message: 'nofields: You must specify "fields".' },
                   { message: 'emptyfields: You must specify one or more fields to "fields".' }
