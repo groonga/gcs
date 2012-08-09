@@ -27,6 +27,11 @@ if (!commandLine.options.source) {
 var sourceFile = CLI.resolve(commandLine.options.source);
 console.log('Processing: %s', sourceFile);
 
+if (!path.existsSync(sourceFile)) {
+  console.log('No such file');
+  return process.exit(1);
+}
+
 var format = sourceFile.match(/\.(xml|json)$/i);
 if (!format) {
   console.log('Unknown format');
@@ -41,26 +46,27 @@ if (format != 'json') {
   return process.exit(1);
 }
 
-var sourceText = fs.readFileSync(sourceFile, 'UTF-8');
-var batches = JSON.parse(sourceText);
-var processor = new BatchProcessor({
-      context: commandLine.context,
-      domain: commandLine.domain
-    });
-
 try {
-  processor.validate(batches);
-} catch (error) {
-  console.log('Validation failed.');
-  console.log(error.errors.join('\n'));
-  return process.exit(1);
-}
+  var batches = fs.readFileSync(sourceFile, 'UTF-8');
+  batches = JSON.parse(batches);
+  var processor = new BatchProcessor({
+        context: commandLine.context,
+        domain: commandLine.domain
+      });
 
-try {
+  try {
+    processor.validate(batches);
+  } catch (error) {
+    console.log('Validation failed.');
+    console.log(error.errors.join('\n'));
+    return process.exit(1);
+  }
+
   var result = processor.loadSync(batches);
   console.log('Status: %s', result.status);
   console.log('Added: %s', result.adds);
   console.log('Deleted: %s', result.deletes);
+
 } catch(error) {
   console.log('Fatal error!');
   console.log(error.message + '\n' + error.stack);
