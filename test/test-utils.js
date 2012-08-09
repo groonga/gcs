@@ -183,6 +183,10 @@ exports.run = run;
 Deferred.register('run', function() { return run.apply(this, arguments); });
 
 
+exports.resolve = function(possibleRelativePath) {
+  return path.resolve(process.cwd(), possibleRelativePath);
+};
+
 // activate diff for chai.assert.deepEqual
 
 var chai_utils = require('chai/lib/chai/utils');

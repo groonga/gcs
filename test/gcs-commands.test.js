@@ -1,5 +1,6 @@
 var utils = require('./test-utils');
 var assert = require('chai').assert;
+var path = require('path');
 
 var Domain = require('../lib/database/domain').Domain;
 
@@ -423,6 +424,27 @@ suite('gcs-configure-text-options', function() {
   setup(commonSetup);
   teardown(commonTeardown);
 
+  test('load synonyms', {
+    utils
+      .run('gcs-create-domain',
+           '--domain-name', 'companies',
+           '--database-path', temporaryDatabase.path)
+      .run('gcs-configure-text-options',
+           '--domain-name', 'companies',
+           '--synonyms', path.join(__dirname, 'fixtures', 'synonyms.txt'),
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        assert.deepEqual({ code:    result.code,
+                           message: result.output.stdout },
+                         { code:    0,
+                           message: '2 synonyms are loaded.\n' },
+                         result.output.stderr);
+        done();
+      })
+      .error(function(e) {
+        done(e);
+      });
+  });
 });
 
 suite('gcs-index-documents', function() {
