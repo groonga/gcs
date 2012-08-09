@@ -425,10 +425,8 @@ suite('gcs-configure-text-options', function() {
   teardown(commonTeardown);
 
   test('load synonyms', function() {
+    new Domain('companies', context).createSync();
     utils
-      .run('gcs-create-domain',
-           '--domain-name', 'companies',
-           '--database-path', temporaryDatabase.path)
       .run('gcs-configure-text-options',
            '--domain-name', 'companies',
            '--synonyms', path.join(__dirname, 'fixtures', 'synonyms.txt'),
@@ -438,6 +436,32 @@ suite('gcs-configure-text-options', function() {
                            message: result.output.stdout },
                          { code:    0,
                            message: '2 synonyms are loaded.\n' },
+                         result.output.stderr);
+        done();
+      })
+      .error(function(e) {
+        done(e);
+      });
+  });
+
+  test('print synonyms', function() {
+    var domain = new Domain('companies', context);
+    domain.createSync();
+    domain.updateSynonymsSync({
+      hokkaido: 'dekkaido',
+      tokyo: ['tonkin', 'tokio']
+    });
+    utils
+      .run('gcs-configure-text-options',
+           '--domain-name', 'companies',
+           '--print-synonyms',
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        assert.deepEqual({ code:    result.code,
+                           message: result.output.stdout },
+                         { code:    0,
+                           message: 'hokkaido,dekkaido\n' +
+                                    'tokyo,tokio,tonkin\n' },
                          result.output.stderr);
         done();
       })
