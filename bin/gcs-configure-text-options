@@ -47,6 +47,29 @@ function strip(string) {
   return string.replace(/^\s+|\s+$/g, '');
 }
 
+var printOptions = ['printStems', 'printStopwords', 'printSynonyms'];
+var loadOptions = ['stems', 'stopwords', 'synonyms'];
+
+if (commandLine.hasTooManyExclusiveOptions(printOptions)) {
+  console.log('Too many options. ' +
+              'You must specify just one option from ' +
+              '--print-stems, --print-stopwords, or --print-synonyms.');
+  process.exit(1);
+  return;
+}
+
+if (printOptions.some(function(option) {
+      return commandLine.options[option];
+    }) &&
+    loadOptions.some(function(option) {
+      return commandLine.options[option];
+    })) {
+  console.log('Too many options. ' +
+              'You cannot do print and load on the same time.');
+  process.exit(1);
+  return;
+}
+
 if (commandLine.options.printStems) {
 } else if (commandLine.options.printStopwords) {
 } else if (commandLine.options.printSynonyms) {
