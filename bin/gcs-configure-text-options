@@ -62,9 +62,11 @@ if (commandLine.options.printStems) {
     synonymsCSV.split('\n').forEach(function(synonym) {
       var terms = synonym.split(',');
       var key = terms.shift();
-      synonyms[key] = terms;
+      var previousTerms = synonyms[key] || [];
+      synonyms[key] = previousTerms.concat(terms);
     });
     commandLine.domain.updateSynonymsSync(synonyms);
+    console.log('%s synonyms are loaded.', Object.keys(synonyms).length);
   }
 }
 
