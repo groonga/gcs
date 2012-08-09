@@ -48,5 +48,5 @@ if (commandLine.options.delete) {
   field.type = commandLine.options.type;
   field.createSync();
   console.log('Updated 1 Index Field:');
-  console.log(field.name + ' ' + field.state + ' ' + field.type + ' ()');
+  console.log('%s %s %s (%s)', field.name, field.state, field.type, field.options);
 }
