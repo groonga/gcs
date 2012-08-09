@@ -331,6 +331,23 @@ suite('database', function() {
         assert.equal(dumpExpected, dumpActual);
       });
 
+      test('getSynonymsSync', function() {
+        var domain = new Domain('companies', context);
+        domain.updateSynonymsSync({
+          synonyms: {
+            tokio: ['tonkin', 'tokyo'],
+            dekkaido: 'hokkaido'
+          }
+        });
+
+        var expectedSynonyms = {
+              dekkaido: ['hokkaido'],
+              tokio: ['tokyo', 'tonkin']
+            };
+        var synonyms = domain.getSynonymsSync();
+        assert.deepEqual(synonyms, expectedSynonyms);
+      });
+
       test('getAll', function() {
         var domain3 = new Domain('domain3', context);
         domain3.createSync();
