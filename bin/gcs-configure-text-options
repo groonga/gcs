@@ -46,7 +46,7 @@ commandLine.assertDomainExists();
 if (commandLine.options.printStems) {
 } else if (commandLine.options.printStopwords) {
 } else if (commandLine.options.printSynonyms) {
-  var synonyms = commandLine.database.getSynonymsSync();
+  var synonyms = commandLine.domain.getSynonymsSync();
   Object.keys(synonyms).forEach(function(term) {
     console.log([term].concat(synonyms[term]).join(','));
   });
@@ -64,7 +64,7 @@ if (commandLine.options.printStems) {
       var key = terms.shift();
       synonyms[key] = terms;
     });
-    commandLine.database.updateSynonymsSync(synonyms);
+    commandLine.domain.updateSynonymsSync(synonyms);
   }
 }
 
