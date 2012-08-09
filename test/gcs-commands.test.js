@@ -19,6 +19,22 @@ function commonTeardown() {
   temporaryDatabase = undefined;
 }
 
+function assertDomainNotSpecified(result) {
+  assert.deepEqual({ code:    result.code,
+                     message: result.output.stdout },
+                   { code:    1,
+                     message: 'You must specify the domain name.\n' },
+                   result.output.stderr);
+}
+
+function assertDomainNotExist(result) {
+  assert.deepEqual({ code:    result.code,
+                     message: result.output.stdout },
+                   { code:    1,
+                     message: 'You must specify an existing domain name.\n' },
+                   result.output.stderr);
+}
+
 suite('gcs-create-domain', function() {
   setup(commonSetup);
   teardown(commonTeardown);
@@ -75,11 +91,7 @@ suite('gcs-create-domain', function() {
       .run('gcs-create-domain',
            '--database-path', temporaryDatabase.path)
       .next(function(result) {
-        assert.deepEqual({ code:    result.code,
-                           message: result.output.stdout },
-                         { code:    1,
-                           message: 'You must specify the domain name.\n' },
-                         result.output.stderr);
+        assertDomainNotSpecified(result);
 
         context.reopen();
         assert.deepEqual(Domain.getAll(context), []);
@@ -128,11 +140,7 @@ suite('gcs-delete-domain', function() {
            '--force',
            '--database-path', temporaryDatabase.path)
       .next(function(result) {
-        assert.deepEqual({ code:    result.code,
-                           message: result.output.stdout },
-                         { code:    1,
-                           message: 'You must specify an existing domain name.\n' },
-                         result.output.stderr);
+        assertDomainNotExist(result);
         done();
       })
       .error(function(e) {
@@ -146,11 +154,7 @@ suite('gcs-delete-domain', function() {
            '--force',
            '--database-path', temporaryDatabase.path)
       .next(function(result) {
-        assert.deepEqual({ code:    result.code,
-                           message: result.output.stdout },
-                         { code:    1,
-                           message: 'You must specify the domain name.\n' },
-                         result.output.stderr);
+        assertDomainNotSpecified(result);
         done();
       })
       .error(function(e) {
@@ -386,11 +390,7 @@ suite('gcs-configure-fields', function() {
            '--name', 'name',
            '--database-path', temporaryDatabase.path)
       .next(function(result) {
-        assert.deepEqual({ code:    result.code,
-                           message: result.output.stdout },
-                         { code:    1,
-                           message: 'You must specify the domain name.\n' },
-                         result.output.stderr);
+        assertDomainNotSpecified(result);
         done();
       })
       .error(function(e) {
@@ -423,6 +423,35 @@ suite('gcs-configure-text-options', function() {
       });
   });
 
+  test('load synonyms to not-existing domain', function() {
+    utils
+      .run('gcs-configure-text-options',
+           '--domain-name', 'companies',
+           '--synonyms', path.join(__dirname, 'fixtures', 'synonyms.txt'),
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        assertDomainNotExist(result);
+        done();
+      })
+      .error(function(e) {
+        done(e);
+      });
+  });
+
+  test('load synonyms without domain', function() {
+    utils
+      .run('gcs-configure-text-options',
+           '--synonyms', path.join(__dirname, 'fixtures', 'synonyms.txt'),
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        assertDomainNotSpecified(result);
+        done();
+      })
+      .error(function(e) {
+        done(e);
+      });
+  });
+
   test('print synonyms', function() {
     var domain = new Domain('companies', context);
     domain.createSync();
@@ -442,6 +471,35 @@ suite('gcs-configure-text-options', function() {
                            message: 'hokkaido,dekkaido\n' +
                                     'tokyo,tokio,tonkin\n' },
                          result.output.stderr);
+        done();
+      })
+      .error(function(e) {
+        done(e);
+      });
+  });
+
+  test('print synonyms to not-existing domain', function() {
+    utils
+      .run('gcs-configure-text-options',
+           '--domain-name', 'companies',
+           '--print-synonyms',
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        assertDomainNotExist(result);
+        done();
+      })
+      .error(function(e) {
+        done(e);
+      });
+  });
+
+  test('print synonyms without domain', function() {
+    utils
+      .run('gcs-configure-text-options',
+           '--print-synonyms',
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        assertDomainNotSpecified(result);
         done();
       })
       .error(function(e) {
@@ -498,11 +556,7 @@ suite('gcs-index-documents', function() {
            '--domain-name', 'test',
            '--database-path', temporaryDatabase.path)
       .next(function(result) {
-        assert.deepEqual({ code:    result.code,
-                           message: result.output.stdout },
-                         { code:    1,
-                           message: 'You must specify an existing domain name.\n' },
-                         result.output.stderr);
+        assertDomainNotExist(result);
         done();
       })
       .error(function(e) {
@@ -515,11 +569,7 @@ suite('gcs-index-documents', function() {
       .run('gcs-index-documents',
            '--database-path', temporaryDatabase.path)
       .next(function(result) {
-        assert.deepEqual({ code:    result.code,
-                           message: result.output.stdout },
-                         { code:    1,
-                           message: 'You must specify the domain name.\n' },
-                         result.output.stderr);
+        assertDomainNotSpecified(result);
         done();
       })
       .error(function(e) {
