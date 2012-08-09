@@ -344,6 +344,13 @@ suite('database', function() {
         assert.deepEqual(synonyms, expectedSynonyms);
       });
 
+      test('getSynonymsSync for new domain', function() {
+        var domain = new Domain('companies', context);
+        var expectedSynonyms = {};
+        var synonyms = domain.getSynonymsSync();
+        assert.deepEqual(synonyms, expectedSynonyms);
+      });
+
       test('getAll', function() {
         var domain3 = new Domain('domain3', context);
         domain3.createSync();
