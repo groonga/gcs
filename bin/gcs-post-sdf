@@ -3,6 +3,7 @@
 var CLI = require(__dirname + '/../lib/command-line').CommandLineInterface;
 var commandLine = new CLI();
 var fs = require('fs');
+var path = require('path');
 var BatchProcessor = require(__dirname + '/../lib/batch').Processor;
 
 commandLine
