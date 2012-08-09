@@ -1,0 +1,71 @@
+#!/usr/bin/env node
+
+var CLI = require(__dirname + '/../lib/command-line').CommandLineInterface;
+var commandLine = new CLI();
+var fs = require('fs');
+
+commandLine
+  .option('--name <field name>',
+          'The name of the field you are configuring or deleting. Required.',
+          String)
+  .option('-stems <path to stems file>',
+          'The path for a stemming dictionary file. The stemming ' +
+            'dictionary file should contain one comma-separated ' +
+            'term, stem pair per line. For example:\n' +
+            '  mice, mouse\n' +
+            '  people, person\n' +
+            '  running, run',
+          String)
+  .option('--stopwords <path to stopwords file>',
+          'The path for a stopwords dictionary file. The stopwords ' +
+            'dictionary file should contain one stopword per line. ' +
+            'For example:\n' +
+            '  the\n' +
+            '  or\n' +
+            '  and',
+          String)
+  .option('-synonyms <path to synonyms file>',
+          'The path for a synonyms dictionary file. Each line in the '+
+            'file should specify term forrowed by a comma-separated ' +
+            'list of its synonyms. For example:\n' +
+            '  cat, feline, kitten\n' +
+            '  dog, canine, puppy\n' +
+            '  hourse, equite, ',
+          String)
+  .option('-psm, --print-stems',
+          'List the domain's stems.')
+  .option('-psw, --print-stopwords',
+          'List the domain's stopwords.')
+  .option('-psn, --print-synonyms',
+          'List the domain's synonyms.')
+  .parse();
+
+commandLine.assertHaveDomainName();
+commandLine.assertDomainExists();
+
+if (commandLine.options.printStems) {
+} else if (commandLine.options.printStopwords) {
+} else if (commandLine.options.printSynonyms) {
+  var synonyms = commandLine.database.getSynonymsSync();
+  Object.keys(synonyms).forEach(function(term) {
+    console.log([term].concat(synonyms[term]).join(','));
+  });
+} else {
+  if (commandLine.options.stems) {
+  }
+  if (commandLine.options.stopwords) {
+  }
+  if (commandLine.options.synonyms) {
+    var synonymsFile = CLI.resolve(commandLine.options.synonyms);
+    var synonymsCSV = fs.readFileSync(synonymsFile, 'UTF-8');
+    var synonyms = {};
+    synonymsCSV.split('\n').forEach(function(synonym) {
+      var terms = synonym.split(',');
+      var key = terms.shift();
+      synonyms[key] = terms;
+    });
+    commandLine.database.updateSynonymsSync(synonyms);
+  }
+}
+
+
