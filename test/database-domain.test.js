@@ -307,10 +307,8 @@ suite('database', function() {
         assert.isFalse(domain.isSynonymsTableAvailableSync());
 
         domain.updateSynonymsSync({
-          synonyms: {
-            tokio: ['tokyo'],
-            dekkaido: 'hokkaido'
-          }
+          tokio: ['tokyo'],
+          dekkaido: 'hokkaido'
         });
         assert.isTrue(domain.isSynonymsTableAvailableSync());
 
@@ -334,10 +332,8 @@ suite('database', function() {
       test('getSynonymsSync', function() {
         var domain = new Domain('companies', context);
         domain.updateSynonymsSync({
-          synonyms: {
-            tokio: ['tonkin', 'tokyo'],
-            dekkaido: 'hokkaido'
-          }
+          tokio: ['tonkin', 'tokyo'],
+          dekkaido: 'hokkaido'
         });
 
         var expectedSynonyms = {
