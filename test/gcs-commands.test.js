@@ -419,6 +419,12 @@ suite('gcs-configure-fields', function() {
   });
 });
 
+suite('gcs-configure-text-options', function() {
+  setup(commonSetup);
+  teardown(commonTeardown);
+
+});
+
 suite('gcs-index-documents', function() {
   setup(commonSetup);
   teardown(commonTeardown);
