@@ -747,7 +747,7 @@ suite('gcs-post-sdf', function() {
 
   test('post unknown format file', function(done) {
     setupDomain();
-    var batchFile = path.join(__dirname, 'fixtures', 'synonyms.txt');
+    var batchFile = path.join(__dirname, 'fixture', 'synonyms.txt');
     utils
       .run('gcs-post-sdf',
            '--domain-name', 'companies',
@@ -769,7 +769,7 @@ suite('gcs-post-sdf', function() {
 
   test('post missing file', function(done) {
     setupDomain();
-    var batchFile = path.join(__dirname, 'fixtures', 'not-exists.json');
+    var batchFile = path.join(__dirname, 'fixture', 'not-exists.json');
     utils
       .run('gcs-post-sdf',
            '--domain-name', 'companies',
