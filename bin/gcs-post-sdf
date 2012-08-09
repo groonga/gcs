@@ -56,15 +56,13 @@ try {
   return process.exit(1);
 }
 
-processor.load(batches)
-  .next(function(result) {
-    console.log('Status: %s', result.status);
-    console.log('Added: %s', result.adds);
-    console.log('Deleted: %s', result.deletes);
-    process.exit(0);
-  })
-  .error(function(error) {
-    console.log('Fatal error!');
-    console.log(error.message + '\n' + error.stack);
-    process.exit(1);
-  });
+try {
+  var result = processor.loadSync(batches);
+  console.log('Status: %s', result.status);
+  console.log('Added: %s', result.adds);
+  console.log('Deleted: %s', result.deletes);
+} catch(error) {
+  console.log('Fatal error!');
+  console.log(error.message + '\n' + error.stack);
+  process.exit(1);
+}

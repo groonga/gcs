@@ -41,26 +41,37 @@ suite('batch/processor/Processor (instance methods)', function() {
     assert.equal(processor.databasePath, temporaryDatabase.path);
   });
 
+  function assertSuccess(result, adds, deletes, expectedDump) {
+    var expected = {
+          status: 'success',
+          adds: adds,
+          deletes: deletes
+        };
+    assert.deepEqual(result, expected);
+    var dump = context.commandSync('dump', {
+          tables: 'companies_00000000000000000000000000'
+        });
+    assert.equal(dump, expectedDump);
+  }
+
   test('load add-batches', function(done) {
     var batches = fs.readFileSync(__dirname + '/fixture/companies/add.sdf.json', 'UTF-8');
     batches = JSON.parse(batches);
     processor.load(batches)
       .next(function(result) {
-        var expected = {
-              status: 'success',
-              adds: 10,
-              deletes: 0
-            };
-        assert.deepEqual(result, expected);
-        var dump = context.commandSync('dump', {
-              tables: 'companies_00000000000000000000000000'
-            });
-        assert.equal(dump, schemeDump + '\n' + loadDump);
+        assertSuccess(result, 10, 0, schemeDump + '\n' + loadDump);
         done();
       })
       .error(function(error) {
         done(error);
       });
+  });
+
+  test('loadSync add-batches', function() {
+    var batches = fs.readFileSync(__dirname + '/fixture/companies/add.sdf.json', 'UTF-8');
+    batches = JSON.parse(batches);
+    var result = processor.loadSync(batches);
+    assertSuccess(result, 10, 0, schemeDump + '\n' + loadDump);
   });
 
   test('load delete-batches', function(done) {
@@ -73,21 +84,22 @@ suite('batch/processor/Processor (instance methods)', function() {
         return processor.load(batches)
       })
       .next(function(result) {
-        var expected = {
-              status: 'success',
-              adds: 0,
-              deletes: 1
-            };
-        assert.deepEqual(result, expected);
-        var dump = context.commandSync('dump', {
-              tables: 'companies_00000000000000000000000000'
-            });
-        assert.equal(dump, schemeDump + '\n' + deletedLoadDump);
+        assertSuccess(result, 0, 1, schemeDump + '\n' + deletedLoadDump);
         done();
       })
       .error(function(error) {
         done(error);
       });
+  });
+
+  test('loadSync delete-batches', function() {
+    var adddBatches = fs.readFileSync(__dirname + '/fixture/companies/add.sdf.json', 'UTF-8');
+    adddBatches = JSON.parse(adddBatches);
+    processor.loadSync(adddBatches);
+    var deleteBatches = fs.readFileSync(__dirname + '/fixture/companies/delete.sdf.json', 'UTF-8');
+    deleteBatches = JSON.parse(deleteBatches);
+    processor.loadSync(deleteBatches);
+    assertSuccess(result, 0, 1, schemeDump + '\n' + deletedLoadDump);
   });
 
   test('validation, valid batches', function() {
