@@ -45,10 +45,8 @@ suite('gcs-create-domain', function() {
   });
 
   test('create again', function(done) {
+    new Domain('test', context).createSync();
     utils
-      .run('gcs-create-domain',
-           '--domain-name', 'test',
-           '--database-path', temporaryDatabase.path)
       .run('gcs-create-domain',
            '--domain-name', 'test',
            '--database-path', temporaryDatabase.path)
@@ -99,10 +97,8 @@ suite('gcs-delete-domain', function() {
   teardown(commonTeardown);
 
   test('delete force', function(done) {
+    new Domain('test', context).createSync();
     utils
-      .run('gcs-create-domain',
-           '--domain-name', 'test',
-           '--database-path', temporaryDatabase.path)
       .run('gcs-delete-domain',
            '--domain-name', 'test',
            '--force',
@@ -181,13 +177,9 @@ suite('gcs-describe-domain', function() {
   }
 
   test('describe one', function(done) {
+    new Domain('domain2', context).createSync();
+    new Domain('domain1', context).createSync();
     utils
-      .run('gcs-create-domain',
-           '--domain-name', 'domain2',
-           '--database-path', temporaryDatabase.path)
-      .run('gcs-create-domain',
-           '--domain-name', 'domain1',
-           '--database-path', temporaryDatabase.path)
       .run('gcs-describe-domain',
            '--domain-name', 'domain1',
            '--database-path', temporaryDatabase.path)
@@ -204,13 +196,9 @@ suite('gcs-describe-domain', function() {
   });
 
   test('describe all', function(done) {
+    new Domain('domain2', context).createSync();
+    new Domain('domain1', context).createSync();
     utils
-      .run('gcs-create-domain',
-           '--domain-name', 'domain2',
-           '--database-path', temporaryDatabase.path)
-      .run('gcs-create-domain',
-           '--domain-name', 'domain1',
-           '--database-path', temporaryDatabase.path)
       .run('gcs-describe-domain',
            '--show-all',
            '--database-path', temporaryDatabase.path)
@@ -234,6 +222,7 @@ suite('gcs-configure-fields', function() {
   teardown(commonTeardown);
 
   function testCreateField(done, name, type) {
+    new Domain('companies', context).createSync();
     utils
       .run('gcs-create-domain',
            '--domain-name', 'companies',
@@ -275,15 +264,12 @@ suite('gcs-configure-fields', function() {
   });
 
   function testDeleteField(done, name, type) {
+    var domain = new Domain('companies', context);
+    domain.createSync();
+    var field = domain.getIndexField(name);
+    field.type = type
+    field.createSync();
     utils
-      .run('gcs-create-domain',
-           '--domain-name', 'companies',
-           '--database-path', temporaryDatabase.path)
-      .run('gcs-configure-fields',
-           '--domain-name', 'companies',
-           '--name', name,
-           '--type', type,
-           '--database-path', temporaryDatabase.path)
       .run('gcs-configure-fields',
            '--domain-name', 'companies',
            '--name', name,
@@ -319,15 +305,12 @@ suite('gcs-configure-fields', function() {
   });
 
   function testRecreateField(done, name, type) {
+    var domain = new Domain('companies', context);
+    domain.createSync();
+    var field = domain.getIndexField(name);
+    field.type = type
+    field.createSync();
     utils
-      .run('gcs-create-domain',
-           '--domain-name', 'companies',
-           '--database-path', temporaryDatabase.path)
-      .run('gcs-configure-fields',
-           '--domain-name', 'companies',
-           '--name', name,
-           '--type', type,
-           '--database-path', temporaryDatabase.path)
       .run('gcs-configure-fields',
            '--domain-name', 'companies',
            '--name', name,
@@ -357,10 +340,8 @@ suite('gcs-configure-fields', function() {
   });
 
   test('delete not-existing field', function(done) {
+    new Domain('companies', context).createSync();
     utils
-      .run('gcs-create-domain',
-           '--domain-name', 'companies',
-           '--database-path', temporaryDatabase.path)
       .run('gcs-configure-fields',
            '--domain-name', 'companies',
            '--name', 'name',
@@ -380,10 +361,8 @@ suite('gcs-configure-fields', function() {
   });
 
   test('create field without type', function(done) {
+    new Domain('companies', context).createSync();
     utils
-      .run('gcs-create-domain',
-           '--domain-name', 'companies',
-           '--database-path', temporaryDatabase.path)
       .run('gcs-configure-fields',
            '--domain-name', 'companies',
            '--name', 'name',
@@ -476,25 +455,19 @@ suite('gcs-index-documents', function() {
   teardown(commonTeardown);
 
   test('reindex', function(done) {
+    var domain = new Domain('companies', context);
+    domain.createSync();
+    var textField = domain.getIndexField('name');
+    textField.type = 'text'
+    textField.createSync();
+    var uintField = domain.getIndexField('age');
+    uintField.type = 'uint'
+    uintField.createSync();
+    var literalField = domain.getIndexField('product');
+    literalField.type = 'literal'
+    literalField.createSync();
+
     utils
-      .run('gcs-create-domain',
-           '--domain-name', 'companies',
-           '--database-path', temporaryDatabase.path)
-      .run('gcs-configure-fields',
-           '--domain-name', 'companies',
-           '--name', 'name',
-           '--type', 'text',
-           '--database-path', temporaryDatabase.path)
-      .run('gcs-configure-fields',
-           '--domain-name', 'companies',
-           '--name', 'age',
-           '--type', 'uint',
-           '--database-path', temporaryDatabase.path)
-      .run('gcs-configure-fields',
-           '--domain-name', 'companies',
-           '--name', 'product',
-           '--type', 'literal',
-           '--database-path', temporaryDatabase.path)
       .run('gcs-index-documents',
            '--domain-name', 'companies',
            '--database-path', temporaryDatabase.path)
