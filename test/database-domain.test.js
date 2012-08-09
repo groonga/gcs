@@ -302,7 +302,7 @@ suite('database', function() {
         assert.equal(dump, expectedDump);
       });
 
-      test('updateSynonymsSync', function() {
+      test('updateSynonymsSync, initialize', function() {
         var domain = new Domain('companies', context);
         assert.isFalse(domain.hasSynonymsTableSync());
 
@@ -322,6 +322,32 @@ suite('database', function() {
              '["_key","synonyms"],\n' +
              '["tokio",["tokyo"]],\n' +
              '["dekkaido",["hokkaido"]]\n' +
+             ']';
+        var dumpActual = context.commandSync('dump', {
+              tables: domain.synonymsTableName
+            });
+        assert.equal(dumpExpected, dumpActual);
+      });
+
+      test('updateSynonymsSync, replace', function() {
+        var domain = new Domain('companies', context);
+        domain.updateSynonymsSync({
+          tokio: ['tokyo'],
+          dekkaido: 'hokkaido'
+        });
+        domain.updateSynonymsSync({
+          tokio: ['tonkin']
+        });
+
+        var dumpExpected =
+             'table_create ' + domain.synonymsTableName +  ' ' +
+               'TABLE_HASH_KEY|KEY_NORMALIZE ShortText\n' +
+             'column_create ' + domain.synonymsTableName + ' ' +
+               'synonyms COLUMN_VECTOR ShortText\n' +
+             'load --table ' + domain.synonymsTableName + '\n' +
+             '[\n' +
+             '["_key","synonyms"],\n' +
+             '["tokio",["tonkin"]]\n' +
              ']';
         var dumpActual = context.commandSync('dump', {
               tables: domain.synonymsTableName
