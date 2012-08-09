@@ -777,14 +777,14 @@ suite('Configuration API', function() {
       })
       .next(function() {
         domain = new Domain('companies', context);
-        assert.isFalse(domain.isSynonymsTableAvailableSync());
+        assert.isFalse(domain.hasSynonymsTableSync());
       })
       .get('/?Version=2011-02-01&Action=UpdateSynonymOptions&' +
            'DomainName=companies&Synonyms='+synonyms, {
         'Host': 'cloudsearch.localhost'
       })
       .next(function(response) {
-        assert.isTrue(domain.isSynonymsTableAvailableSync());
+        assert.isTrue(domain.hasSynonymsTableSync());
 
         response = toParsedResponse(response);
         assert.deepEqual(response.pattern,

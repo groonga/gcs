@@ -304,13 +304,13 @@ suite('database', function() {
 
       test('updateSynonymsSync', function() {
         var domain = new Domain('companies', context);
-        assert.isFalse(domain.isSynonymsTableAvailableSync());
+        assert.isFalse(domain.hasSynonymsTableSync());
 
         domain.updateSynonymsSync({
           tokio: ['tokyo'],
           dekkaido: 'hokkaido'
         });
-        assert.isTrue(domain.isSynonymsTableAvailableSync());
+        assert.isTrue(domain.hasSynonymsTableSync());
 
         var dumpExpected =
              'table_create ' + domain.synonymsTableName +  ' ' +
