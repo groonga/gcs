@@ -33,11 +33,11 @@ commandLine
             '  hourse, equite, ',
           String)
   .option('-psm, --print-stems',
-          'List the domain's stems.')
+          'List the domain\'s stems.')
   .option('-psw, --print-stopwords',
-          'List the domain's stopwords.')
+          'List the domain\'s stopwords.')
   .option('-psn, --print-synonyms',
-          'List the domain's synonyms.')
+          'List the domain\'s synonyms.')
   .parse();
 
 commandLine.assertHaveDomainName();
