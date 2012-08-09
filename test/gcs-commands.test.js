@@ -268,7 +268,7 @@ suite('gcs-configure-fields', function() {
   setup(commonSetup);
   teardown(commonTeardown);
 
-  function testCreateField(done, name, type) {
+  function testCreateField(done, name, type, options) {
     new Domain('companies', context).createSync();
     utils
       .run('gcs-create-domain',
@@ -284,7 +284,7 @@ suite('gcs-configure-fields', function() {
                            message: result.output.stdout },
                          { code:    0,
                            message: 'Updated 1 Index Field:\n' +
-                                    name + ' Active ' + type + ' ()\n' },
+                                    name + ' Active ' + type + ' (' + options + ')\n' },
                          result.output.stderr);
 
         context.reopen();
@@ -301,13 +301,13 @@ suite('gcs-configure-fields', function() {
   }
 
   test('create text field', function(done) {
-    testCreateField(done, 'name', 'text');
+    testCreateField(done, 'name', 'text', 'Search Facet Result');
   });
   test('create uint field', function(done) {
-    testCreateField(done, 'age', 'uint');
+    testCreateField(done, 'age', 'uint', 'Search Result');
   });
   test('create literal field', function(done) {
-    testCreateField(done, 'product', 'literal');
+    testCreateField(done, 'product', 'literal', 'Search Facet Result');
   });
 
   function testDeleteField(done, name, type) {
