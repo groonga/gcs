@@ -101,12 +101,14 @@ suite('database', function() {
         facetEnabled:  field.facetEnabled,
         resultEnabled: field.resultEnabled,
         searchEnabled: field.searchEnabled,
-        state:         field.state
+        state:         field.state,
+        options:       field.options
       }, {
-        facetEnabled:  false,
+        facetEnabled:  true,
         resultEnabled: true,
         searchEnabled: true,
-        state:         'Active'
+        state:         'Active',
+        options:       'Search Facet Result'
       });
     });
 
@@ -117,12 +119,14 @@ suite('database', function() {
         facetEnabled:  field.facetEnabled,
         resultEnabled: field.resultEnabled,
         searchEnabled: field.searchEnabled,
-        state:         field.state
+        state:         field.state,
+        options:       field.options
       }, {
-        facetEnabled:  true,
+        facetEnabled:  false,
         resultEnabled: true,
         searchEnabled: true,
-        state:         'Active'
+        state:         'Active',
+        options:       'Search Result'
       });
     });
 
@@ -133,12 +137,14 @@ suite('database', function() {
         facetEnabled:  field.facetEnabled,
         resultEnabled: field.resultEnabled,
         searchEnabled: field.searchEnabled,
-        state:         field.state
+        state:         field.state,
+        options:       field.options
       }, {
         facetEnabled:  true,
         resultEnabled: true,
         searchEnabled: true,
-        state:         'Active'
+        state:         'Active',
+        options:       'Search Facet Result'
       });
     });
 
