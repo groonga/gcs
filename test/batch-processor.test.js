@@ -98,7 +98,7 @@ suite('batch/processor/Processor (instance methods)', function() {
     processor.loadSync(adddBatches);
     var deleteBatches = fs.readFileSync(__dirname + '/fixture/companies/delete.sdf.json', 'UTF-8');
     deleteBatches = JSON.parse(deleteBatches);
-    processor.loadSync(deleteBatches);
+    var result = processor.loadSync(deleteBatches);
     assertSuccess(result, 0, 1, schemeDump + '\n' + deletedLoadDump);
   });
 
