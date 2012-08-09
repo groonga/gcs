@@ -558,15 +558,9 @@ suite('gcs-index-documents', function() {
   test('reindex', function(done) {
     var domain = new Domain('companies', context);
     domain.createSync();
-    var textField = domain.getIndexField('name');
-    textField.type = 'text'
-    textField.createSync();
-    var uintField = domain.getIndexField('age');
-    uintField.type = 'uint'
-    uintField.createSync();
-    var literalField = domain.getIndexField('product');
-    literalField.type = 'literal'
-    literalField.createSync();
+    domain.getIndexField('name').setType('text').createSync();
+    domain.getIndexField('age').setType('uint').createSync();
+    domain.getIndexField('product').setType('literal').createSync();
 
     utils
       .run('gcs-index-documents',
@@ -576,15 +570,16 @@ suite('gcs-index-documents', function() {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
                          { code:    0,
-                           message: '===========================================\n' +
-                                    'Indexing documents for domain [companies]\n' +
-                                    '\n' +
-                                    'Now indexing fields:\n' +
-                                    '===========================================\n' +
-                                    'age\n' +
-                                    'name\n' +
-                                    'product\n' +
-                                    '===========================================\n' },
+                           message:
+                             '===========================================\n' +
+                             'Indexing documents for domain [companies]\n' +
+                             '\n' +
+                             'Now indexing fields:\n' +
+                             '===========================================\n' +
+                             'age\n' +
+                             'name\n' +
+                             'product\n' +
+                             '===========================================\n' },
                          result.output.stderr);
         done();
       })
@@ -619,4 +614,139 @@ suite('gcs-index-documents', function() {
         done(e);
       });
   });
+});
+
+suite('gcs-post-sdf', function() {
+  setup(commonSetup);
+  teardown(commonTeardown);
+
+  var fixturesDirectory = path.join(__dirname, 'fixtures', 'companies');
+  
+  function setupDomain() {
+    var domain = new Domain('companies', context);
+    domain.createSync();
+    domain.getIndexField('name').setType('text').createSync();
+    domain.getIndexField('age').setType('uint').createSync();
+    domain.getIndexField('product').setType('literal').createSync();
+  }
+
+  test('post add sdf', function(done) {
+    setupDomain();
+    var batchFile = path.join(fixturesDirectory, 'add.sdf.json');
+    utils
+      .run('gcs-post-sdf',
+           '--domain-name', 'companies',
+           '--source', batchFile,
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        assert.deepEqual({ code:    result.code,
+                           message: result.output.stdout },
+                         { code:    0,
+                           message:
+                             'Processing: ' + batchFile + '\n' +
+                             'Detected source format for ' + 
+                               'add.sdf.json as json\n' +
+                             'Status: success\n' +
+                             'Added: 10\n' +
+                             'Deleted: 0\n' },
+                         result.output.stderr);
+        done();
+      })
+      .error(function(e) {
+        done(e);
+      });
+  });
+
+  test('post delete sdf', function(done) {
+    setupDomain();
+    var batchFile = path.join(fixturesDirectory, 'delete.sdf.json');
+    utils
+      .run('gcs-post-sdf',
+           '--domain-name', 'companies',
+           '--source', path.join(fixturesDirectory, 'add.sdf.json'),
+           '--database-path', temporaryDatabase.path)
+      .run('gcs-post-sdf',
+           '--domain-name', 'companies',
+           '--source', batchFile,
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        assert.deepEqual({ code:    result.code,
+                           message: result.output.stdout },
+                         { code:    0,
+                           message:
+                             'Processing: ' + batchFile + '\n' +
+                             'Detected source format for ' + 
+                               'delete.sdf.json as json\n' +
+                             'Status: success\n' +
+                             'Added: 0\n' +
+                             'Deleted: 1\n' },
+                         result.output.stderr);
+        done();
+      })
+      .error(function(e) {
+        done(e);
+      });
+  });
+
+  test('post invalid sdf', function(done) {
+    setupDomain();
+    var batchFile = path.join(fixturesDirectory, 'invalid.sdf.json');
+    utils
+      .run('gcs-post-sdf',
+           '--domain-name', 'companies',
+           '--source', batchFile,
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        assert.deepEqual({ code:    result.code,
+                           message: result.output.stdout },
+                         { code:    1,
+                           message:
+                             'Processing: ' + batchFile + '\n' +
+                             'Detected source format for ' + 
+                               'delete.sdf.json as json\n' +
+                             'Validation failed.\n' +
+                             'invalidfield: The field "unknown1" is ' +
+                               'unknown. (available: address,age,' +
+                               'description,email_address,name,product)\n' +
+                             'invalidfield: The field "unknown2" is ' +
+                               'unknown. (available: address,age,' +
+                               'description,email_address,name,product)\n' +
+                             'invalidfield: The field "name" is null.\n' +
+                             'nofields: You must specify "fields".\n' +
+                             'emptyfields: You must specify one or ' +
+                               'more fields to "fields".\n' },
+                         result.output.stderr);
+        done();
+      })
+      .error(function(e) {
+        done(e);
+      });
+  });
+
+  test('post not-existing domain', function(done) {
+    utils
+      .run('gcs-post-sdf',
+           '--domain-name', 'test',
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        assertDomainNotExist(result);
+        done();
+      })
+      .error(function(e) {
+        done(e);
+      });
+  });
+
+  test('post without domain', function(done) {
+    utils
+      .run('gcs-post-sdf',
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        assertDomainNotSpecified(result);
+        done();
+      })
+      .error(function(e) {
+        done(e);
+      });
+  });  
 });
