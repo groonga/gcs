@@ -1,0 +1,69 @@
+#!/usr/bin/env node
+
+var CLI = require(__dirname + '/../lib/command-line').CommandLineInterface;
+var commandLine = new CLI();
+var fs = require('fs');
+
+commandLine
+  .usage('--source <path to SDF file> [options]')
+  .option('-s, --source <path to SDF file>',
+          'The path to a file which contains the SDF data you want to upload.',
+          String)
+  .option('-d, --domain-name <domain name>',
+          'The name of the domain that you are updating. Required.',
+          String)
+  .parse();
+
+commandLine.assertHaveDomainName();
+commandLine.assertDomainExists();
+
+var sourceFile = CLI.resolve(commandLine.options.source);
+if (!sourceFile) {
+  console.log('You must specify the source SDF.');
+  return process.exit(1);
+}
+
+console.log('Processing: %1', sourceFile);
+
+var format = sourceFile.match(/\.(xml|json)$/i);
+if (!format) {
+  console.log('Unknown format');
+  return process.exit(1);
+}
+
+format = format[1].toLowerCase();
+console.log('Detected source format for %s as %s', path.basename(sourceFile), format)
+
+if (format != 'json') {
+  console.log('Unsupported format: %s');
+  return process.exit(1);
+}
+
+var sourceText = fs.readFileSync(sourceFile, 'UTF-8');
+var batches = JSON.parse(sourceText);
+var processor = new BatchProcessor({
+      context: commandLine.context,
+      domain: commandLine.domain
+    });
+
+try {
+  processor.validate(batches);
+} catch (error) {
+  console.log('Validation failed.');
+  var errors = error.errors.map(function(error) { return error.message; });
+  console.log(errors.join('\n'));
+  return process.exit(1);
+}
+
+processor.load(batches);
+  .next(function(result) {
+    console.log('Status: %s', result.status);
+    console.log('Added: %s', result.adds);
+    console.log('Deleted: %s', result.deletes);
+    process.exit(0);
+  })
+  .error(function(error) {
+    console.log('Fatal error!');
+    console.log(error.message + '\n' + error.stack);
+    process.exit(1);
+  });
