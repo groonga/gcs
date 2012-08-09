@@ -235,8 +235,8 @@ suite('gcs-describe-domain', function() {
                              '\n' +
                              'Fields:\n' +
                              '=======\n' +
+                             '======================\n' +
                              '\n' +
-                             '======================\n'
                              '=== Domain Summary ===\n' +
                              'Domain Name: domain2\n' +
                              'Document Service endpoint: ' +
