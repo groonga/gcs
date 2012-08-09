@@ -620,7 +620,7 @@ suite('gcs-post-sdf', function() {
   setup(commonSetup);
   teardown(commonTeardown);
 
-  var fixturesDirectory = path.join(__dirname, 'fixtures', 'companies');
+  var fixturesDirectory = path.join(__dirname, 'fixture', 'companies');
   
   function setupDomain() {
     var domain = new Domain('companies', context);
@@ -706,7 +706,7 @@ suite('gcs-post-sdf', function() {
                            message:
                              'Processing: ' + batchFile + '\n' +
                              'Detected source format for ' + 
-                               'delete.sdf.json as json\n' +
+                               'invalid.sdf.json as json\n' +
                              'Validation failed.\n' +
                              'invalidfield: The field "unknown1" is ' +
                                'unknown. (available: address,age,' +
