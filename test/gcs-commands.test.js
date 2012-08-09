@@ -626,6 +626,9 @@ suite('gcs-post-sdf', function() {
     var domain = new Domain('companies', context);
     domain.createSync();
     domain.getIndexField('name').setType('text').createSync();
+    domain.getIndexField('address').setType('text').createSync();
+    domain.getIndexField('email_address').setType('text').createSync();
+    domain.getIndexField('description').setType('text').createSync();
     domain.getIndexField('age').setType('uint').createSync();
     domain.getIndexField('product').setType('literal').createSync();
   }
