@@ -41,7 +41,7 @@ function report(domain) {
   console.log('=======');
   domain.indexFields.forEach(function(field) {
     console.log('%s %s %s (%s)',
-                field.name, field.status, field.type, field.options);
+                field.name, field.state, field.type, field.options);
   });
   console.log('======================');
 }
