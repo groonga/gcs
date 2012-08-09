@@ -167,19 +167,6 @@ suite('gcs-describe-domain', function() {
   setup(commonSetup);
   teardown(commonTeardown);
 
-  function report(domain, hostname) {
-    return [
-      'Domain Name               ' + domain.name,
-      'Document Service Endpoint ' + domain.getDocumentsEndpoint(hostname),
-      'Search Endpoint           ' + domain.getSearchEndpoint(hostname),
-      'Searchable Documents      ' + domain.searchableDocumentsCount,
-      'Index Fields              ' + domain.name,
-      'SearchPartitionCount      ' + domain.searchPartitionCount,
-      'SearchInstanceCount       ' + domain.searchInstanceCount,
-      'SearchInstanceType        ' + domain.searchInstanceType
-    ].join('\n');
-  }
-
   test('describe one', function(done) {
     new Domain('domain2', context).createSync();
     new Domain('domain1', context).createSync();
@@ -188,9 +175,28 @@ suite('gcs-describe-domain', function() {
            '--domain-name', 'domain1',
            '--database-path', temporaryDatabase.path)
       .next(function(result) {
-        assert.equal(result.code, 0, result.output.stderr);
-        assert.include(result.output.stdout,
-                       report(new Domain('domain1', context), 'localhost'));
+        var domain = new Domain('domain1', context);
+        assert.deepEqual({ code: result.code, message: result.output.stdout },
+                         { code: 0,
+                           message:
+                             '=== Domain Summary ===\n' +
+                             'Domain Name: domain1\n' +
+                             'Document Service endpoint: ' +
+                               domain.getDocumentsEndpoint('localhost') + '\n' +
+                             'Search Service endpoint: ' +
+                               domain.getSearchEndpoint('localhost') + '\n' +
+                             'SearchInstanceType: null\n' +
+                             'SearchPartitionCount: 0\n' +
+                             'SearchInstanceCount: 0\n' +
+                             'Searchable Documents: 0\n' +
+                             'Current configuration changes require ' +
+                               'a call to IndexDocuments: No\n' +
+                             '\n' +
+                             '=== Domain Configuration ===\n' +
+                             '\n' +
+                             'Fields:\n' +
+                             '=======\n' +
+                             '======================\n' });
 
         done();
       })
@@ -207,11 +213,48 @@ suite('gcs-describe-domain', function() {
            '--show-all',
            '--database-path', temporaryDatabase.path)
       .next(function(result) {
-        assert.equal(result.code, 0, result.output.stderr);
-        assert.include(result.output.stdout,
-                       report(new Domain('domain2', context), 'localhost'));
-        assert.include(result.output.stdout,
-                       report(new Domain('domain1', context), 'localhost'));
+        var domain1 = new Domain('domain1', context);
+        var domain2 = new Domain('domain2', context);
+        assert.deepEqual({ code: result.code, message: result.output.stdout },
+                         { code: 0,
+                           message:
+                             '=== Domain Summary ===\n' +
+                             'Domain Name: domain1\n' +
+                             'Document Service endpoint: ' +
+                               domain1.getDocumentsEndpoint('localhost') + '\n' +
+                             'Search Service endpoint: ' +
+                               domain1.getSearchEndpoint('localhost') + '\n' +
+                             'SearchInstanceType: null\n' +
+                             'SearchPartitionCount: 0\n' +
+                             'SearchInstanceCount: 0\n' +
+                             'Searchable Documents: 0\n' +
+                             'Current configuration changes require ' +
+                               'a call to IndexDocuments: No\n' +
+                             '\n' +
+                             '=== Domain Configuration ===\n' +
+                             '\n' +
+                             'Fields:\n' +
+                             '=======\n' +
+                             '\n' +
+                             '======================\n'
+                             '=== Domain Summary ===\n' +
+                             'Domain Name: domain2\n' +
+                             'Document Service endpoint: ' +
+                               domain2.getDocumentsEndpoint('localhost') + '\n' +
+                             'Search Service endpoint: ' +
+                               domain2.getSearchEndpoint('localhost') + '\n' +
+                             'SearchInstanceType: null\n' +
+                             'SearchPartitionCount: 0\n' +
+                             'SearchInstanceCount: 0\n' +
+                             'Searchable Documents: 0\n' +
+                             'Current configuration changes require ' +
+                               'a call to IndexDocuments: No\n' +
+                             '\n' +
+                             '=== Domain Configuration ===\n' +
+                             '\n' +
+                             'Fields:\n' +
+                             '=======\n' +
+                             '======================\n' });
 
         done();
       })

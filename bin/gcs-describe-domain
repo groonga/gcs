@@ -51,6 +51,7 @@ if (commandLine.options.domainName) {
 } else {
   var domains = CLI.Domain.getAll(commandLine.context);
   domains.forEach(function(domain, index) {
+    if (index) console.log('');
     report(domain);
   });
 }
