@@ -24,7 +24,7 @@ commandLine
             '  or\n' +
             '  and',
           String)
-  .option('-synonyms <path to synonyms file>',
+  .option('--synonyms <path to synonyms file>',
           'The path for a synonyms dictionary file. Each line in the '+
             'file should specify term forrowed by a comma-separated ' +
             'list of its synonyms. For example:\n' +
