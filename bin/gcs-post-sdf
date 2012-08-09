@@ -18,13 +18,13 @@ commandLine
 commandLine.assertHaveDomainName();
 commandLine.assertDomainExists();
 
-var sourceFile = CLI.resolve(commandLine.options.source);
-if (!sourceFile) {
+if (!commandLine.options.source) {
   console.log('You must specify the source SDF.');
   return process.exit(1);
 }
 
-console.log('Processing: %1', sourceFile);
+var sourceFile = CLI.resolve(commandLine.options.source);
+console.log('Processing: %s', sourceFile);
 
 var format = sourceFile.match(/\.(xml|json)$/i);
 if (!format) {
