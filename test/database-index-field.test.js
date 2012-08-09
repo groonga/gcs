@@ -106,7 +106,7 @@ suite('database', function() {
         facetEnabled:  false,
         resultEnabled: true,
         searchEnabled: true,
-        state:         'RequiresIndexDocuments'
+        state:         'Active'
       });
     });
 

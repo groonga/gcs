@@ -241,7 +241,7 @@ suite('gcs-configure-fields', function() {
                            message: result.output.stdout },
                          { code:    0,
                            message: 'Updated 1 Index Field:\n' +
-                                    name + ' RequiresIndexDocuments ' + type + ' ()\n' },
+                                    name + ' Active ' + type + ' ()\n' },
                          result.output.stderr);
 
         context.reopen();
