@@ -518,5 +518,100 @@ suite('database', function() {
         assert.deepEqual(actualDump.slice(-2), expectedDump);
       });
     });
+
+    suite('configuration operations', function() {
+      var temporaryDatabase;
+      var context;
+      var domain;
+
+      setup(function() {
+        temporaryDatabase = utils.createTemporaryDatabase();
+        context = temporaryDatabase.get();
+        domain = new Domain('companies', context);
+        domain.createSync();
+      });
+
+      teardown(function() {
+        domain = undefined;
+        temporaryDatabase.teardown();
+        temporaryDatabase = undefined;
+      });
+
+      test('setConfiguration', function() {
+        domain.setConfiguration('key1_string', 'abc');
+        domain.setConfiguration('key2_number', 123);
+        domain.setConfiguration('key3_hash', { value: true });
+
+        var dumpExpected =
+             'table_create ' + domain.tableName +  ' ' +
+               'TABLE_HASH_KEY ShortText\n' +
+             'table_create ' + domain.configurationsTableName +  ' ' +
+               'TABLE_HASH_KEY ShortText\n' +
+             'column_create ' + domain.configurationsTableName + ' ' +
+               'value COLUMN_SCALAR ShortText\n' +
+             'table_create ' + domain.termsTableName +  ' ' +
+               'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
+               '--default_tokenizer TokenBigram\n' +
+             'load --table ' + domain.configurationsTableName + '\n' +
+             '[\n' +
+             '["_key","value"],\n' +
+             '["key1_string","\\"abc\\""],\n' +
+             '["key2_number","123"],\n' +
+             '["key3_hash","{\\"value\\":true}"]\n' +
+             ']';
+        var dumpActual = context.commandSync('dump', {
+              tables: domain.configurationsTableName
+            });
+        assert.equal(dumpExpected, dumpActual);
+      });
+
+      test('getConfiguration', function() {
+        var expectedValues = {
+              string: 'abc',
+              number: 123,
+              hash: { value: true }
+            };
+        domain.setConfiguration('key1_string', expectedValues.string);
+        domain.setConfiguration('key2_number', expectedValues.number);
+        domain.setConfiguration('key3_hash', expectedValues.hash);
+
+        var actualValues = {
+              string: domain.getConfiguration('key1_string'),
+              number: domain.getConfiguration('key2_number'),
+              hash: domain.getConfiguration('key3_hash'),
+            };
+        assert.deepEqual(actualValues, expectedValues);
+      });
+
+      test('getConfiguration (undefined configuration)', function() {
+        assert.deepEqual(undefined, domain.getConfiguration('unknown'));
+      });
+
+      test('deleteConfiguration', function() {
+        domain.setConfiguration('key1_string', 'abc');
+        domain.setConfiguration('key2_number', 123);
+        domain.deleteConfiguration('key2_number');
+
+        var dumpExpected =
+             'table_create ' + domain.tableName +  ' ' +
+               'TABLE_HASH_KEY ShortText\n' +
+             'table_create ' + domain.configurationsTableName +  ' ' +
+               'TABLE_HASH_KEY ShortText\n' +
+             'column_create ' + domain.configurationsTableName + ' ' +
+               'value COLUMN_SCALAR ShortText\n' +
+             'table_create ' + domain.termsTableName +  ' ' +
+               'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
+               '--default_tokenizer TokenBigram\n' +
+             'load --table ' + domain.configurationsTableName + '\n' +
+             '[\n' +
+             '["_key","value"],\n' +
+             '["key1_string","\\"abc\\""]\n' +
+             ']';
+        var dumpActual = context.commandSync('dump', {
+              tables: domain.configurationsTableName
+            });
+        assert.equal(dumpExpected, dumpActual);
+      });
+    });
   });
 });

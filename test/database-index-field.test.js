@@ -7,15 +7,23 @@ var IndexField = require('../lib/database/index-field').IndexField;
 
 suite('database', function() {
   suite('IndexField', function() {
+    var temporaryDatabase;
+    var context;
     var domain;
 
     setup(function() {
-      domain = new Domain('testdomain');
+      temporaryDatabase = utils.createTemporaryDatabase();
+      context = temporaryDatabase.get();
+      domain = new Domain('testdomain', context);
       domain.id = Domain.DEFAULT_ID;
+      domain.createSync();
     });
 
     teardown(function() {
       domain = undefined;
+      context = undefined;
+      temporaryDatabase.teardown();
+      temporaryDatabase = undefined;
     });
 
     test('lower case', function() {
@@ -108,7 +116,7 @@ suite('database', function() {
         resultEnabled: false,
         searchEnabled: true,
         state:         'Active',
-        options:       'Search Facet Result'
+        options:       'Search'
       });
     });
 
@@ -144,7 +152,7 @@ suite('database', function() {
         resultEnabled: false,
         searchEnabled: false,
         state:         'Active',
-        options:       'Search Facet Result'
+        options:       ''
       });
     });
 
