@@ -433,7 +433,7 @@ suite('Configuration API', function() {
       .next(function(response) {
         var domain = new Domain('companies', context);
         var field = domain.getIndexField('name');
-        assert.isTrue(field.exists());
+        assert.isTrue(field.exists(), response.body);
 
         response = toParsedResponse(response);
         assert.deepEqual(response.pattern,
@@ -470,7 +470,7 @@ suite('Configuration API', function() {
       .next(function(response) {
         var domain = new Domain('companies', context);
         var field = domain.getIndexField('name');
-        assert.isTrue(field.exists());
+        assert.isTrue(field.exists(), response.body);
 
         response = toParsedResponse(response);
         assert.deepEqual(response.pattern,
@@ -506,7 +506,7 @@ suite('Configuration API', function() {
       .next(function(response) {
         var domain = new Domain('companies', context);
         var field = domain.getIndexField('age');
-        assert.isTrue(field.exists());
+        assert.isTrue(field.exists(), response.body);
 
         response = toParsedResponse(response);
         assert.deepEqual(response.pattern,
@@ -540,7 +540,7 @@ suite('Configuration API', function() {
       .next(function(response) {
         var domain = new Domain('companies', context);
         var field = domain.getIndexField('product');
-        assert.isTrue(field.exists());
+        assert.isTrue(field.exists(), response.body);
 
         response = toParsedResponse(response);
         assert.deepEqual(response.pattern,
@@ -580,7 +580,7 @@ suite('Configuration API', function() {
       .next(function(response) {
         var domain = new Domain('companies', context);
         var field = domain.getIndexField('product');
-        assert.isTrue(field.exists());
+        assert.isTrue(field.exists(), response.body);
 
         response = toParsedResponse(response);
         assert.deepEqual(response.pattern,
