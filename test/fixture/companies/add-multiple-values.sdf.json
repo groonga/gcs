@@ -14,56 +14,6 @@
   },
   {
     "type": "add",
-    "id": "id2",
-    "version": 1,
-    "lang": "en",
-    "fields": {
-      "name": "Enishi Tech Inc.",
-      "address": "Sapporo, Hokkaido, Japan",
-      "email_address": "info@enishi-tech.com",
-      "age": 2,
-      "product": ["nroonga","groonga"]
-    }
-  },
-  {
-    "type": "add",
-    "id": "id3",
-    "version": 1,
-    "lang": "en",
-    "fields": {
-      "name": "ClearCode Inc.",
-      "address": "Hongo, Tokyo, Japan",
-      "email_address": "info@clear-code.com",
-      "age": 3,
-      "product": ["cutter","groonga"]
-    }
-  },
-  {
-    "type": "add",
-    "id": "id4",
-    "version": 1,
-    "lang": "en",
-    "fields": {
-      "name": "Anaheim Electronics",
-      "address": "Granada, Moon",
-      "age": 4,
-      "product": ["hi-zack","gundam"]
-    }
-  },
-  {
-    "type": "add",
-    "id": "id5",
-    "version": 1,
-    "lang": "en",
-    "fields": {
-      "name": "Shinsei Industry",
-      "address": "Earth",
-      "age": 5,
-      "product": "valkyrie"
-    }
-  },
-  {
-    "type": "add",
     "id": "id6",
     "version": 1,
     "lang": "en",
@@ -72,42 +22,6 @@
       "address": "Detroit and Delta City, Michigan, United States",
       "age": 6,
       "product": "robocop"
-    }
-  },
-  {
-    "type": "add",
-    "id": "id7",
-    "version": 1,
-    "lang": "en",
-    "fields": {
-      "name": "Capsule Corporation",
-      "address": "West City",
-      "age": 7,
-      "product": "time machine"
-    }
-  },
-  {
-    "type": "add",
-    "id": "id8",
-    "version": 1,
-    "lang": "en",
-    "fields": {
-      "name": "Stark Industries",
-      "address": "United States",
-      "age": 8,
-      "product": "iron man"
-    }
-  },
-  {
-    "type": "add",
-    "id": "id9",
-    "version": 1,
-    "lang": "en",
-    "fields": {
-      "name": "Umbrella Corporation",
-      "address": "Tokyo, Japan",
-      "age": 9,
-      "product": "tyrant"
     }
   },
   {

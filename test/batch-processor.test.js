@@ -80,66 +80,36 @@ suite('batch/processor/Processor (instance methods)', function() {
   });
 
   test('loadSync: auto migration to multiple values field', function() {
+    var field = processor.domain.getIndexField('product');
+    assert.isFalse(field.multipleValues);
+
     var batches = fs.readFileSync(__dirname + '/fixture/companies/add-multiple-values.sdf.json', 'UTF-8');
     batches = JSON.parse(batches);
     var result = processor.loadSync(batches);
-
-    var field = processor.domain.getIndexField('product');
     assert.isTrue(field.multipleValues);
 
     var dump = [
           { id: 'id1',
             name: 'Brazil',
+            description: '',
             address: 'Shibuya, Tokyo, Japan',
-            email_address: 'info@razil.jp',
             age: 1,
+            email_address: 'info@razil.jp',
             product: ['moritapo','groonga'] },
-          { id: 'id2',
-            name: 'Enishi Tech Inc.',
-            address: 'Sapporo, Hokkaido, Japan',
-            email_address: 'info@enishi-tech.com',
-            age: 2,
-            product: ['nroonga','groonga'] },
-          { id: 'id3',
-            name: 'ClearCode Inc.',
-            address: 'Hongo, Tokyo, Japan',
-            email_address: 'info@clear-code.com',
-            age: 3,
-            product: ['cutter','groonga'] },
-          { id: 'id4', 
-            name: 'Anaheim Electronics',
-            address: 'Granada, Moon',
-            age: 4,
-            product: ['hi-zack','gundam'] },
-          { id: 'id5',
-            name: 'Shinsei Industry',
-            address: 'Earth',
-            age: 5,
-            product: ['valkyrie'] },
-          { type: 'add',
+          { id: 'id6',
             name: 'Omni Consumer Products',
+            description: '',
+            description: '',
             address: 'Detroit and Delta City, Michigan, United States',
             age: 6,
+            email_address: '',
             product: ['robocop'] },
-          { id: 'id7',
-            name: 'Capsule Corporation',
-            address: ['West City'],
-            age: 7,
-            product: ['time machine'] },
-          { id: 'id8',
-            name: 'Stark Industries',
-            address: 'United States',
-            age: 8,
-            product: ['iron man'] },
-          { id: 'id9',
-            name: 'Umbrella Corporation',
-            address: 'Tokyo, Japan',
-            age: 9,
-            product: ['tyrant'] },
           { id: 'id10',
             name: 'U.S. Robots and Mechanical Men',
+            description: '',
             address: 'New York, United States',
             age: 10,
+            email_address: '',
             product: ['ndr114'] }
         ];
     assertSuccess(result, 10, 0, dump);
