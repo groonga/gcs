@@ -1,0 +1,23 @@
+Source: gcs
+Section: database
+Priority: optional
+Maintainer: Kouhei Sutou <kou@clear-code.com>
+Build-Depends:
+  debhelper (>= 7.0.50),
+  libgroonga-dev,
+  pkg-config,
+  npm
+Standards-Version: 3.9.1
+Homepage: http://gcs.groonga.org/
+
+Package: gcs
+Section: database
+Architecture: any
+Depends:
+  ${misc:Depends},
+  ${shlibs:Depends},
+  libgroonga0,
+  npm
+Description: Open Source Amazon CloudSearch on Your Computer
+ Groonga CloudSearch is an Amazon CloudSearch compatible open source
+ full text search server.

@@ -1,5 +1,8 @@
-/node_modules
+/node_modules/
 /test/tmp
+/packages/*.tar.gz
 /packages/all-in-one/tmp/
 /packages/all-in-one/*.tar.gz
 /packages/yum/repositories/
+/packages/apt/repositories/
+/packages/apt/tmp/

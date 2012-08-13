@@ -1,0 +1,52 @@
+#!/usr/bin/make -f
+# -*- makefile-gmake -*-
+#
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+# This has to be exported to make some magic below work.
+export DH_OPTIONS
+
+%:
+	dh $@
+
+override_dh_clean:
+	rm -rf node_modules npm-debug.log
+	dh_clean
+
+INSTALL_PATHS =					\
+	bin/					\
+	client_templates/			\
+	examples/				\
+	lib/					\
+	node_modules/				\
+	npm-shrinkwrap.json			\
+	package.json				\
+	tools/					\
+	views/
+
+DESTDIR = debian/tmp
+
+override_dh_install:
+	npm install --production node-gyp
+	npm install --production
+
+	eval $$(dpkg-architecture);				\
+	  if [ -n "$DEB_HOST_MULTIARCH" ]; then			\
+	    libdir=lib/$${DEB_HOST_MULTIARCH};			\
+	  else							\
+	    libdir=lib;						\
+	  fi;							\
+	  gcsdir=/usr/$${libdir}/gcs;				\
+	  dest_gcsdir=$(DESTDIR)$${gcsdir};			\
+	  mkdir -p $${dest_gcsdir};				\
+	  cp -a $(INSTALL_PATHS) $${dest_gcsdir}/;		\
+								\
+	  bindir=/usr/bin;					\
+	  dest_bindir=$(DESTDIR)$${bindir};			\
+	  mkdir -p $${dest_bindir};				\
+	  for script in bin/*; do				\
+	    ln -s $${gcsdir}/bin/$$(basename $${script})	\
+	      $${dest_bindir};					\
+	  done
+
+	dh_install
