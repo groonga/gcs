@@ -268,6 +268,15 @@ suite('gcs-configure-fields', function() {
   setup(commonSetup);
   teardown(commonTeardown);
 
+  function assertSuccess(result, name, type, options) {
+    assert.deepEqual({ code:    result.code,
+                       message: result.output.stdout },
+                     { code:    0,
+                       message: 'Updated 1 Index Field:\n' +
+                                name + ' Active ' + type + ' (' + options + ')\n' },
+                     result.output.stderr);
+  }
+
   function testCreateField(done, name, type, options) {
     new Domain('companies', context).createSync();
     utils
@@ -280,12 +289,7 @@ suite('gcs-configure-fields', function() {
            '--type', type,
            '--database-path', temporaryDatabase.path)
       .next(function(result) {
-        assert.deepEqual({ code:    result.code,
-                           message: result.output.stdout },
-                         { code:    0,
-                           message: 'Updated 1 Index Field:\n' +
-                                    name + ' Active ' + type + ' (' + options + ')\n' },
-                         result.output.stderr);
+        assertSuccess(result, name, type, options);
 
         context.reopen();
         var domain = new Domain('companies', context);
@@ -313,8 +317,7 @@ suite('gcs-configure-fields', function() {
   function testDeleteField(done, name, type) {
     var domain = new Domain('companies', context);
     domain.createSync();
-    var field = domain.getIndexField(name);
-    field.type = type
+    var field = domain.getIndexField(name).setType(type);
     field.createSync();
     utils
       .run('gcs-configure-fields',
@@ -354,8 +357,7 @@ suite('gcs-configure-fields', function() {
   function testRecreateField(done, name, type) {
     var domain = new Domain('companies', context);
     domain.createSync();
-    var field = domain.getIndexField(name);
-    field.type = type
+    var field = domain.getIndexField(name).setType(type);
     field.createSync();
     utils
       .run('gcs-configure-fields',
@@ -439,6 +441,132 @@ suite('gcs-configure-fields', function() {
       .error(function(e) {
         done(e);
       });
+  });
+
+  function assertOptionNotConfigurable(result, option, type) {
+    if (option.indexOf('search') > -1)
+      option = 'searchable option';
+    else if (option.indexOf('facet') > -1)
+      option = 'facet option';
+    else if (option.indexOf('result') > -1)
+      option = 'returnable option';
+    assert.deepEqual({ code:    result.code,
+                       message: result.output.stdout },
+                     { code:    1,
+                       message: option + ' cannot be configured for the type ' + type + '.\n' },
+                     result.output.stderr);
+  }
+
+  function assertOptionConfigured(result, name, type, options) {
+    assertSuccess(result, name, type, options);
+    context.reopen();
+    var field = new Domain('companies', context).getIndexField(name);
+    assert.equal(field.options, options);
+  }
+
+  function testConfigureFieldOptions(type, results, done) {
+    var name = 'test';
+    var domain = new Domain('companies', context);
+    domain.createSync();
+    domain.getIndexField(name).setType(type).createSync();
+    utils
+      .run('gcs-configure-fields',
+           '--name', name,
+           '--option', 'search',
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        if (results.search == 'error')
+          assertOptionNotConfigurable(result, 'search', type);
+        else
+          assertOptionConfigured(result, name, type, results.search);
+      })
+      .run('gcs-configure-fields',
+           '--name', name,
+           '--option', 'nosearch',
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        if (results.nosearch == 'error')
+          assertOptionNotConfigurable(result, 'nosearch', type);
+        else
+          assertOptionConfigured(result, name, type, results.nosearch);
+      })
+      .run('gcs-configure-fields',
+           '--name', name,
+           '--option', 'result',
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        if (results.result == 'error')
+          assertOptionNotConfigurable(result, 'result', type);
+        else
+          assertOptionConfigured(result, name, type, results.result);
+      })
+      .run('gcs-configure-fields',
+           '--name', name,
+           '--option', 'noresult',
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        if (results.noresult == 'error')
+          assertOptionNotConfigurable(result, 'noresult', type);
+        else
+          assertOptionConfigured(result, name, type, results.noresult);
+      })
+      .run('gcs-configure-fields',
+           '--name', name,
+           '--option', 'facet',
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        if (results.facet == 'error')
+          assertOptionNotConfigurable(result, 'facet', type);
+        else
+          assertOptionConfigured(result, name, type, results.facet);
+      })
+      .run('gcs-configure-fields',
+           '--name', name,
+           '--option', 'nofacet',
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        if (results.nofacet == 'error')
+          assertOptionNotConfigurable(result, 'nofacet', type);
+        else
+          assertOptionConfigured(result, name, type, results.nofacet);
+        done();
+      })
+      .error(function(e) {
+        done(e);
+      });
+  }
+
+  test('change option of text field', function() {
+    testConfigureFieldOptions('text', {
+      search:   'error',
+      nosearch: 'error',
+      facet:    'Search Facet',
+      nofacet:  'Search',
+      result:   'Search Result',
+      noresult: 'Search'
+    }, done);
+  });
+
+  test('change option of uint field', function() {
+    testConfigureFieldOptions('uint', {
+      search:   'error',
+      nosearch: 'error',
+      facet:    'error',
+      nofacet:  'error',
+      result:   'error',
+      noresult: 'error'
+    }, done);
+  });
+
+  test('change option of literal field', function() {
+    testConfigureFieldOptions('literal', {
+      search:   'Search',
+      nosearch: '',
+      facet:    'Facet',
+      nofacet:  '',
+      result:   'Result',
+      noresult: ''
+    }, done);
   });
 });
 

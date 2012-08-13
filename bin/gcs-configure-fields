@@ -12,6 +12,14 @@ commandLine
           'The type of the field that you are configuring or deleting: ' +
             'text, literal, uint. Required.',
           String)
+  .option('--option <option>',
+          'Configures an option for the field specified by the --name and ' +
+          '--type options. Valid values: search, nosearch, facet, nofacet, ' +
+          'result, noresult. Text and literal fields cannot have both the ' +
+          'facet and result options enabled. By default, text and uint ' +
+          'fields are always searchable and uint fields are always ' +
+          'facet-enabled.',
+          String)
   .option('-d, --domain-name <domain name>',
           'The name of the domain that you are configuring. Required.',
           String)
@@ -37,16 +45,40 @@ if (commandLine.options.delete) {
   field.deleteSync();
   console.log('Updated 1 Index Field:');
 } else {
-  if (!commandLine.options.type) {
-    console.log('You must specify the field type.');
+  if (!field.exists()) {
+    if (!commandLine.options.type) {
+      console.log('You must specify the field type.');
+      return process.exit(1);
+    }
+    field.type = commandLine.options.type;
+  } else if (!commandLine.options.option) {
+    console.log('You must specify the configuring option.');
     return process.exit(1);
   }
-  if (field.exists()) {
-    console.log('You must specify not-existing field name.');
-    return process.exit(1);
+
+  if (commandLine.options.option) {
+    try {
+      switch (commandLine.options.option) {
+        case 'search':   field.searchEnabled = true;  break;
+        case 'nosearch': field.searchEnabled = false; break;
+        case 'facet':    field.facetEnabled =  true;  break;
+        case 'nofacet':  field.facetEnabled =  false; break;
+        case 'result':   field.resultEnabled = true;  break;
+        case 'noresult': field.resultEnabled = false; break;
+        default:
+          thro new Error('invalid field option ' + commandLine.options.option);
+      }
+    } catch(error) {
+      console.log(error.message);
+      return process.exit(1);
+    }
   }
-  field.type = commandLine.options.type;
-  field.createSync();
+
+  if (!field.exists())
+    field.createSync();
+  else
+    field.saveOptionsSync();
+
   console.log('Updated 1 Index Field:');
   console.log('%s %s %s (%s)', field.name, field.state, field.type, field.options);
 }
