@@ -242,6 +242,28 @@ suite('database', function() {
         assert.equal('Search Facet Result', field.options);
       });
 
+      test('invalid modification of options for text field', function() {
+        var field = new IndexField('name', domain).setType('text');
+        field.createSync();
+        assert.throw(function() {
+          field.searchEnabled = false;
+        }, 'searchable option cannot be configured for the type text');
+      });
+
+      test('invalid modification of options for uint field', function() {
+        var field = new IndexField('age', domain).setType('uint');
+        field.createSync();
+        assert.throw(function() {
+          field.searchEnabled = false;
+        }, 'searchable option cannot be configured for the type uint');
+        assert.throw(function() {
+          field.facetEnabled = false;
+        }, 'facet option cannot be configured for the type uint');
+        assert.throw(function() {
+          field.resultEnabled = false;
+        }, 'returnable option cannot be configured for the type uint');
+      });
+
       test('create literal field with options', function() {
         var field = new IndexField('product', domain).setType('literal');
         assert.equal('', field.options);
