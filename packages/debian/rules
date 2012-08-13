@@ -47,6 +47,9 @@ override_dh_install:
 	  for script in bin/*; do				\
 	    ln -s $${gcsdir}/bin/$$(basename $${script})	\
 	      $${dest_bindir};					\
-	  done
+	  done;							\
+	  sbindir=/usr/sbin;					\
+	  dest_sbindir=$(DESTDIR)$${sbindir};			\
+	  mv $${dest_bindir}/gcs $${dest_sbindir}/;
 
 	dh_install
