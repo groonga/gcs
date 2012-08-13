@@ -1,0 +1,16 @@
+#! /bin/sh
+
+set -e
+
+if [ "$1" = "purge" ]; then
+    rm -f /var/run/gcs/*
+    dpkg-statoverride --remove /var/run/gcs
+    rm -rf /var/lib/gcs/*
+    dpkg-statoverride --remove /var/lib/gcs
+
+    if getent passwd gcs >/dev/null; then
+        deluser --system --remove-all-files gcs
+    fi
+fi
+
+#DEBHELPER#

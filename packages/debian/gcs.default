@@ -1,0 +1,7 @@
+# Default
+#USER=gcs
+#GROUP=gcs
+#PORT=7575
+
+# Comment out this to disable Groonga CloudSearch daemon.
+ENABLE=yes
