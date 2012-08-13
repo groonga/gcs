@@ -100,7 +100,7 @@ suite('batch/processor/Processor (instance methods)', function() {
             email_address: 'info@enishi-tech.com',
             age: 2,
             product: ['nroonga','groonga'] },
-          { id: 'id3'
+          { id: 'id3',
             name: 'ClearCode Inc.',
             address: 'Hongo, Tokyo, Japan',
             email_address: 'info@clear-code.com',
