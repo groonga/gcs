@@ -104,8 +104,8 @@ suite('database', function() {
         state:         field.state,
         options:       field.options
       }, {
-        facetEnabled:  true,
-        resultEnabled: true,
+        facetEnabled:  false,
+        resultEnabled: false,
         searchEnabled: true,
         state:         'Active',
         options:       'Search Facet Result'
@@ -122,7 +122,7 @@ suite('database', function() {
         state:         field.state,
         options:       field.options
       }, {
-        facetEnabled:  false,
+        facetEnabled:  false, // disabled by groonga...
         resultEnabled: true,
         searchEnabled: true,
         state:         'Active',
@@ -140,9 +140,9 @@ suite('database', function() {
         state:         field.state,
         options:       field.options
       }, {
-        facetEnabled:  true,
-        resultEnabled: true,
-        searchEnabled: true,
+        facetEnabled:  false,
+        resultEnabled: false,
+        searchEnabled: false,
         state:         'Active',
         options:       'Search Facet Result'
       });
