@@ -444,8 +444,8 @@ suite('Configuration API', function() {
               IndexFieldType: 'text',
               TextOptions: {
                 DefaultValue: {},
-                FacetEnabled: false,
-                ResultEnabled: false
+                FacetEnabled: 'false',
+                ResultEnabled: 'false'
               }
             };
         var options = response.body.DefineIndexFieldResponse.DefineIndexFieldResult.IndexField.Options;
@@ -481,8 +481,8 @@ suite('Configuration API', function() {
               IndexFieldType: 'text',
               TextOptions: {
                 DefaultValue: {},
-                FacetEnabled: true,
-                ResultEnabled: true
+                FacetEnabled: 'true',
+                ResultEnabled: 'true'
               }
             };
         var options = response.body.DefineIndexFieldResponse.DefineIndexFieldResult.IndexField.Options;
@@ -551,9 +551,9 @@ suite('Configuration API', function() {
               IndexFieldType: 'literal',
               LiteralOptions: {
                 DefaultValue: {},
-                FacetEnabled: false,
-                ResultEnabled: false,
-                SearchEnabled: false
+                FacetEnabled: 'false',
+                ResultEnabled: 'false',
+                SearchEnabled: 'false'
               }
             };
         var options = response.body.DefineIndexFieldResponse.DefineIndexFieldResult.IndexField.Options;
@@ -591,9 +591,9 @@ suite('Configuration API', function() {
               IndexFieldType: 'literal',
               LiteralOptions: {
                 DefaultValue: {},
-                FacetEnabled: true,
-                ResultEnabled: true,
-                SearchEnabled: true
+                FacetEnabled: 'true',
+                ResultEnabled: 'true',
+                SearchEnabled: 'true'
               }
             };
         var options = response.body.DefineIndexFieldResponse.DefineIndexFieldResult.IndexField.Options;
