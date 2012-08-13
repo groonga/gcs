@@ -536,7 +536,7 @@ suite('gcs-configure-fields', function() {
       });
   }
 
-  test('change option of text field', function() {
+  test('change option of text field', function(done) {
     testConfigureFieldOptions('text', {
       search:   'error',
       nosearch: 'error',
@@ -547,7 +547,7 @@ suite('gcs-configure-fields', function() {
     }, done);
   });
 
-  test('change option of uint field', function() {
+  test('change option of uint field', function(done) {
     testConfigureFieldOptions('uint', {
       search:   'error',
       nosearch: 'error',
@@ -558,7 +558,7 @@ suite('gcs-configure-fields', function() {
     }, done);
   });
 
-  test('change option of literal field', function() {
+  test('change option of literal field', function(done) {
     testConfigureFieldOptions('literal', {
       search:   'Search',
       nosearch: '',

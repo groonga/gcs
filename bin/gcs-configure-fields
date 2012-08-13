@@ -66,10 +66,10 @@ if (commandLine.options.delete) {
         case 'result':   field.resultEnabled = true;  break;
         case 'noresult': field.resultEnabled = false; break;
         default:
-          thro new Error('invalid field option ' + commandLine.options.option);
+          throw new Error('invalid field option ' + commandLine.options.option);
       }
     } catch(error) {
-      console.log(error.message);
+      console.log((error.message || error).toString());
       return process.exit(1);
     }
   }
