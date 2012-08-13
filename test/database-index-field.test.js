@@ -200,6 +200,76 @@ suite('database', function() {
       });
     });
 
+    suite('options', function() {
+      var temporaryDatabase;
+      var context;
+      var domain;
+
+      setup(function() {
+        temporaryDatabase = utils.createTemporaryDatabase();
+        context = temporaryDatabase.get();
+        domain = new Domain('companies', context);
+        domain.createSync();
+      });
+
+      teardown(function() {
+        temporaryDatabase.teardown();
+        temporaryDatabase = undefined;
+      });
+
+      test('create text field with options', function() {
+        var field = new IndexField('name', domain).setType('text');
+        assert.equal('Search', field.options);
+
+        field.facetEnabled = true;
+        field.resultEnabled = true;
+        field.createSync();
+
+        field = new IndexField('name', domain); // reset instance from database
+        assert.equal('Search Facet Result', field.options);
+      });
+
+      test('update text field with options', function() {
+        var field = new IndexField('name', domain).setType('text');
+        field.createSync();
+        assert.equal('Search', field.options);
+
+        field.facetEnabled = true;
+        field.resultEnabled = true;
+        field.saveOptionsSync();
+
+        field = new IndexField('name', domain); // reset instance from database
+        assert.equal('Search Facet Result', field.options);
+      });
+
+      test('create literal field with options', function() {
+        var field = new IndexField('product', domain).setType('literal');
+        assert.equal('', field.options);
+
+        field.searchEnabled = true;
+        field.facetEnabled = true;
+        field.resultEnabled = true;
+        field.createSync();
+
+        field = new IndexField('product', domain); // reset instance from database
+        assert.equal('Search Facet Result', field.options);
+      });
+
+      test('update literal field with options', function() {
+        var field = new IndexField('product', domain).setType('literal');
+        field.createSync();
+        assert.equal('', field.options);
+
+        field.searchEnabled = true;
+        field.facetEnabled = true;
+        field.resultEnabled = true;
+        field.saveOptionsSync();
+
+        field = new IndexField('product', domain); // reset instance from database
+        assert.equal('Search Facet Result', field.options);
+      });
+    });
+
     suite('database modifications', function() {
       var temporaryDatabase;
       var context;
