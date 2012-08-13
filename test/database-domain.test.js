@@ -417,15 +417,15 @@ suite('database', function() {
         temporaryDatabase = undefined;
       });
 
-      test('dump for blank domain', function() {
-        var actualDump = domain.dump();
+      test('dumpSync for blank domain', function() {
+        var actualDump = domain.dumpSync();
         assert.deepEqual(actualDump, []);
       });
 
-      test('dump', function() {
+      test('dumpSync', function() {
         utils.loadDumpFile(context, __dirname + '/fixture/companies/data.grn');
 
-        var actualDump = domain.dump();
+        var actualDump = domain.dumpSync();
         assert.isTrue(Array.isArray(actualDump), actualDump);
         assert.equal(actualDump.length, 10, actualDump);
 
@@ -455,7 +455,7 @@ suite('database', function() {
         assert.deepEqual(actualDump.slice(0, 3), expectedDump);
       });
 
-      test('load', function() {
+      test('loadSync', function() {
         utils.loadDumpFile(context, __dirname + '/fixture/companies/data.grn');
 
         var values = [
@@ -467,9 +467,9 @@ suite('database', function() {
                 name: 'Nergal Heavy Industries',
                 product: 'nadesico' }
             ];
-        domain.load(values);
+        domain.loadSync(values);
 
-        var actualDump = domain.dump();
+        var actualDump = domain.dumpSync();
         var expectedDump = [
               { id: 'id10',
                 address: 'New York, United States',

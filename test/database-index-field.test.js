@@ -398,7 +398,7 @@ suite('database', function() {
         field.createSync();
         assert.isFalse(field.multipleValues);
 
-        field.domain.load([
+        field.domain.loadSync([
           { id: 'id1', product: 'groonga' },
           { id: 'id2', product: 'nroonga' }
         ]);
@@ -407,7 +407,7 @@ suite('database', function() {
         assert.isTrue(field.exists());
         assert.isTrue(field.multipleValues);
 
-        var actualDump = field.domain.dump();
+        var actualDump = field.domain.dumpSync();
         var expectedDump = [
               { id: 'id1', product: ['groonga'] },
               { id: 'id2', product: ['nroonga'] }
