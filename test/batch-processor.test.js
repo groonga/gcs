@@ -125,7 +125,7 @@ suite('batch/processor/Processor (instance methods)', function() {
             name: 'Capsule Corporation',
             address: ['West City'],
             age: 7,
-            product: '[time machine'] },
+            product: ['time machine'] },
           { id: 'id8',
             name: 'Stark Industries',
             address: 'United States',
