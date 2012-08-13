@@ -112,7 +112,7 @@ suite('batch/processor/Processor (instance methods)', function() {
             email_address: '',
             product: ['ndr114'] }
         ];
-    assertSuccess(result, 10, 0, dump);
+    assertSuccess(result, 3, 0, dump);
   });
 
   test('load delete-batches', function(done) {
