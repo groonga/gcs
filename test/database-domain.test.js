@@ -398,5 +398,88 @@ suite('database', function() {
                          ]);
       });
     });
+
+    suite('dump and load', function() {
+      var temporaryDatabase;
+      var context;
+      var domain;
+
+      setup(function() {
+        temporaryDatabase = utils.createTemporaryDatabase();
+        context = temporaryDatabase.get();
+        utils.loadDumpFile(context, __dirname + '/fixture/companies/ddl.grn');
+        utils.loadDumpFile(context, __dirname + '/fixture/companies/data.grn');
+        domain = new Domain('companies', context);
+      });
+
+      teardown(function() {
+        domain = undefined;
+        temporaryDatabase.teardown();
+        temporaryDatabase = undefined;
+      });
+
+      test('dump', function() {
+        var actualDump = domain.dump();
+        assert.isTrue(Array.isArray(actualDump), actualDump);
+        assert.equal(actualDump.length, 10, actualDump);
+
+        var expectedDump = [
+              { id: 'id1',
+                address: 'Shibuya, Tokyo, Japan',
+                age: 1,
+                description: '',
+                email_address: 'info@razil.jp',
+                name: 'Brazil',
+                product: 'groonga' },
+              { id: 'id2',
+                address: 'Sapporo, Hokkaido, Japan',
+                age: 2,
+                description: '',
+                email_address: 'info@enishi-tech.com',
+                name: 'Enishi Tech Inc.',
+                product: 'groonga' },
+              { id: 'id3',
+                address: 'Hongo, Tokyo, Japan',
+                age: 3,
+                description: '',
+                email_address: 'info@clear-code.com',
+                name: 'ClearCode Inc.',
+                product: 'groonga' }
+            ];
+        assert.deepEqual(actualDump.slice(0, 3), expectedDump);
+      });
+
+      test('load', function() {
+        var values = [
+              { id: 'id10',
+                description: 'updated',
+                product: 'spd13' },
+              { id: 'id11',
+                description: 'new',
+                name: 'Nergal Heavy Industries',
+                product: 'nadesico' }
+            ];
+        domain.load(values);
+
+        var actualDump = domain.dump();
+        var expectedDump = [
+              { id: 'id10',
+                address: 'New York, United States',
+                age: 10,
+                description: 'updated',
+                email_address: '',
+                name: 'U.S. Robots and Mechanical Men',
+                product: 'spd13' },
+              { id: 'id11',
+                address: '',
+                age: 0,
+                description: 'new',
+                email_address: '',
+                name: 'Nergal Heavy Industries',
+                product: 'nadesico' }
+            ];
+        assert.deepEqual(actualDump.slice(-2), expectedDump);
+      });
+    });
   });
 });
