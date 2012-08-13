@@ -408,7 +408,6 @@ suite('database', function() {
         temporaryDatabase = utils.createTemporaryDatabase();
         context = temporaryDatabase.get();
         utils.loadDumpFile(context, __dirname + '/fixture/companies/ddl.grn');
-        utils.loadDumpFile(context, __dirname + '/fixture/companies/data.grn');
         domain = new Domain('companies', context);
       });
 
@@ -418,7 +417,14 @@ suite('database', function() {
         temporaryDatabase = undefined;
       });
 
+      test('dump for blank domain', function() {
+        var actualDump = domain.dump();
+        assert.deepEqual(actualDump, []);
+      });
+
       test('dump', function() {
+        utils.loadDumpFile(context, __dirname + '/fixture/companies/data.grn');
+
         var actualDump = domain.dump();
         assert.isTrue(Array.isArray(actualDump), actualDump);
         assert.equal(actualDump.length, 10, actualDump);
@@ -450,6 +456,8 @@ suite('database', function() {
       });
 
       test('load', function() {
+        utils.loadDumpFile(context, __dirname + '/fixture/companies/data.grn');
+
         var values = [
               { id: 'id10',
                 description: 'updated',
