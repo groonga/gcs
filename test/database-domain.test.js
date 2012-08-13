@@ -399,7 +399,7 @@ suite('database', function() {
       });
     });
 
-    suite('dump and load', function() {
+    suite('record operations (add, delete, dump, load)', function() {
       var temporaryDatabase;
       var context;
       var domain;
@@ -415,6 +415,31 @@ suite('database', function() {
         domain = undefined;
         temporaryDatabase.teardown();
         temporaryDatabase = undefined;
+      });
+
+      test('addRecordSync', function() {
+        var record = {
+              id: 'id1',
+              address: 'Shibuya, Tokyo, Japan',
+              age: 1,
+              description: '',
+              email_address: 'info@razil.jp',
+              name: 'Brazil',
+              product: 'groonga'
+            };
+        domain.addRecordSync(record);
+        assert.deepEqual(domain.dumpSync(), [record]);
+      });
+
+      test('deleteRecordSync', function() {
+        utils.loadDumpFile(context, __dirname + '/fixture/companies/data.grn');
+        domain.deleteRecordSync('id1');
+
+        var actualDump = domain.dumpSync();
+        var found = actualDump.some(function(record) {
+              return record.id == 'id1';
+            });
+        assert.isFalse(found, actualDump);
       });
 
       test('dumpSync for blank domain', function() {
