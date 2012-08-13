@@ -212,6 +212,10 @@ suite('database', function() {
       function getNoColumnDump() {
         return 'table_create ' + domain.tableName +  ' ' +
                  'TABLE_HASH_KEY ShortText\n' +
+               'table_create ' + domain.configurationsTableName +  ' ' +
+                 'TABLE_HASH_KEY ShortText\n' +
+               'column_create ' + domain.configurationsTableName +  ' ' +
+                 'value COLUMN_SCALAR ShortText\n' +
                'table_create ' + domain.termsTableName + ' ' +
                  'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
                  '--default_tokenizer TokenBigram';
@@ -235,6 +239,10 @@ suite('database', function() {
                          'TABLE_HASH_KEY ShortText\n' +
                        'column_create ' + domain.tableName + ' ' +
                          field.columnName + ' COLUMN_SCALAR ShortText\n' +
+                       'table_create ' + domain.configurationsTableName +  ' ' +
+                         'TABLE_HASH_KEY ShortText\n' +
+                       'column_create ' + domain.configurationsTableName +  ' ' +
+                         'value COLUMN_SCALAR ShortText\n' +
                        'table_create ' + domain.termsTableName + ' ' +
                          'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
                          '--default_tokenizer TokenBigram\n' +
@@ -278,6 +286,10 @@ suite('database', function() {
                          'TABLE_HASH_KEY ShortText\n' +
                        'column_create ' + domain.tableName + ' ' +
                          field.columnName + ' COLUMN_SCALAR UInt32\n' +
+                       'table_create ' + domain.configurationsTableName +  ' ' +
+                         'TABLE_HASH_KEY ShortText\n' +
+                       'column_create ' + domain.configurationsTableName +  ' ' +
+                         'value COLUMN_SCALAR ShortText\n' +
                        'table_create ' + domain.termsTableName + ' ' +
                          'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
                          '--default_tokenizer TokenBigram\n' +
@@ -321,6 +333,10 @@ suite('database', function() {
             });
         var expected = 'table_create ' + domain.tableName + ' ' +
                          'TABLE_HASH_KEY ShortText\n' +
+                       'table_create ' + domain.configurationsTableName +  ' ' +
+                         'TABLE_HASH_KEY ShortText\n' +
+                       'column_create ' + domain.configurationsTableName +  ' ' +
+                         'value COLUMN_SCALAR ShortText\n' +
                        'table_create ' + domain.termsTableName + ' ' +
                          'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
                          '--default_tokenizer TokenBigram\n' +
@@ -383,6 +399,10 @@ suite('database', function() {
                          'TABLE_HASH_KEY ShortText\n' +
                        'column_create ' + domain.tableName + ' ' +
                          field.columnName + ' COLUMN_VECTOR ShortText\n' +
+                       'table_create ' + domain.configurationsTableName +  ' ' +
+                         'TABLE_HASH_KEY ShortText\n' +
+                       'column_create ' + domain.configurationsTableName +  ' ' +
+                         'value COLUMN_SCALAR ShortText\n' +
                        'table_create ' + domain.termsTableName + ' ' +
                          'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
                          '--default_tokenizer TokenBigram\n' +
