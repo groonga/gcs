@@ -226,6 +226,7 @@ suite('database', function() {
 
         field.createSync();
         assert.isTrue(field.exists());
+        assert.isFalse(field.multipleValues);
 
         var dump = context.commandSync('dump', {
               tables: domain.tableName
@@ -268,6 +269,7 @@ suite('database', function() {
 
         field.createSync();
         assert.isTrue(field.exists());
+        assert.isFalse(field.multipleValues);
 
         var dump = context.commandSync('dump', {
               tables: domain.tableName
@@ -312,6 +314,7 @@ suite('database', function() {
 
         field.createSync();
         assert.isTrue(field.exists());
+        assert.isFalse(field.multipleValues);
 
         var dump = context.commandSync('dump', {
               tables: 'companies'
@@ -346,6 +349,70 @@ suite('database', function() {
             });
         var expected = getNoColumnDump();
         assert.equal(dump, expected);
+      });
+    });
+
+    suite('multiple values column', function() {
+      var temporaryDatabase;
+      var context;
+      var domain;
+
+      setup(function() {
+        temporaryDatabase = utils.createTemporaryDatabase();
+        context = temporaryDatabase.get();
+        domain = new Domain('companies', context);
+        domain.createSync();
+      });
+
+      teardown(function() {
+        temporaryDatabase.teardown();
+        temporaryDatabase = undefined;
+      });
+
+      test('createSync (multiple values)', function() {
+        var field = new IndexField('name', domain).setType('text');
+        assert.isFalse(field.exists());
+        field.createSync(true);
+        assert.isTrue(field.exists());
+        assert.isTrue(field.multipleValues);
+
+        var dump = context.commandSync('dump', {
+              tables: domain.tableName
+            });
+        var expected = 'table_create ' + domain.tableName +  ' ' +
+                         'TABLE_HASH_KEY ShortText\n' +
+                       'column_create ' + domain.tableName + ' ' +
+                         field.columnName + ' COLUMN_VECTOR ShortText\n' +
+                       'table_create ' + domain.termsTableName + ' ' +
+                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
+                         '--default_tokenizer TokenBigram\n' +
+                       'column_create ' + domain.termsTableName + ' ' +
+                         field.indexColumnName + ' ' +
+                         'COLUMN_INDEX|WITH_POSITION ' + domain.tableName +
+                         ' ' + field.columnName;
+        assert.equal(dump, expected);
+      });
+
+      test('upgradeToMultipleValuesSync', function() {
+        var field = new IndexField('product', domain).setType('literal');
+        field.createSync();
+        assert.isFalse(field.multipleValues);
+
+        field.domain.load([
+          { id: 'id1', product: 'groonga' },
+          { id: 'id2', product: 'nroonga' }
+        ]);
+
+        field.upgradeToMultipleValuesSync();
+        assert.isTrue(field.exists());
+        assert.isTrue(field.multipleValues);
+
+        var actualDump = field.domain.dump();
+        var expectedDump = [
+              { id: 'id1', product: ['groonga'] },
+              { id: 'id2', product: ['nroonga'] }
+            ];
+        assert.deepEqual(actualDump, expectedDump);
       });
     });
   });
