@@ -422,7 +422,7 @@ suite('Configuration API', function() {
       });
   });
 
-  test('Get, Action=DefineIndexField (text)', function(done) {
+  test('Get, Action=DefineIndexField (text, without options)', function(done) {
     utils
       .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
         'Host': 'cloudsearch.localhost'
@@ -440,12 +440,49 @@ suite('Configuration API', function() {
                          { statusCode: 200,
                            body: PATTERN_DefineIndexFieldResponse_Text });
         var expectedOptions = {
-              IndexFieldName: field.name,
-              IndexFieldType: field.type,
+              IndexFieldName: 'name',
+              IndexFieldType: 'text',
               TextOptions: {
                 DefaultValue: {},
-                FacetEnabled: String(field.facetEnabled),
-                ResultEnabled: String(field.resultEnabled)
+                FacetEnabled: false,
+                ResultEnabled: false
+              }
+            };
+        var options = response.body.DefineIndexFieldResponse.DefineIndexFieldResult.IndexField.Options;
+        assert.deepEqual(options, expectedOptions);
+
+        done();
+      })
+      .error(function(error) {
+        done(error);
+      });
+  });
+
+  test('Get, Action=DefineIndexField (text, with options)', function(done) {
+    utils
+      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
+        'Host': 'cloudsearch.localhost'
+      })
+      .get('/?DomainName=companies&IndexField.IndexFieldName=name&' +
+           'IndexField.IndexFieldType=text&' +
+           'TextOptions.FacetEnabled=true&TextOptions.ResultEnabled=true&' +
+           'Action=DefineIndexField&Version=2011-02-01')
+      .next(function(response) {
+        var domain = new Domain('companies', context);
+        var field = domain.getIndexField('name');
+        assert.isTrue(field.exists());
+
+        response = toParsedResponse(response);
+        assert.deepEqual(response.pattern,
+                         { statusCode: 200,
+                           body: PATTERN_DefineIndexFieldResponse_Text });
+        var expectedOptions = {
+              IndexFieldName: 'name',
+              IndexFieldType: 'text',
+              TextOptions: {
+                DefaultValue: {},
+                FacetEnabled: true,
+                ResultEnabled: true
               }
             };
         var options = response.body.DefineIndexFieldResponse.DefineIndexFieldResult.IndexField.Options;
@@ -476,8 +513,8 @@ suite('Configuration API', function() {
                          { statusCode: 200,
                            body: PATTERN_DefineIndexFieldResponse_UInt });
         var expectedOptions = {
-              IndexFieldName: field.name,
-              IndexFieldType: field.type,
+              IndexFieldName: 'age',
+              IndexFieldType: 'uint',
               UIntOptions: {
                 DefaultValue: {}
               }
@@ -492,7 +529,7 @@ suite('Configuration API', function() {
       });
   });
 
-  test('Get, Action=DefineIndexField (literal)', function(done) {
+  test('Get, Action=DefineIndexField (literal, without options)', function(done) {
     utils
       .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
         'Host': 'cloudsearch.localhost'
@@ -510,13 +547,53 @@ suite('Configuration API', function() {
                          { statusCode: 200,
                            body: PATTERN_DefineIndexFieldResponse_Literal });
         var expectedOptions = {
-              IndexFieldName: field.name,
-              IndexFieldType: field.type,
+              IndexFieldName: 'product',
+              IndexFieldType: 'literal',
               LiteralOptions: {
                 DefaultValue: {},
-                FacetEnabled: String(field.facetEnabled),
-                ResultEnabled: String(field.resultEnabled),
-                SearchEnabled: String(field.searchEnabled)
+                FacetEnabled: false,
+                ResultEnabled: false,
+                SearchEnabled: false
+              }
+            };
+        var options = response.body.DefineIndexFieldResponse.DefineIndexFieldResult.IndexField.Options;
+        assert.deepEqual(options, expectedOptions);
+
+        done();
+      })
+      .error(function(error) {
+        done(error);
+      });
+  });
+
+  test('Get, Action=DefineIndexField (literal, with options)', function(done) {
+    utils
+      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
+        'Host': 'cloudsearch.localhost'
+      })
+      .get('/?DomainName=companies&IndexField.IndexFieldName=product&' +
+           'IndexField.IndexFieldType=literal&' +
+           'LiteralOptions.SearchEnabled=true&' +
+           'LiteralOptions.FacetEnabled=true&' +
+           'LiteralOptions.ResultEnabled=true&' +
+           'Action=DefineIndexField&Version=2011-02-01')
+      .next(function(response) {
+        var domain = new Domain('companies', context);
+        var field = domain.getIndexField('product');
+        assert.isTrue(field.exists());
+
+        response = toParsedResponse(response);
+        assert.deepEqual(response.pattern,
+                         { statusCode: 200,
+                           body: PATTERN_DefineIndexFieldResponse_Literal });
+        var expectedOptions = {
+              IndexFieldName: 'product',
+              IndexFieldType: 'literal',
+              LiteralOptions: {
+                DefaultValue: {},
+                FacetEnabled: true,
+                ResultEnabled: true,
+                SearchEnabled: true
               }
             };
         var options = response.body.DefineIndexFieldResponse.DefineIndexFieldResult.IndexField.Options;
