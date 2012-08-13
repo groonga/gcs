@@ -110,7 +110,7 @@ suite('batch/processor/Processor (instance methods)', function() {
             address: 'New York, United States',
             age: 10,
             email_address: '',
-            product: ['ndr114'] }
+            product: ['ndr114','spd13'] }
         ];
     assertSuccess(result, 3, 0, dump);
   });
