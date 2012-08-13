@@ -369,7 +369,7 @@ suite('gcs-configure-fields', function() {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
                          { code:    1,
-                           message: 'You must specify not-existing field name.\n' },
+                           message: 'You must specify the configuring option.\n' },
                          result.output.stderr);
         done();
       })
@@ -471,6 +471,7 @@ suite('gcs-configure-fields', function() {
     domain.getIndexField(name).setType(type).createSync();
     utils
       .run('gcs-configure-fields',
+           '--domain-name', 'companies',
            '--name', name,
            '--option', 'search',
            '--database-path', temporaryDatabase.path)
@@ -481,6 +482,7 @@ suite('gcs-configure-fields', function() {
           assertOptionConfigured(result, name, type, results.search);
       })
       .run('gcs-configure-fields',
+           '--domain-name', 'companies',
            '--name', name,
            '--option', 'nosearch',
            '--database-path', temporaryDatabase.path)
@@ -491,6 +493,7 @@ suite('gcs-configure-fields', function() {
           assertOptionConfigured(result, name, type, results.nosearch);
       })
       .run('gcs-configure-fields',
+           '--domain-name', 'companies',
            '--name', name,
            '--option', 'result',
            '--database-path', temporaryDatabase.path)
@@ -501,6 +504,7 @@ suite('gcs-configure-fields', function() {
           assertOptionConfigured(result, name, type, results.result);
       })
       .run('gcs-configure-fields',
+           '--domain-name', 'companies',
            '--name', name,
            '--option', 'noresult',
            '--database-path', temporaryDatabase.path)
@@ -511,6 +515,7 @@ suite('gcs-configure-fields', function() {
           assertOptionConfigured(result, name, type, results.noresult);
       })
       .run('gcs-configure-fields',
+           '--domain-name', 'companies',
            '--name', name,
            '--option', 'facet',
            '--database-path', temporaryDatabase.path)
@@ -521,6 +526,7 @@ suite('gcs-configure-fields', function() {
           assertOptionConfigured(result, name, type, results.facet);
       })
       .run('gcs-configure-fields',
+           '--domain-name', 'companies',
            '--name', name,
            '--option', 'nofacet',
            '--database-path', temporaryDatabase.path)

@@ -37,6 +37,10 @@ if (!commandLine.options.name) {
 
 var field = commandLine.domain.getIndexField(commandLine.options.name);
 
+var option = commandLine.options.option;
+if (typeof option != 'string')
+  option = null;
+
 if (commandLine.options.delete) {
   if (!field.exists()) {
     console.log('You must specify an existing field.');
@@ -51,14 +55,14 @@ if (commandLine.options.delete) {
       return process.exit(1);
     }
     field.type = commandLine.options.type;
-  } else if (!commandLine.options.option) {
+  } else if (!option) {
     console.log('You must specify the configuring option.');
     return process.exit(1);
   }
 
-  if (commandLine.options.option) {
+  if (option) {
     try {
-      switch (commandLine.options.option) {
+      switch (option) {
         case 'search':   field.searchEnabled = true;  break;
         case 'nosearch': field.searchEnabled = false; break;
         case 'facet':    field.facetEnabled =  true;  break;
@@ -66,7 +70,7 @@ if (commandLine.options.delete) {
         case 'result':   field.resultEnabled = true;  break;
         case 'noresult': field.resultEnabled = false; break;
         default:
-          throw new Error('invalid field option ' + commandLine.options.option);
+          throw new Error('invalid field option ' + option);
       }
     } catch(error) {
       console.log((error.message || error).toString());
