@@ -245,8 +245,7 @@ suite('database', function() {
       });
 
       test('deleteSync for text field', function() {
-        var field = new IndexField('name', domain);
-        field.type = 'text';
+        var field = new IndexField('name', domain).setType('text');
         field.createSync();
         assert.isTrue(field.exists());
 
@@ -290,8 +289,7 @@ suite('database', function() {
       });
 
       test('deleteSync for uint field', function() {
-        var field = new IndexField('age', domain);
-        field.type = 'uint';
+        var field = new IndexField('age', domain).setType('uint');
         field.createSync();
         assert.isTrue(field.exists());
 
@@ -336,8 +334,7 @@ suite('database', function() {
       });
 
       test('deleteSync for literal field', function() {
-        var field = new IndexField('product', domain);
-        field.type = 'literal';
+        var field = new IndexField('product', domain).setType('literal');
         field.createSync();
         assert.isTrue(field.exists());
 
