@@ -301,13 +301,13 @@ suite('gcs-configure-fields', function() {
   }
 
   test('create text field', function(done) {
-    testCreateField(done, 'name', 'text', 'Search Facet Result');
+    testCreateField(done, 'name', 'text', 'Search');
   });
   test('create uint field', function(done) {
     testCreateField(done, 'age', 'uint', 'Search Result');
   });
   test('create literal field', function(done) {
-    testCreateField(done, 'product', 'literal', 'Search Facet Result');
+    testCreateField(done, 'product', 'literal', '');
   });
 
   function testDeleteField(done, name, type) {
