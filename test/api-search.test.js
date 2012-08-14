@@ -58,7 +58,7 @@ suite('Search API', function() {
         var actual = JSON.parse(normalizedBody);
         var expected = { // FIXME
           rank: '-text_relevance',
-          'match-expr': '',
+          'match-expr': "(label 'Hongo')",
           hits: {
             found: 1,
             start: 0,
@@ -95,7 +95,7 @@ suite('Search API', function() {
         var actual = JSON.parse(normalizedBody);
         var expected = {
           rank: '-text_relevance',
-          'match-expr': '',
+          'match-expr': "(label 'Tokyo')",
           hits: {
             found: 3,
             start: 0,
@@ -159,7 +159,7 @@ suite('Search API', function() {
         var actual = JSON.parse(normalizedBody);
         var expected = {
           rank: '-text_relevance',
-          'match-expr': '',
+          'match-expr': "(label 'Tokyo')",
           hits: {
             found: 3,
             start: 0,
@@ -232,7 +232,7 @@ suite('Search API', function() {
         var actual = JSON.parse(normalizedBody);
         var expected = {
           rank: '-text_relevance',
-          'match-expr': '',
+          'match-expr': "(label 'Tokyo')",
           hits: {
             found: 3,
             start: 0,
@@ -284,7 +284,7 @@ suite('Search API', function() {
         var actual = JSON.parse(normalizedBody);
         var expected = {
           rank: '-text_relevance',
-          'match-expr': '',
+          'match-expr': "(label 'Tokyo')",
           hits: {
             found: 3,
             start: 1,
@@ -336,7 +336,7 @@ suite('Search API', function() {
         var actual = JSON.parse(normalizedBody);
         var expected = {
           rank: '-text_relevance',
-          'match-expr': '',
+          'match-expr': "(label 'Tokio')",
           hits: {
             found: 0,
             start: 0,
@@ -370,7 +370,7 @@ suite('Search API', function() {
         var actual = JSON.parse(normalizedBody);
         var expected = {
           rank: '-text_relevance',
-          'match-expr': '',
+          'match-expr': "(label 'Tokio')",
           hits: {
             found: 3,
             start: 0,
