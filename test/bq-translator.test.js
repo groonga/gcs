@@ -350,20 +350,37 @@ suite('BoolanQueryTranslator', function() {
                              "'ModelName'||",
                              "no default field");
 
-  testSynonym("existent: 0 synonym",
+  testSynonym("keyword: existent: 0 synonym",
               "'tokio'",
               { tokio: [] },
               '');
-  testSynonym("existent: 1 synonym",
+  testSynonym("keyword: existent: 1 synonym",
               "'tokio'",
               { tokio: ["tokyo"] },
               'field @ "tokyo"');
-  testSynonym("existent: N synonyms",
+  testSynonym("keyword: existent: N synonyms",
               "'tokio'",
               { tokio: ["tokio", "tokyo"] },
               '(field @ "tokio" || field @ "tokyo")');
-  testSynonym("nonexistent",
+  testSynonym("keyword: nonexistent",
               "'hokkaido'",
               { tokio: ["tokio", "tokyo"] },
               'field @ "hokkaido"');
+
+  testSynonym("phrase: existent: 0 synonym",
+              "'\"tokyo disney land\"'",
+              { "tokyo disney land": [] },
+              '');
+  testSynonym("phrase: existent: 1 synonym",
+              "'\"tokyo disney land\"'",
+              { "tokyo disney land": ["TDL"] },
+              'field @ "TDL"');
+  testSynonym("phrase: existent: N synonyms",
+              "'\"tokyo disney land\"'",
+              { "tokyo disney land": ["tokyo disney land", "TDL"] },
+              '(field @ "tokyo disney land" || field @ "TDL")');
+  testSynonym("phrase: nonexistent",
+              "'\"tokyo disney land\"'",
+              { tokio: ["tokio", "tokyo"] },
+              'field @ "tokyo disney land"');
 });
