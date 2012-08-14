@@ -5,11 +5,21 @@ var assert = require('chai').assert;
 
 var BooleanQueryTranslator = require('../lib/bq-translator').BooleanQueryTranslator;
 
+function createTranslator(query) {
+  var translator = new BooleanQueryTranslator(query);
+  translator.domain = {
+    getSynonymSync: function(key) {
+      return null;
+    }
+  };
+  translator.defaultFieldNames = ["field"];
+  return translator;
+}
+
 function testQuery(label, query, expected) {
   test('query: ' + label + ': ' +
        '<' + query + '> -> <' + expected + '>', function() {
-    var translator = new BooleanQueryTranslator(query);
-    translator.defaultFieldNames = ["field"];
+    var translator = createTranslator(query);
     assert.equal(translator.translate(),
                  expected);
   });
@@ -17,8 +27,7 @@ function testQuery(label, query, expected) {
 
 function testQueryError(label, query, context, detail) {
   test('error: query: ' + label + ': ' + '<' + query + '>', function() {
-    var translator = new BooleanQueryTranslator(query);
-    translator.defaultFieldNames = ["field"];
+    var translator = createTranslator(query);
     var actualError;
     assert.throw(function() {
       try {
@@ -35,8 +44,7 @@ function testQueryError(label, query, context, detail) {
 function testGroup(label, group, expectedOffset, expectedScriptGrnExpr) {
   test('gorup: ' + label + ': ' +
        '<' + group + '> -> <' + expectedScriptGrnExpr + '>', function() {
-    var translator = new BooleanQueryTranslator(group);
-    translator.defaultFieldNames = ["field"];
+    var translator = createTranslator(group);
     var actualScriptGrnExpr = translator.translateGroup();
     assert.deepEqual({
                        scriptGrnExpr: actualScriptGrnExpr,
@@ -51,8 +59,7 @@ function testGroup(label, group, expectedOffset, expectedScriptGrnExpr) {
 
 function testGroupError(label, group, context, detail) {
   test('error: group: ' + label + ': ' + '<' + group + '>', function() {
-    var translator = new BooleanQueryTranslator(group);
-    translator.defaultFieldNames = ["field"];
+    var translator = createTranslator(group);
     var actualError;
     assert.throw(function() {
       try {
@@ -70,8 +77,7 @@ function testExpression(label, expression,
                         expectedOffset, expectedScriptGrnExpr) {
   test('expression: ' + label + ': ' +
        '<' + expression + '> -> <' + expectedScriptGrnExpr + '>', function() {
-    var translator = new BooleanQueryTranslator(expression);
-    translator.defaultFieldNames = ["field"];
+    var translator = createTranslator(expression);
     var actualScriptGrnExpr =
           translator.translateExpression();
     assert.deepEqual({
@@ -88,8 +94,7 @@ function testExpression(label, expression,
 function testExpressionError(label, expression, context, detail) {
   test('error: expression: ' + label + ': ' + '<' + expression + '>',
        function() {
-    var translator = new BooleanQueryTranslator(expression);
-    translator.defaultFieldNames = ["field"];
+    var translator = createTranslator(expression);
     var actualError;
     assert.throw(function() {
       try {
@@ -106,7 +111,7 @@ function testExpressionError(label, expression, context, detail) {
 function testDefaultFieldNames(label, query, defaultFieldNames, expected) {
   test('default field names: ' + label + ': ' +
        '<' + query + '> -> <' + expected + '>', function() {
-    var translator = new BooleanQueryTranslator(query);
+    var translator = createTranslator(query);
     translator.defaultFieldNames = defaultFieldNames;
     assert.equal(translator.translate(),
                  expected);
@@ -117,7 +122,7 @@ function testDefaultFieldNamesError(label, query, defaultFieldNames,
                                     context, detail) {
   test('error: default field names: ' + label + ': ' + '<' + query + '>',
        function() {
-    var translator = new BooleanQueryTranslator(query);
+    var translator = createTranslator(query);
     translator.defaultFieldNames = defaultFieldNames;
     var actualError;
     assert.throw(function() {
@@ -129,6 +134,19 @@ function testDefaultFieldNamesError(label, query, defaultFieldNames,
       }
     });
     assert.equal(actualError.message, "<" + context + ">" + ": " + detail);
+  });
+}
+
+function testSynonym(label, query, synonyms, expected) {
+  test('default synonym: ' + label + ': ' +
+       '<' + query + '> -> <' + expected + '>', function() {
+    var translator = createTranslator(query);
+    translator.domain = {
+      getSynonymSync: function(key) {
+        return synonyms[key];
+      }
+    };
+    assert.equal(translator.translate(), expected);
   });
 }
 
@@ -331,4 +349,21 @@ suite('BoolanQueryTranslator', function() {
                              [],
                              "'ModelName'||",
                              "no default field");
+
+  testSynonym("existent: 0 synonym",
+              "'tokio'",
+              { tokio: [] },
+              '');
+  testSynonym("existent: 1 synonym",
+              "'tokio'",
+              { tokio: ["tokyo"] },
+              'field @ "tokyo"');
+  testSynonym("existent: N synonyms",
+              "'tokio'",
+              { tokio: ["tokio", "tokyo"] },
+              '(field @ "tokio" || field @ "tokyo")');
+  testSynonym("nonexistent",
+              "'hokkaido'",
+              { tokio: ["tokio", "tokyo"] },
+              'field @ "hokkaido"');
 });
