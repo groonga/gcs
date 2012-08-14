@@ -302,7 +302,8 @@ suite('database', function() {
 
         field.defaultSearchField = true;
         field.saveOptionsSync();
-        assert.equal(domain.defaultSearchField, null);
+        assert.isTrue(domain.defaultSearchField === null,
+                      domain.defaultSearchField);
       });
 
       test('auto-remove default search field', function() {
@@ -314,7 +315,8 @@ suite('database', function() {
                      domain.getIndexField('product'));
 
         field.deleteSync();
-        assert.equal(domain.defaultSearchField, null);
+        assert.isTrue(domain.defaultSearchField === null,
+                      domain.defaultSearchField);
       });
     });
 

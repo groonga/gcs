@@ -258,7 +258,8 @@ suite('database', function() {
     });
 
     test('setting default search field (instance)', function() {
-      assert.equal(domain.defaultSearchField, null);
+      assert.isTrue(domain.defaultSearchField === null,
+                    domain.defaultSearchField);
       var nameField = domain.getIndexField('name');
       domain.defaultSearchField = nameField;
       assert.equal(domain.defaultSearchField, nameField);
@@ -269,7 +270,8 @@ suite('database', function() {
     });
 
     test('setting default search field (text)', function() {
-      assert.equal(domain.defaultSearchField, null);
+      assert.isTrue(domain.defaultSearchField === null,
+                    domain.defaultSearchField);
       domain.defaultSearchField = 'name';
       assert.equal(domain.defaultSearchField, domain.getIndexField('name'));
 
@@ -279,9 +281,11 @@ suite('database', function() {
     });
 
     test('setting default search field (unknown field)', function() {
-      assert.equal(domain.defaultSearchField, null);
+      assert.isTrue(domain.defaultSearchField === null,
+                    domain.defaultSearchField);
       domain.defaultSearchField = 'unknown';
-      assert.equal(domain.defaultSearchField, null);
+      assert.isTrue(domain.defaultSearchField === null,
+                    domain.defaultSearchField);
     });
 
     test('removing default search field', function() {
@@ -290,7 +294,8 @@ suite('database', function() {
       assert.equal(domain.defaultSearchField, nameField);
 
       domain.defaultSearchField = null;
-      assert.equal(domain.defaultSearchField, null);
+      assert.isTrue(domain.defaultSearchField === null,
+                    domain.defaultSearchField);
 
       var anotherDomainInstance = new Domain('companies', context);
       assert.equal(anotherDomainInstance.defaultSearchField, null);
