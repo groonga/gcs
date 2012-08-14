@@ -257,6 +257,39 @@ suite('database', function() {
       });
     });
 
+    test('setting default search field', function() {
+      assert.equal(domain.defaultSearchField, null, field);
+      var nameField = domain.getIndexField('name');
+      domain.defaultSearchField = nameField;
+      assert.equal(domain.defaultSearchField, nameField);
+
+      var anotherDomainInstance = new Domain('companies', context);
+      assert.equal(anotherDomainInstance.defaultSearchField,
+                   anotherDomainInstance.getIndexField('name'));
+    });
+
+    test('setting default search field (text)', function() {
+      assert.equal(domain.defaultSearchField, null, field);
+      domain.defaultSearchField = 'name';
+      assert.equal(domain.defaultSearchField, domain.getIndexField('name'));
+
+      var anotherDomainInstance = new Domain('companies', context);
+      assert.equal(anotherDomainInstance.defaultSearchField,
+                   anotherDomainInstance.getIndexField('name'));
+    });
+
+    test('removing default search field', function() {
+      var nameField = domain.getIndexField('name');
+      domain.defaultSearchField = nameField;
+      assert.equal(domain.defaultSearchField, nameField);
+
+      domain.defaultSearchField = null;
+      assert.equal(domain.defaultSearchField, null);
+
+      var anotherDomainInstance = new Domain('companies', context);
+      assert.equal(anotherDomainInstance.defaultSearchField, null);
+    });
+
     suite('database modifications', function() {
       var temporaryDatabase;
       var context;
