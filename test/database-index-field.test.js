@@ -300,7 +300,7 @@ suite('database', function() {
         assert.equal(domain.defaultSearchField,
                      domain.getIndexField('product'));
 
-        field.defaultSearchField = true;
+        field.defaultSearchField = false;
         field.saveOptionsSync();
         assert.isTrue(domain.defaultSearchField === null,
                       domain.defaultSearchField);
