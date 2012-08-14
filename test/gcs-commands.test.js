@@ -755,7 +755,7 @@ suite('gcs-post-sdf', function() {
   teardown(commonTeardown);
 
   var fixturesDirectory = path.join(__dirname, 'fixture', 'companies');
-  
+
   function setupDomain() {
     var domain = new Domain('companies', context);
     domain.createSync();
@@ -781,7 +781,7 @@ suite('gcs-post-sdf', function() {
                          { code:    0,
                            message:
                              'Processing: ' + batchFile + '\n' +
-                             'Detected source format for ' + 
+                             'Detected source format for ' +
                                'add.sdf.json as json\n' +
                              'Status: success\n' +
                              'Added: 10\n' +
@@ -812,7 +812,7 @@ suite('gcs-post-sdf', function() {
                          { code:    0,
                            message:
                              'Processing: ' + batchFile + '\n' +
-                             'Detected source format for ' + 
+                             'Detected source format for ' +
                                'delete.sdf.json as json\n' +
                              'Status: success\n' +
                              'Added: 0\n' +
@@ -839,7 +839,7 @@ suite('gcs-post-sdf', function() {
                          { code:    1,
                            message:
                              'Processing: ' + batchFile + '\n' +
-                             'Detected source format for ' + 
+                             'Detected source format for ' +
                                'invalid.sdf.json as json\n' +
                              'Validation failed.\n' +
                              'invalidfield: The field "unknown1" is ' +
@@ -948,5 +948,5 @@ suite('gcs-post-sdf', function() {
       .error(function(e) {
         done(e);
       });
-  });  
+  });
 });
