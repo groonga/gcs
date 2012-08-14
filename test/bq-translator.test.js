@@ -9,7 +9,7 @@ function testQuery(label, query, expected) {
   test('query: ' + label + ': ' +
        '<' + query + '> -> <' + expected + '>', function() {
     var translator = new BooleanQueryTranslator(query);
-    translator.defaultFields = ["field"];
+    translator.defaultFieldNames = ["field"];
     assert.equal(translator.translate(),
                  expected);
   });
@@ -18,7 +18,7 @@ function testQuery(label, query, expected) {
 function testQueryError(label, query, context, detail) {
   test('error: query: ' + label + ': ' + '<' + query + '>', function() {
     var translator = new BooleanQueryTranslator(query);
-    translator.defaultFields = ["field"];
+    translator.defaultFieldNames = ["field"];
     var actualError;
     assert.throw(function() {
       try {
@@ -36,7 +36,7 @@ function testGroup(label, group, expectedOffset, expectedScriptGrnExpr) {
   test('gorup: ' + label + ': ' +
        '<' + group + '> -> <' + expectedScriptGrnExpr + '>', function() {
     var translator = new BooleanQueryTranslator(group);
-    translator.defaultFields = ["field"];
+    translator.defaultFieldNames = ["field"];
     var actualScriptGrnExpr = translator.translateGroup();
     assert.deepEqual({
                        scriptGrnExpr: actualScriptGrnExpr,
@@ -52,7 +52,7 @@ function testGroup(label, group, expectedOffset, expectedScriptGrnExpr) {
 function testGroupError(label, group, context, detail) {
   test('error: group: ' + label + ': ' + '<' + group + '>', function() {
     var translator = new BooleanQueryTranslator(group);
-    translator.defaultFields = ["field"];
+    translator.defaultFieldNames = ["field"];
     var actualError;
     assert.throw(function() {
       try {
@@ -71,7 +71,7 @@ function testExpression(label, expression,
   test('expression: ' + label + ': ' +
        '<' + expression + '> -> <' + expectedScriptGrnExpr + '>', function() {
     var translator = new BooleanQueryTranslator(expression);
-    translator.defaultFields = ["field"];
+    translator.defaultFieldNames = ["field"];
     var actualScriptGrnExpr =
           translator.translateExpression();
     assert.deepEqual({
@@ -89,7 +89,7 @@ function testExpressionError(label, expression, context, detail) {
   test('error: expression: ' + label + ': ' + '<' + expression + '>',
        function() {
     var translator = new BooleanQueryTranslator(expression);
-    translator.defaultFields = ["field"];
+    translator.defaultFieldNames = ["field"];
     var actualError;
     assert.throw(function() {
       try {
@@ -103,20 +103,22 @@ function testExpressionError(label, expression, context, detail) {
   });
 }
 
-function testDefaultFields(label, query, defaultFields, expected) {
-  test('defaultFields: ' + label + ': ' +
+function testDefaultFieldNames(label, query, defaultFieldNames, expected) {
+  test('default field names: ' + label + ': ' +
        '<' + query + '> -> <' + expected + '>', function() {
     var translator = new BooleanQueryTranslator(query);
-    translator.defaultFields = defaultFields;
+    translator.defaultFieldNames = defaultFieldNames;
     assert.equal(translator.translate(),
                  expected);
   });
 }
 
-function testDefaultFieldsError(label, query, defaultFields, context, detail) {
-  test('error: defaultFields: ' + label + ': ' + '<' + query + '>', function() {
+function testDefaultFieldNamesError(label, query, defaultFieldNames,
+                                    context, detail) {
+  test('error: default field names: ' + label + ': ' + '<' + query + '>',
+       function() {
     var translator = new BooleanQueryTranslator(query);
-    translator.defaultFields = defaultFields;
+    translator.defaultFieldNames = defaultFieldNames;
     var actualError;
     assert.throw(function() {
       try {
@@ -315,18 +317,18 @@ suite('BoolanQueryTranslator', function() {
                       "..||",
                       "both min and max are missing");
 
-  testDefaultFields("multi",
-                    "'ModelName'",
-                    ["type", "name"],
-                    '(type @ "ModelName" || name @ "ModelName")');
-  testDefaultFieldsError("null",
-                         "'ModelName'",
-                         null,
-                         "'ModelName'||",
-                         "default fields are missing");
-  testDefaultFieldsError("empty",
-                         "'ModelName'",
-                         [],
-                         "'ModelName'||",
-                         "no default field");
+  testDefaultFieldNames("multi",
+                        "'ModelName'",
+                        ["type", "name"],
+                        '(type @ "ModelName" || name @ "ModelName")');
+  testDefaultFieldNamesError("null",
+                             "'ModelName'",
+                             null,
+                             "'ModelName'||",
+                             "default fields are missing");
+  testDefaultFieldNamesError("empty",
+                             "'ModelName'",
+                             [],
+                             "'ModelName'||",
+                             "no default field");
 });
