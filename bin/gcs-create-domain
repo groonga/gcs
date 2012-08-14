@@ -22,4 +22,4 @@ console.log('Creating domain [' + commandLine.domain.name + ']');
 commandLine.domain.createSync();
 
 console.log('Domain endpoints are currently being created. ' +
-            'Use cs-describe-domain to check for endpoints.');
+            'Use gcs-describe-domain to check for endpoints.');
