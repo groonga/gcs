@@ -236,22 +236,6 @@ suite('BoolanQueryTranslator', function() {
                  "'\"keyword1 keyword2\"|\"keyword3\"' 'other keyword'",
                  "'\"keyword1 keyword2\"|\"keyword3\"'".length,
                  "field @ \"keyword1 keyword2\" || field @ \"keyword3\"");
-  testExpression("value only: unsigned integer",
-                 "29 75",
-                 "29".length,
-                 "field == 29");
-  testExpression("value only: unsigned integer range: min only",
-                 "29.. 75",
-                 "29..".length,
-                 "field >= 29");
-  testExpression("value only: unsigned integer range: max only",
-                 "..29 75",
-                 "..29".length,
-                 "field <= 29");
-  testExpression("value only: unsigned integer range: min and max",
-                 "14..29 75",
-                 "14..29".length,
-                 "(field >= 14 && field <= 29)");
 
   testExpression("field value: string",
                  "field1:'keyword1 keyword2' field2:'other keyword'",
@@ -262,9 +246,14 @@ suite('BoolanQueryTranslator', function() {
                  "field1:29".length,
                  "field1 == 29");
 
-  testExpressionError("missing field value separator",
+  testExpressionError("missing field value separator: normal field name",
                       "f1 'k1'",
                       "f1| |'k1'",
+                      "field value separator is missing");
+  testExpressionError("missing field value separator: " +
+                        "unsigned integer like field name",
+                      "29 75",
+                      "29| |75",
                       "field value separator is missing");
   testExpressionError("invalid value",
                       "f1:value",
