@@ -359,6 +359,15 @@ suite('database', function() {
         assert.equal(dumpExpected, dumpActual);
       });
 
+      test('getSynonymSync', function() {
+        var domain = new Domain('companies', context);
+        domain.updateSynonymsSync({
+          tokio: ['tonkin', 'tokyo']
+        });
+
+        assert.deepEqual(domain.getSynonymSync('tokio'), ['tonkin', 'tokyo']);
+      });
+
       test('getSynonymsSync', function() {
         var domain = new Domain('companies', context);
         domain.updateSynonymsSync({
