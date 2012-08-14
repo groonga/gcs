@@ -255,50 +255,50 @@ suite('database', function() {
         }
         assert.deepEqual(fields.sort(sortFields), expected.sort(sortFields));
       });
-    });
 
-    test('setting default search field (instance)', function() {
-      assert.isTrue(domain.defaultSearchField === null,
-                    domain.defaultSearchField);
-      var nameField = domain.getIndexField('name');
-      domain.defaultSearchField = nameField;
-      assert.equal(domain.defaultSearchField, nameField);
+      test('setting default search field (instance)', function() {
+        assert.isTrue(domain.defaultSearchField === null,
+                      domain.defaultSearchField);
+        var nameField = domain.getIndexField('name');
+        domain.defaultSearchField = nameField;
+        assert.equal(domain.defaultSearchField, nameField);
 
-      var anotherDomainInstance = new Domain('companies', context);
-      assert.equal(anotherDomainInstance.defaultSearchField,
-                   anotherDomainInstance.getIndexField('name'));
-    });
+        var anotherDomainInstance = new Domain('companies', context);
+        assert.equal(anotherDomainInstance.defaultSearchField,
+                     anotherDomainInstance.getIndexField('name'));
+      });
 
-    test('setting default search field (text)', function() {
-      assert.isTrue(domain.defaultSearchField === null,
-                    domain.defaultSearchField);
-      domain.defaultSearchField = 'name';
-      assert.equal(domain.defaultSearchField, domain.getIndexField('name'));
+      test('setting default search field (text)', function() {
+        assert.isTrue(domain.defaultSearchField === null,
+                      domain.defaultSearchField);
+        domain.defaultSearchField = 'name';
+        assert.equal(domain.defaultSearchField, domain.getIndexField('name'));
 
-      var anotherDomainInstance = new Domain('companies', context);
-      assert.equal(anotherDomainInstance.defaultSearchField,
-                   anotherDomainInstance.getIndexField('name'));
-    });
+        var anotherDomainInstance = new Domain('companies', context);
+        assert.equal(anotherDomainInstance.defaultSearchField,
+                     anotherDomainInstance.getIndexField('name'));
+      });
 
-    test('setting default search field (unknown field)', function() {
-      assert.isTrue(domain.defaultSearchField === null,
-                    domain.defaultSearchField);
-      domain.defaultSearchField = 'unknown';
-      assert.isTrue(domain.defaultSearchField === null,
-                    domain.defaultSearchField);
-    });
+      test('setting default search field (unknown field)', function() {
+        assert.isTrue(domain.defaultSearchField === null,
+                      domain.defaultSearchField);
+        domain.defaultSearchField = 'unknown';
+        assert.isTrue(domain.defaultSearchField === null,
+                      domain.defaultSearchField);
+      });
 
-    test('removing default search field', function() {
-      var nameField = domain.getIndexField('name');
-      domain.defaultSearchField = nameField;
-      assert.equal(domain.defaultSearchField, nameField);
+      test('removing default search field', function() {
+        var nameField = domain.getIndexField('name');
+        domain.defaultSearchField = nameField;
+        assert.equal(domain.defaultSearchField, nameField);
 
-      domain.defaultSearchField = null;
-      assert.isTrue(domain.defaultSearchField === null,
-                    domain.defaultSearchField);
+        domain.defaultSearchField = null;
+        assert.isTrue(domain.defaultSearchField === null,
+                      domain.defaultSearchField);
 
-      var anotherDomainInstance = new Domain('companies', context);
-      assert.equal(anotherDomainInstance.defaultSearchField, null);
+        var anotherDomainInstance = new Domain('companies', context);
+        assert.equal(anotherDomainInstance.defaultSearchField, null);
+      });
     });
 
     suite('database modifications', function() {
