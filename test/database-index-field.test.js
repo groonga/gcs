@@ -290,6 +290,32 @@ suite('database', function() {
         field = new IndexField('product', domain); // reset instance from database
         assert.equal('Search Facet Result', field.options);
       });
+
+      test('setting default search field', function() {
+        var field = new IndexField('product', domain).setType('literal');
+        field.createSync();
+
+        field.defaultSearchField = true;
+        field.saveOptionsSync();
+        assert.equal(domain.defaultSearchField,
+                     domain.getIndexField('product'));
+
+        field.defaultSearchField = true;
+        field.saveOptionsSync();
+        assert.equal(domain.defaultSearchField, null);
+      });
+
+      test('auto-remove default search field', function() {
+        var field = new IndexField('product', domain).setType('literal');
+        field.createSync();
+        field.defaultSearchField = true;
+        field.saveOptionsSync();
+        assert.equal(domain.defaultSearchField,
+                     domain.getIndexField('product'));
+
+        field.deleteSync();
+        assert.equal(domain.defaultSearchField, null);
+      });
     });
 
     suite('database modifications', function() {
