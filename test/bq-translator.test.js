@@ -161,10 +161,19 @@ suite('BoolanQueryTranslator', function() {
             "(and 'keyword1 keyword2' type:'ModelName')",
             '(field @ "keyword1" && field @ "keyword2" && type @ "ModelName")');
 
+  testQuery("label",
+            "(label 'keyword1 keyword2')",
+            'field @ "keyword1" && field @ "keyword2"');
+
   testQueryError("garbage",
                  "(and 'keyword' type:'ModelName') garbage1 garbage2",
                  "(and 'keyword' type:'ModelName')| |garbage1 garbage2",
                  "garbages exist after valid boolean query");
+
+  testQueryError("label: missing close parentheis",
+                 "(label 'keyword1 keyword2'",
+                 "(label 'keyword1 keyword2'||",
+                 "close parenthesis is missing: operator:<label>");
 
   testGroup("field",
             "(field field1 'keyword1') (other group)",
