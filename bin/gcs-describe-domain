@@ -13,14 +13,16 @@ commandLine
           String)
   .parse();
 
+var hostPort = '127.0.0.1.xip.io:7575';
+
 function report(domain) {
   console.log('=== Domain Summary ===');
   console.log('Domain Name: %s',
               domain.name);
   console.log('Document Service endpoint: %s',
-              domain.getDocumentsEndpoint('localhost'));
+              domain.getDocumentsEndpoint(hostPort));
   console.log('Search Service endpoint: %s',
-              domain.getSearchEndpoint('localhost'));
+              domain.getSearchEndpoint(hostPort));
   console.log('SearchInstanceType: %s',
               domain.searchInstanceType);
   console.log('SearchPartitionCount: %s',
