@@ -28,7 +28,7 @@
     "xmlbuilder": ""
   },
   "scripts": {
-    "test": "./node_modules/.bin/mocha --reporter list --ui tdd",
+    "test": "NODE_ENV=test ./node_modules/.bin/mocha --reporter list --ui tdd",
     "start": "./bin/gcs"
   },
   "bin": {
