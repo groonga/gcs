@@ -156,6 +156,18 @@ suite('database', function() {
       });
     });
 
+    test('summary', function() {
+      var textField =    new IndexField('name', domain).setType('text');
+      var uintField =    new IndexField('age', domain).setType('uint');
+      var literalField = new IndexField('product', domain).setType('literal');
+      assert.deepEqual({ text:    textField.summary,
+                         uint:    uintField.summary,
+                         literal: literalField.summary },
+                       { text:    'name Active text (Search)',
+                         uint:    'age Active uint (Facet Result)',
+                         literal: 'product Active literal ()' });
+    });
+
     suite('getting data from database', function() {
       var temporaryDatabase;
       var context;
