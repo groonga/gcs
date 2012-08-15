@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Kouhei Sutou <kou@clear-code.com>
 Build-Depends:
   debhelper (>= 7.0.50),
-  libgroonga-dev,
+  libgroonga-dev (>= 2.0.6),
   pkg-config,
   npm
 Standards-Version: 3.9.1
@@ -16,7 +16,7 @@ Architecture: any
 Depends:
   ${misc:Depends},
   ${shlibs:Depends},
-  libgroonga0,
+  libgroonga0 (>= 2.0.6),
   npm
 Description: Open Source Amazon CloudSearch on Your Computer
  Groonga CloudSearch is an Amazon CloudSearch compatible open source
