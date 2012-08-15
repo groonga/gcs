@@ -320,11 +320,11 @@ suite('Configuration API', function() {
     temporaryDatabase = undefined;
   });
 
+  var defaultBaseHost = '127.0.0.1.xip.io:' + utils.testPort;
+
   test('Get, Action=CreateDomain', function(done) {
     utils
-      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
-         'Host': utils.testConfigurationHost
-       })
+      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
       .next(function(response) {
         var domain = new Domain('companies', context);
         assert.isTrue(domain.exists());
@@ -337,7 +337,7 @@ suite('Configuration API', function() {
               Created: 'true',
               Deleted: 'false',
               DocService: {
-                Endpoint: domain.getDocumentsEndpoint('api.localhost')
+                Endpoint: domain.getDocumentsEndpoint(defaultBaseHost)
               },
               DomainId: domain.domainId,
               DomainName: domain.name,
@@ -346,7 +346,7 @@ suite('Configuration API', function() {
               SearchInstanceCount: String(domain.searchInstanceCount),
               SearchPartitionCount: String(domain.searchPartitionCount),
               SearchService: {
-                Endpoint: domain.getSearchEndpoint('api.localhost')
+                Endpoint: domain.getSearchEndpoint(defaultBaseHost)
               }
             };
         var status = response.body.CreateDomainResponse.CreateDomainResult.DomainStatus;
@@ -536,15 +536,9 @@ suite('Configuration API', function() {
   test('Get, Action=DescribeDomains (all domains)', function(done) {
     var domain;
     utils
-      .get('/?DomainName=domain3&Action=CreateDomain&Version=2011-02-01', {
-        'Host': utils.testConfigurationHost
-      })
-      .get('/?DomainName=domain1&Action=CreateDomain&Version=2011-02-01', {
-        'Host': utils.testConfigurationHost
-      })
-      .get('/?DomainName=domain2&Action=CreateDomain&Version=2011-02-01', {
-        'Host': utils.testConfigurationHost
-      })
+      .get('/?DomainName=domain3&Action=CreateDomain&Version=2011-02-01')
+      .get('/?DomainName=domain1&Action=CreateDomain&Version=2011-02-01')
+      .get('/?DomainName=domain2&Action=CreateDomain&Version=2011-02-01')
       .get('/?Action=DescribeDomains&Version=2011-02-01')
       .next(function(response) {
         response = toParsedResponse(response);
@@ -565,15 +559,9 @@ suite('Configuration API', function() {
 
   test('Get, Action=DescribeDomains (specified domains)', function(done) {
     utils
-      .get('/?DomainName=domain3&Action=CreateDomain&Version=2011-02-01', {
-        'Host': utils.testConfigurationHost
-      })
-      .get('/?DomainName=domain1&Action=CreateDomain&Version=2011-02-01', {
-        'Host': utils.testConfigurationHost
-      })
-      .get('/?DomainName=domain2&Action=CreateDomain&Version=2011-02-01', {
-        'Host': utils.testConfigurationHost
-      })
+      .get('/?DomainName=domain3&Action=CreateDomain&Version=2011-02-01')
+      .get('/?DomainName=domain1&Action=CreateDomain&Version=2011-02-01')
+      .get('/?DomainName=domain2&Action=CreateDomain&Version=2011-02-01')
       .get('/?Action=DescribeDomains&Version=2011-02-01' +
              '&DomainNames.member.1=domain2' +
              '&DomainNames.member.2=domain1')
@@ -596,9 +584,7 @@ suite('Configuration API', function() {
 
   test('Get, Action=DefineIndexField (text, without options)', function(done) {
     utils
-      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
-        'Host': utils.testConfigurationHost
-      })
+      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
       .get('/?DomainName=companies&IndexField.IndexFieldName=name&' +
            'IndexField.IndexFieldType=text&' +
            'Action=DefineIndexField&Version=2011-02-01')
@@ -632,9 +618,7 @@ suite('Configuration API', function() {
 
   test('Get, Action=DefineIndexField (text, with options)', function(done) {
     utils
-      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
-        'Host': utils.testConfigurationHost
-      })
+      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
       .get('/?DomainName=companies&IndexField.IndexFieldName=name&' +
            'IndexField.IndexFieldType=text&' +
            'TextOptions.FacetEnabled=true&TextOptions.ResultEnabled=true&' +
@@ -669,9 +653,7 @@ suite('Configuration API', function() {
 
   test('Get, Action=DefineIndexField (uint)', function(done) {
     utils
-      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
-        'Host': utils.testConfigurationHost
-      })
+      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
       .get('/?DomainName=companies&IndexField.IndexFieldName=age&' +
            'IndexField.IndexFieldType=uint&' +
            'Action=DefineIndexField&Version=2011-02-01')
@@ -703,9 +685,7 @@ suite('Configuration API', function() {
 
   test('Get, Action=DefineIndexField (literal, without options)', function(done) {
     utils
-      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
-        'Host': utils.testConfigurationHost
-      })
+      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
       .get('/?DomainName=companies&IndexField.IndexFieldName=product&' +
            'IndexField.IndexFieldType=literal&' +
            'Action=DefineIndexField&Version=2011-02-01')
@@ -740,9 +720,7 @@ suite('Configuration API', function() {
 
   test('Get, Action=DefineIndexField (literal, with options)', function(done) {
     utils
-      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
-        'Host': utils.testConfigurationHost
-      })
+      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
       .get('/?DomainName=companies&IndexField.IndexFieldName=product&' +
            'IndexField.IndexFieldType=literal&' +
            'LiteralOptions.SearchEnabled=true&' +
@@ -781,9 +759,7 @@ suite('Configuration API', function() {
   test('Get, Action=DeleteIndexField (text)', function(done) {
     var domain, field;
     utils
-      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
-        'Host': utils.testConfigurationHost
-      })
+      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
       .get('/?DomainName=companies&IndexField.IndexFieldName=name&' +
            'IndexField.IndexFieldType=text&' +
            'Action=DefineIndexField&Version=2011-02-01')
@@ -814,9 +790,7 @@ suite('Configuration API', function() {
   test('Get, Action=DeleteIndexField (uint)', function(done) {
     var domain, field;
     utils
-      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
-        'Host': utils.testConfigurationHost
-      })
+      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
       .get('/?DomainName=companies&IndexField.IndexFieldName=age&' +
            'IndexField.IndexFieldType=uint&' +
            'Action=DefineIndexField&Version=2011-02-01')
@@ -847,9 +821,7 @@ suite('Configuration API', function() {
   test('Get, Action=DeleteIndexField (literal)', function(done) {
     var domain, field;
     utils
-      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
-        'Host': utils.testConfigurationHost
-      })
+      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
       .get('/?DomainName=companies&IndexField.IndexFieldName=product&' +
            'IndexField.IndexFieldType=literal&' +
            'Action=DefineIndexField&Version=2011-02-01')
@@ -893,9 +865,7 @@ suite('Configuration API', function() {
   test('Get, Action=DescribeIndexFields (all fields)', function(done) {
     var domain;
     utils
-      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
-        'Host': utils.testConfigurationHost
-      })
+      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
       .get('/?DomainName=companies&IndexField.IndexFieldName=name&' +
            'IndexField.IndexFieldType=text&' +
            'Action=DefineIndexField&Version=2011-02-01')
@@ -930,9 +900,7 @@ suite('Configuration API', function() {
 
   test('Get, Action=DescribeIndexFields (specified fields)', function(done) {
     utils
-      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
-        'Host': utils.testConfigurationHost
-      })
+      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
       .get('/?DomainName=companies&IndexField.IndexFieldName=name&' +
            'IndexField.IndexFieldType=text&' +
            'Action=DefineIndexField&Version=2011-02-01')
@@ -968,9 +936,7 @@ suite('Configuration API', function() {
 
   test('Get, Action=IndexDocuments', function(done) {
     utils
-      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
-        'Host': utils.testConfigurationHost
-      })
+      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
       .get('/?DomainName=companies&IndexField.IndexFieldName=name&' +
            'Action=DefineIndexField&Version=2011-02-01')
       .get('/?DomainName=companies&IndexField.IndexFieldName=age&' +
@@ -1021,17 +987,13 @@ suite('Configuration API', function() {
     var json = JSON.stringify(synonymsObject);
     var synonyms = encodeURIComponent(json);
     utils
-      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
-        'Host': utils.testConfigurationHost
-      })
+      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
       .next(function() {
         domain = new Domain('companies', context);
         assert.isFalse(domain.hasSynonymsTableSync());
       })
       .get('/?Version=2011-02-01&Action=UpdateSynonymOptions&' +
-           'DomainName=companies&Synonyms='+synonyms, {
-        'Host': utils.testConfigurationHost
-      })
+           'DomainName=companies&Synonyms='+synonyms)
       .next(function(response) {
         assert.isTrue(domain.hasSynonymsTableSync());
 
@@ -1070,9 +1032,7 @@ suite('Configuration API', function() {
     var json = JSON.stringify(synonymsObject);
     var synonyms = encodeURIComponent(json);
     utils
-      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
-        'Host': utils.testConfigurationHost
-      })
+      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
       .get('/?Version=2011-02-01&Action=DescribeSynonymOptions&' +
            'DomainName=companies')
       .next(function(response) {
@@ -1122,9 +1082,7 @@ suite('Configuration API', function() {
   test('Get, Action=UpdateDefaultSearchField', function(done) {
     var domain;
     utils
-      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
-        'Host': utils.testConfigurationHost
-      })
+      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
       .get('/?DomainName=companies&IndexField.IndexFieldName=name&' +
            'Action=DefineIndexField&Version=2011-02-01')
       .next(function() {
@@ -1175,9 +1133,7 @@ suite('Configuration API', function() {
   test('Get, Action=DescribeDefaultSearchField', function(done) {
     var domain;
     utils
-      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
-        'Host': utils.testConfigurationHost
-      })
+      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
       .get('/?DomainName=companies&IndexField.IndexFieldName=name&' +
            'Action=DefineIndexField&Version=2011-02-01')
       .get('/?Version=2011-02-01&Action=DescribeDefaultSearchField&' +
@@ -1218,9 +1174,7 @@ suite('Configuration API', function() {
 
   test('Get, no version', function(done) {
     utils
-      .get('/?Action=unknown', {
-        'Host': utils.testConfigurationHost
-      })
+      .get('/?Action=unknown')
       .next(function(response) {
         response = toParsedResponse(response);
         assert.deepEqual(response.pattern,
@@ -1243,9 +1197,7 @@ suite('Configuration API', function() {
 
   test('Get, invalid version', function(done) {
     utils
-      .get('/?Version=2011-02-02&Action=unknown', {
-        'Host': utils.testConfigurationHost
-      })
+      .get('/?Version=2011-02-02&Action=unknown')
       .next(function(response) {
         response = toParsedResponse(response);
         assert.deepEqual(response.pattern,
