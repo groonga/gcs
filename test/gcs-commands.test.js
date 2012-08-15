@@ -170,8 +170,10 @@ suite('gcs-describe-domain', function() {
   var hostPort = '127.0.0.1.xip.io:7575';
 
   test('describe one', function(done) {
-    new Domain('domain2', context).createSync();
-    new Domain('domain1', context).createSync();
+    var domain2 = new Domain('domain2', context).createSync();
+    var domain1 = new Domain('domain1', context).createSync();
+    var nameField = domain1.getIndexField('name').setType('text').createSync();
+    var ageField = domain1.getIndexField('age').setType('uint').createSync();
     utils
       .run('gcs-describe-domain',
            '--domain-name', 'domain1',
@@ -198,6 +200,10 @@ suite('gcs-describe-domain', function() {
                              '\n' +
                              'Fields:\n' +
                              '=======\n' +
+                             ageField.name + ' ' + ageField.state + ' ' +
+                               ageField.type + ' (' + ageField.options + ')\n' +
+                             nameField.name + ' ' + nameField.state + ' ' +
+                               nameField.type + ' (' + nameField.options + ')\n' +
                              '======================\n' });
 
         done();
