@@ -320,7 +320,7 @@ suite('Configuration API', function() {
     temporaryDatabase = undefined;
   });
 
-  var defaultBaseHost = '127.0.0.1.xip.io:' + utils.testPort;
+  var defaultBaseHost = 'localhost:' + utils.testPort;
 
   test('Get, Action=CreateDomain', function(done) {
     utils
@@ -367,11 +367,10 @@ suite('Configuration API', function() {
     setup(function() {
       temporaryDatabase = utils.createTemporaryDatabase();
       context = temporaryDatabase.get();
-      server = utils.setupServer(context);
     });
 
     teardown(function() {
-      server.close();
+      if (server) server.close();
       temporaryDatabase.teardown();
       temporaryDatabase = undefined;
     });
@@ -393,7 +392,6 @@ suite('Configuration API', function() {
 
     test('specified by server option', function(done) {
       var baseHost = 'by.server.option';
-      server.close();
       server = utils.setupServer(context, { baseHost: baseHost });
       utils
         .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
@@ -408,6 +406,7 @@ suite('Configuration API', function() {
 
     test('specified by Host header', function(done) {
       var baseHost = 'by.host.header';
+      server = utils.setupServer(context);
       utils
         .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
           'Host': baseHost
@@ -423,6 +422,7 @@ suite('Configuration API', function() {
 
     test('specified by HTTP_X_FORWARDED_HOST header', function(done) {
       var baseHost = 'by.forwarded.host.header';
+      server = utils.setupServer(context);
       utils
         .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
           'HTTP_X_FORWARDED_HOST': baseHost
@@ -439,6 +439,7 @@ suite('Configuration API', function() {
     test('HTTP_X_FORWARDED_HOST and Host header', function(done) {
       var baseHost =          'by.host.header';
       var baseHostForwarded = 'by.forwarded.host.header';
+      server = utils.setupServer(context);
       utils
         .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
           'Host': baseHost,
@@ -454,11 +455,10 @@ suite('Configuration API', function() {
     });
 
     test('HTTP_X_FORWARDED_HOST, Host header, and server option', function(done) {
-      var baseHostByOption = 'by.server.option';
-      server.close();
-      server = utils.setupServer(context, { baseHost: baseHostByOption });
+      var baseHostByOption =  'by.server.option';
       var baseHost =          'by.host.header';
       var baseHostForwarded = 'by.forwarded.host.header';
+      server = utils.setupServer(context, { baseHost: baseHostByOption });
       utils
         .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
           'Host': baseHost,
