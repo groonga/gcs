@@ -993,11 +993,6 @@ suite('Configuration API', function() {
       })
       .get('/?DomainName=companies&IndexField.IndexFieldName=name&' +
            'Action=DefineIndexField&Version=2011-02-01')
-      .next(function() {
-        domain = new Domain('companies', context);
-        assert.isTrue(domain.defaultSearchField === null,
-                      domain.defaultSearchField);
-      })
       .get('/?Version=2011-02-01&Action=DescribeDefaultSearchField&' +
            'DomainName=companies')
       .next(function(response) {
