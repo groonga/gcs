@@ -23,7 +23,7 @@ suite('Search API', function() {
   function testSearch(path, message, host, callback) {
     test('GET ' + path + ' ' + message, function(done) {
       var options = {
-        host: utils.testBaseHost,
+        host: 'localhost',
         port: utils.testPort,
         path: path,
         headers: {Host: host}

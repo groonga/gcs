@@ -11,18 +11,20 @@ var spawn = require('child_process').spawn;
 
 var temporaryDirectory = exports.temporaryDirectory = path.join(__dirname, 'tmp');
 
-var testBaseHost = 'api.localhost:80';
-var testConfigurationHost = 'configuration.localhost:80';
+var testBaseHost = 'api.localhost';
+var testConfigurationHost = 'configuration.localhost';
 var testPort = 3333;
 exports.testBaseHost = testBaseHost;
 exports.testConfigurationHost = testConfigurationHost;
 exports.testPort = testPort;
 
 function setupServer(context) {
-  var server = gcsServer.createServer({ context:           context,
-                                        port:              testPort,
-                                        baseHost:          exports.testBaseHost,
-                                        configurationHost: exports.testConfigurationHost });
+  var server = gcsServer.createServer({
+                 context:           context,
+                 port:              testPort,
+                 baseHost:          exports.testBaseHost + ':80',
+                 configurationHost: exports.testConfigurationHost + ':80'
+               });
   server.listen(testPort);
   return server;
 }
@@ -32,7 +34,7 @@ function sendRequest(method, path, postData, headers) {
   var deferred = new Deferred();
 
   var options = {
-        host: testBaseHost,
+        host: 'localhost',
         port: testPort,
         path: path,
         method: method,

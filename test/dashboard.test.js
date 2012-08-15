@@ -1,6 +1,5 @@
 var utils = require('./test-utils');
 var assert = require('chai').assert;
-var http = require('http');
 var fs = require('fs');
 
 suite('dashboard', function() {
@@ -15,40 +14,28 @@ suite('dashboard', function() {
   });
 
   test('GET /', function(done) {
-    var options = {
-      host: utils.testBaseHost,
-      port: utils.testPort,
-      path: '/'
-    };
-    http.get(options, function(response) {
-      assert.equal(response.statusCode, 200);
-      var body = '';
-      response.on('data', function(data) {
-        body += data;
-      });
-      response.on('end', function() {
-        assert.match(body, /Groonga CloudSearch/);
+    utils
+      .get('/')
+      .next(function(response) {
+        assert.equal(response.statusCode, 200);
+        assert.match(response.body, /Groonga CloudSearch/);
         done();
+      })
+      .error(function(error) {
+        done(error);
       });
-    });
   });
 
   test('GET /javascripts/templates.js', function(done) {
-    var options = {
-      host: utils.testBaseHost,
-      port: utils.testPort,
-      path: '/javascripts/templates.js'
-    };
-    http.get(options, function(response) {
-      assert.equal(response.statusCode, 200);
-      var body = '';
-      response.on('data', function(data) {
-        body += data;
-      });
-      response.on('end', function() {
-        assert.include(body, "this.JST");
+    utils
+      .get('/javascripts/templates.js')
+      .next(function(response) {
+        assert.equal(response.statusCode, 200);
+        assert.include(response.body, "this.JST");
         done();
+      })
+      .error(function(error) {
+        done(error);
       });
-    });
   });
 });
