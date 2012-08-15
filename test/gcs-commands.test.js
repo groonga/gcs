@@ -167,6 +167,8 @@ suite('gcs-describe-domain', function() {
   setup(commonSetup);
   teardown(commonTeardown);
 
+  var hostPort = '127.0.0.1.xip.io:7575';
+
   test('describe one', function(done) {
     new Domain('domain2', context).createSync();
     new Domain('domain1', context).createSync();
@@ -182,9 +184,9 @@ suite('gcs-describe-domain', function() {
                              '=== Domain Summary ===\n' +
                              'Domain Name: domain1\n' +
                              'Document Service endpoint: ' +
-                               domain.getDocumentsEndpoint('localhost') + '\n' +
+                               domain.getDocumentsEndpoint(hostPort) + '\n' +
                              'Search Service endpoint: ' +
-                               domain.getSearchEndpoint('localhost') + '\n' +
+                               domain.getSearchEndpoint(hostPort) + '\n' +
                              'SearchInstanceType: null\n' +
                              'SearchPartitionCount: 0\n' +
                              'SearchInstanceCount: 0\n' +
@@ -221,9 +223,9 @@ suite('gcs-describe-domain', function() {
                              '=== Domain Summary ===\n' +
                              'Domain Name: domain1\n' +
                              'Document Service endpoint: ' +
-                               domain1.getDocumentsEndpoint('localhost') + '\n' +
+                               domain1.getDocumentsEndpoint(hostPort) + '\n' +
                              'Search Service endpoint: ' +
-                               domain1.getSearchEndpoint('localhost') + '\n' +
+                               domain1.getSearchEndpoint(hostPort) + '\n' +
                              'SearchInstanceType: null\n' +
                              'SearchPartitionCount: 0\n' +
                              'SearchInstanceCount: 0\n' +
@@ -240,9 +242,9 @@ suite('gcs-describe-domain', function() {
                              '=== Domain Summary ===\n' +
                              'Domain Name: domain2\n' +
                              'Document Service endpoint: ' +
-                               domain2.getDocumentsEndpoint('localhost') + '\n' +
+                               domain2.getDocumentsEndpoint(hostPort) + '\n' +
                              'Search Service endpoint: ' +
-                               domain2.getSearchEndpoint('localhost') + '\n' +
+                               domain2.getSearchEndpoint(hostPort) + '\n' +
                              'SearchInstanceType: null\n' +
                              'SearchPartitionCount: 0\n' +
                              'SearchInstanceCount: 0\n' +
