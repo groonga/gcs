@@ -1,3 +1,2 @@
-var/lib/gcs
 var/log/gcs
 var/run/gcs
