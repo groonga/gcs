@@ -31,6 +31,10 @@ override_dh_install:
 	npm install --production forever
 	npm install --production
 
+	find node_modules/nroonga/node_modules/msgpack2/deps/msgpack-full	\
+	  -mindepth 1 -maxdepth 1 -type d ! -name cpp				\
+	  -exec rm -rf '{}' ';'
+
 	eval $$(dpkg-architecture);				\
 	  if [ -n "$DEB_HOST_MULTIARCH" ]; then			\
 	    libdir=lib/$${DEB_HOST_MULTIARCH};			\
