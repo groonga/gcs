@@ -222,12 +222,12 @@ function sortAndStringify(object) {
 }
 
 require('chai').Assertion.prototype.eql = function(obj) {
-  var expected = chai_utils.flag(this, 'object');
+  var actual = chai_utils.flag(this, 'object');
   this.assert(
-      chai_utils.eql(obj, expected)
+      chai_utils.eql(obj, actual)
     , 'expected #{this} to deeply equal #{exp}'
     , 'expected #{this} to not deeply equal #{exp}'
-    , sortAndStringify(expected)
     , sortAndStringify(obj)
+    , sortAndStringify(actual)
   );
 };
