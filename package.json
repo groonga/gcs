@@ -25,7 +25,8 @@
     "mkdirp": "",
     "nroonga": "",
     "xml2js": "",
-    "xmlbuilder": ""
+    "xmlbuilder": "",
+    "forever": ""
   },
   "scripts": {
     "test": "./node_modules/.bin/mocha --reporter list --ui tdd",
