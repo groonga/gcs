@@ -310,6 +310,18 @@ License:
 
 Files:
 
+    node_modules/forever/*
+
+Copyright:
+
+    TODO
+
+License:
+
+    TODO
+
+Files:
+
     node_modules/jade/*
     node_modules/mocha/node_modules/jade/*
     node_modules/nroonga/node_modules/mocha/node_modules/jade/*
