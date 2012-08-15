@@ -87,6 +87,12 @@ if [ -n "${DEB_HOST_MULTIARCH}" ]; then
 	/tmp/${PACKAGE}-debian/*.install
 fi
 
+case ${distribution} in
+    Ubuntu)
+	rm /tmp/${PACKAGE}-debian/*.init
+	;;
+esac
+
 run aptitude install -V -D -y devscripts ${DEPENDED_PACKAGES}
 run aptitude clean
 
