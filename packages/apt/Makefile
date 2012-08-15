@@ -2,7 +2,7 @@ REPOSITORIES_PATH = repositories
 DISTRIBUTIONS = debian ubuntu
 CHROOT_BASE = /var/lib/chroot
 ARCHITECTURES = i386 amd64
-CODES = squeeze wheezy unstable lucid oneiric precise
+CODES = unstable precise
 
 PACKAGE = gcs
 VERSION = $(shell ruby -rjson -e 'print JSON.parse(ARGF.read)["version"]' ../../package.json)
