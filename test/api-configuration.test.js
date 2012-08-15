@@ -208,27 +208,51 @@ var PATTERN_COMMON_ERROR_RESPONSE = {
       }
     };
 
-var PATTERN_UpdateDefaultSearchField = {
+var PATTERN_DefaultSearchFieldStatus = {
+      Options: '',
+      Status: PATTERN_OptionStatus
+    };
+
+var PATTERN_DefaultSearchFieldStatus_blank = {
+      Options: {},
+      Status: PATTERN_OptionStatus
+    };
+
+var PATTERN_UpdateDefaultSearchFieldResponse = {
       UpdateDefaultSearchFieldResponse: {
         '@': { xmlns: '' },
         UpdateDefaultSearchFieldResult: {
-          DefaultSearchField: {
-            Options: '',
-            Status: PATTERN_OptionStatus
-          },
+          DefaultSearchField: PATTERN_DefaultSearchFieldStatus,
         },
         ResponseMetadata: PATTERN_ResponseMetadata
       }
     };
 
-var PATTERN_UpdateDefaultSearchField_blank = {
+var PATTERN_UpdateDefaultSearchFieldResponse_blank = {
       UpdateDefaultSearchFieldResponse: {
         '@': { xmlns: '' },
         UpdateDefaultSearchFieldResult: {
-          DefaultSearchField: {
-            Options: {},
-            Status: PATTERN_OptionStatus
-          },
+          DefaultSearchField: PATTERN_DefaultSearchFieldStatus_blank,
+        },
+        ResponseMetadata: PATTERN_ResponseMetadata
+      }
+    };
+
+var PATTERN_DescribeDefaultSearchFieldResponse = {
+      DescribeDefaultSearchFieldResponse: {
+        '@': { xmlns: '' },
+        DescribeDefaultSearchFieldResult: {
+          DefaultSearchField: PATTERN_DefaultSearchFieldStatus,
+        },
+        ResponseMetadata: PATTERN_ResponseMetadata
+      }
+    };
+
+var PATTERN_DescribeDefaultSearchFieldResponse_blank = {
+      DescribeDefaultSearchFieldResponse: {
+        '@': { xmlns: '' },
+        DescribeDefaultSearchFieldResult: {
+          DefaultSearchField: PATTERN_DefaultSearchFieldStatus_blank,
         },
         ResponseMetadata: PATTERN_ResponseMetadata
       }
@@ -930,7 +954,7 @@ suite('Configuration API', function() {
         response = toParsedResponse(response);
         assert.deepEqual(response.pattern,
                          { statusCode: 200,
-                           body: PATTERN_UpdateDefaultSearchField });
+                           body: PATTERN_UpdateDefaultSearchFieldResponse });
 
         var fieldName = response.body.UpdateDefaultSearchFieldResponse
                                      .UpdateDefaultSearchFieldResult
@@ -946,13 +970,62 @@ suite('Configuration API', function() {
         response = toParsedResponse(response);
         assert.deepEqual(response.pattern,
                          { statusCode: 200,
-                           body: PATTERN_UpdateDefaultSearchField_blank });
+                           body: PATTERN_UpdateDefaultSearchFieldResponse_blank });
 
         var fieldName = response.body.UpdateDefaultSearchFieldResponse
                                      .UpdateDefaultSearchFieldResult
                                      .DefaultSearchField.Options;
         // xml2json converts the content of the empty element to a blank object, not a blank text.
         assert.deepEqual(fieldName, {});
+
+        done();
+      })
+      .error(function(error) {
+        done(error);
+      });
+  });
+
+  test('Get, Action=DescribeDefaultSearchField', function(done) {
+    var domain;
+    utils
+      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
+        'Host': 'cloudsearch.localhost'
+      })
+      .get('/?DomainName=companies&IndexField.IndexFieldName=name&' +
+           'Action=DefineIndexField&Version=2011-02-01')
+      .next(function() {
+        domain = new Domain('companies', context);
+        assert.isTrue(domain.defaultSearchField === null,
+                      domain.defaultSearchField);
+      })
+      .get('/?Version=2011-02-01&Action=DescribeDefaultSearchField&' +
+           'DomainName=companies')
+      .next(function(response) {
+        response = toParsedResponse(response);
+        assert.deepEqual(response.pattern,
+                         { statusCode: 200,
+                           body: PATTERN_DescribeDefaultSearchFieldResponse_blank });
+
+        var fieldName = response.body.DescribeDefaultSearchFieldResponse
+                                     .DescribeDefaultSearchFieldResult
+                                     .DefaultSearchField.Options;
+        // xml2json converts the content of the empty element to a blank object, not a blank text.
+        assert.deepEqual(fieldName, {});
+      })
+      .get('/?Version=2011-02-01&Action=UpdateDefaultSearchField&' +
+           'DomainName=companies&DefaultSearchField=name')
+      .get('/?Version=2011-02-01&Action=DescribeDefaultSearchField&' +
+           'DomainName=companies')
+      .next(function(response) {
+        response = toParsedResponse(response);
+        assert.deepEqual(response.pattern,
+                         { statusCode: 200,
+                           body: PATTERN_DescribeDefaultSearchFieldResponse });
+
+        var fieldName = response.body.DescribeDefaultSearchFieldResponse
+                                     .DescribeDefaultSearchFieldResult
+                                     .DefaultSearchField.Options;
+        assert.deepEqual(fieldName, 'name');
 
         done();
       })
