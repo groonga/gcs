@@ -18,13 +18,14 @@ exports.testBaseHost = testBaseHost;
 exports.testConfigurationHost = testConfigurationHost;
 exports.testPort = testPort;
 
-function setupServer(context) {
-  var server = gcsServer.createServer({
-                 context:           context,
-                 port:              testPort,
-                 baseHost:          exports.testBaseHost + ':80',
-                 configurationHost: exports.testConfigurationHost + ':80'
-               });
+function setupServer(context, extraOptions) {
+  var options = { context: context,
+                  port:    testPort };
+  if (extraOptions)
+    Object.keys(extraOptions).forEach(function(key) {
+      options[key] = extraOptions[key];
+    });
+  var server = gcsServer.createServer(options);
   server.listen(testPort);
   return server;
 }

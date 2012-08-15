@@ -359,6 +359,121 @@ suite('Configuration API', function() {
       });
   });
 
+  suite('auto detection of the base hostname and port', function() {
+    var temporaryDatabase;
+    var context;
+    var server;
+
+    setup(function() {
+      temporaryDatabase = utils.createTemporaryDatabase();
+      context = temporaryDatabase.get();
+      server = utils.setupServer(context);
+    });
+
+    teardown(function() {
+      server.close();
+      temporaryDatabase.teardown();
+      temporaryDatabase = undefined;
+    });
+
+    function assertBaseHost(baseHost, response) {
+      response = toParsedResponse(response);
+      assert.deepEqual(response.pattern,
+                       { statusCode: 200,
+                         body: PATTERN_CreateDomainResponse });
+      var domain = new Domain('companies', context);
+      var status = response.body.CreateDomainResponse.CreateDomainResult.DomainStatus;
+      assert.deepEqual(
+        { documentsEndpoint: status.DocService.Endpoint,
+          searchEndpoint:    status.SearchService.Endpoint },
+        { documentsEndpoint: domain.getDocumentsEndpoint(baseHost),
+          searchEndpoint:    domain.getSearchEndpoint(baseHost) }
+      );
+    }
+
+    test('specified by server option', function(done) {
+      var baseHost = 'by.server.option';
+      server.close();
+      server = utils.setupServer(context, { baseHost: baseHost });
+      utils
+        .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
+        .next(function(response) {
+          assertBaseHost(baseHost, response);
+          done();
+        })
+        .error(function(error) {
+          done(error);
+        });
+    });
+
+    test('specified by Host header', function(done) {
+      var baseHost = 'by.host.header';
+      utils
+        .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
+          'Host': baseHost
+        })
+        .next(function(response) {
+          assertBaseHost(baseHost, response);
+          done();
+        })
+        .error(function(error) {
+          done(error);
+        });
+    });
+
+    test('specified by HTTP_X_FORWARDED_HOST header', function(done) {
+      var baseHost = 'by.forwarded.host.header';
+      utils
+        .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
+          'HTTP_X_FORWARDED_HOST': baseHost
+        })
+        .next(function(response) {
+          assertBaseHost(baseHost, response);
+          done();
+        })
+        .error(function(error) {
+          done(error);
+        });
+    });
+
+    test('HTTP_X_FORWARDED_HOST and Host header', function(done) {
+      var baseHost =          'by.host.header';
+      var baseHostForwarded = 'by.forwarded.host.header';
+      utils
+        .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
+          'Host': baseHost,
+          'HTTP_X_FORWARDED_HOST': baseHostForwarded
+        })
+        .next(function(response) {
+          assertBaseHost(baseHostForwarded, response);
+          done();
+        })
+        .error(function(error) {
+          done(error);
+        });
+    });
+
+    test('HTTP_X_FORWARDED_HOST, Host header, and server option', function(done) {
+      var baseHostByOption = 'by.server.option';
+      server.close();
+      server = utils.setupServer(context, { baseHost: baseHostByOption });
+      var baseHost =          'by.host.header';
+      var baseHostForwarded = 'by.forwarded.host.header';
+      utils
+        .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
+          'Host': baseHost,
+          'HTTP_X_FORWARDED_HOST': baseHostForwarded
+        })
+        .next(function(response) {
+          assertBaseHost(baseHostByOption, response);
+          done();
+        })
+        .error(function(error) {
+          done(error);
+        });
+    });
+  });
+
   test('Get, Action=DeleteDomain', function(done) {
     var domain;
     utils
