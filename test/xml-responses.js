@@ -3,14 +3,18 @@ var utils = require('./test-utils');
 var XMLNS =
     exports.XMLNS = 'http://cloudsearch.amazonaws.com/doc/2011-02-01';
 
+var ResponseMetadata =
+    exports.ResponseMetadata = {
+      RequestId: ''
+    };
+
 function createGenericResponse(action, result) {
-  return {
-    action + 'Response': {
-      '@': { xmlns: '' },
-      action + 'Result': result || {},
-      ResponseMetadata: ResponseMetadata
-    }
-  };
+  var responseBody = { '@': { xmlns: '' } };
+  responseBody[action + 'Result'] = result || {};
+  responseBody.ResponseMetadata = ResponseMetadata;
+  var response = {};
+  response[action + 'Response'] = responseBody;
+  return response;
 }
 
 function defineGenericResponse(action, result) {
@@ -24,10 +28,6 @@ var DocService =
 var SearchService =
     exports.SearchService = {
       Endpoint: ''
-    };
-var ResponseMetadata =
-    exports.ResponseMetadata = {
-      RequestId: ''
     };
 var DomainStatus =
     exports.DomainStatus = {
