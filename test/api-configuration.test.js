@@ -1,307 +1,9 @@
 var utils = require('./test-utils');
+var xmlResponses = require('./xml-responses');
 var assert = require('chai').assert;
 var fs = require('fs');
 
 var Domain = require('../lib/database').Domain;
-
-var XMLNS = 'http://cloudsearch.amazonaws.com/doc/2011-02-01';
-
-var PATTERN_DocService = {
-      Endpoint: ''
-    };
-var PATTERN_SearchService = {
-      Endpoint: ''
-    };
-var PATTERN_ResponseMetadata = {
-      RequestId: {}
-    };
-var PATTERN_DomainStatus = {
-      Created: '',
-      Deleted: '',
-      DocService: PATTERN_DocService,
-      DomainId: '',
-      DomainName: '',
-      NumSearchableDocs: '',
-      RequiresIndexDocuments: '',
-      SearchInstanceCount: '',
-      SearchPartitionCount: '',
-      SearchService: PATTERN_SearchService
-    };
-var PATTERN_CreateDomainResponse = {
-      CreateDomainResponse: {
-        '@': { xmlns: '' },
-        CreateDomainResult: {
-          DomainStatus: PATTERN_DomainStatus
-        },
-        ResponseMetadata: PATTERN_ResponseMetadata
-      }
-    };
-var PATTERN_DeleteDomainResponse = {
-      DeleteDomainResponse: {
-        '@': { xmlns: '' },
-        DeleteDomainResult: {
-          DomainStatus: PATTERN_DomainStatus
-        },
-        ResponseMetadata: PATTERN_ResponseMetadata
-      }
-    };
-
-function PATTERN_DescribeDomainsResponse(members) {
-  return {
-    DescribeDomainsResponse: {
-      '@': { xmlns: '' },
-      DescribeDomainsResult: {
-        DomainStatusList: (function() {
-          var pattern = {};
-          members.forEach(function(member, index) {
-            pattern[index] = PATTERN_DomainStatus;
-          });
-          return { member: pattern };
-        })()
-      },
-      ResponseMetadata: PATTERN_ResponseMetadata
-    }
-  };
-}
-
-var PATTERN_OptionStatus = {
-      CreationDate: '',
-      State: '',
-      UpdateDate: '',
-      UpdateVersion: ''
-    };
-var PATTERN_TextOptions = {
-      DefaultValue: {},
-      FacetEnabled: '',
-      ResultEnabled: ''
-    };
-var PATTERN_IndexField_Text = {
-      IndexFieldName: '',
-      IndexFieldType: '',
-      TextOptions: PATTERN_TextOptions
-    };
-var PATTERN_IndexFieldStatus_Text = {
-      Options: PATTERN_IndexField_Text,
-      Status: PATTERN_OptionStatus
-    };
-var PATTERN_DefineIndexFieldResponse_Text = {
-      DefineIndexFieldResponse: {
-        '@': { xmlns: '' },
-        DefineIndexFieldResult: {
-          IndexField: PATTERN_IndexFieldStatus_Text
-        },
-        ResponseMetadata: PATTERN_ResponseMetadata
-      }
-    };
-var PATTERN_UIntOptions = {
-      DefaultValue: {}
-    };
-var PATTERN_IndexField_UInt = {
-      IndexFieldName: '',
-      IndexFieldType: '',
-      UIntOptions: PATTERN_UIntOptions
-    };
-var PATTERN_IndexFieldStatus_UInt = {
-      Options: PATTERN_IndexField_UInt,
-      Status: PATTERN_OptionStatus
-    };
-var PATTERN_DefineIndexFieldResponse_UInt = {
-      DefineIndexFieldResponse: {
-        '@': { xmlns: '' },
-        DefineIndexFieldResult: {
-          IndexField: PATTERN_IndexFieldStatus_UInt
-        },
-        ResponseMetadata: PATTERN_ResponseMetadata
-      }
-    };
-var PATTERN_LiteralOptions = {
-      DefaultValue: {},
-      FacetEnabled: '',
-      ResultEnabled: '',
-      SearchEnabled: ''
-    };
-var PATTERN_IndexField_Literal = {
-      IndexFieldName: '',
-      IndexFieldType: '',
-      LiteralOptions: PATTERN_LiteralOptions
-    };
-var PATTERN_IndexFieldStatus_Literal = {
-      Options: PATTERN_IndexField_Literal,
-      Status: PATTERN_OptionStatus
-    };
-var PATTERN_DefineIndexFieldResponse_Literal = {
-      DefineIndexFieldResponse: {
-        '@': { xmlns: '' },
-        DefineIndexFieldResult: {
-          IndexField: PATTERN_IndexFieldStatus_Literal
-        },
-        ResponseMetadata: PATTERN_ResponseMetadata
-      }
-    };
-
-var PATTERN_DeleteIndexFieldResponse = {
-      DeleteIndexFieldResponse: {
-        '@': { xmlns: '' },
-        DeleteIndexFieldResult: {},
-        ResponseMetadata: PATTERN_ResponseMetadata
-      }
-    };
-
-function PATTERN_DescribeIndexFieldsResponse(members) {
-  return {
-    DescribeIndexFieldsResponse: {
-      '@': { xmlns: '' },
-      DescribeIndexFieldsResult: {
-        IndexFields: (function() {
-          var pattern = {};
-          members.forEach(function(member, index) {
-            pattern[index] = member;
-          });
-          return { member: pattern };
-        })()
-      },
-      ResponseMetadata: PATTERN_ResponseMetadata
-    }
-  };
-}
-
-function PATTERN_IndexDocumentsResponse(members) {
-  return {
-    IndexDocumentsResponse: {
-      '@': { xmlns: '' },
-      IndexDocumentsResult: {
-        FieldNames: (function() {
-          var pattern = {};
-          members.forEach(function(member, index) {
-            pattern[index] = '';
-          });
-          return { member: pattern };
-        })()
-      },
-      ResponseMetadata: PATTERN_ResponseMetadata
-    }
-  };
-}
-
-var PATTERN_SynonymOptionsStatus = {
-      Options: '',
-      Status: PATTERN_OptionStatus
-    };
-
-var PATTERN_UpdateSynonymOptionsResponse = {
-      UpdateSynonymOptionsResponse: {
-        '@': { xmlns: '' },
-        UpdateSynonymOptionsResult: {
-          Synonyms: PATTERN_SynonymOptionsStatus,
-        },
-        ResponseMetadata: PATTERN_ResponseMetadata
-      }
-    };
-
-var PATTERN_DescribeSynonymOptionsResponse = {
-      DescribeSynonymOptionsResponse: {
-        '@': { xmlns: '' },
-        DescribeSynonymOptionsResult: {
-          Synonyms: PATTERN_SynonymOptionsStatus,
-        },
-        ResponseMetadata: PATTERN_ResponseMetadata
-      }
-    };
-
-var PATTERN_COMMON_ERROR_RESPONSE = {
-      Response: {
-        Errors: {
-          Error: {
-            Code: '',
-            Message: ''
-          }
-        },
-        RequestID: {}
-      }
-    };
-
-var PATTERN_DefaultSearchFieldStatus = {
-      Options: '',
-      Status: PATTERN_OptionStatus
-    };
-
-var PATTERN_DefaultSearchFieldStatus_blank = {
-      Options: {},
-      Status: PATTERN_OptionStatus
-    };
-
-var PATTERN_UpdateDefaultSearchFieldResponse = {
-      UpdateDefaultSearchFieldResponse: {
-        '@': { xmlns: '' },
-        UpdateDefaultSearchFieldResult: {
-          DefaultSearchField: PATTERN_DefaultSearchFieldStatus,
-        },
-        ResponseMetadata: PATTERN_ResponseMetadata
-      }
-    };
-
-var PATTERN_UpdateDefaultSearchFieldResponse_blank = {
-      UpdateDefaultSearchFieldResponse: {
-        '@': { xmlns: '' },
-        UpdateDefaultSearchFieldResult: {
-          DefaultSearchField: PATTERN_DefaultSearchFieldStatus_blank,
-        },
-        ResponseMetadata: PATTERN_ResponseMetadata
-      }
-    };
-
-var PATTERN_DescribeDefaultSearchFieldResponse = {
-      DescribeDefaultSearchFieldResponse: {
-        '@': { xmlns: '' },
-        DescribeDefaultSearchFieldResult: {
-          DefaultSearchField: PATTERN_DefaultSearchFieldStatus,
-        },
-        ResponseMetadata: PATTERN_ResponseMetadata
-      }
-    };
-
-var PATTERN_DescribeDefaultSearchFieldResponse_blank = {
-      DescribeDefaultSearchFieldResponse: {
-        '@': { xmlns: '' },
-        DescribeDefaultSearchFieldResult: {
-          DefaultSearchField: PATTERN_DefaultSearchFieldStatus_blank,
-        },
-        ResponseMetadata: PATTERN_ResponseMetadata
-      }
-    };
-
-function toXMLPattern(fragment) {
-  switch (typeof fragment) {
-    default:
-      return '';
-    case 'object':
-      var format = {};
-      Object.keys(fragment).forEach(function(key) {
-        if (!fragment.hasOwnProperty(key))
-          return;
-        format[key] = toXMLPattern(fragment[key]);
-      });
-      return format;
-  }
-}
-
-function replaceXMLDates(str) {
-  return str.replace(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/g,
-                     '1970-01-01T00:00:00Z');
-}
-
-function toParsedResponse(response) {
-  var parsed = {
-        statusCode: response.statusCode,
-        body: utils.XMLStringToJSON(response.body)
-      };
-  var pattern = {
-        statusCode: parsed.statusCode,
-        body: toXMLPattern(parsed.body)
-      };
-  parsed.pattern = pattern;
-  return parsed;
-}
 
 suite('Configuration API', function() {
   var temporaryDatabase;
@@ -329,10 +31,10 @@ suite('Configuration API', function() {
         var domain = new Domain('companies', context);
         assert.isTrue(domain.exists());
 
-        response = toParsedResponse(response);
+        response = xmlResponses.toParsedResponse(response);
         assert.deepEqual(response.pattern,
                          { statusCode: 200,
-                           body: PATTERN_CreateDomainResponse });
+                           body: xmlResponses.CreateDomainResponse });
         var expectedStatus = {
               Created: 'true',
               Deleted: 'false',
@@ -360,26 +62,11 @@ suite('Configuration API', function() {
   });
 
   suite('auto detection of the base hostname and port', function() {
-    var temporaryDatabase;
-    var context;
-    var server;
-
-    setup(function() {
-      temporaryDatabase = utils.createTemporaryDatabase();
-      context = temporaryDatabase.get();
-    });
-
-    teardown(function() {
-      if (server) server.close();
-      temporaryDatabase.teardown();
-      temporaryDatabase = undefined;
-    });
-
     function assertBaseHost(baseHost, response) {
-      response = toParsedResponse(response);
+      response = xmlResponses.toParsedResponse(response);
       assert.deepEqual(response.pattern,
                        { statusCode: 200,
-                         body: PATTERN_CreateDomainResponse });
+                         body: xmlResponses.CreateDomainResponse });
       var domain = new Domain('companies', context);
       var status = response.body.CreateDomainResponse.CreateDomainResult.DomainStatus;
       assert.deepEqual(
@@ -486,10 +173,10 @@ suite('Configuration API', function() {
       .next(function(response) {
         assert.isFalse(domain.exists());
 
-        response = toParsedResponse(response);
+        response = xmlResponses.toParsedResponse(response);
         assert.deepEqual(response.pattern,
                          { statusCode: 200,
-                           body: PATTERN_DeleteDomainResponse });
+                           body: xmlResponses.DeleteDomainResponse });
         var expectedStatus = {
               Created: 'false',
               Deleted: 'true',
@@ -537,11 +224,11 @@ suite('Configuration API', function() {
       .get('/?DomainName=domain2&Action=CreateDomain&Version=2011-02-01')
       .get('/?Action=DescribeDomains&Version=2011-02-01')
       .next(function(response) {
-        response = toParsedResponse(response);
+        response = xmlResponses.toParsedResponse(response);
         var expectedDomains = ['domain1', 'domain2', 'domain3'];
         assert.deepEqual(response.pattern,
                          { statusCode: 200,
-                           body: PATTERN_DescribeDomainsResponse(expectedDomains) });
+                           body: xmlResponses.DescribeDomainsResponse(expectedDomains) });
 
         var actualDomains = getActualDescribedDomains(response);
         assert.deepEqual(actualDomains, expectedDomains);
@@ -562,11 +249,11 @@ suite('Configuration API', function() {
              '&DomainNames.member.1=domain2' +
              '&DomainNames.member.2=domain1')
       .next(function(response) {
-        response = toParsedResponse(response);
+        response = xmlResponses.toParsedResponse(response);
         var expectedDomains = ['domain2', 'domain1'];
         assert.deepEqual(response.pattern,
                          { statusCode: 200,
-                           body: PATTERN_DescribeDomainsResponse(expectedDomains) });
+                           body: xmlResponses.DescribeDomainsResponse(expectedDomains) });
 
         var actualDomains = getActualDescribedDomains(response);
         assert.deepEqual(actualDomains, expectedDomains);
@@ -589,10 +276,10 @@ suite('Configuration API', function() {
         var field = domain.getIndexField('name');
         assert.isTrue(field.exists(), response.body);
 
-        response = toParsedResponse(response);
+        response = xmlResponses.toParsedResponse(response);
         assert.deepEqual(response.pattern,
                          { statusCode: 200,
-                           body: PATTERN_DefineIndexFieldResponse_Text });
+                           body: xmlResponses.DefineIndexFieldResponse_Text });
         var expectedOptions = {
               IndexFieldName: 'name',
               IndexFieldType: 'text',
@@ -624,10 +311,10 @@ suite('Configuration API', function() {
         var field = domain.getIndexField('name');
         assert.isTrue(field.exists(), response.body);
 
-        response = toParsedResponse(response);
+        response = xmlResponses.toParsedResponse(response);
         assert.deepEqual(response.pattern,
                          { statusCode: 200,
-                           body: PATTERN_DefineIndexFieldResponse_Text });
+                           body: xmlResponses.DefineIndexFieldResponse_Text });
         var expectedOptions = {
               IndexFieldName: 'name',
               IndexFieldType: 'text',
@@ -658,10 +345,10 @@ suite('Configuration API', function() {
         var field = domain.getIndexField('age');
         assert.isTrue(field.exists(), response.body);
 
-        response = toParsedResponse(response);
+        response = xmlResponses.toParsedResponse(response);
         assert.deepEqual(response.pattern,
                          { statusCode: 200,
-                           body: PATTERN_DefineIndexFieldResponse_UInt });
+                           body: xmlResponses.DefineIndexFieldResponse_UInt });
         var expectedOptions = {
               IndexFieldName: 'age',
               IndexFieldType: 'uint',
@@ -690,10 +377,10 @@ suite('Configuration API', function() {
         var field = domain.getIndexField('product');
         assert.isTrue(field.exists(), response.body);
 
-        response = toParsedResponse(response);
+        response = xmlResponses.toParsedResponse(response);
         assert.deepEqual(response.pattern,
                          { statusCode: 200,
-                           body: PATTERN_DefineIndexFieldResponse_Literal });
+                           body: xmlResponses.DefineIndexFieldResponse_Literal });
         var expectedOptions = {
               IndexFieldName: 'product',
               IndexFieldType: 'literal',
@@ -728,10 +415,10 @@ suite('Configuration API', function() {
         var field = domain.getIndexField('product');
         assert.isTrue(field.exists(), response.body);
 
-        response = toParsedResponse(response);
+        response = xmlResponses.toParsedResponse(response);
         assert.deepEqual(response.pattern,
                          { statusCode: 200,
-                           body: PATTERN_DefineIndexFieldResponse_Literal });
+                           body: xmlResponses.DefineIndexFieldResponse_Literal });
         var expectedOptions = {
               IndexFieldName: 'product',
               IndexFieldType: 'literal',
@@ -771,10 +458,10 @@ suite('Configuration API', function() {
                          { domain: true,
                            field:  false });
 
-        response = toParsedResponse(response);
+        response = xmlResponses.toParsedResponse(response);
         assert.deepEqual(response.pattern,
                          { statusCode: 200,
-                           body: PATTERN_DeleteIndexFieldResponse });
+                           body: xmlResponses.DeleteIndexFieldResponse });
 
         done();
       })
@@ -802,10 +489,10 @@ suite('Configuration API', function() {
                          { domain: true,
                            field:  false });
 
-        response = toParsedResponse(response);
+        response = xmlResponses.toParsedResponse(response);
         assert.deepEqual(response.pattern,
                          { statusCode: 200,
-                           body: PATTERN_DeleteIndexFieldResponse });
+                           body: xmlResponses.DeleteIndexFieldResponse });
 
         done();
       })
@@ -833,10 +520,10 @@ suite('Configuration API', function() {
                          { domain: true,
                            field:  false });
 
-        response = toParsedResponse(response);
+        response = xmlResponses.toParsedResponse(response);
         assert.deepEqual(response.pattern,
                          { statusCode: 200,
-                           body: PATTERN_DeleteIndexFieldResponse });
+                           body: xmlResponses.DeleteIndexFieldResponse });
 
         done();
       })
@@ -874,13 +561,13 @@ suite('Configuration API', function() {
       .get('/?Action=DescribeIndexFields&Version=2011-02-01' +
              '&DomainName=companies')
       .next(function(response) {
-        response = toParsedResponse(response);
+        response = xmlResponses.toParsedResponse(response);
         assert.deepEqual(response.pattern,
                          { statusCode: 200,
-                           body: PATTERN_DescribeIndexFieldsResponse([
-                             PATTERN_IndexFieldStatus_UInt,
-                             PATTERN_IndexFieldStatus_Text,
-                             PATTERN_IndexFieldStatus_Literal
+                           body: xmlResponses.DescribeIndexFieldsResponse([
+                             xmlResponses.IndexFieldStatus_UInt,
+                             xmlResponses.IndexFieldStatus_Text,
+                             xmlResponses.IndexFieldStatus_Literal
                            ]) });
 
         var expectedFields = ['age', 'name', 'product'];
@@ -911,12 +598,12 @@ suite('Configuration API', function() {
              '&FieldNames.member.1=name' +
              '&FieldNames.member.2=age')
       .next(function(response) {
-        response = toParsedResponse(response);
+        response = xmlResponses.toParsedResponse(response);
         assert.deepEqual(response.pattern,
                          { statusCode: 200,
-                           body: PATTERN_DescribeIndexFieldsResponse([
-                             PATTERN_IndexFieldStatus_Text,
-                             PATTERN_IndexFieldStatus_UInt
+                           body: xmlResponses.DescribeIndexFieldsResponse([
+                             xmlResponses.IndexFieldStatus_Text,
+                             xmlResponses.IndexFieldStatus_UInt
                            ]) });
 
         var expectedFields = ['name', 'age'];
@@ -947,10 +634,10 @@ suite('Configuration API', function() {
         assert.isTrue(domain.getIndexField('age').exists());
 
         var expectedFieldNames = ['age', 'name'];
-        response = toParsedResponse(response);
+        response = xmlResponses.toParsedResponse(response);
         assert.deepEqual(response.pattern,
                          { statusCode: 200,
-                           body: PATTERN_IndexDocumentsResponse(expectedFieldNames) });
+                           body: xmlResponses.IndexDocumentsResponse(expectedFieldNames) });
         var fieldNames = response.body.IndexDocumentsResponse
                                       .IndexDocumentsResult
                                       .FieldNames
@@ -993,10 +680,10 @@ suite('Configuration API', function() {
       .next(function(response) {
         assert.isTrue(domain.hasSynonymsTableSync());
 
-        response = toParsedResponse(response);
+        response = xmlResponses.toParsedResponse(response);
         assert.deepEqual(response.pattern,
                          { statusCode: 200,
-                           body: PATTERN_UpdateSynonymOptionsResponse });
+                           body: xmlResponses.UpdateSynonymOptionsResponse });
 
         var synonymOptions = response.body.UpdateSynonymOptionsResponse
                                           .UpdateSynonymOptionsResult
@@ -1032,10 +719,10 @@ suite('Configuration API', function() {
       .get('/?Version=2011-02-01&Action=DescribeSynonymOptions&' +
            'DomainName=companies')
       .next(function(response) {
-        response = toParsedResponse(response);
+        response = xmlResponses.toParsedResponse(response);
         assert.deepEqual(response.pattern,
                          { statusCode: 200,
-                           body: PATTERN_DescribeSynonymOptionsResponse });
+                           body: xmlResponses.DescribeSynonymOptionsResponse });
 
         var synonymOptions = response.body.DescribeSynonymOptionsResponse
                                           .DescribeSynonymOptionsResult
@@ -1051,10 +738,10 @@ suite('Configuration API', function() {
       .get('/?Version=2011-02-01&Action=DescribeSynonymOptions&' +
            'DomainName=companies')
       .next(function(response) {
-        response = toParsedResponse(response);
+        response = xmlResponses.toParsedResponse(response);
         assert.deepEqual(response.pattern,
                          { statusCode: 200,
-                           body: PATTERN_DescribeSynonymOptionsResponse });
+                           body: xmlResponses.DescribeSynonymOptionsResponse });
 
         var synonymOptions = response.body.DescribeSynonymOptionsResponse
                                           .DescribeSynonymOptionsResult
@@ -1092,10 +779,10 @@ suite('Configuration API', function() {
         assert.equal(domain.defaultSearchField,
                      domain.getIndexField('name'));
 
-        response = toParsedResponse(response);
+        response = xmlResponses.toParsedResponse(response);
         assert.deepEqual(response.pattern,
                          { statusCode: 200,
-                           body: PATTERN_UpdateDefaultSearchFieldResponse });
+                           body: xmlResponses.UpdateDefaultSearchFieldResponse });
 
         var fieldName = response.body.UpdateDefaultSearchFieldResponse
                                      .UpdateDefaultSearchFieldResult
@@ -1108,10 +795,10 @@ suite('Configuration API', function() {
         assert.isTrue(domain.defaultSearchField === null,
                       domain.defaultSearchField);
 
-        response = toParsedResponse(response);
+        response = xmlResponses.toParsedResponse(response);
         assert.deepEqual(response.pattern,
                          { statusCode: 200,
-                           body: PATTERN_UpdateDefaultSearchFieldResponse_blank });
+                           body: xmlResponses.UpdateDefaultSearchFieldResponse_blank });
 
         var fieldName = response.body.UpdateDefaultSearchFieldResponse
                                      .UpdateDefaultSearchFieldResult
@@ -1135,10 +822,10 @@ suite('Configuration API', function() {
       .get('/?Version=2011-02-01&Action=DescribeDefaultSearchField&' +
            'DomainName=companies')
       .next(function(response) {
-        response = toParsedResponse(response);
+        response = xmlResponses.toParsedResponse(response);
         assert.deepEqual(response.pattern,
                          { statusCode: 200,
-                           body: PATTERN_DescribeDefaultSearchFieldResponse_blank });
+                           body: xmlResponses.DescribeDefaultSearchFieldResponse_blank });
 
         var fieldName = response.body.DescribeDefaultSearchFieldResponse
                                      .DescribeDefaultSearchFieldResult
@@ -1151,10 +838,10 @@ suite('Configuration API', function() {
       .get('/?Version=2011-02-01&Action=DescribeDefaultSearchField&' +
            'DomainName=companies')
       .next(function(response) {
-        response = toParsedResponse(response);
+        response = xmlResponses.toParsedResponse(response);
         assert.deepEqual(response.pattern,
                          { statusCode: 200,
-                           body: PATTERN_DescribeDefaultSearchFieldResponse });
+                           body: xmlResponses.DescribeDefaultSearchFieldResponse });
 
         var fieldName = response.body.DescribeDefaultSearchFieldResponse
                                      .DescribeDefaultSearchFieldResult
@@ -1172,10 +859,10 @@ suite('Configuration API', function() {
     utils
       .get('/?Action=unknown')
       .next(function(response) {
-        response = toParsedResponse(response);
+        response = xmlResponses.toParsedResponse(response);
         assert.deepEqual(response.pattern,
                          { statusCode: 400,
-                           body: PATTERN_COMMON_ERROR_RESPONSE });
+                           body: xmlResponses.COMMON_ERROR_RESPONSE });
 
         var expectedError = {
               Code: 'MissingParameter',
@@ -1195,10 +882,10 @@ suite('Configuration API', function() {
     utils
       .get('/?Version=2011-02-02&Action=unknown')
       .next(function(response) {
-        response = toParsedResponse(response);
+        response = xmlResponses.toParsedResponse(response);
         assert.deepEqual(response.pattern,
                          { statusCode: 400,
-                           body: PATTERN_COMMON_ERROR_RESPONSE });
+                           body: xmlResponses.COMMON_ERROR_RESPONSE });
 
         var expectedError = {
               Code: 'InvalidParameterValue',
