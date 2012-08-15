@@ -202,7 +202,12 @@ suite('gcs-describe-domain', function() {
                              '=======\n' +
                              ageField.summary + '\n' +
                              nameField.summary +'\n' +
-                             '======================\n' });
+                             '======================\n' +
+                             '*Note: the hostname and the port number is ' +
+                             'detected from the default options. If you run ' +
+                             'the service with your favorite host name and ' +
+                             'port number, then use it instead of default ' +
+                             'information.\n' });
 
         done();
       })
@@ -260,7 +265,12 @@ suite('gcs-describe-domain', function() {
                              '\n' +
                              'Fields:\n' +
                              '=======\n' +
-                             '======================\n' });
+                             '======================\n' +
+                             '*Note: the hostname and the port number is ' +
+                             'detected from the default options. If you run ' +
+                             'the service with your favorite host name and ' +
+                             'port number, then use it instead of default ' +
+                             'information.\n' });
 
         done();
       })
