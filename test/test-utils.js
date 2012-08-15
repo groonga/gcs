@@ -17,7 +17,8 @@ exports.testHost = testHost;
 exports.testPort = testPort;
 
 function setupServer(context) {
-  var server = gcsServer.createServer({context: context});
+  var server = gcsServer.createServer({ context: context,
+                                        port:    testPort });
   server.listen(testPort);
   return server;
 }
