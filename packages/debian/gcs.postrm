@@ -3,10 +3,12 @@
 set -e
 
 if [ "$1" = "purge" ]; then
-    rm -f /var/run/gcs/*
-    dpkg-statoverride --remove /var/run/gcs
     rm -rf /var/lib/gcs/*
     dpkg-statoverride --remove /var/lib/gcs
+    rm -rf /var/log/gcs/*
+    dpkg-statoverride --remove /var/log/gcs
+    rm -f /var/run/gcs/*
+    dpkg-statoverride --remove /var/run/gcs
 
     if getent passwd gcs >/dev/null; then
         deluser --system --remove-all-files gcs
