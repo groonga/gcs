@@ -15,12 +15,12 @@ commandLine
           String,
           CLI.defaultPrivilegedRanges)
   .option('--base-host <hostname>',
-          'The base host name assigned to this server '+
+          'The base host name assigned to the service '+
             '[' + CLI.defaultBaseHost + ']',
           String,
           CLI.defaultBaseHost)
   .option('--configuration-host <hostname>',
-          'The host name for configuration API of this server '+
+          'The host name for configuration API of the service '+
             '[' + CLI.defaultConfigurationHost + ']',
           String,
           CLI.defaultConfigurationHost)

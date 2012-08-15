@@ -11,8 +11,8 @@ var spawn = require('child_process').spawn;
 
 var temporaryDirectory = exports.temporaryDirectory = path.join(__dirname, 'tmp');
 
-var testBaseHost = 'localhost';
-var testConfigurationHost = 'configuration.localhost';
+var testBaseHost = 'api.localhost:80';
+var testConfigurationHost = 'configuration.localhost:80';
 var testPort = 3333;
 exports.testBaseHost = testBaseHost;
 exports.testConfigurationHost = testConfigurationHost;
