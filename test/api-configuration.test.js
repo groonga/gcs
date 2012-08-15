@@ -931,8 +931,8 @@ suite('Configuration API', function() {
         synonymOptions = JSON.parse(synonymOptions);
         var expectedSynonymOptions = {
               synonyms: {
-                tokio: ['tokyo'],
-                dekkaido: 'hokkaido'
+                dekkaido: ['hokkaido'],
+                tokio: ['tokyo']
               }
             };
         assert.deepEqual(expectedSynonymOptions, synonymOptions);
@@ -991,8 +991,8 @@ suite('Configuration API', function() {
         synonymOptions = JSON.parse(synonymOptions);
         var expectedSynonymOptions = {
               synonyms: {
-                tokio: ['tokyo'],
-                dekkaido: 'hokkaido'
+                dekkaido: ['hokkaido'],
+                tokio: ['tokyo']
               }
             };
         assert.deepEqual(expectedSynonymOptions, synonymOptions);
