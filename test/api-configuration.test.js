@@ -960,7 +960,7 @@ suite('Configuration API', function() {
       })
       .get('/?Version=2011-02-01&Action=DescribeSynonymOptions&' +
            'DomainName=companies')
-      .next(function() {
+      .next(function(response) {
         response = toParsedResponse(response);
         assert.deepEqual(response.pattern,
                          { statusCode: 200,
