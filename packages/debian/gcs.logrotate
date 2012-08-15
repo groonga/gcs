@@ -8,6 +8,6 @@
     create 640 gcs gcs
     sharedscripts
     postrotate
-        service gcs status && service gcs restart
+        service gcs status | grep --quiet stop || service gcs restart
     endscript
 }
