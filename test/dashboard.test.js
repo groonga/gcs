@@ -16,7 +16,7 @@ suite('dashboard', function() {
 
   test('GET /', function(done) {
     var options = {
-      host: utils.testHost,
+      host: utils.testBaseHost,
       port: utils.testPort,
       path: '/'
     };
@@ -35,7 +35,7 @@ suite('dashboard', function() {
 
   test('GET /javascripts/templates.js', function(done) {
     var options = {
-      host: utils.testHost,
+      host: utils.testBaseHost,
       port: utils.testPort,
       path: '/javascripts/templates.js'
     };

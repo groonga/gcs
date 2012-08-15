@@ -32,7 +32,7 @@ function sendRequest(method, path, postData, headers) {
   var deferred = new Deferred();
 
   var options = {
-        host: testHost,
+        host: testBaseHost,
         port: testPort,
         path: path,
         method: method,
