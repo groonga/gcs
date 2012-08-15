@@ -323,7 +323,7 @@ suite('Configuration API', function() {
   test('Get, Action=CreateDomain', function(done) {
     utils
       .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
-         'Host': 'cloudsearch.localhost'
+         'Host': utils.testConfigurationHost
        })
       .next(function(response) {
         var domain = new Domain('companies', context);
@@ -363,14 +363,14 @@ suite('Configuration API', function() {
     var domain;
     utils
       .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
-        'Host': 'cloudsearch.localhost'
+        'Host': utils.testConfigurationHost
       })
       .next(function() {
         domain = new Domain('companies', context);
         assert.isTrue(domain.exists());
       })
       .get('/?DomainName=companies&Action=DeleteDomain&Version=2011-02-01', {
-        'Host': 'cloudsearch.localhost'
+        'Host': utils.testConfigurationHost
       })
       .next(function(response) {
         assert.isFalse(domain.exists());
@@ -422,13 +422,13 @@ suite('Configuration API', function() {
     var domain;
     utils
       .get('/?DomainName=domain3&Action=CreateDomain&Version=2011-02-01', {
-        'Host': 'cloudsearch.localhost'
+        'Host': utils.testConfigurationHost
       })
       .get('/?DomainName=domain1&Action=CreateDomain&Version=2011-02-01', {
-        'Host': 'cloudsearch.localhost'
+        'Host': utils.testConfigurationHost
       })
       .get('/?DomainName=domain2&Action=CreateDomain&Version=2011-02-01', {
-        'Host': 'cloudsearch.localhost'
+        'Host': utils.testConfigurationHost
       })
       .get('/?Action=DescribeDomains&Version=2011-02-01')
       .next(function(response) {
@@ -451,13 +451,13 @@ suite('Configuration API', function() {
   test('Get, Action=DescribeDomains (specified domains)', function(done) {
     utils
       .get('/?DomainName=domain3&Action=CreateDomain&Version=2011-02-01', {
-        'Host': 'cloudsearch.localhost'
+        'Host': utils.testConfigurationHost
       })
       .get('/?DomainName=domain1&Action=CreateDomain&Version=2011-02-01', {
-        'Host': 'cloudsearch.localhost'
+        'Host': utils.testConfigurationHost
       })
       .get('/?DomainName=domain2&Action=CreateDomain&Version=2011-02-01', {
-        'Host': 'cloudsearch.localhost'
+        'Host': utils.testConfigurationHost
       })
       .get('/?Action=DescribeDomains&Version=2011-02-01' +
              '&DomainNames.member.1=domain2' +
@@ -482,7 +482,7 @@ suite('Configuration API', function() {
   test('Get, Action=DefineIndexField (text, without options)', function(done) {
     utils
       .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
-        'Host': 'cloudsearch.localhost'
+        'Host': utils.testConfigurationHost
       })
       .get('/?DomainName=companies&IndexField.IndexFieldName=name&' +
            'IndexField.IndexFieldType=text&' +
@@ -518,7 +518,7 @@ suite('Configuration API', function() {
   test('Get, Action=DefineIndexField (text, with options)', function(done) {
     utils
       .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
-        'Host': 'cloudsearch.localhost'
+        'Host': utils.testConfigurationHost
       })
       .get('/?DomainName=companies&IndexField.IndexFieldName=name&' +
            'IndexField.IndexFieldType=text&' +
@@ -555,7 +555,7 @@ suite('Configuration API', function() {
   test('Get, Action=DefineIndexField (uint)', function(done) {
     utils
       .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
-        'Host': 'cloudsearch.localhost'
+        'Host': utils.testConfigurationHost
       })
       .get('/?DomainName=companies&IndexField.IndexFieldName=age&' +
            'IndexField.IndexFieldType=uint&' +
@@ -589,7 +589,7 @@ suite('Configuration API', function() {
   test('Get, Action=DefineIndexField (literal, without options)', function(done) {
     utils
       .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
-        'Host': 'cloudsearch.localhost'
+        'Host': utils.testConfigurationHost
       })
       .get('/?DomainName=companies&IndexField.IndexFieldName=product&' +
            'IndexField.IndexFieldType=literal&' +
@@ -626,7 +626,7 @@ suite('Configuration API', function() {
   test('Get, Action=DefineIndexField (literal, with options)', function(done) {
     utils
       .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
-        'Host': 'cloudsearch.localhost'
+        'Host': utils.testConfigurationHost
       })
       .get('/?DomainName=companies&IndexField.IndexFieldName=product&' +
            'IndexField.IndexFieldType=literal&' +
@@ -667,7 +667,7 @@ suite('Configuration API', function() {
     var domain, field;
     utils
       .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
-        'Host': 'cloudsearch.localhost'
+        'Host': utils.testConfigurationHost
       })
       .get('/?DomainName=companies&IndexField.IndexFieldName=name&' +
            'IndexField.IndexFieldType=text&' +
@@ -700,7 +700,7 @@ suite('Configuration API', function() {
     var domain, field;
     utils
       .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
-        'Host': 'cloudsearch.localhost'
+        'Host': utils.testConfigurationHost
       })
       .get('/?DomainName=companies&IndexField.IndexFieldName=age&' +
            'IndexField.IndexFieldType=uint&' +
@@ -733,7 +733,7 @@ suite('Configuration API', function() {
     var domain, field;
     utils
       .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
-        'Host': 'cloudsearch.localhost'
+        'Host': utils.testConfigurationHost
       })
       .get('/?DomainName=companies&IndexField.IndexFieldName=product&' +
            'IndexField.IndexFieldType=literal&' +
@@ -779,7 +779,7 @@ suite('Configuration API', function() {
     var domain;
     utils
       .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
-        'Host': 'cloudsearch.localhost'
+        'Host': utils.testConfigurationHost
       })
       .get('/?DomainName=companies&IndexField.IndexFieldName=name&' +
            'IndexField.IndexFieldType=text&' +
@@ -816,7 +816,7 @@ suite('Configuration API', function() {
   test('Get, Action=DescribeIndexFields (specified fields)', function(done) {
     utils
       .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
-        'Host': 'cloudsearch.localhost'
+        'Host': utils.testConfigurationHost
       })
       .get('/?DomainName=companies&IndexField.IndexFieldName=name&' +
            'IndexField.IndexFieldType=text&' +
@@ -854,7 +854,7 @@ suite('Configuration API', function() {
   test('Get, Action=IndexDocuments', function(done) {
     utils
       .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
-        'Host': 'cloudsearch.localhost'
+        'Host': utils.testConfigurationHost
       })
       .get('/?DomainName=companies&IndexField.IndexFieldName=name&' +
            'Action=DefineIndexField&Version=2011-02-01')
@@ -907,7 +907,7 @@ suite('Configuration API', function() {
     var synonyms = encodeURIComponent(json);
     utils
       .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
-        'Host': 'cloudsearch.localhost'
+        'Host': utils.testConfigurationHost
       })
       .next(function() {
         domain = new Domain('companies', context);
@@ -915,7 +915,7 @@ suite('Configuration API', function() {
       })
       .get('/?Version=2011-02-01&Action=UpdateSynonymOptions&' +
            'DomainName=companies&Synonyms='+synonyms, {
-        'Host': 'cloudsearch.localhost'
+        'Host': utils.testConfigurationHost
       })
       .next(function(response) {
         assert.isTrue(domain.hasSynonymsTableSync());
@@ -956,7 +956,7 @@ suite('Configuration API', function() {
     var synonyms = encodeURIComponent(json);
     utils
       .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
-        'Host': 'cloudsearch.localhost'
+        'Host': utils.testConfigurationHost
       })
       .get('/?Version=2011-02-01&Action=DescribeSynonymOptions&' +
            'DomainName=companies')
@@ -1008,7 +1008,7 @@ suite('Configuration API', function() {
     var domain;
     utils
       .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
-        'Host': 'cloudsearch.localhost'
+        'Host': utils.testConfigurationHost
       })
       .get('/?DomainName=companies&IndexField.IndexFieldName=name&' +
            'Action=DefineIndexField&Version=2011-02-01')
@@ -1061,7 +1061,7 @@ suite('Configuration API', function() {
     var domain;
     utils
       .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
-        'Host': 'cloudsearch.localhost'
+        'Host': utils.testConfigurationHost
       })
       .get('/?DomainName=companies&IndexField.IndexFieldName=name&' +
            'Action=DefineIndexField&Version=2011-02-01')
@@ -1104,7 +1104,7 @@ suite('Configuration API', function() {
   test('Get, no version', function(done) {
     utils
       .get('/?Action=unknown', {
-        'Host': 'cloudsearch.localhost'
+        'Host': utils.testConfigurationHost
       })
       .next(function(response) {
         response = toParsedResponse(response);
@@ -1129,7 +1129,7 @@ suite('Configuration API', function() {
   test('Get, invalid version', function(done) {
     utils
       .get('/?Version=2011-02-02&Action=unknown', {
-        'Host': 'cloudsearch.localhost'
+        'Host': utils.testConfigurationHost
       })
       .next(function(response) {
         response = toParsedResponse(response);

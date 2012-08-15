@@ -11,14 +11,18 @@ var spawn = require('child_process').spawn;
 
 var temporaryDirectory = exports.temporaryDirectory = path.join(__dirname, 'tmp');
 
-var testHost = 'localhost';
+var testBaseHost = 'localhost';
+var testConfigurationHost = 'configuration.localhost';
 var testPort = 3333;
-exports.testHost = testHost;
+exports.testBaseHost = testBaseHost;
+exports.testConfigurationHost = testConfigurationHost;
 exports.testPort = testPort;
 
 function setupServer(context) {
-  var server = gcsServer.createServer({ context: context,
-                                        port:    testPort });
+  var server = gcsServer.createServer({ context:           context,
+                                        port:              testPort,
+                                        baseHost:          exports.testBaseHost,
+                                        configurationHost: exports.testConfigurationHost });
   server.listen(testPort);
   return server;
 }
