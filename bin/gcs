@@ -6,9 +6,9 @@ var commandLine = new CLI();
 
 commandLine
   .option('-p, --port <port>',
-          'specify port [7575]',
+          'specify port [' + CLI.defaultPort + ']',
           Number,
-          7575)
+          CLI.defaultPort)
   .option('--privilege <ip range>',
           'list of IP ranges for privileged client '+
             '[' + CLI.defaultPrivilegedRanges + ']',
