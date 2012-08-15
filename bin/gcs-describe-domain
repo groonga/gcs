@@ -47,12 +47,23 @@ function report(domain) {
   console.log('======================');
 }
 
+function outputNotesForHostAndPort() {
+  console.log('*Note: the hostname and the port number is detected from ' +
+              'the default options. If you run the service with your ' +
+              'favorite host name and port number, then use it instead of ' +
+              'default information.');
+}
+
 if (commandLine.options.domainName) {
+  commandLine.assertDomainExists();
   report(commandLine.domain);
+  outputNotesForHostAndPort();
 } else {
   var domains = CLI.Domain.getAll(commandLine.context);
   domains.forEach(function(domain, index) {
     if (index) console.log('');
     report(domain);
   });
+  if (domains.length)
+    outputNotesForHostAndPort();
 }
