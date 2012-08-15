@@ -164,7 +164,7 @@ suite('database', function() {
                          uint:    uintField.summary,
                          literal: literalField.summary },
                        { text:    'name Active text (Search)',
-                         uint:    'age Active uint (Facet Result)',
+                         uint:    'age Active uint (Search Result)',
                          literal: 'product Active literal ()' });
     });
 
