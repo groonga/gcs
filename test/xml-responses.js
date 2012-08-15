@@ -3,6 +3,20 @@ var utils = require('./test-utils');
 var XMLNS =
     exports.XMLNS = 'http://cloudsearch.amazonaws.com/doc/2011-02-01';
 
+function createGenericResponse(action, result) {
+  return {
+    action + 'Response': {
+      '@': { xmlns: '' },
+      action + 'Result': result || {},
+      ResponseMetadata: ResponseMetadata
+    }
+  };
+}
+
+function defineGenericResponse(action, result) {
+  exports[action + 'Response'] = createGenericResponse(action, result);
+}
+
 var DocService =
     exports.DocService = {
       Endpoint: ''
@@ -28,46 +42,24 @@ var DomainStatus =
       SearchPartitionCount: '',
       SearchService: SearchService
     };
-var CreateDomainResponse =
-    exports.CreateDomainResponse = {
-      CreateDomainResponse: {
-        '@': { xmlns: '' },
-        CreateDomainResult: {
-          DomainStatus: DomainStatus
-        },
-        ResponseMetadata: ResponseMetadata
-      }
-    };
-var DeleteDomainResponse =
-    exports.DeleteDomainResponse = {
-      DeleteDomainResponse: {
-        '@': { xmlns: '' },
-        DeleteDomainResult: {
-          DomainStatus: DomainStatus
-        },
-        ResponseMetadata: ResponseMetadata
-      }
-    };
+defineGenericResponse('CreateDomain', {
+  DomainStatus: DomainStatus
+});
+defineGenericResponse('DeleteDomain', {
+  DomainStatus: DomainStatus
+});
 
-var DescribeDomainsResponse = 
-    exports.DescribeDomainsResponse = function(members) {
-  return {
-    DescribeDomainsResponse: {
-      '@': { xmlns: '' },
-      DescribeDomainsResult: {
-        DomainStatusList: (function() {
-          var pattern =
-    exports.pattern = {};
-          members.forEach(function(member, index) {
-            pattern[index] = DomainStatus;
-          });
-          return { member: pattern };
-        })()
-      },
-      ResponseMetadata: ResponseMetadata
-    }
-  };
-}
+exports.DescribeDomainsResponse = function(members) {
+  return createGenericResponse('DescribeDomains', {
+    DomainStatusList: (function() {
+      var pattern = {};
+      members.forEach(function(member, index) {
+        pattern[index] = DomainStatus;
+      });
+      return { member: pattern };
+    })()
+  });
+};
 
 var OptionStatus =
     exports.OptionStatus = {
@@ -93,16 +85,10 @@ var IndexFieldStatus_Text =
       Options: IndexField_Text,
       Status: OptionStatus
     };
-var DefineIndexFieldResponse_Text =
-    exports.DefineIndexFieldResponse_Text = {
-      DefineIndexFieldResponse: {
-        '@': { xmlns: '' },
-        DefineIndexFieldResult: {
-          IndexField: IndexFieldStatus_Text
-        },
-        ResponseMetadata: ResponseMetadata
-      }
-    };
+exports.DefineIndexFieldResponse_Text = createGenericResponse('DefineIndexField', {
+  IndexField: IndexFieldStatus_Text
+});
+
 var UIntOptions =
     exports.UIntOptions = {
       DefaultValue: {}
@@ -118,16 +104,10 @@ var IndexFieldStatus_UInt =
       Options: IndexField_UInt,
       Status: OptionStatus
     };
-var DefineIndexFieldResponse_UInt =
-    exports.DefineIndexFieldResponse_UInt = {
-      DefineIndexFieldResponse: {
-        '@': { xmlns: '' },
-        DefineIndexFieldResult: {
-          IndexField: IndexFieldStatus_UInt
-        },
-        ResponseMetadata: ResponseMetadata
-      }
-    };
+exports.DefineIndexFieldResponse_UInt = createGenericResponse('DefineIndexField', {
+  IndexField: IndexFieldStatus_UInt
+});
+
 var LiteralOptions =
     exports.LiteralOptions = {
       DefaultValue: {},
@@ -146,93 +126,47 @@ var IndexFieldStatus_Literal =
       Options: IndexField_Literal,
       Status: OptionStatus
     };
-var DefineIndexFieldResponse_Literal =
-    exports.DefineIndexFieldResponse_Literal = {
-      DefineIndexFieldResponse: {
-        '@': { xmlns: '' },
-        DefineIndexFieldResult: {
-          IndexField: IndexFieldStatus_Literal
-        },
-        ResponseMetadata: ResponseMetadata
-      }
-    };
+exports.DefineIndexFieldResponse_Literal = createGenericResponse('DefineIndexField', {
+  IndexField: IndexFieldStatus_Literal
+});
 
-var DeleteIndexFieldResponse =
-    exports.DeleteIndexFieldResponse = {
-      DeleteIndexFieldResponse: {
-        '@': { xmlns: '' },
-        DeleteIndexFieldResult: {},
-        ResponseMetadata: ResponseMetadata
-      }
-    };
+defineGenericResponse('DeleteIndexField');
 
-var DescribeIndexFieldsResponse = 
-    exports.DescribeIndexFieldsResponse = function(members) {
-  return {
-    DescribeIndexFieldsResponse: {
-      '@': { xmlns: '' },
-      DescribeIndexFieldsResult: {
-        IndexFields: (function() {
-          var pattern =
-    exports.pattern = {};
+exports.DescribeIndexFieldsResponse = function(members) {
+  return createGenericResponse('DefineIndexField', {
+    IndexFields: (function() {
+          var pattern = {};
           members.forEach(function(member, index) {
             pattern[index] = member;
           });
           return { member: pattern };
         })()
-      },
-      ResponseMetadata: ResponseMetadata
-    }
-  };
-}
+  });
+};
 
-var IndexDocumentsResponse = 
-    exports.IndexDocumentsResponse = function(members) {
-  return {
-    IndexDocumentsResponse: {
-      '@': { xmlns: '' },
-      IndexDocumentsResult: {
-        FieldNames: (function() {
-          var pattern =
-    exports.pattern = {};
-          members.forEach(function(member, index) {
-            pattern[index] = '';
-          });
-          return { member: pattern };
-        })()
-      },
-      ResponseMetadata: ResponseMetadata
-    }
-  };
-}
+exports.IndexDocumentsResponse = function(members) {
+  return createGenericResponse('IndexDocuments', {
+    FieldNames: (function() {
+      var pattern = {};
+      members.forEach(function(member, index) {
+        pattern[index] = '';
+      });
+      return { member: pattern };
+    })()
+  });
+};
 
 var SynonymOptionsStatus =
     exports.SynonymOptionsStatus = {
       Options: '',
       Status: OptionStatus
     };
-
-var UpdateSynonymOptionsResponse =
-    exports.UpdateSynonymOptionsResponse = {
-      UpdateSynonymOptionsResponse: {
-        '@': { xmlns: '' },
-        UpdateSynonymOptionsResult: {
-          Synonyms: SynonymOptionsStatus,
-        },
-        ResponseMetadata: ResponseMetadata
-      }
-    };
-
-var DescribeSynonymOptionsResponse =
-    exports.DescribeSynonymOptionsResponse = {
-      DescribeSynonymOptionsResponse: {
-        '@': { xmlns: '' },
-        DescribeSynonymOptionsResult: {
-          Synonyms: SynonymOptionsStatus,
-        },
-        ResponseMetadata: ResponseMetadata
-      }
-    };
+defineGenericResponse('UpdateSynonymOptions', {
+  Synonyms: SynonymOptionsStatus,
+});
+defineGenericResponse('DescribeSynonymOptions', {
+  Synonyms: SynonymOptionsStatus,
+});
 
 var COMMON_ERROR_RESPONSE =
     exports.COMMON_ERROR_RESPONSE = {
@@ -252,56 +186,24 @@ var DefaultSearchFieldStatus =
       Options: '',
       Status: OptionStatus
     };
+exports.UpdateDefaultSearchFieldResponse = createGenericResponse('UpdateDefaultSearchField', {
+  DefaultSearchField: DefaultSearchFieldStatus
+});
+exports.DescribeDefaultSearchFieldResponse = createGenericResponse('DescribeDefaultSearchField', {
+  DefaultSearchField: DefaultSearchFieldStatus
+});
 
 var DefaultSearchFieldStatus_blank =
     exports.DefaultSearchFieldStatus_blank = {
       Options: {},
       Status: OptionStatus
     };
-
-var UpdateDefaultSearchFieldResponse =
-    exports.UpdateDefaultSearchFieldResponse = {
-      UpdateDefaultSearchFieldResponse: {
-        '@': { xmlns: '' },
-        UpdateDefaultSearchFieldResult: {
-          DefaultSearchField: DefaultSearchFieldStatus,
-        },
-        ResponseMetadata: ResponseMetadata
-      }
-    };
-
-var UpdateDefaultSearchFieldResponse_blank =
-    exports.UpdateDefaultSearchFieldResponse_blank = {
-      UpdateDefaultSearchFieldResponse: {
-        '@': { xmlns: '' },
-        UpdateDefaultSearchFieldResult: {
-          DefaultSearchField: DefaultSearchFieldStatus_blank,
-        },
-        ResponseMetadata: ResponseMetadata
-      }
-    };
-
-var DescribeDefaultSearchFieldResponse =
-    exports.DescribeDefaultSearchFieldResponse = {
-      DescribeDefaultSearchFieldResponse: {
-        '@': { xmlns: '' },
-        DescribeDefaultSearchFieldResult: {
-          DefaultSearchField: DefaultSearchFieldStatus,
-        },
-        ResponseMetadata: ResponseMetadata
-      }
-    };
-
-var DescribeDefaultSearchFieldResponse_blank =
-    exports.DescribeDefaultSearchFieldResponse_blank = {
-      DescribeDefaultSearchFieldResponse: {
-        '@': { xmlns: '' },
-        DescribeDefaultSearchFieldResult: {
-          DefaultSearchField: DefaultSearchFieldStatus_blank,
-        },
-        ResponseMetadata: ResponseMetadata
-      }
-    };
+exports.UpdateDefaultSearchFieldResponse_blank = createGenericResponse('UpdateDefaultSearchField', {
+  DefaultSearchField: DefaultSearchFieldStatus_blank
+});
+exports.DescribeDefaultSearchFieldResponse_blank = createGenericResponse('DescribeDefaultSearchField', {
+  DefaultSearchField: DefaultSearchFieldStatus_blank
+});
 
 function toXMLPattern(fragment) {
   switch (typeof fragment) {
