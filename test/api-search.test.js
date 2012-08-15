@@ -1,7 +1,8 @@
 var utils = require('./test-utils');
 var assert = require('chai').assert;
-var http = require('http');
 var fs = require('fs');
+
+var Domain = require('../lib/database').Domain;
 
 suite('Search API', function() {
   var server;
@@ -20,19 +21,33 @@ suite('Search API', function() {
     server.close();
   });
 
-  function testSearch(path, message, host, callback) {
+  function testSearch(path, message, host) {
+    var setup, callback;
+    var callbacks = Array.prototype.slice.call(arguments, 3);
+    if (callbacks.length > 1) {
+      setup = callbacks[0];
+      callback = callbacks[1];
+    } else {
+      callback = callbacks[0];
+    }
     test('GET ' + path + ' ' + message, function(done) {
+      if (setup) setup();
       var options = {
         host: 'localhost',
         port: utils.testPort,
         path: path,
-        headers: {Host: host}
+        headers: { Host: host }
       };
       utils
         .get(path, { Host: host })
         .next(function(response) {
           var normalizedBody = normalizeSearchResult(response.body);
-          var normalizedBody = JSON.parse(normalizedBody);
+          try {
+            normalizedBody = JSON.parse(normalizedBody);
+          } catch(error) {
+            console.log(normalizedBody);
+            throw error;
+          }
           callback({
             statusCode:     response.statusCode,
             body:           response.body,
@@ -411,5 +426,135 @@ suite('Search API', function() {
         assert.deepEqual(response.normalizedBody, expected);
       }
     );
+  });
+
+  suite('search options', function() {
+    var domain;
+
+    setup(function() {
+      domain = new Domain('people', context)
+                 .setId('00000000000000000000000000').createSync();
+      domain.getIndexField('realname').setType('text').createSync();
+      domain.getIndexField('nickname').setType('text').createSync();
+      domain.loadSync([
+        { id: 'id1', realname: 'Jack Sparrow',
+                     nickname: 'Captain' },
+        { id: 'id2', realname: 'Pumpkin Man',
+                     nickname: 'Jack-o\'-Lantern' }
+      ]);
+    });
+
+    testSearch('/2011-02-01/search?q=Jack',
+               'should match both records',
+               'search-people-00000000000000000000000000.localhost',
+      function(response) {
+        var expected = {
+          rank: '-text_relevance',
+          'match-expr': "(label 'Jack')",
+          hits: {
+            found: 2,
+            start: 0,
+            hit: [
+              {
+                id: 'id2',
+                data: {
+                  _id: [2],
+                  _key: ['id2'],
+                  realname: ['Pumpkin Man'],
+                  nickname: ['Jack-o\'-Lantern']
+                }
+              },
+              {
+                id: 'id1',
+                data: {
+                  _id: [1],
+                  _key: ['id1'],
+                  realname: ['Jack Sparrow'],
+                  nickname: ['Captain']
+                }
+              }
+            ]
+          },
+          info: {
+            rid: '000000000000000000000000000000000000000000000000000000000000000',
+            'time-ms': 0, // always 0
+            'cpu-time-ms': 0
+          }
+        };
+        assert.deepEqual(response.normalizedBody, expected);
+      }
+    );
+
+    testSearch('/2011-02-01/search?q=Jack',
+               'should match only realname, by default search field',
+               'search-people-00000000000000000000000000.localhost',
+      function() {
+        domain.defaultSearchField = 'realname';
+      },
+      function(response) {
+        var expected = {
+          rank: '-text_relevance',
+          'match-expr': "(label 'Jack')",
+          hits: {
+            found: 1,
+            start: 0,
+            hit: [
+              {
+                id: 'id1',
+                data: {
+                  _id: [1],
+                  _key: ['id1'],
+                  realname: ['Jack Sparrow'],
+                  nickname: ['Captain']
+                }
+              }
+            ]
+          },
+          info: {
+            rid: '000000000000000000000000000000000000000000000000000000000000000',
+            'time-ms': 0, // always 0
+            'cpu-time-ms': 0
+          }
+        };
+        assert.deepEqual(response.normalizedBody, expected);
+      }
+    );
+
+/* searchability of text field cannot be configured. how should I test it?
+    testSearch('/2011-02-01/search?q=Jack',
+               'should match only nickname, by searchability',
+               'search-people-00000000000000000000000000.localhost',
+      function() {
+        domain.getIndexField('realname').setSearchEnabled(false).saveOptionsSync();
+      },
+      function(response) {
+        var expected = {
+          rank: '-text_relevance',
+          'match-expr': "(label 'Jack')",
+          hits: {
+            found: 1,
+            start: 0,
+            hit: [
+              {
+                id: 'id2',
+                data: {
+                  _id: [2],
+                  _key: ['id2'],
+                  realname: ['Pumpkin Man'],
+                  nickname: ['Jack-o\'-Lantern']
+                }
+              }
+            ]
+          },
+          info: {
+            rid: '000000000000000000000000000000000000000000000000000000000000000',
+            'time-ms': 0, // always 0
+            'cpu-time-ms': 0
+          }
+        };
+        assert.deepEqual(response.normalizedBody, expected);
+      }
+    );
+*/
   });
 });
