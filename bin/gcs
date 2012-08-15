@@ -18,7 +18,8 @@ commandLine
 
 var server = gcsServer.createServer({
       databasePath:     commandLine.options.databasePath,
-      privilegedRanges: commandLine.options.privilege
+      privilegedRanges: commandLine.options.privilege,
+      port:             commandLine.options.port
     });
 
 server.listen(commandLine.options.port, function() {
