@@ -13,7 +13,7 @@ var SearchService =
     };
 var ResponseMetadata =
     exports.ResponseMetadata = {
-      RequestId: {}
+      RequestId: ''
     };
 var DomainStatus =
     exports.DomainStatus = {
@@ -243,7 +243,7 @@ var COMMON_ERROR_RESPONSE =
             Message: ''
           }
         },
-        RequestID: {}
+        RequestID: ''
       }
     };
 
