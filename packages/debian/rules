@@ -55,6 +55,7 @@ override_dh_install:
 	  done;							\
 	  sbindir=/usr/sbin;					\
 	  dest_sbindir=$(DESTDIR)$${sbindir};			\
+	  mkdir -p $${dest_sbindir};				\
 	  mv $${dest_bindir}/gcs $${dest_sbindir}/;
 
 	dh_install
