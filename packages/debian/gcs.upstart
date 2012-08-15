@@ -10,5 +10,7 @@ setuid gcs
 setgid gcs
 
 script
+  HOME=`echo ~gcs`
+  export HOME
   exec /usr/sbin/gcs
 end script
