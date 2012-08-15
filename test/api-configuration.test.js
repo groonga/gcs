@@ -498,7 +498,7 @@ suite('Configuration API', function() {
               Created: 'false',
               Deleted: 'true',
               DocService: {
-                Endpoint: domain.getDocumentsEndpoint('api.localhost')
+                Endpoint: domain.getDocumentsEndpoint(defaultBaseHost)
               },
               DomainId: domain.domainId,
               DomainName: domain.name,
@@ -507,7 +507,7 @@ suite('Configuration API', function() {
               SearchInstanceCount: String(domain.searchInstanceCount),
               SearchPartitionCount: String(domain.searchPartitionCount),
               SearchService: {
-                Endpoint: domain.getSearchEndpoint('api.localhost')
+                Endpoint: domain.getSearchEndpoint(defaultBaseHost)
               }
             };
         var status = response.body.DeleteDomainResponse.DeleteDomainResult.DomainStatus;
