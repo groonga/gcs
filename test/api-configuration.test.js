@@ -171,7 +171,11 @@ suite('Configuration API', function() {
   });
 
   suite('auto detection of the base hostname and port', function() {
-    setup(commonSetup);
+    setup(function() {
+      temporaryDatabase = utils.createTemporaryDatabase();
+      context = temporaryDatabase.get();
+    });
+
     teardown(commonTeardown);
 
     function assertBaseHost(baseHost, response) {
