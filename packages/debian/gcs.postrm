@@ -11,7 +11,7 @@ if [ "$1" = "purge" ]; then
     dpkg-statoverride --remove /var/run/gcs
 
     if getent passwd gcs >/dev/null; then
-        deluser --system --remove-all-files gcs
+        deluser --system --remove-home gcs
     fi
 fi
 
