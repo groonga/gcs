@@ -221,6 +221,19 @@ var PATTERN_UpdateDefaultSearchField = {
       }
     };
 
+var PATTERN_UpdateDefaultSearchField_blank = {
+      UpdateDefaultSearchFieldResponse: {
+        '@': { xmlns: '' },
+        UpdateDefaultSearchFieldResult: {
+          DefaultSearchField: {
+            Options: {},
+            Status: PATTERN_OptionStatus
+          },
+        },
+        ResponseMetadata: PATTERN_ResponseMetadata
+      }
+    };
+
 function toXMLPattern(fragment) {
   switch (typeof fragment) {
     default:
@@ -933,12 +946,13 @@ suite('Configuration API', function() {
         response = toParsedResponse(response);
         assert.deepEqual(response.pattern,
                          { statusCode: 200,
-                           body: PATTERN_UpdateDefaultSearchField });
+                           body: PATTERN_UpdateDefaultSearchField_blank });
 
         var fieldName = response.body.UpdateDefaultSearchFieldResponse
                                      .UpdateDefaultSearchFieldResult
                                      .DefaultSearchField.Options;
-        assert.deepEqual(fieldName, '');
+        // xml2json converts the content of the empty element to a blank object, not a blank text.
+        assert.deepEqual(fieldName, {});
 
         done();
       })
