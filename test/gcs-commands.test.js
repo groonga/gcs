@@ -200,8 +200,8 @@ suite('gcs-describe-domain', function() {
                              '\n' +
                              'Fields:\n' +
                              '=======\n' +
-                             ageField.summary\n' +
-                             nameField.summary\n' +
+                             ageField.summary + '\n' +
+                             nameField.summary +'\n' +
                              '======================\n' });
 
         done();
