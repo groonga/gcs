@@ -911,7 +911,8 @@ suite('Configuration API', function() {
       .get('/?Version=2011-02-01&Action=UpdateDefaultSearchField&' +
            'DomainName=companies&DefaultSearchField=name')
       .next(function(response) {
-        assert.equal(domain.defaultSearchField, domain.getField('name'));
+        assert.equal(domain.defaultSearchField,
+                     domain.getIndexField('name'));
 
         response = toParsedResponse(response);
         assert.deepEqual(response.pattern,
