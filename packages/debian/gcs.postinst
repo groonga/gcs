@@ -11,10 +11,12 @@ add_system_user() {
 }
 
 fixperms() {
+    dpkg-statoverride --list /var/lib/gcs >/dev/null || \
+        dpkg-statoverride --update --add gcs gcs 0750 /var/lib/gcs
+    dpkg-statoverride --list /var/lob/gcs >/dev/null || \
+        dpkg-statoverride --update --add gcs gcs 0750 /var/log/gcs
     dpkg-statoverride --list /var/run/gcs >/dev/null || \
         dpkg-statoverride --update --add gcs gcs 0755 /var/run/gcs
-    dpkg-statoverride --list /var/lib/gcs >/dev/null || \
-        dpkg-statoverride --update --add gcs gcs 0755 /var/lib/gcs
 }
 
 case "$1" in

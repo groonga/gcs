@@ -28,6 +28,7 @@ DESTDIR = debian/tmp
 
 override_dh_install:
 	npm install --production node-gyp
+	npm install --production forever
 	npm install --production
 
 	eval $$(dpkg-architecture);				\
