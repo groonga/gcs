@@ -188,13 +188,8 @@ var PATTERN_UpdateSynonymOptionsResponse = {
         '@': { xmlns: '' },
         UpdateSynonymOptionsResult: {
           Synonyms: {
-            Status: {
-              CreationDate: '',
-              UpdateVersion: '',
-              State: '',
-              UpdateDate: ''
-            },
-            Options: ''
+            Options: '',
+            Status: PATTERN_OptionStatus
           },
         },
         ResponseMetadata: PATTERN_ResponseMetadata
@@ -210,6 +205,19 @@ var PATTERN_COMMON_ERROR_RESPONSE = {
           }
         },
         RequestID: {}
+      }
+    };
+
+var PATTERN_UpdateDefaultSearchField = {
+      UpdateDefaultSearchFieldResponse: {
+        '@': { xmlns: '' },
+        UpdateDefaultSearchFieldResult: {
+          DefaultSearchField: {
+            Options: '',
+            Status: PATTERN_OptionStatus
+          },
+        },
+        ResponseMetadata: PATTERN_ResponseMetadata
       }
     };
 
@@ -879,6 +887,57 @@ suite('Configuration API', function() {
               }
             };
         assert.deepEqual(expectedSynonymOptions, synonymOptions);
+
+        done();
+      })
+      .error(function(error) {
+        done(error);
+      });
+  });
+
+  test('Get, Action=UpdateDefaultSearchField', function(done) {
+    var domain;
+    utils
+      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
+        'Host': 'cloudsearch.localhost'
+      })
+      .get('/?DomainName=companies&IndexField.IndexFieldName=name&' +
+           'Action=DefineIndexField&Version=2011-02-01')
+      .next(function() {
+        domain = new Domain('companies', context);
+        assert.isTrue(domain.defaultSearchField === null,
+                      domain.defaultSearchField);
+      })
+      .get('/?Version=2011-02-01&Action=UpdateDefaultSearchField&' +
+           'DomainName=companies&DefaultSearchField=name')
+      .next(function(response) {
+        assert.equal(domain.defaultSearchField, domain.getField('name'));
+
+        response = toParsedResponse(response);
+        assert.deepEqual(response.pattern,
+                         { statusCode: 200,
+                           body: PATTERN_UpdateDefaultSearchField });
+
+        var fieldName = response.body.UpdateDefaultSearchFieldResponse
+                                     .UpdateDefaultSearchFieldResult
+                                     .DefaultSearchField.Options;
+        assert.deepEqual(fieldName, 'name');
+      })
+      .get('/?Version=2011-02-01&Action=UpdateDefaultSearchField&' +
+           'DomainName=companies&DefaultSearchField=')
+      .next(function(response) {
+        assert.isTrue(domain.defaultSearchField === null,
+                      domain.defaultSearchField);
+
+        response = toParsedResponse(response);
+        assert.deepEqual(response.pattern,
+                         { statusCode: 200,
+                           body: PATTERN_UpdateDefaultSearchField });
+
+        var fieldName = response.body.UpdateDefaultSearchFieldResponse
+                                     .UpdateDefaultSearchFieldResult
+                                     .DefaultSearchField.Options;
+        assert.deepEqual(fieldName, '');
 
         done();
       })
