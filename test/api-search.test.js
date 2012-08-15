@@ -28,15 +28,21 @@ suite('Search API', function() {
         path: path,
         headers: {Host: host}
       };
-      http.get(options, function(response) {
-        var body = '';
-        response.on('data', function(data) {
-          body += data;
+      utils
+        .get(path, { Host: host })
+        .next(function(response) {
+          var normalizedBody = normalizeSearchResult(response.body);
+          var normalizedBody = JSON.parse(normalizedBody);
+          callback({
+            statusCode:     response.statusCode,
+            body:           response.body,
+            normalizedBody: normalizedBody
+          });
+          done();
+        })
+        .error(function(error) {
+          done(error);
         });
-        response.on('end', function() {
-          callback(response, body, done);
-        });
-      } );
     });
   }
 
@@ -53,9 +59,7 @@ suite('Search API', function() {
     testSearch('/2011-02-01/search?q=Hongo',
                'should hit one entry',
                'search-companies-00000000000000000000000000.localhost',
-      function(response, body, done) {
-        var normalizedBody = normalizeSearchResult(body);
-        var actual = JSON.parse(normalizedBody);
+      function(response) {
         var expected = { // FIXME
           rank: '-text_relevance',
           'match-expr': "(label 'Hongo')",
@@ -82,17 +86,14 @@ suite('Search API', function() {
             'cpu-time-ms': 0
           }
         };
-        assert.deepEqual(actual, expected);
-        done();
+        assert.deepEqual(response.normalizedBody, expected);
       }
     );
 
     testSearch('/2011-02-01/search?q=Tokyo',
                'should hit three entries',
                'search-companies-00000000000000000000000000.localhost',
-      function(response, body, done) {
-        var normalizedBody = normalizeSearchResult(body);
-        var actual = JSON.parse(normalizedBody);
+      function(response) {
         var expected = {
           rank: '-text_relevance',
           'match-expr': "(label 'Tokyo')",
@@ -147,16 +148,13 @@ suite('Search API', function() {
             'cpu-time-ms': 0
           }
         };
-        assert.deepEqual(actual, expected);
-        done();
+        assert.deepEqual(response.normalizedBody, expected);
       }
     );
     testSearch('/2011-02-01/search?q=Tokyo&facet=product',
                'with facet "domain"',
                'search-companies-00000000000000000000000000.localhost',
-      function(response, body, done) {
-        var normalizedBody = normalizeSearchResult(body);
-        var actual = JSON.parse(normalizedBody);
+      function(response) {
         var expected = {
           rank: '-text_relevance',
           'match-expr': "(label 'Tokyo')",
@@ -219,17 +217,14 @@ suite('Search API', function() {
             'cpu-time-ms': 0
           }
         };
-        assert.deepEqual(actual, expected);
-        done();
+        assert.deepEqual(response.normalizedBody, expected);
       }
     );
 
     testSearch('/2011-02-01/search?q=Tokyo&size=2',
                'should return two hit entries',
                'search-companies-00000000000000000000000000.localhost',
-      function(response, body, done) {
-        var normalizedBody = normalizeSearchResult(body);
-        var actual = JSON.parse(normalizedBody);
+      function(response) {
         var expected = {
           rank: '-text_relevance',
           'match-expr': "(label 'Tokyo')",
@@ -271,17 +266,14 @@ suite('Search API', function() {
             'cpu-time-ms': 0
           }
         };
-        assert.deepEqual(actual, expected);
-        done();
+        assert.deepEqual(response.normalizedBody, expected);
       }
     );
 
     testSearch('/2011-02-01/search?q=Tokyo&start=1',
                'should return offseted hit result',
                'search-companies-00000000000000000000000000.localhost',
-      function(response, body, done) {
-        var normalizedBody = normalizeSearchResult(body);
-        var actual = JSON.parse(normalizedBody);
+      function(response) {
         var expected = {
           rank: '-text_relevance',
           'match-expr': "(label 'Tokyo')",
@@ -323,17 +315,14 @@ suite('Search API', function() {
             'cpu-time-ms': 0
           }
         };
-        assert.deepEqual(actual, expected);
-        done();
+        assert.deepEqual(response.normalizedBody, expected);
       }
     );
 
     testSearch('/2011-02-01/search?q=Tokio',
                'should not match with any entry',
                'search-companies-00000000000000000000000000.localhost',
-      function(response, body, done) {
-        var normalizedBody = normalizeSearchResult(body);
-        var actual = JSON.parse(normalizedBody);
+      function(response) {
         var expected = {
           rank: '-text_relevance',
           'match-expr': "(label 'Tokio')",
@@ -349,8 +338,7 @@ suite('Search API', function() {
             'cpu-time-ms': 0
           }
         };
-        assert.deepEqual(actual, expected);
-        done();
+        assert.deepEqual(response.normalizedBody, expected);
       }
     );
   });
@@ -365,9 +353,7 @@ suite('Search API', function() {
     testSearch('/2011-02-01/search?q=Tokio',
                'should match with using synonyms',
                'search-companies-00000000000000000000000000.localhost',
-      function(response, body, done) {
-        var normalizedBody = normalizeSearchResult(body);
-        var actual = JSON.parse(normalizedBody);
+      function(response) {
         var expected = {
           rank: '-text_relevance',
           'match-expr': "(label 'Tokio')",
@@ -422,8 +408,7 @@ suite('Search API', function() {
             'cpu-time-ms': 0
           }
         };
-        assert.deepEqual(actual, expected);
-        done();
+        assert.deepEqual(response.normalizedBody, expected);
       }
     );
   });
