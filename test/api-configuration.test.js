@@ -183,14 +183,26 @@ function PATTERN_IndexDocumentsResponse(members) {
   };
 }
 
+var PATTERN_SynonymOptionsStatus = {
+      Options: '',
+      Status: PATTERN_OptionStatus
+    };
+
 var PATTERN_UpdateSynonymOptionsResponse = {
       UpdateSynonymOptionsResponse: {
         '@': { xmlns: '' },
         UpdateSynonymOptionsResult: {
-          Synonyms: {
-            Options: '',
-            Status: PATTERN_OptionStatus
-          },
+          Synonyms: PATTERN_SynonymOptionsStatus,
+        },
+        ResponseMetadata: PATTERN_ResponseMetadata
+      }
+    };
+
+var PATTERN_DescribeSynonymOptionsResponse = {
+      DescribeSynonymOptionsResponse: {
+        '@': { xmlns: '' },
+        DescribeSynonymOptionsResult: {
+          Synonyms: PATTERN_SynonymOptionsStatus,
         },
         ResponseMetadata: PATTERN_ResponseMetadata
       }
@@ -915,6 +927,66 @@ suite('Configuration API', function() {
 
         var synonymOptions = response.body.UpdateSynonymOptionsResponse
                                           .UpdateSynonymOptionsResult
+                                          .Synonyms.Options;
+        synonymOptions = JSON.parse(synonymOptions);
+        var expectedSynonymOptions = {
+              synonyms: {
+                tokio: ['tokyo'],
+                dekkaido: 'hokkaido'
+              }
+            };
+        assert.deepEqual(expectedSynonymOptions, synonymOptions);
+
+        done();
+      })
+      .error(function(error) {
+        done(error);
+      });
+  });
+
+  test('Get, Action=DescribeSynonymOptions', function(done) {
+    var domain;
+    var synonymsObject = {
+      synonyms: {
+        tokio: ["tokyo"],
+        dekkaido: "hokkaido"
+      }
+    };
+    var json = JSON.stringify(synonymsObject);
+    var synonyms = encodeURIComponent(json);
+    utils
+      .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01', {
+        'Host': 'cloudsearch.localhost'
+      })
+      .get('/?Version=2011-02-01&Action=DescribeSynonymOptions&' +
+           'DomainName=companies')
+      .next(function() {
+        response = toParsedResponse(response);
+        assert.deepEqual(response.pattern,
+                         { statusCode: 200,
+                           body: PATTERN_DescribeSynonymOptionsResponse });
+
+        var synonymOptions = response.body.DescribeSynonymOptionsResponse
+                                          .DescribeSynonymOptionsResult
+                                          .Synonyms.Options;
+        synonymOptions = JSON.parse(synonymOptions);
+        var expectedSynonymOptions = {
+              synonyms: {}
+            };
+        assert.deepEqual(expectedSynonymOptions, synonymOptions);
+      })
+      .get('/?Version=2011-02-01&Action=UpdateSynonymOptions&' +
+           'DomainName=companies&Synonyms='+synonyms)
+      .get('/?Version=2011-02-01&Action=DescribeSynonymOptions&' +
+           'DomainName=companies')
+      .next(function(response) {
+        response = toParsedResponse(response);
+        assert.deepEqual(response.pattern,
+                         { statusCode: 200,
+                           body: PATTERN_DescribeSynonymOptionsResponse });
+
+        var synonymOptions = response.body.DescribeSynonymOptionsResponse
+                                          .DescribeSynonymOptionsResult
                                           .Synonyms.Options;
         synonymOptions = JSON.parse(synonymOptions);
         var expectedSynonymOptions = {
