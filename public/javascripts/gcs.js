@@ -51,11 +51,18 @@ function renderRequestInformation(data) {
 
 function searchExecute() {
   var query = $('form#search input[name="query"]').val();
-  var searchEndpoint = $('form#domain select[name="domain-and-id"]').attr('value');
-  searchEndpoint = 'http://' + searchEndpoint + '/2011-02-01/search';
+  var domains = $('#domain-and-id');
+  var domain = domains.find('option[value="' + domains.val() + '"]');
+  var searchEndpoint = 'http://' + domain.attr('value') + '/2011-02-01/search';
+  var fields = domain.attr('data-field-names');
   var perPage = 5;
   var start = parseInt($('form#search input[name="start"]').val() || '0', 10);
-  var params = {q: query, size: perPage, start: start};
+  var params = {
+        q:     query,
+        size:  perPage,
+        start: start,
+        'return-fields': fields
+      };
   var urlForRawRequest = searchEndpoint + '?' + jQuery.param(params);
   renderRequestInformation({urlForRawRequest: urlForRawRequest});
 
@@ -76,7 +83,7 @@ function searchExecute() {
 $(document).ready(function($) {
   $.ajax({
     type: 'GET',
-    url: configurationEndpoint,
+    url:  configurationEndpoint,
     data: {
       Version: '2011-02-01',
       Action:  'DescribeDomains'
@@ -84,11 +91,34 @@ $(document).ready(function($) {
     dataType: 'xml',
     success: function(data) {
       $(data).find('DomainStatusList > member')
-             .each(function(index) {
-               var name = $(this).find('DomainName').text();
-               var endpoint = $(this).find('SearchService > Endpoint').text();
-               $('#domain-and-id').append('<option value="' + endpoint + '">'+name+'</option>');
-             });
+        .each(function(index) {
+          var domain = $(this);
+          var name = domain.find('DomainName').text();
+          var endpoint = domain.find('SearchService > Endpoint').text();
+          $.ajax({
+            type: 'GET',
+            url:  configurationEndpoint,
+            data: {
+              Version:    '2011-02-01',
+              Action:     'DescribeIndexFields',
+              DomainName: name
+            },
+            dataType: 'xml',
+            success: function(data) {
+              var fieldNames = [];
+              $(data).find('IndexFields > member')
+                .each(function(index) {
+                  var field = $(this);
+                  fieldNames.push(field.find('IndexFieldName').text());
+                });
+              var option = $("<option/>")
+                    .text(name)
+                    .attr('value', endpoint)
+                    .attr('data-field-names', fieldNames.join(','));
+              $('#domain-and-id').append(option);
+            }
+          });
+        });
     }
   });
 
