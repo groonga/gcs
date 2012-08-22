@@ -1,3 +1,15 @@
+var configurationEndpoint = 'http://' + location.host + '/';
+var hostAndPort = getHostAndPort();
+
+function getHostAndPort() {
+  var hostAndPort = location.host.split(':');
+  if (hostAndPort[0] == 'localhost')
+    hostAndPort[0] = '127.0.0.1';
+  if (hostAndPort[0].match(/^\d+\.\d+\.\d+\.\d+$/))
+    hostAndPort[0] += '.xip.io';
+  return hostAndPort.join(':');
+}
+
 function renderResults(data, perPage) {
   var rendered = JST['results'](data);
   var found = data.hits.found;
@@ -39,14 +51,8 @@ function renderRequestInformation(data) {
 
 function searchExecute() {
   var query = $('form#search input[name="query"]').val();
-  var domain = $('form#domain input[name="domain-name"]').val();
-  var hostAndPort = location.host.split(':');
-  if (hostAndPort[0] == 'localhost')
-    hostAndPort[0] = '127.0.0.1';
-  if (hostAndPort[0].match(/^\d+\.\d+\.\d+\.\d+$/))
-    hostAndPort[0] += '.xip.io';
-  hostAndPort = hostAndPort.join(':');
-  var searchEndpoint = 'http://search-' + domain + '-00000000000000000000000000.' + hostAndPort + '/2011-02-01/search';
+  var searchEndpoint = $('form#domain select[name="domain-and-id"]').attr('value');
+  searchEndpoint = 'http://' + searchEndpoint + '/2011-02-01/search';
   var perPage = 5;
   var start = parseInt($('form#search input[name="start"]').val() || '0', 10);
   var params = {q: query, size: perPage, start: start};
@@ -68,6 +74,24 @@ function searchExecute() {
 }
 
 $(document).ready(function($) {
+  $.ajax({
+    type: 'GET',
+    url: configurationEndpoint,
+    data: {
+      Version: '2011-02-01',
+      Action:  'DescribeDomains'
+    },
+    dataType: 'xml',
+    success: function(data) {
+      $(data).find('DomainStatusList > member')
+             .each(function(index) {
+               var name = $(this).find('DomainName').text();
+               var endpoint = $(this).find('SearchService > Endpoint').text();
+               $('#domain-and-id').append('<option value="' + endpoint + '">'+name+'</option>');
+             });
+    }
+  });
+
   $('form#domain').submit(searchExecute);
   $('form#search').submit(searchExecute);
 });
