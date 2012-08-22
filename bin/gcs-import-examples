@@ -53,9 +53,13 @@ echo
 
 echo "==== Creating 'example' domain"
 
-curl -s "http://localhost:7575/?DomainName=example&Action=CreateDomain&Version=2011-02-01"
+create_domain_result=`curl -s "http://localhost:7575/?DomainName=example&Action=CreateDomain&Version=2011-02-01"`
+echo $create_domain_result
 echo
 echo
+
+documents_endpoint=`echo "$create_domain_result" | sed -r -e "s/.+<DocService><Endpoint>//" | sed -r -e "s/<.+//"`
+search_endpoint=`echo "$create_domain_result" | sed -r -e "s/.+<SearchService><Endpoint>//" | sed -r -e "s/<.+//"`
 
 echo "==== Adding index fields"
 echo "== Creating 'name' field"
@@ -82,7 +86,7 @@ do
     fi
 done
 
-curl -X POST --upload-file $sdf_path --header "Content-Type: application/json" http://doc-example-00000000000000000000000000.127.0.0.1.xip.io:7575/2011-02-01/documents/batch
+curl -X POST --upload-file $sdf_path --header "Content-Type: application/json" http://$documents_endpoint/2011-02-01/documents/batch
 echo
 
 echo
@@ -92,7 +96,7 @@ cat <<EOT
 
 Now you can try searching by
 
-$ curl "http://search-example-00000000000000000000000000.127.0.0.1.xip.io:7575/2011-02-01/search?q=Tokyo"
+$ curl "http://$search_endpoint/2011-02-01/search?q=Tokyo"
 
 or, open
 http://localhost:7575
