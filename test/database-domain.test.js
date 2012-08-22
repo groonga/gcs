@@ -256,6 +256,89 @@ suite('database', function() {
         assert.deepEqual(fields.sort(sortFields), expected.sort(sortFields));
       });
 
+      test('facetReturnableIndexFields', function() {
+        domain.getIndexField('address').facetEnabled = false;
+        domain.getIndexField('description').facetEnabled = false;
+        domain.getIndexField('email_address').facetEnabled = true;
+        domain.getIndexField('name').facetEnabled = true;
+        domain.getIndexField('product').facetEnabled = true;
+        var fields = domain.facetReturnableIndexFields;
+        fields = fields.map(function(field) {
+          return {
+            name: field.name,
+            type: field.type
+          };
+        });
+        var expected = [
+              { name: 'email_address',
+                type: 'text'},
+              { name: 'name',
+                type: 'text'},
+              { name: 'product',
+                type: 'literal'}
+            ];
+        function sortFields(a, b) {
+          return a.name - b.name;
+        }
+        assert.deepEqual(fields.sort(sortFields), expected.sort(sortFields));
+      });
+
+      test('resultReturnableIndexFields', function() {
+        domain.getIndexField('address').resultEnabled = true;
+        domain.getIndexField('description').resultEnabled = true;
+        domain.getIndexField('email_address').resultEnabled = true;
+        domain.getIndexField('name').resultEnabled = false;
+        domain.getIndexField('product').resultEnabled = false;
+        var fields = domain.resultReturnableIndexFields;
+        fields = fields.map(function(field) {
+          return {
+            name: field.name,
+            type: field.type
+          };
+        });
+        var expected = [
+              { name: 'address',
+                type: 'text'},
+              { name: 'age',
+                type: 'uint'},
+              { name: 'description',
+                type: 'text'},
+              { name: 'email_address',
+                type: 'text'}
+            ];
+        function sortFields(a, b) {
+          return a.name - b.name;
+        }
+        assert.deepEqual(fields.sort(sortFields), expected.sort(sortFields));
+      });
+
+      test('searchableIndexFields', function() {
+        domain.getIndexField('product').searchEnabled = false;
+        var fields = domain.resultReturnableIndexFields;
+        fields = fields.map(function(field) {
+          return {
+            name: field.name,
+            type: field.type
+          };
+        });
+        var expected = [
+              { name: 'address',
+                type: 'text'},
+              { name: 'age',
+                type: 'uint'},
+              { name: 'description',
+                type: 'text'},
+              { name: 'email_address',
+                type: 'text'},
+              { name: 'name',
+                type: 'text'}
+            ];
+        function sortFields(a, b) {
+          return a.name - b.name;
+        }
+        assert.deepEqual(fields.sort(sortFields), expected.sort(sortFields));
+      });
+
       test('setting default search field (instance)', function() {
         assert.isTrue(domain.defaultSearchField === null,
                       domain.defaultSearchField);
