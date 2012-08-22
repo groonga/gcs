@@ -194,6 +194,50 @@ suite('database', function() {
       });
     });
 
+    suite('getDocumentsEndpoint', function() {
+      var domain;
+      setup(function() {
+        domain = new Domain('valid').setId(Domain.DEFAULT_ID);
+      });
+
+      test('regular domain', function() {
+        assert.equal(domain.getDocumentsEndpoint('my.domain:0123'),
+                     'doc-valid-' + Domain.DEFAULT_ID + '.my.domain:0123');
+      });
+
+      test('IP address', function() {
+        assert.equal(domain.getDocumentsEndpoint('192.168.0.1:4567'),
+                     'doc-valid-' + Domain.DEFAULT_ID + '.192.168.0.1.xip.io:4567');
+      });
+
+      test('localhost', function() {
+        assert.equal(domain.getDocumentsEndpoint('localhost:4567'),
+                     'doc-valid-' + Domain.DEFAULT_ID + '.127.0.0.1.xip.io:4567');
+      });
+    });
+
+    suite('getSearchEndpoint', function() {
+      var domain;
+      setup(function() {
+        domain = new Domain('valid').setId(Domain.DEFAULT_ID);
+      });
+
+      test('regular domain', function() {
+        assert.equal(domain.getSearchEndpoint('my.domain:0123'),
+                     'search-valid-' + Domain.DEFAULT_ID + '.my.domain:0123');
+      });
+
+      test('IP address', function() {
+        assert.equal(domain.getSearchEndpoint('192.168.0.1:4567'),
+                     'search-valid-' + Domain.DEFAULT_ID + '.192.168.0.1.xip.io:4567');
+      });
+
+      test('localhost', function() {
+        assert.equal(domain.getSearchEndpoint('localhost:4567'),
+                     'search-valid-' + Domain.DEFAULT_ID + '.127.0.0.1.xip.io:4567');
+      });
+    });
+
     suite('getting data from database', function() {
       var temporaryDatabase;
       var context;
