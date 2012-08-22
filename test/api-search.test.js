@@ -82,17 +82,9 @@ suite('Search API', function() {
           hits: {
             found: 1,
             start: 0,
-            hit: [{
-              id: 'id3',
-              data: {
-                address: ['Hongo, Tokyo, Japan'],
-                description: [''],
-                email_address: ['info@clear-code.com'],
-                name: ['ClearCode Inc.'],
-                age: [3],
-                product: ['groonga']
-              }
-            }]
+            hit: [
+              { id: 'id3' }
+            ]
           },
           info: {
             rid: '000000000000000000000000000000000000000000000000000000000000000',
@@ -115,39 +107,9 @@ suite('Search API', function() {
             found: 3,
             start: 0,
             hit: [
-              {
-                id: 'id1',
-                data: {
-                  address: ['Shibuya, Tokyo, Japan'],
-                  description: [''],
-                  email_address: ['info@razil.jp'],
-                  name: ['Brazil'],
-                  age: [1],
-                  product: ['groonga']
-                }
-              },
-              {
-                id: 'id3',
-                data: {
-                  address: ['Hongo, Tokyo, Japan'],
-                  description: [''],
-                  email_address: ['info@clear-code.com'],
-                  name: ['ClearCode Inc.'],
-                  age: [3],
-                  product: ['groonga']
-                }
-              },
-              {
-                id: 'id9',
-                data: {
-                  address: ['Tokyo, Japan'],
-                  description: [''],
-                  email_address: [''],
-                  name: ['Umbrella Corporation'],
-                  age: [9],
-                  product: ['tyrant']
-                }
-              }
+              { id: 'id1' },
+              { id: 'id3' },
+              { id: 'id9' }
             ]
           },
           info: {
@@ -159,6 +121,39 @@ suite('Search API', function() {
         assert.deepEqual(response.normalizedBody, expected);
       }
     );
+
+    testSearch('/2011-02-01/search?q=Hongo&' +
+                 'return-fields=address,description,name,age,product',
+               'should return field values',
+               'search-companies-00000000000000000000000000.localhost',
+      function(response) {
+        var expected = { // FIXME
+          rank: '-text_relevance',
+          'match-expr': "(label 'Hongo')",
+          hits: {
+            found: 1,
+            start: 0,
+            hit: [{
+              id: 'id3',
+              data: {
+                address: ['Hongo, Tokyo, Japan'],
+                description: [''],
+                name: ['ClearCode Inc.'],
+                age: [3],
+                product: ['groonga']
+              }
+            }]
+          },
+          info: {
+            rid: '000000000000000000000000000000000000000000000000000000000000000',
+            'time-ms': 0, // always 0
+            'cpu-time-ms': 0
+          }
+        };
+        assert.deepEqual(response.normalizedBody, expected);
+      }
+    );
+
     testSearch('/2011-02-01/search?q=Tokyo&facet=product',
                'with facet "domain"',
                'search-companies-00000000000000000000000000.localhost',
@@ -170,39 +165,9 @@ suite('Search API', function() {
             found: 3,
             start: 0,
             hit: [
-              {
-                id: 'id1',
-                data: {
-                  address: ['Shibuya, Tokyo, Japan'],
-                  description: [''],
-                  email_address: ['info@razil.jp'],
-                  name: ['Brazil'],
-                  age: [1],
-                  product: ['groonga']
-                }
-              },
-              {
-                id: 'id3',
-                data: {
-                  address: ['Hongo, Tokyo, Japan'],
-                  description: [''],
-                  email_address: ['info@clear-code.com'],
-                  name: ['ClearCode Inc.'],
-                  age: [3],
-                  product: ['groonga']
-                }
-              },
-              {
-                id: 'id9',
-                data: {
-                  address: ['Tokyo, Japan'],
-                  description: [''],
-                  email_address: [''],
-                  name: ['Umbrella Corporation'],
-                  age: [9],
-                  product: ['tyrant']
-                }
-              }
+              { id: 'id1' },
+              { id: 'id3' },
+              { id: 'id9' }
             ]
           },
           facets: {
@@ -234,28 +199,8 @@ suite('Search API', function() {
             found: 3,
             start: 0,
             hit: [
-              {
-                id: 'id1',
-                data: {
-                  address: ['Shibuya, Tokyo, Japan'],
-                  description: [''],
-                  email_address: ['info@razil.jp'],
-                  name: ['Brazil'],
-                  age: [1],
-                  product: ['groonga']
-                }
-              },
-              {
-                id: 'id3',
-                data: {
-                  address: ['Hongo, Tokyo, Japan'],
-                  description: [''],
-                  email_address: ['info@clear-code.com'],
-                  name: ['ClearCode Inc.'],
-                  age: [3],
-                  product: ['groonga']
-                }
-              }
+              { id: 'id1' },
+              { id: 'id3' }
             ]
           },
           info: {
@@ -279,28 +224,8 @@ suite('Search API', function() {
             found: 3,
             start: 1,
             hit: [
-              {
-                id: 'id3',
-                data: {
-                  address: ['Hongo, Tokyo, Japan'],
-                  description: [''],
-                  email_address: ['info@clear-code.com'],
-                  name: ['ClearCode Inc.'],
-                  age: [3],
-                  product: ['groonga']
-                }
-              },
-              {
-                id: 'id9',
-                data: {
-                  address: ['Tokyo, Japan'],
-                  description: [''],
-                  email_address: [''],
-                  name: ['Umbrella Corporation'],
-                  age: [9],
-                  product: ['tyrant']
-                }
-              }
+              { id: 'id3' },
+              { id: 'id9' }
             ]
           },
           info: {
@@ -356,39 +281,9 @@ suite('Search API', function() {
             found: 3,
             start: 0,
             hit: [
-              {
-                id: 'id1',
-                data: {
-                  address: ['Shibuya, Tokyo, Japan'],
-                  description: [''],
-                  email_address: ['info@razil.jp'],
-                  name: ['Brazil'],
-                  age: [1],
-                  product: ['groonga']
-                }
-              },
-              {
-                id: 'id3',
-                data: {
-                  address: ['Hongo, Tokyo, Japan'],
-                  description: [''],
-                  email_address: ['info@clear-code.com'],
-                  name: ['ClearCode Inc.'],
-                  age: [3],
-                  product: ['groonga']
-                }
-              },
-              {
-                id: 'id9',
-                data: {
-                  address: ['Tokyo, Japan'],
-                  description: [''],
-                  email_address: [''],
-                  name: ['Umbrella Corporation'],
-                  age: [9],
-                  product: ['tyrant']
-                }
-              }
+              { id: 'id1' },
+              { id: 'id3' },
+              { id: 'id9' }
             ]
           },
           info: {
@@ -436,22 +331,8 @@ suite('Search API', function() {
             found: 2,
             start: 0,
             hit: [
-              {
-                id: 'id2',
-                data: {
-                  realname: ['Pumpkin Man'],
-                  nickname: ['Jack-o\'-Lantern'],
-                  type:     ['ghost']
-                }
-              },
-              {
-                id: 'id1',
-                data: {
-                  realname: ['Jack Sparrow'],
-                  nickname: ['Captain'],
-                  type:     ['human']
-                }
-              }
+              { id: 'id2' },
+              { id: 'id1' }
             ]
           },
           info: {
@@ -478,14 +359,7 @@ suite('Search API', function() {
             found: 1,
             start: 0,
             hit: [
-              {
-                id: 'id1',
-                data: {
-                  realname: ['Jack Sparrow'],
-                  nickname: ['Captain'],
-                  type:     ['human']
-                }
-              }
+              { id: 'id1' }
             ]
           },
           info: {
@@ -513,14 +387,7 @@ suite('Search API', function() {
             found: 1,
             start: 0,
             hit: [
-              {
-                id: 'id2',
-                data: {
-                  realname: ['Pumpkin Man'],
-                  nickname: ['Jack-o\'-Lantern'],
-                  type:     ['ghost']
-                }
-              }
+              { id: 'id2' }
             ]
           },
           info: {
@@ -534,7 +401,7 @@ suite('Search API', function() {
     );
 */
 
-    testSearch('/2011-02-01/search?q=Jack',
+    testSearch('/2011-02-01/search?q=Jack&return-fields=realname,nickname,type',
                'should return only "realname" field by resultEnabled',
                'search-people-00000000000000000000000000.localhost',
       function() {
@@ -588,22 +455,8 @@ suite('Search API', function() {
             found: 2,
             start: 0,
             hit: [
-              {
-                id: 'id2',
-                data: {
-                  realname: ['Pumpkin Man'],
-                  nickname: ['Jack-o\'-Lantern'],
-                  type:     ['ghost']
-                }
-              },
-              {
-                id: 'id1',
-                data: {
-                  realname: ['Jack Sparrow'],
-                  nickname: ['Captain'],
-                  type:     ['human']
-                }
-              }
+              { id: 'id2' },
+              { id: 'id1' }
             ]
           },
           facets: {
