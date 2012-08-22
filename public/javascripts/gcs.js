@@ -40,8 +40,12 @@ function renderRequestInformation(data) {
 function searchExecute() {
   var query = $('form#search input[name="query"]').val();
   var domain = $('form#domain input[name="domain-name"]').val();
-  var host = location.host;
-  var searchEndpoint = 'http://search-' + domain + '-00000000000000000000000000.' + host + '/2011-02-01/search';
+  var hostAndPort = location.host.split(':');
+  if (hostAndPort[0] == 'localhost')
+    hostAndPort[0] = '127.0.0.1';
+  if (hostAndPort[0].match(/^\d+\.\d+\.\d+\.\d+$/))
+    hostAndPort[0] += '.xip.io';
+  var searchEndpoint = 'http://search-' + domain + '-00000000000000000000000000.' + hostAndPort + '/2011-02-01/search';
   var perPage = 5;
   var start = parseInt($('form#search input[name="start"]').val() || '0', 10);
   var params = {q: query, size: perPage, start: start};
