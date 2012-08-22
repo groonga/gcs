@@ -45,6 +45,7 @@ function searchExecute() {
     hostAndPort[0] = '127.0.0.1';
   if (hostAndPort[0].match(/^\d+\.\d+\.\d+\.\d+$/))
     hostAndPort[0] += '.xip.io';
+  hostAndPort = hostAndPort.join(':');
   var searchEndpoint = 'http://search-' + domain + '-00000000000000000000000000.' + hostAndPort + '/2011-02-01/search';
   var perPage = 5;
   var start = parseInt($('form#search input[name="start"]').val() || '0', 10);
