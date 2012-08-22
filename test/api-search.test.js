@@ -68,6 +68,7 @@ suite('Search API', function() {
   suite('with fixture loaded', function() {
     setup(function() {
       utils.loadDumpFile(context, __dirname + '/fixture/companies/ddl.grn');
+      utils.loadDumpFile(context, __dirname + '/fixture/companies/configurations.grn');
       utils.loadDumpFile(context, __dirname + '/fixture/companies/data.grn');
     });
 

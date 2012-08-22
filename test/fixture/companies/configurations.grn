@@ -1,0 +1,22 @@
+load --table companies_00000000000000000000000000_configurations
+[
+["_key","value"],
+["column_age_option_facet_enabled","true"],
+["column_address_option_facet_enabled","true"],
+["column_email_address_option_facet_enabled","true"],
+["column_description_option_facet_enabled","true"],
+["column_name_option_facet_enabled","true"],
+["column_product_option_facet_enabled","true"],
+["column_age_option_result_enabled","true"],
+["column_address_option_result_enabled","true"],
+["column_email_address_option_result_enabled","true"],
+["column_description_option_result_enabled","true"],
+["column_name_option_result_enabled","true"],
+["column_product_option_result_enabled","true"],
+["column_age_option_search_enabled","true"],
+["column_address_option_search_enabled","true"],
+["column_email_address_option_search_enabled","true"],
+["column_description_option_search_enabled","true"],
+["column_name_option_search_enabled","true"],
+["column_product_option_search_enabled","true"]
+]
