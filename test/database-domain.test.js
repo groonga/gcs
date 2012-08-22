@@ -314,7 +314,7 @@ suite('database', function() {
 
       test('searchableIndexFields', function() {
         domain.getIndexField('product').searchEnabled = false;
-        var fields = domain.resultReturnableIndexFields;
+        var fields = domain.searchableIndexFields;
         fields = fields.map(function(field) {
           return {
             name: field.name,
