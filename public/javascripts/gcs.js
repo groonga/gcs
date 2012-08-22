@@ -40,7 +40,8 @@ function renderRequestInformation(data) {
 function searchExecute() {
   var query = $('form#search input[name="query"]').val();
   var domain = $('form#domain input[name="domain-name"]').val();
-  var searchEndpoint = 'http://search-' + domain + '-00000000000000000000000000.127.0.0.1.xip.io:7575/2011-02-01/search';
+  var host = location.host;
+  var searchEndpoint = 'http://search-' + domain + '-00000000000000000000000000.' + host + '/2011-02-01/search';
   var perPage = 5;
   var start = parseInt($('form#search input[name="start"]').val() || '0', 10);
   var params = {q: query, size: perPage, start: start};
