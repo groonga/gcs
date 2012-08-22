@@ -409,9 +409,9 @@ suite('Search API', function() {
       domain = new Domain('people', context)
                  .setId('00000000000000000000000000').createSync();
       domain.getIndexField('realname').setType('text')
-        .setSearchEnabled(true).setResultEnabled(true).createSync();
+        .setResultEnabled(true).createSync();
       domain.getIndexField('nickname').setType('text')
-        .setSearchEnabled(true).setResultEnabled(true).createSync();
+        .setResultEnabled(true).createSync();
       domain.loadSync([
         { id: 'id1', realname: 'Jack Sparrow',
                      nickname: 'Captain' },
