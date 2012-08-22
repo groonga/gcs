@@ -84,8 +84,6 @@ suite('Search API', function() {
             hit: [{
               id: 'id3',
               data: {
-                _id: [3],
-                _key: ['id3'],
                 address: ['Hongo, Tokyo, Japan'],
                 description: [''],
                 email_address: ['info@clear-code.com'],
@@ -119,8 +117,6 @@ suite('Search API', function() {
               {
                 id: 'id1',
                 data: {
-                  _id: [1],
-                  _key: ['id1'],
                   address: ['Shibuya, Tokyo, Japan'],
                   description: [''],
                   email_address: ['info@razil.jp'],
@@ -132,8 +128,6 @@ suite('Search API', function() {
               {
                 id: 'id3',
                 data: {
-                  _id: [3],
-                  _key: ['id3'],
                   address: ['Hongo, Tokyo, Japan'],
                   description: [''],
                   email_address: ['info@clear-code.com'],
@@ -145,8 +139,6 @@ suite('Search API', function() {
               {
                 id: 'id9',
                 data: {
-                  _id: [9],
-                  _key: ['id9'],
                   address: ['Tokyo, Japan'],
                   description: [''],
                   email_address: [''],
@@ -180,8 +172,6 @@ suite('Search API', function() {
               {
                 id: 'id1',
                 data: {
-                  _id: [1],
-                  _key: ['id1'],
                   address: ['Shibuya, Tokyo, Japan'],
                   description: [''],
                   email_address: ['info@razil.jp'],
@@ -193,8 +183,6 @@ suite('Search API', function() {
               {
                 id: 'id3',
                 data: {
-                  _id: [3],
-                  _key: ['id3'],
                   address: ['Hongo, Tokyo, Japan'],
                   description: [''],
                   email_address: ['info@clear-code.com'],
@@ -206,8 +194,6 @@ suite('Search API', function() {
               {
                 id: 'id9',
                 data: {
-                  _id: [9],
-                  _key: ['id9'],
                   address: ['Tokyo, Japan'],
                   description: [''],
                   email_address: [''],
@@ -250,8 +236,6 @@ suite('Search API', function() {
               {
                 id: 'id1',
                 data: {
-                  _id: [1],
-                  _key: ['id1'],
                   address: ['Shibuya, Tokyo, Japan'],
                   description: [''],
                   email_address: ['info@razil.jp'],
@@ -263,8 +247,6 @@ suite('Search API', function() {
               {
                 id: 'id3',
                 data: {
-                  _id: [3],
-                  _key: ['id3'],
                   address: ['Hongo, Tokyo, Japan'],
                   description: [''],
                   email_address: ['info@clear-code.com'],
@@ -299,8 +281,6 @@ suite('Search API', function() {
               {
                 id: 'id3',
                 data: {
-                  _id: [3],
-                  _key: ['id3'],
                   address: ['Hongo, Tokyo, Japan'],
                   description: [''],
                   email_address: ['info@clear-code.com'],
@@ -312,8 +292,6 @@ suite('Search API', function() {
               {
                 id: 'id9',
                 data: {
-                  _id: [9],
-                  _key: ['id9'],
                   address: ['Tokyo, Japan'],
                   description: [''],
                   email_address: [''],
@@ -379,8 +357,6 @@ suite('Search API', function() {
               {
                 id: 'id1',
                 data: {
-                  _id: [1],
-                  _key: ['id1'],
                   address: ['Shibuya, Tokyo, Japan'],
                   description: [''],
                   email_address: ['info@razil.jp'],
@@ -392,8 +368,6 @@ suite('Search API', function() {
               {
                 id: 'id3',
                 data: {
-                  _id: [3],
-                  _key: ['id3'],
                   address: ['Hongo, Tokyo, Japan'],
                   description: [''],
                   email_address: ['info@clear-code.com'],
@@ -405,8 +379,6 @@ suite('Search API', function() {
               {
                 id: 'id9',
                 data: {
-                  _id: [9],
-                  _key: ['id9'],
                   address: ['Tokyo, Japan'],
                   description: [''],
                   email_address: [''],
@@ -458,8 +430,6 @@ suite('Search API', function() {
               {
                 id: 'id2',
                 data: {
-                  _id: [2],
-                  _key: ['id2'],
                   realname: ['Pumpkin Man'],
                   nickname: ['Jack-o\'-Lantern']
                 }
@@ -467,8 +437,6 @@ suite('Search API', function() {
               {
                 id: 'id1',
                 data: {
-                  _id: [1],
-                  _key: ['id1'],
                   realname: ['Jack Sparrow'],
                   nickname: ['Captain']
                 }
@@ -502,8 +470,6 @@ suite('Search API', function() {
               {
                 id: 'id1',
                 data: {
-                  _id: [1],
-                  _key: ['id1'],
                   realname: ['Jack Sparrow'],
                   nickname: ['Captain']
                 }
@@ -538,8 +504,6 @@ suite('Search API', function() {
               {
                 id: 'id2',
                 data: {
-                  _id: [2],
-                  _key: ['id2'],
                   realname: ['Pumpkin Man'],
                   nickname: ['Jack-o\'-Lantern']
                 }
