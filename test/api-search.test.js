@@ -412,11 +412,15 @@ suite('Search API', function() {
         .setResultEnabled(true).createSync();
       domain.getIndexField('nickname').setType('text')
         .setResultEnabled(true).createSync();
+      domain.getIndexField('type').setType('literal')
+        .setSearchEnabled(true).setResultEnabled(true).createSync();
       domain.loadSync([
         { id: 'id1', realname: 'Jack Sparrow',
-                     nickname: 'Captain' },
+                     nickname: 'Captain',
+                     type:     'human' },
         { id: 'id2', realname: 'Pumpkin Man',
-                     nickname: 'Jack-o\'-Lantern' }
+                     nickname: 'Jack-o\'-Lantern',
+                     type:     'ghost' }
       ]);
     });
 
@@ -435,14 +439,16 @@ suite('Search API', function() {
                 id: 'id2',
                 data: {
                   realname: ['Pumpkin Man'],
-                  nickname: ['Jack-o\'-Lantern']
+                  nickname: ['Jack-o\'-Lantern'],
+                  type:     ['ghost']
                 }
               },
               {
                 id: 'id1',
                 data: {
                   realname: ['Jack Sparrow'],
-                  nickname: ['Captain']
+                  nickname: ['Captain'],
+                  type:     ['human']
                 }
               }
             ]
@@ -475,7 +481,8 @@ suite('Search API', function() {
                 id: 'id1',
                 data: {
                   realname: ['Jack Sparrow'],
-                  nickname: ['Captain']
+                  nickname: ['Captain'],
+                  type:     ['human']
                 }
               }
             ]
@@ -509,7 +516,8 @@ suite('Search API', function() {
                 id: 'id2',
                 data: {
                   realname: ['Pumpkin Man'],
-                  nickname: ['Jack-o\'-Lantern']
+                  nickname: ['Jack-o\'-Lantern'],
+                  type:     ['ghost']
                 }
               }
             ]
@@ -524,5 +532,44 @@ suite('Search API', function() {
       }
     );
 */
+
+    testSearch('/2011-02-01/search?q=Jack',
+               'should return only "realname" field by resultEnabled',
+               'search-people-00000000000000000000000000.localhost',
+      function() {
+        domain.getIndexField('nickname').setResultEnabled(false).saveOptionsSync();
+        domain.getIndexField('type').setResultEnabled(false).saveOptionsSync();
+      },
+      function(response) {
+        var expected = {
+          rank: '-text_relevance',
+          'match-expr': "(label 'Jack')",
+          hits: {
+            found: 2,
+            start: 0,
+            hit: [
+              {
+                id: 'id2',
+                data: {
+                  realname: ['Pumpkin Man']
+                }
+              },
+              {
+                id: 'id1',
+                data: {
+                  realname: ['Jack Sparrow']
+                }
+              }
+            ]
+          },
+          info: {
+            rid: '000000000000000000000000000000000000000000000000000000000000000',
+            'time-ms': 0, // always 0
+            'cpu-time-ms': 0
+          }
+        };
+        assert.deepEqual(response.normalizedBody, expected);
+      }
+    );
   });
 });
