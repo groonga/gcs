@@ -409,11 +409,12 @@ suite('Search API', function() {
       domain = new Domain('people', context)
                  .setId('00000000000000000000000000').createSync();
       domain.getIndexField('realname').setType('text')
-        .setResultEnabled(true).createSync();
+        .setFacetEnabled(true).setResultEnabled(true).createSync();
       domain.getIndexField('nickname').setType('text')
-        .setResultEnabled(true).createSync();
+        .setFacetEnabled(true).setResultEnabled(true).createSync();
       domain.getIndexField('type').setType('literal')
-        .setSearchEnabled(true).setResultEnabled(true).createSync();
+        .setFacetEnabled(true).setSearchEnabled(true).setResultEnabled(true)
+        .createSync();
       domain.loadSync([
         { id: 'id1', realname: 'Jack Sparrow',
                      nickname: 'Captain',
@@ -561,6 +562,57 @@ suite('Search API', function() {
                 }
               }
             ]
+          },
+          info: {
+            rid: '000000000000000000000000000000000000000000000000000000000000000',
+            'time-ms': 0, // always 0
+            'cpu-time-ms': 0
+          }
+        };
+        assert.deepEqual(response.normalizedBody, expected);
+      }
+    );
+
+    testSearch('/2011-02-01/search?q=Jack&facet=realname,nickname,type',
+               'should return only "type" field as facet by facetEnabled',
+               'search-people-00000000000000000000000000.localhost',
+      function() {
+        domain.getIndexField('realname').setFacetEnabled(false).saveOptionsSync();
+        domain.getIndexField('nickname').setFacetEnabled(false).saveOptionsSync();
+      },
+      function(response) {
+        var expected = {
+          rank: '-text_relevance',
+          'match-expr': "(label 'Jack')",
+          hits: {
+            found: 2,
+            start: 0,
+            hit: [
+              {
+                id: 'id2',
+                data: {
+                  realname: ['Pumpkin Man'],
+                  nickname: ['Jack-o\'-Lantern'],
+                  type:     ['ghost']
+                }
+              },
+              {
+                id: 'id1',
+                data: {
+                  realname: ['Jack Sparrow'],
+                  nickname: ['Captain'],
+                  type:     ['human']
+                }
+              }
+            ]
+          },
+          facets: {
+            type: {
+              constraints: [
+                {value: 'ghost', count: 1},
+                {value: 'human', count: 1}
+              ]
+            }
           },
           info: {
             rid: '000000000000000000000000000000000000000000000000000000000000000',
