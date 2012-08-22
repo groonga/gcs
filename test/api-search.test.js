@@ -340,6 +340,7 @@ suite('Search API', function() {
   suite('with fixture and synonyms loaded', function() {
     setup(function() {
       utils.loadDumpFile(context, __dirname + '/fixture/companies/ddl.grn');
+      utils.loadDumpFile(context, __dirname + '/fixture/companies/configurations.grn');
       utils.loadDumpFile(context, __dirname + '/fixture/companies/data.grn');
       utils.loadDumpFile(context, __dirname + '/fixture/companies/synonyms.grn');
     });
@@ -407,8 +408,10 @@ suite('Search API', function() {
     setup(function() {
       domain = new Domain('people', context)
                  .setId('00000000000000000000000000').createSync();
-      domain.getIndexField('realname').setType('text').createSync();
-      domain.getIndexField('nickname').setType('text').createSync();
+      domain.getIndexField('realname').setType('text')
+        .setSearchEnabled(true).setResultEnabled(true).createSync();
+      domain.getIndexField('nickname').setType('text')
+        .setSearchEnabled(true).setResultEnabled(true).createSync();
       domain.loadSync([
         { id: 'id1', realname: 'Jack Sparrow',
                      nickname: 'Captain' },
