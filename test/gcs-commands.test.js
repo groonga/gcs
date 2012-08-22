@@ -701,6 +701,118 @@ suite('gcs-configure-text-options', function() {
   });
 });
 
+suite('gcs-configure-default-search-field', function() {
+  setup(commonSetup);
+  teardown(commonTeardown);
+
+  test('set to an existing field', function() {
+    var domain = new Domain('companies', context).createSync();
+    domain.getIndexField('name').setType('text').createSync();
+    utils
+      .run('gcs-configure-default-search-field',
+           '--domain-name', 'companies',
+           '--name', 'name',
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        assert.deepEqual({ code:    result.code,
+                           message: result.output.stdout },
+                         { code:    0,
+                           message: 'Setting "name" as the default search ' +
+                                      'field of "companies"...' +
+                                    'Done.\n' },
+                         result.output.stderr);
+        assert.equal(domain.defaultSearchField.name, 'name');
+        done();
+      })
+      .error(function(e) {
+        done(e);
+      });
+  });
+
+  test('set to a missing field', function() {
+    var domain = new Domain('companies', context).createSync();
+    domain.getIndexField('name').setType('text').createSync();
+    utils
+      .run('gcs-configure-default-search-field',
+           '--domain-name', 'companies',
+           '--name', 'name',
+           '--database-path', temporaryDatabase.path)
+      .run('gcs-configure-default-search-field',
+           '--domain-name', 'companies',
+           '--name', 'address',
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        assert.deepEqual({ code:    result.code,
+                           message: result.output.stdout },
+                         { code:    1,
+                           message: '"name" as not a field of "companies".\n' },
+                         result.output.stderr);
+        assert.equal(domain.defaultSearchField.name, 'name');
+        done();
+      })
+      .error(function(e) {
+        done(e);
+      });
+  });
+
+  test('set to blank', function() {
+    var domain = new Domain('companies', context).createSync();
+    domain.getIndexField('name').setType('text').createSync();
+    utils
+      .run('gcs-configure-default-search-field',
+           '--domain-name', 'companies',
+           '--name', 'name',
+           '--database-path', temporaryDatabase.path)
+      .run('gcs-configure-default-search-field',
+           '--domain-name', 'companies',
+           '--name', '',
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        assert.deepEqual({ code:    result.code,
+                           message: result.output.stdout },
+                         { code:    0,
+                           message: 'Resetting the default search field of ' +
+                                      '"companies"...' +
+                                    'Done.\n' },
+                         result.output.stderr);
+        assert.isTrue(domain.defaultSearchField === null,
+                      domain.defaultSearchField);
+        done();
+      })
+      .error(function(e) {
+        done(e);
+      });
+  });
+
+  test('set to blank (omitted "name" option)', function() {
+    var domain = new Domain('companies', context).createSync();
+    domain.getIndexField('name').setType('text').createSync();
+    utils
+      .run('gcs-configure-default-search-field',
+           '--domain-name', 'companies',
+           '--name', 'name',
+           '--database-path', temporaryDatabase.path)
+      .run('gcs-configure-default-search-field',
+           '--domain-name', 'companies',
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        assert.deepEqual({ code:    result.code,
+                           message: result.output.stdout },
+                         { code:    0,
+                           message: 'Resetting the default search field of ' +
+                                      '"companies"...' +
+                                    'Done.\n' },
+                         result.output.stderr);
+        assert.isTrue(domain.defaultSearchField === null,
+                      domain.defaultSearchField);
+        done();
+      })
+      .error(function(e) {
+        done(e);
+      });
+  });
+});
+
 suite('gcs-index-documents', function() {
   setup(commonSetup);
   teardown(commonTeardown);

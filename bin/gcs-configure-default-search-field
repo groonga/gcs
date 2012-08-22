@@ -1,0 +1,33 @@
+#!/usr/bin/env node
+
+var CLI = require(__dirname + '/../lib/command-line').CommandLineInterface;
+var commandLine = new CLI();
+var fs = require('fs');
+
+commandLine
+  .option('-d, --domain-name <domain name>',
+          'The name of the domain that you are configuring. Required.',
+          String)
+  .option('--name <field name>',
+          'The name of the field you want to set as the default search field. ' +
+          'It becomes blank if you omit this option',
+          String)
+  .parse();
+
+commandLine.assertHaveDomainName();
+commandLine.assertDomainExists();
+
+var field = commandLine.domain.getIndexField(commandLine.options.name);
+if (field) {
+  console.log('Setting "%s" as the default search field of "%s"...',
+              field.name,
+              commandLine.domain.name);
+} else if (commandLine.options.name) {
+  console.log('"%s" is not a field of "%s".');
+  return process.exit(1);
+} else {
+  console.log('Resetting the default search field of "%s"...',
+              commandLine.domain.name);
+}
+commandLine.domain.defaultSearchField = field;
+console.log('Done.');
