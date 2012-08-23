@@ -7,7 +7,12 @@
     "fields": {
       "name": "Brazil",
       "address": "Shibuya, Tokyo, Japan",
-      "email_address": "info@razil.jp"
+      "email_address": "info@razil.jp",
+      "products": [
+        "Moritapo",
+        "Groonga",
+        "Senna"
+      ]
     }
   },
   {
@@ -18,7 +23,10 @@
     "fields": {
       "name": "Enishi Tech Inc.",
       "address": "Sapporo, Hokkaido, Japan",
-      "email_address": "info@enishi-tech.com"
+      "email_address": "info@enishi-tech.com",
+      "products": [
+        "soupcurry.info"
+      ]
     }
   },
   {
@@ -29,7 +37,12 @@
     "fields": {
       "name": "ClearCode Inc.",
       "address": "Hongo, Tokyo, Japan",
-      "email_address": "info@clear-code.com"
+      "email_address": "info@clear-code.com",
+      "products": [
+        "Cutter",
+        "UxU",
+        "milter manager"
+      ]
     }
   },
   {
@@ -39,7 +52,11 @@
     "lang": "en",
     "fields": {
       "name": "Anaheim Electronics",
-      "address": "Granada, Moon"
+      "address": "Granada, Moon",
+      "products": [
+        "MSZ-006 Zeta Gundam",
+        "RGZ-95 ReZEL"
+      ]
     }
   },
   {
@@ -49,7 +66,10 @@
     "lang": "en",
     "fields": {
       "name": "Shinsei Industry",
-      "address": "Earth"
+      "address": "Earth",
+      "products": [
+        "VF-19 Excalibur"
+      ]
     }
   },
   {
@@ -59,7 +79,11 @@
     "lang": "en",
     "fields": {
       "name": "Omni Consumer Products",
-      "address": "Detroit and Delta City, Michigan, United States"
+      "address": "Detroit and Delta City, Michigan, United States",
+      "products": [
+        "Robocop",
+        "Robocop 2"
+      ]
     }
   },
   {
@@ -69,7 +93,10 @@
     "lang": "en",
     "fields": {
       "name": "Capsule Corporation",
-      "address": "West City"
+      "address": "West City",
+      "products": [
+        "Time Machine"
+      ]
     }
   },
   {
@@ -79,7 +106,10 @@
     "lang": "en",
     "fields": {
       "name": "Stark Industries",
-      "address": "United States"
+      "address": "United States",
+      "products": [
+        "Iron Man"
+      ]
     }
   },
   {
@@ -89,7 +119,10 @@
     "lang": "en",
     "fields": {
       "name": "Umbrella Corporation",
-      "address": "Tokyo, Japan"
+      "address": "Tokyo, Japan",
+      "products": [
+        "Tyrant"
+      ]
     }
   },
   {
@@ -99,7 +132,11 @@
     "lang": "en",
     "fields": {
       "name": "U.S. Robots and Mechanical Men",
-      "address": "New York, United States"
+      "address": "New York, United States",
+      "products": [
+        "NDR-113",
+        "NDR-114"
+      ]
     }
   }
 ]

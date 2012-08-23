@@ -63,13 +63,16 @@ search_endpoint=`echo "$create_domain_result" | sed -r -e "s/.+<SearchService><E
 
 echo "==== Adding index fields"
 echo "== Creating 'name' field"
-curl -s "http://localhost:7575/?Action=DefineIndexField&DomainName=example&IndexField.IndexFieldName=name&IndexField.IndexFieldType=text&TextOptions.ResultEnabled=true&Version=2011-02-01"
+curl -s "http://localhost:7575/?Action=DefineIndexField&DomainName=example&IndexField.IndexFieldName=name&IndexField.IndexFieldType=text&TextOptions.ResultEnabled=true&TextOption.FacetEnabled=true&Version=2011-02-01"
 echo
 echo "== Creating 'address' field"
-curl -s "http://localhost:7575/?Action=DefineIndexField&DomainName=example&IndexField.IndexFieldName=address&IndexField.IndexFieldType=text&TextOptions.ResultEnabled=true&Version=2011-02-01"
+curl -s "http://localhost:7575/?Action=DefineIndexField&DomainName=example&IndexField.IndexFieldName=address&IndexField.IndexFieldType=text&TextOptions.ResultEnabled=true&TextOption.FacetEnabled=true&Version=2011-02-01"
 echo
 echo "== Creating 'email_address' field"
-curl -s "http://localhost:7575/?Action=DefineIndexField&DomainName=example&IndexField.IndexFieldName=email_address&IndexField.IndexFieldType=text&TextOptions.ResultEnabled=true&Version=2011-02-01"
+curl -s "http://localhost:7575/?Action=DefineIndexField&DomainName=example&IndexField.IndexFieldName=email_address&IndexField.IndexFieldType=text&TextOptions.ResultEnabled=true&TextOption.FacetEnabled=true&Version=2011-02-01"
+echo
+echo "== Creating 'products' field"
+curl -s "http://localhost:7575/?Action=DefineIndexField&DomainName=example&IndexField.IndexFieldName=products&IndexField.IndexFieldType=literal&LiteralOptions.SearchEnabled=true&LiteralOptions.ResultEnabled=true&LiteralOptions.FacetEnabled=true&Version=2011-02-01"
 echo
 
 echo
