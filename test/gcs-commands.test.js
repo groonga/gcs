@@ -560,7 +560,7 @@ suite('gcs-configure-fields', function() {
 
   test('change option of text field', function(done) {
     testConfigureFieldOptions('text', {
-      search:   'error',
+      search:   'Search',
       nosearch: 'error',
       facet:    'Search Facet',
       nofacet:  'Search',
@@ -571,11 +571,11 @@ suite('gcs-configure-fields', function() {
 
   test('change option of uint field', function(done) {
     testConfigureFieldOptions('uint', {
-      search:   'error',
+      search:   'Search Result',
       nosearch: 'error',
       facet:    'error',
-      nofacet:  'error',
-      result:   'error',
+      nofacet:  'Search Result',
+      result:   'Search Result',
       noresult: 'error'
     }, done);
   });

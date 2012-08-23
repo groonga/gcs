@@ -257,6 +257,7 @@ suite('database', function() {
       test('invalid modification of options for text field', function() {
         var field = new IndexField('name', domain).setType('text');
         field.createSync();
+        field.searchEnabled = true;
         assert.throw(function() {
           field.searchEnabled = false;
         }, 'searchable option cannot be configured for the type text');
@@ -265,12 +266,15 @@ suite('database', function() {
       test('invalid modification of options for uint field', function() {
         var field = new IndexField('age', domain).setType('uint');
         field.createSync();
+        field.searchEnabled = true;
         assert.throw(function() {
           field.searchEnabled = false;
         }, 'searchable option cannot be configured for the type uint');
+        field.facetEnabled = false;
         assert.throw(function() {
           field.facetEnabled = false;
         }, 'facet option cannot be configured for the type uint');
+        field.resultEnabled = true;
         assert.throw(function() {
           field.resultEnabled = false;
         }, 'returnable option cannot be configured for the type uint');
