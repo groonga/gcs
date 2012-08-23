@@ -4,21 +4,19 @@ var utils = require('./test-utils');
 var assert = require('chai').assert;
 
 var BooleanQueryTranslator = require('../lib/bq-translator').BooleanQueryTranslator;
+var Domain = require('../lib/database').Domain;
 
 function createTranslator(query) {
   var translator = new BooleanQueryTranslator(query);
-  translator.domain = {
-    getSynonymSync: function(key) {
-      return null;
-    }
-  };
+  translator.domain = domain;
   translator.defaultFieldNames = ["field"];
   return translator;
 }
 
-function testQuery(label, query, expected) {
+function testQuery(label, query, expected, customSetup) {
   test('query: ' + label + ': ' +
        '<' + query + '> -> <' + expected + '>', function() {
+    if (customSetup) customSetup();
     var translator = createTranslator(query);
     assert.equal(translator.translate(),
                  expected);
@@ -150,10 +148,37 @@ function testSynonym(label, query, synonyms, expected) {
   });
 }
 
+var context;
+var temporaryDatabase;
+var domain;
+
 suite('BoolanQueryTranslator', function() {
+  setup(function() {
+    temporaryDatabase = utils.createTemporaryDatabase();
+    context = temporaryDatabase.get();
+    domain = new Domain('test', context).createSync();
+  });
+
+  teardown(function() {
+    context = undefined;
+    temporaryDatabase.clear();
+    temporaryDatabase.teardown();
+    temporaryDatabase = undefined;
+  });
+
   testQuery("expression",
             "type:'ModelName'",
             'type @ "ModelName"');
+  testQuery("multiple words expression",
+            "type:'Model Name'",
+            'type @ "Model" && type @ "Name"');
+  testQuery("multiple words expression for literal column",
+            "literalfield:'Model Name'",
+            'literalfield == "Model Name"',
+            function() {
+              domain.getIndexField('literalfield').setType('literal')
+               .setFacetEnabled(true).setSearchEnabled(true).createSync();
+            });
   testQuery("group: raw expressions",
             "(and field1:'keyword1' field2:'keyword2' type:'ModelName')",
             '(field1 @ "keyword1" && field2 @ "keyword2" && type @ "ModelName")');
