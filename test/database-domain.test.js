@@ -223,6 +223,7 @@ suite('database', function() {
       test('localhost, with port', function() {
         assert.equal(domain.getDocumentsEndpoint('localhost:4567'),
                      'doc-valid-' + Domain.DEFAULT_ID + '.127.0.0.1.xip.io:4567');
+      });
 
       test('localhost, without port', function() {
         assert.equal(domain.getDocumentsEndpoint('localhost'),
