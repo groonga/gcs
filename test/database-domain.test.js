@@ -200,19 +200,33 @@ suite('database', function() {
         domain = new Domain('valid').setId(Domain.DEFAULT_ID);
       });
 
-      test('regular domain', function() {
+      test('regular domain, with port', function() {
         assert.equal(domain.getDocumentsEndpoint('my.domain:0123'),
                      'doc-valid-' + Domain.DEFAULT_ID + '.my.domain:0123');
       });
 
-      test('IP address', function() {
+      test('regular domain, without port', function() {
+        assert.equal(domain.getDocumentsEndpoint('my.domain'),
+                     'doc-valid-' + Domain.DEFAULT_ID + '.my.domain');
+      });
+
+      test('IP address, with port', function() {
         assert.equal(domain.getDocumentsEndpoint('192.168.0.1:4567'),
                      'doc-valid-' + Domain.DEFAULT_ID + '.192.168.0.1.xip.io:4567');
       });
 
-      test('localhost', function() {
+      test('IP address, without port', function() {
+        assert.equal(domain.getDocumentsEndpoint('192.168.0.1'),
+                     'doc-valid-' + Domain.DEFAULT_ID + '.192.168.0.1.xip.io');
+      });
+
+      test('localhost, with port', function() {
         assert.equal(domain.getDocumentsEndpoint('localhost:4567'),
                      'doc-valid-' + Domain.DEFAULT_ID + '.127.0.0.1.xip.io:4567');
+
+      test('localhost, without port', function() {
+        assert.equal(domain.getDocumentsEndpoint('localhost'),
+                     'doc-valid-' + Domain.DEFAULT_ID + '.127.0.0.1.xip.io');
       });
     });
 
