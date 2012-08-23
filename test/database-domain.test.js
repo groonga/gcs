@@ -237,19 +237,34 @@ suite('database', function() {
         domain = new Domain('valid').setId(Domain.DEFAULT_ID);
       });
 
-      test('regular domain', function() {
+      test('regular domain, with port', function() {
         assert.equal(domain.getSearchEndpoint('my.domain:0123'),
                      'search-valid-' + Domain.DEFAULT_ID + '.my.domain:0123');
       });
 
-      test('IP address', function() {
+      test('regular domain, without port', function() {
+        assert.equal(domain.getSearchEndpoint('my.domain'),
+                     'search-valid-' + Domain.DEFAULT_ID + '.my.domain');
+      });
+
+      test('IP address, with port', function() {
         assert.equal(domain.getSearchEndpoint('192.168.0.1:4567'),
                      'search-valid-' + Domain.DEFAULT_ID + '.192.168.0.1.xip.io:4567');
       });
 
-      test('localhost', function() {
+      test('IP address, without port', function() {
+        assert.equal(domain.getSearchEndpoint('192.168.0.1'),
+                     'search-valid-' + Domain.DEFAULT_ID + '.192.168.0.1.xip.io');
+      });
+
+      test('localhost, with port', function() {
         assert.equal(domain.getSearchEndpoint('localhost:4567'),
                      'search-valid-' + Domain.DEFAULT_ID + '.127.0.0.1.xip.io:4567');
+      });
+
+      test('localhost, without port', function() {
+        assert.equal(domain.getSearchEndpoint('localhost'),
+                     'search-valid-' + Domain.DEFAULT_ID + '.127.0.0.1.xip.io');
       });
     });
 
