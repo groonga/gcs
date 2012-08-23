@@ -217,17 +217,17 @@ suite('BoolanQueryTranslator', function() {
             "(or field1:'keyword1' field2:'keyword2')".length,
             "(field1 @ \"keyword1\" || field2 @ \"keyword2\")");
   testGroup("nested",
-            "(and (or f1:'k1' f2:'k2') f3:'k3') (other group)",
-            "(and (or f1:'k1' f2:'k2') f3:'k3')".length,
-            "((f1 @ \"k1\" || f2 @ \"k2\") && f3 @ \"k3\")");
+            "(and (or field1:'k1' field2:'k2') field3:'k3') (other group)",
+            "(and (or field1:'k1' field2:'k2') field3:'k3')".length,
+            "((field1 @ \"k1\" || field2 @ \"k2\") && field3 @ \"k3\")");
 
   testGroupError("missing open parentheis",
-                 "and f1:'k1' f2:'k2')",
-                 "|a|nd f1:'k1' f2:'k2')",
+                 "and field1:'k1' field2:'k2')",
+                 "|a|nd field1:'k1' field2:'k2')",
                  "open parenthesis is missing");
   testGroupError("unknown operator",
-                 "(nonexistent f1:'k1' f2:'k2')",
-                 "(nonexistent| |f1:'k1' f2:'k2')",
+                 "(nonexistent field1:'k1' field2:'k2')",
+                 "(nonexistent| |field1:'k1' field2:'k2')",
                  "unknown operator: <nonexistent>");
   testGroupError("missing close parentheis: in operator",
                  "(an",
@@ -238,25 +238,25 @@ suite('BoolanQueryTranslator', function() {
                  "(|)|",
                  "operator is missing");
   testGroupError("invalid operator character",
-                 "(operat0r f1:'k1' f2:'k2')",
-                 "(operat|0|r f1:'k1' f2:'k2')",
+                 "(operat0r field1:'k1' field2:'k2')",
+                 "(operat|0|r field1:'k1' field2:'k2')",
                  "invalid operator character: <0>");
 
   testGroupError("field: garbage after value",
-                 "(field f1 'k1' 'garbage')",
-                 "(field f1 'k1' |'|garbage')",
+                 "(field field1 'k1' 'garbage')",
+                 "(field field1 'k1' |'|garbage')",
                  "a garbage character after value: <'>");
   testGroupError("field: no field",
                  "(field )",
                  "(field |)|",
                  "field is missing");
   testGroupError("field: no value",
-                 "(field f1)",
-                 "(field f1|)|",
-                 "field value is missing: field:<f1>");
+                 "(field field1)",
+                 "(field field1|)|",
+                 "field value is missing: field:<field1>");
   testGroupError("field: not string value",
-                 "(field f1 29)",
-                 "(field f1 |2|9)",
+                 "(field field1 29)",
+                 "(field field1 |2|9)",
                  "open single quote for string value is missing");
   testGroupError("field: invalid field name",
                  "(field fIeld 'value')",
@@ -276,9 +276,9 @@ suite('BoolanQueryTranslator', function() {
                  "(filter |)|",
                  "field is missing");
   testGroupError("filter: no value",
-                 "(filter f1)",
-                 "(filter f1|)|",
-                 "field value is missing: field:<f1>");
+                 "(filter field1)",
+                 "(filter field1|)|",
+                 "field value is missing: field:<field1>");
   testGroupError("filter: invalid field name",
                  "(filter fIeld 'value')",
                  "(filter f|I|eld 'value')",
@@ -289,8 +289,8 @@ suite('BoolanQueryTranslator', function() {
                  "close parenthesis is missing: operator:<filter>");
 
   testGroupError("and: missing close parentheis",
-                 "(and f1:'k1' f2:'k2'",
-                 "(and f1:'k1' f2:'k2'||",
+                 "(and field1:'k1' field2:'k2'",
+                 "(and field1:'k1' field2:'k2'||",
                  "close parenthesis is missing: operator:<and>");
 
   testExpression("value only: stirng: and: space",
@@ -328,8 +328,8 @@ suite('BoolanQueryTranslator', function() {
                  "field1 == 29");
 
   testExpressionError("missing field value separator: normal field name",
-                      "f1 'k1'",
-                      "f1| |'k1'",
+                      "field1 'k1'",
+                      "field1| |'k1'",
                       "field value separator is missing");
   testExpressionError("missing field value separator: " +
                         "unsigned integer like field name",
@@ -337,9 +337,9 @@ suite('BoolanQueryTranslator', function() {
                       "29| |75",
                       "field value separator is missing");
   testExpressionError("invalid value",
-                      "f1:value",
-                      "f1:|v|alue",
-                      "invalid value: field:<f1>");
+                      "field1:value",
+                      "field1:|v|alue",
+                      "invalid value: field:<field1>");
 
   testExpressionError("value only: string: missing close quote",
                       "'k1",
