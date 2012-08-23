@@ -272,7 +272,7 @@ suite('database', function() {
         }, 'searchable option cannot be configured for the type uint');
         field.facetEnabled = false;
         assert.throw(function() {
-          field.facetEnabled = false;
+          field.facetEnabled = true;
         }, 'facet option cannot be configured for the type uint');
         field.resultEnabled = true;
         assert.throw(function() {
