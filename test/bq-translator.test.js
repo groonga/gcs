@@ -157,6 +157,8 @@ suite('BoolanQueryTranslator', function() {
     temporaryDatabase = utils.createTemporaryDatabase();
     context = temporaryDatabase.get();
     domain = new Domain('test', context).createSync();
+    domain.getIndexField('literalfield').setType('literal')
+      .setFacetEnabled(true).setSearchEnabled(true).createSync();
   });
 
   teardown(function() {
@@ -169,16 +171,15 @@ suite('BoolanQueryTranslator', function() {
   testQuery("expression",
             "type:'ModelName'",
             'type @ "ModelName"');
+  testQuery("expression for literal column",
+            "literalfield:'ModelName'",
+            'literalfield == "ModelName"');
   testQuery("multiple words expression",
             "type:'Model Name'",
             'type @ "Model" && type @ "Name"');
   testQuery("multiple words expression for literal column",
             "literalfield:'Model Name'",
-            'literalfield == "Model Name"',
-            function() {
-              domain.getIndexField('literalfield').setType('literal')
-               .setFacetEnabled(true).setSearchEnabled(true).createSync();
-            });
+            'literalfield == "Model Name"');
   testQuery("group: raw expressions",
             "(and field1:'keyword1' field2:'keyword2' type:'ModelName')",
             '(field1 @ "keyword1" && field2 @ "keyword2" && type @ "ModelName")');
