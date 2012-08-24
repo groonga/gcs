@@ -131,7 +131,7 @@ suite('Search API', function() {
                'should return field values siecified by return-fields',
                'search-companies-00000000000000000000000000.localhost',
       function() {
-        domain.getIndexField('address').setReturnEnabled(false).saveOptionsSync();
+        domain.getIndexField('address').setResultEnabled(false).saveOptionsSync();
       },
       function(response) {
         var expected = { // FIXME
