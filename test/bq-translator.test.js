@@ -23,6 +23,14 @@ function testQuery(label, query, expected, customSetup) {
   });
 }
 
+function syntaxErrorData(message) {
+  return {
+    severity: 'fatal',
+    code:     'CS-InvalidMatchSetExpression',
+    message:  '[WARNING] Syntax error in match set expression: ' + message
+  };
+}
+
 function testQueryError(label, query, context, detail) {
   test('error: query: ' + label + ': ' + '<' + query + '>', function() {
     var translator = createTranslator(query);
@@ -35,7 +43,8 @@ function testQueryError(label, query, context, detail) {
         throw error;
       }
     });
-    assert.equal(actualError.message, "<" + context + ">" + ": " + detail);
+    assert.deepEqual(actualError.data,
+                     syntaxErrorData(detail + ' <' + context + '>'));
   });
 }
 
@@ -67,7 +76,8 @@ function testGroupError(label, group, context, detail) {
         throw error;
       }
     });
-    assert.equal(actualError.message, "<" + context + ">" + ": " + detail);
+    assert.deepEqual(actualError.data,
+                     syntaxErrorData(detail + ' <' + context + '>'));
   });
 }
 
@@ -102,7 +112,8 @@ function testExpressionError(label, expression, context, detail) {
         throw error;
       }
     });
-    assert.equal(actualError.message, "<" + context + ">" + ": " + detail);
+    assert.deepEqual(actualError.data,
+                     syntaxErrorData(detail + ' <' + context + '>'));
   });
 }
 
@@ -116,8 +127,7 @@ function testDefaultFieldNames(label, query, defaultFieldNames, expected) {
   });
 }
 
-function testDefaultFieldNamesError(label, query, defaultFieldNames,
-                                    context, detail) {
+function testDefaultFieldNamesError(label, query, defaultFieldNames, detail) {
   test('error: default field names: ' + label + ': ' + '<' + query + '>',
        function() {
     var translator = createTranslator(query);
@@ -131,7 +141,7 @@ function testDefaultFieldNamesError(label, query, defaultFieldNames,
         throw error;
       }
     });
-    assert.equal(actualError.message, "<" + context + ">" + ": " + detail);
+    assert.equal(actualError.data, detail);
   });
 }
 
@@ -388,12 +398,10 @@ suite('BoolanQueryTranslator', function() {
   testDefaultFieldNamesError("null",
                              "'ModelName'",
                              null,
-                             "'ModelName'||",
                              "default fields are missing");
   testDefaultFieldNamesError("empty",
                              "'ModelName'",
                              [],
-                             "'ModelName'||",
                              "no default field");
 
   testSynonym("keyword: existent: 0 synonym",
