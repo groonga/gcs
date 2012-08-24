@@ -123,7 +123,7 @@ suite('Search API', function() {
     );
 
     testSearch('/2011-02-01/search?q=Hongo&' +
-                 'return-fields=address,description,name,age,product',
+                 'return-fields=address,description,name,age,product,unknown',
                'should return field values of result returnable fields ' +
                  'in the list of return-fields',
                'search-companies-00000000000000000000000000.localhost',
@@ -142,6 +142,7 @@ suite('Search API', function() {
                 name: ['ClearCode Inc.'],
                 age: [3],
                 product: ['groonga']
+                // unknown (missing) field is simply ignored.
               }
             }]
           },
