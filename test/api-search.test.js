@@ -158,7 +158,7 @@ suite('Search API', function() {
 
     testSearch('/2011-02-01/search?q=Hongo&' +
                  'return-fields=unknown1,unknown2',
-               'should return blank "data" by return-fields with unexisting fields',
+               'should return blank "data" by return-fields filled by unexisting fields',
                'search-companies-00000000000000000000000000.localhost',
       function(response) {
         var expected = { // FIXME
@@ -177,6 +177,27 @@ suite('Search API', function() {
             'time-ms': 0, // always 0
             'cpu-time-ms': 0
           }
+        };
+        assert.deepEqual(response.normalizedBody, expected);
+      }
+    );
+
+    testSearch('/2011-02-01/search?bq=unknown:\'Foo\'',
+               'should be 400 error for search query with unexisting field',
+               'search-companies-00000000000000000000000000.localhost',
+      function(response) {
+        var expected = {
+          error:         'info',
+          rid:           '000000000000000000000000000000000000000000000000000000000000000',
+          'time-ms':     0,
+          'cpu-time-ms': 0,
+          messages: [
+            { severity: 'fatal',
+              code:     'CS-UnknownFieldInMatchExpression',
+              message:  'Field \'unknown\' is not defined in the metadata ' +
+                        'for this collection. All fields used in the match ' +
+                        'expression must be defined in the metadata.' }
+          ]
         };
         assert.deepEqual(response.normalizedBody, expected);
       }
@@ -401,6 +422,30 @@ suite('Search API', function() {
     );
 
     testSearch('/2011-02-01/search?bq=type:\'human\'',
+               'should return result, for search query about "search" field',
+               'search-people-00000000000000000000000000.localhost',
+      function(response) {
+        var expected = {
+          rank: '-text_relevance',
+          'match-expr': "type:'human'",
+          hits: {
+            found: 1,
+            start: 0,
+            hit: [
+              { id: 'id1' }
+            ]
+          },
+          info: {
+            rid: '000000000000000000000000000000000000000000000000000000000000000',
+            'time-ms': 0, // always 0
+            'cpu-time-ms': 0
+          }
+        };
+        assert.deepEqual(response.normalizedBody, expected);
+      }
+    );
+
+    testSearch('/2011-02-01/search?bq=type:\'human\'',
                'should return empty result, for search query about "nosearch" field',
                'search-people-00000000000000000000000000.localhost',
       function() {
@@ -426,7 +471,8 @@ suite('Search API', function() {
     );
 
     testSearch('/2011-02-01/search?q=Jack&return-fields=realname,nickname,type,unknown',
-               'should return only "realname" field by resultEnabled',
+               'should return only "realname" field, ' +
+                 'and return empty value for "noresult" fields',
                'search-people-00000000000000000000000000.localhost',
       function() {
         domain.getIndexField('nickname').setResultEnabled(false).saveOptionsSync();
@@ -443,7 +489,7 @@ suite('Search API', function() {
               {
                 id: 'id2',
                 data: {
-                  // "noresult" field retuened as an empty arrya
+                  // "noresult" field retuened as an empty array
                   realname: ['Pumpkin Man'],
                   nickname: [],
                   type:     []
@@ -471,7 +517,8 @@ suite('Search API', function() {
     );
 
     testSearch('/2011-02-01/search?q=Jack&facet=realname,nickname,type,unknown',
-               'should return only "type" field as facet by facetEnabled',
+               'should return only "type" field as facet, ' +
+                 'and return blank results for "nofacet" fields',
                'search-people-00000000000000000000000000.localhost',
       function() {
         domain.getIndexField('realname').setFacetEnabled(false).saveOptionsSync();
