@@ -157,6 +157,17 @@ suite('BoolanQueryTranslator', function() {
     temporaryDatabase = utils.createTemporaryDatabase();
     context = temporaryDatabase.get();
     domain = new Domain('test', context).createSync();
+    [
+      'type',
+      'name',
+      'field',
+      'field1',
+      'field2',
+      'field3'
+    ].forEach(function(field) {
+      domain.getIndexField(field).setType('text')
+        .setFacetEnabled(true).setSearchEnabled(true).createSync();
+    });
     domain.getIndexField('literalfield').setType('literal')
       .setFacetEnabled(true).setSearchEnabled(true).createSync();
   });
