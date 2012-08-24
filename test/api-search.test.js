@@ -400,23 +400,20 @@ suite('Search API', function() {
       }
     );
 
-/* searchability of text field cannot be configured. how should I test it?
-    testSearch('/2011-02-01/search?q=Jack',
-               'should match only nickname, by searchability',
+    testSearch('/2011-02-01/search?bq=type:\'human\'',
+               'should return empty result, for search query about "nosearch" field',
                'search-people-00000000000000000000000000.localhost',
       function() {
-        domain.getIndexField('realname').setSearchEnabled(false).saveOptionsSync();
+        domain.getIndexField('type').setSearchEnabled(false).saveOptionsSync();
       },
       function(response) {
         var expected = {
           rank: '-text_relevance',
-          'match-expr': "(label 'Jack')",
+          'match-expr': "type:'human'",
           hits: {
-            found: 1,
+            found: 0,
             start: 0,
-            hit: [
-              { id: 'id2' }
-            ]
+            hit: []
           },
           info: {
             rid: '000000000000000000000000000000000000000000000000000000000000000',
@@ -427,7 +424,6 @@ suite('Search API', function() {
         assert.deepEqual(response.normalizedBody, expected);
       }
     );
-*/
 
     testSearch('/2011-02-01/search?q=Jack&return-fields=realname,nickname,type,unknown',
                'should return only "realname" field by resultEnabled',
