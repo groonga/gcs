@@ -128,7 +128,8 @@ suite('Search API', function() {
 
     testSearch('/2011-02-01/search?q=Hongo&' +
                  'return-fields=address,description,name,age,product,unknown',
-               'should return field values siecified by return-fields',
+               'should return field values of result returnable fields ' +
+                 'in the list of return-fields',
                'search-companies-00000000000000000000000000.localhost',
       function() {
         domain.getIndexField('address').setResultEnabled(false).saveOptionsSync();
@@ -143,7 +144,7 @@ suite('Search API', function() {
             hit: [{
               id: 'id3',
               data: {
-                address: [], // "unreturnable" field should be empty!
+                address: [], // "unreturnable" field should be returned as an empty array!
                 description: [''],
                 name: ['ClearCode Inc.'],
                 age: [3],
@@ -165,9 +166,6 @@ suite('Search API', function() {
                  'return-fields=unknown1,unknown2',
                'should return blank "data" by return-fields with unexisting fields',
                'search-companies-00000000000000000000000000.localhost',
-      function() {
-        domain.getIndexField('address').setReturnEnabled(false).saveOptionsSync();
-      },
       function(response) {
         var expected = { // FIXME
           rank: '-text_relevance',
