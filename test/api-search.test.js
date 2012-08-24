@@ -66,14 +66,10 @@ suite('Search API', function() {
   }
 
   suite('with fixture loaded', function() {
-    var domain;
-
     setup(function() {
       utils.loadDumpFile(context, __dirname + '/fixture/companies/ddl.grn');
       utils.loadDumpFile(context, __dirname + '/fixture/companies/configurations.grn');
       utils.loadDumpFile(context, __dirname + '/fixture/companies/data.grn');
-
-      domain = new Domain('companies', context);
     });
 
     testSearch('/2011-02-01/search?q=Hongo',
@@ -127,13 +123,10 @@ suite('Search API', function() {
     );
 
     testSearch('/2011-02-01/search?q=Hongo&' +
-                 'return-fields=address,description,name,age,product,unknown',
+                 'return-fields=address,description,name,age,product',
                'should return field values of result returnable fields ' +
                  'in the list of return-fields',
                'search-companies-00000000000000000000000000.localhost',
-      function() {
-        domain.getIndexField('address').setResultEnabled(false).saveOptionsSync();
-      },
       function(response) {
         var expected = { // FIXME
           rank: '-text_relevance',
@@ -144,7 +137,7 @@ suite('Search API', function() {
             hit: [{
               id: 'id3',
               data: {
-                address: [], // "unreturnable" field should be returned as an empty array!
+                address: ['Hongo, Tokyo, Japan'],
                 description: [''],
                 name: ['ClearCode Inc.'],
                 age: [3],
@@ -435,7 +428,7 @@ suite('Search API', function() {
     );
 */
 
-    testSearch('/2011-02-01/search?q=Jack&return-fields=realname,nickname,type',
+    testSearch('/2011-02-01/search?q=Jack&return-fields=realname,nickname,type,unknown',
                'should return only "realname" field by resultEnabled',
                'search-people-00000000000000000000000000.localhost',
       function() {
@@ -453,13 +446,19 @@ suite('Search API', function() {
               {
                 id: 'id2',
                 data: {
-                  realname: ['Pumpkin Man']
+                  // "noresult" field retuened as an empty arrya
+                  realname: ['Pumpkin Man'],
+                  nickname: [],
+                  type:     []
+                  // unknown field is simply ignored.
                 }
               },
               {
                 id: 'id1',
                 data: {
-                  realname: ['Jack Sparrow']
+                  realname: ['Jack Sparrow'],
+                  nickname: [],
+                  type:     []
                 }
               }
             ]
@@ -474,7 +473,7 @@ suite('Search API', function() {
       }
     );
 
-    testSearch('/2011-02-01/search?q=Jack&facet=realname,nickname,type',
+    testSearch('/2011-02-01/search?q=Jack&facet=realname,nickname,type,unknown',
                'should return only "type" field as facet by facetEnabled',
                'search-people-00000000000000000000000000.localhost',
       function() {
@@ -499,7 +498,11 @@ suite('Search API', function() {
                 {value: 'ghost', count: 1},
                 {value: 'human', count: 1}
               ]
-            }
+            },
+            // "nofacet" field retuened as an empty hash
+            realname: {},
+            nickname: {}
+            // and, unknown field is simply ignored.
           },
           info: {
             rid: '000000000000000000000000000000000000000000000000000000000000000',
