@@ -66,10 +66,14 @@ suite('Search API', function() {
   }
 
   suite('with fixture loaded', function() {
+    var domain;
+
     setup(function() {
       utils.loadDumpFile(context, __dirname + '/fixture/companies/ddl.grn');
       utils.loadDumpFile(context, __dirname + '/fixture/companies/configurations.grn');
       utils.loadDumpFile(context, __dirname + '/fixture/companies/data.grn');
+
+      domain = new Domain('companies', context);
     });
 
     testSearch('/2011-02-01/search?q=Hongo',
@@ -123,9 +127,12 @@ suite('Search API', function() {
     );
 
     testSearch('/2011-02-01/search?q=Hongo&' +
-                 'return-fields=address,description,name,age,product',
-               'should return field values',
+                 'return-fields=address,description,name,age,product,unknown',
+               'should return field values siecified by return-fields',
                'search-companies-00000000000000000000000000.localhost',
+      function() {
+        domain.getIndexField('address').setReturnEnabled(false).saveOptionsSync();
+      },
       function(response) {
         var expected = { // FIXME
           rank: '-text_relevance',
@@ -136,12 +143,41 @@ suite('Search API', function() {
             hit: [{
               id: 'id3',
               data: {
-                address: ['Hongo, Tokyo, Japan'],
+                address: [], // "unreturnable" field should be empty!
                 description: [''],
                 name: ['ClearCode Inc.'],
                 age: [3],
                 product: ['groonga']
               }
+            }]
+          },
+          info: {
+            rid: '000000000000000000000000000000000000000000000000000000000000000',
+            'time-ms': 0, // always 0
+            'cpu-time-ms': 0
+          }
+        };
+        assert.deepEqual(response.normalizedBody, expected);
+      }
+    );
+
+    testSearch('/2011-02-01/search?q=Hongo&' +
+                 'return-fields=unknown1,unknown2',
+               'should return blank "data" by return-fields with unexisting fields',
+               'search-companies-00000000000000000000000000.localhost',
+      function() {
+        domain.getIndexField('address').setReturnEnabled(false).saveOptionsSync();
+      },
+      function(response) {
+        var expected = { // FIXME
+          rank: '-text_relevance',
+          'match-expr': "(label 'Hongo')",
+          hits: {
+            found: 1,
+            start: 0,
+            hit: [{
+              id: 'id3',
+              data: {}
             }]
           },
           info: {
