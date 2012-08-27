@@ -17,19 +17,26 @@ commandLine
 commandLine.assertHaveDomainName();
 commandLine.assertDomainExists();
 
-var field = commandLine.domain.getIndexField(commandLine.options.name);
-if (field && field.exists()) {
-  console.log('Setting "%s" as the default search field of "%s"...',
-              field.name,
-              commandLine.domain.name);
-} else if (commandLine.options.name) {
-  console.log('"%s" is not a field of "%s".',
-              field.name,
-              commandLine.domain.name);
-  return process.exit(1);
+var field;
+if (commandLine.hasOption('name'))
+  field = commandLine.domain.getIndexField(commandLine.options.name);
+
+if (field) {
+  if (field.exists()) {
+    console.log('Setting "%s" as the default search field of "%s"...',
+                field.name,
+                commandLine.domain.name);
+    commandLine.domain.defaultSearchField = field;
+    console.log('Done.');
+  } else {
+    console.log('"%s" is not a field of "%s".',
+                field.name,
+                commandLine.domain.name);
+    return process.exit(1);
+  }
 } else {
   console.log('Resetting the default search field of "%s"...',
               commandLine.domain.name);
+  commandLine.domain.defaultSearchField = null;
+  console.log('Done.');
 }
-commandLine.domain.defaultSearchField = field;
-console.log('Done.');
