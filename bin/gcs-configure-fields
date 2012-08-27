@@ -25,6 +25,8 @@ commandLine
           String)
   .option('--delete',
           'Delete the field specified by the --name and --type options.')
+  .option('-f, --force', /* this is an extension of gcs-command */
+          'Delete the domain without prompting for confirmation.')
   .parse();
 
 commandLine.assertHaveDomainName();
