@@ -23,7 +23,9 @@ if (field && field.exists()) {
               field.name,
               commandLine.domain.name);
 } else if (commandLine.options.name) {
-  console.log('"%s" is not a field of "%s".');
+  console.log('"%s" is not a field of "%s".',
+              field.name,
+              commandLine.domain.name);
   return process.exit(1);
 } else {
   console.log('Resetting the default search field of "%s"...',
