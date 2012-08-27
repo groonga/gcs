@@ -720,7 +720,7 @@ suite('gcs-configure-default-search-field', function() {
                            message: result.output.stdout },
                          { code:    0,
                            message: 'Setting "name" as the default search ' +
-                                      'field of "companies"...' +
+                                      'field of "companies"...\n' +
                                     'Done.\n' },
                          result.output.stderr);
         assert.equal(domain.defaultSearchField.name, 'name');
