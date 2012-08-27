@@ -705,7 +705,7 @@ suite('gcs-configure-default-search-field', function() {
   setup(commonSetup);
   teardown(commonTeardown);
 
-  test('set to an existing field', function() {
+  test('set to an existing field', function(done) {
     var domain = new Domain('companies', context).createSync();
     domain.getIndexField('name').setType('text').createSync();
     utils
@@ -729,7 +729,7 @@ suite('gcs-configure-default-search-field', function() {
       });
   });
 
-  test('set to a missing field', function() {
+  test('set to a missing field', function(done) {
     var domain = new Domain('companies', context).createSync();
     domain.getIndexField('name').setType('text').createSync();
     utils
@@ -755,7 +755,7 @@ suite('gcs-configure-default-search-field', function() {
       });
   });
 
-  test('set to blank', function() {
+  test('set to blank', function(done) {
     var domain = new Domain('companies', context).createSync();
     domain.getIndexField('name').setType('text').createSync();
     utils
@@ -784,7 +784,7 @@ suite('gcs-configure-default-search-field', function() {
       });
   });
 
-  test('set to blank (omitted "name" option)', function() {
+  test('set to blank (omitted "name" option)', function(done) {
     var domain = new Domain('companies', context).createSync();
     domain.getIndexField('name').setType('text').createSync();
     utils
