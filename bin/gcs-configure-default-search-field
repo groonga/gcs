@@ -18,7 +18,7 @@ commandLine.assertHaveDomainName();
 commandLine.assertDomainExists();
 
 var field;
-if (commandLine.hasOption('name'))
+if (commandLine.hasOption('name') && commandLine.options.name)
   field = commandLine.domain.getIndexField(commandLine.options.name);
 
 if (field) {
