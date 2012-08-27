@@ -18,7 +18,7 @@ commandLine.assertHaveDomainName();
 commandLine.assertDomainExists();
 
 var field = commandLine.domain.getIndexField(commandLine.options.name);
-if (field) {
+if (field && field.exists()) {
   console.log('Setting "%s" as the default search field of "%s"...',
               field.name,
               commandLine.domain.name);

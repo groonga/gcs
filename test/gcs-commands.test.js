@@ -747,7 +747,7 @@ suite('gcs-configure-default-search-field', function() {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
                          { code:    1,
-                           message: '"name" as not a field of "companies".\n' },
+                           message: '"address" is not a field of "companies".\n' },
                          result.output.stderr);
         assert.equal(domain.defaultSearchField.name, 'name');
         done();
