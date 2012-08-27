@@ -774,7 +774,7 @@ suite('gcs-configure-default-search-field', function() {
                            message: result.output.stdout },
                          { code:    0,
                            message: 'Resetting the default search field of ' +
-                                      '"companies"...' +
+                                      '"companies"...\n' +
                                     'Done.\n' },
                          result.output.stderr);
         assert.isTrue(domain.defaultSearchField === null,
