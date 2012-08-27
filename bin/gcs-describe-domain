@@ -35,6 +35,11 @@ function report(domain) {
                 'IndexDocuments: %s',
               domain.requiresIndexDocuments ? 'Yes' : 'No' );
 
+  // additional information for the default search field!
+  var field = domain.defaultSearchField;
+  if (field)
+    console.log('Default search field: %s', field.name);
+
   console.log('');
   console.log('=== Domain Configuration ===');
 

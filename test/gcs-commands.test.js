@@ -811,6 +811,28 @@ suite('gcs-configure-default-search-field', function() {
         done(e);
       });
   });
+
+  test('Described default search field', function(done) {
+    var domain = new Domain('companies', context).createSync();
+    domain.getIndexField('name').setType('text').createSync();
+    utils
+      .run('gcs-configure-default-search-field',
+           '--domain-name', 'companies',
+           '--name', 'name',
+           '--database-path', temporaryDatabase.path)
+      .run('gcs-describe-domain',
+           '--domain-name', 'companies',
+           '--database-path', temporaryDatabase.path)
+      .next(function(result) {
+        assert.equal(result.code, 0, result.output.stdout + result.output.stderr);
+        console.log(result.output.stdout);
+        assert.include(result.output.stdout, 'Default search field: name', result.output.stderr);
+        done();
+      })
+      .error(function(e) {
+        done(e);
+      });
+  });
 });
 
 suite('gcs-index-documents', function() {
