@@ -340,6 +340,7 @@ suite('gcs-configure-fields', function() {
            '--domain-name', 'companies',
            '--name', name,
            '--delete',
+           '--force',
            '--database-path', temporaryDatabase.path)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
@@ -411,6 +412,7 @@ suite('gcs-configure-fields', function() {
            '--domain-name', 'companies',
            '--name', 'name',
            '--delete',
+           '--force',
            '--database-path', temporaryDatabase.path)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
