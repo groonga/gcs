@@ -238,10 +238,18 @@ suite('BoolanQueryTranslator', function() {
             "(or field1:'keyword1' field2:'keyword2') (other group)",
             "(or field1:'keyword1' field2:'keyword2')".length,
             "(field1 @ \"keyword1\" || field2 @ \"keyword2\")");
+  testGroup("not",
+            "(not field1:'keyword1') (other group)",
+            "(not field1:'keyword1')".length,
+            "(all_records() &! field1 @ \"keyword1\")");
   testGroup("nested",
             "(and (or field1:'k1' field2:'k2') field3:'k3') (other group)",
             "(and (or field1:'k1' field2:'k2') field3:'k3')".length,
             "((field1 @ \"k1\" || field2 @ \"k2\") && field3 @ \"k3\")");
+  testGroup("not and",
+            "(not (and field1:'k1' field2:'k2')) (other group)",
+            "(not (and field1:'k1' field2:'k2'))".length,
+            "(all_records() &! (field1 @ \"k1\" && field2 @ \"k2\"))");
 
   testGroupError("missing open parentheis",
                  "and field1:'k1' field2:'k2')",
