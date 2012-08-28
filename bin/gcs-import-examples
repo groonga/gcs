@@ -44,11 +44,11 @@ echo
 echo "==== Creating 'example' domain"
 
 $bin_path/gcs-create-domain --domain-name example
+echo
+echo
 
-describe_domain_result=`$bin_path/gcs-describe-domain --domain-name example`
-echo $describe_domain_result
-echo
-echo
+documents_endpoint=`$bin_path/gcs-describe-domain --domain-name example | grep "Document Service endpoint" | cut -d " " -f 4`
+search_endpoint=`$bin_path/gcs-describe-domain --domain-name example | grep "Search Service endpoint" | cut -d " " -f 4`
 
 echo "==== Adding index fields"
 echo "== Creating 'name' field"
@@ -71,7 +71,7 @@ echo
 
 echo
 echo "==== Indexing data"
-$bin_path/gcs-post-sdf --domain-name example --source $base_path/examples/example.sdf.json
+$bin_path/gcs-post-sdf --domain-name example $base_path/examples/example.sdf.json
 echo
 
 echo
