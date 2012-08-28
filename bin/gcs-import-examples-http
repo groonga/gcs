@@ -1,0 +1,116 @@
+#!/bin/sh
+
+GREEN="\033[0;32;1m"
+RED="\033[0;31;1m"
+YELLOW="\033[1;33;1m"
+RESET="\033[m"
+
+cat <<EOT
+Groonga CloudSearch example data importer
+-----------------------------------------
+
+This script setup an example domain and import data into the domain.
+
+EOT
+
+echo "Checking prerequisites..."
+echo
+
+printf "* gcs running..."
+curl --silent "http://localhost:7575" > /dev/null
+if [ $? -eq 0 ]
+then
+  echo " "$GREEN"OK"$RESET
+else
+  echo " "$RED"not running"$RESET
+  printf $YELLOW
+cat <<"EOT"
+
+You need to run gcs on port 7575. Just run gcs command without any options on another terminal.
+
+  $ gcs
+
+EOT
+  printf $RESET
+fi
+
+cat <<EOT
+
+NOTICE:
+
+If you have data in the domain whose name is 'example', it will be updated.
+
+
+Hit enter to continue. Ctrl-C to break.
+EOT
+read enter
+
+
+
+echo "==== Deleting 'example' domain (if exists)"
+curl -s "http://localhost:7575/?DomainName=example&Action=DeleteDomain&Version=2011-02-01" > /dev/null
+echo
+
+echo "==== Creating 'example' domain"
+
+create_domain_result=`curl -s "http://localhost:7575/?DomainName=example&Action=CreateDomain&Version=2011-02-01"`
+echo $create_domain_result
+echo
+echo
+
+case $(uname) in
+  Darwin|*BSD)
+    sed="sed -E"
+    ;;
+  *)
+    sed="sed -r"
+    ;;
+esac
+
+documents_endpoint=`echo "$create_domain_result" | $sed -e "s/.+<DocService><Endpoint>//" | $sed -e "s/<.+//"`
+search_endpoint=`echo "$create_domain_result" | $sed -e "s/.+<SearchService><Endpoint>//" | $sed -e "s/<.+//"`
+
+echo "==== Adding index fields"
+echo "== Creating 'name' field"
+curl -s "http://localhost:7575/?Action=DefineIndexField&DomainName=example&IndexField.IndexFieldName=name&IndexField.IndexFieldType=text&TextOptions.ResultEnabled=true&TextOption.FacetEnabled=true&Version=2011-02-01"
+echo
+echo "== Creating 'address' field"
+curl -s "http://localhost:7575/?Action=DefineIndexField&DomainName=example&IndexField.IndexFieldName=address&IndexField.IndexFieldType=text&TextOptions.ResultEnabled=true&TextOption.FacetEnabled=true&Version=2011-02-01"
+echo
+echo "== Creating 'email_address' field"
+curl -s "http://localhost:7575/?Action=DefineIndexField&DomainName=example&IndexField.IndexFieldName=email_address&IndexField.IndexFieldType=text&TextOptions.ResultEnabled=true&TextOption.FacetEnabled=true&Version=2011-02-01"
+echo
+echo "== Creating 'products' field"
+curl -s "http://localhost:7575/?Action=DefineIndexField&DomainName=example&IndexField.IndexFieldName=products&IndexField.IndexFieldType=literal&LiteralOptions.SearchEnabled=true&LiteralOptions.ResultEnabled=true&LiteralOptions.FacetEnabled=true&Version=2011-02-01"
+echo
+
+echo
+echo "==== Indexing data"
+sdf_path=
+sdf_base_path=examples/example.sdf.json
+for sdf_path_prefix in "`dirname $0`/.." "`npm root`/gcs" "`npm -g root`/gcs"
+do
+    sdf_path="$sdf_path_prefix/$sdf_base_path"
+    if [ -f "$sdf_path" ]; then
+	break
+    else
+	sdf_path=
+    fi
+done
+
+curl -X POST --upload-file $sdf_path --header "Content-Type: application/json" http://$documents_endpoint/2011-02-01/documents/batch
+echo
+
+echo
+echo "Done."
+
+cat <<EOT
+
+Now you can try searching by
+
+$ curl "http://$search_endpoint/2011-02-01/search?q=Tokyo"
+
+or, open
+http://localhost:7575
+for web dashboard.
+EOT
