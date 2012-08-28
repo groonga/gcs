@@ -58,8 +58,17 @@ echo $create_domain_result
 echo
 echo
 
-documents_endpoint=`echo "$create_domain_result" | sed -r -e "s/.+<DocService><Endpoint>//" | sed -r -e "s/<.+//"`
-search_endpoint=`echo "$create_domain_result" | sed -r -e "s/.+<SearchService><Endpoint>//" | sed -r -e "s/<.+//"`
+case $(uname) in
+  Darwin|*BSD)
+    sed="sed -E"
+    ;;
+  *)
+    sed="sed -r"
+    ;;
+esac
+
+documents_endpoint=`echo "$create_domain_result" | $sed -e "s/.+<DocService><Endpoint>//" | $sed -e "s/<.+//"`
+search_endpoint=`echo "$create_domain_result" | $sed -e "s/.+<SearchService><Endpoint>//" | $sed -e "s/<.+//"`
 
 echo "==== Adding index fields"
 echo "== Creating 'name' field"
