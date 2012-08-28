@@ -41,7 +41,9 @@
     "gcs-configure-fields": "./bin/gcs-configure-fields",
     "gcs-configure-text-options": "./bin/gcs-configure-text-options",
     "gcs-index-documents": "./bin/gcs-index-documents",
-    "gcs-import-examples": "./bin/gcs-import-examples"
+    "gcs-import-examples": "./bin/gcs-import-examples",
+    "gcs-configure-default-search-field": "./bin/gcs-configure-default-search-field",
+    "gcs-post-sdf": "./bin/gcs/gcs-post-sdf"
   },
   "main": "./lib/server",
   "engines": {
