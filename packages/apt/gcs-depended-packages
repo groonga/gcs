@@ -1,3 +1,4 @@
+debhelper
 libgroonga-dev
 pkg-config
 npm
