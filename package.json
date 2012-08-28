@@ -43,7 +43,8 @@
     "gcs-index-documents": "./bin/gcs-index-documents",
     "gcs-import-examples": "./bin/gcs-import-examples",
     "gcs-configure-default-search-field": "./bin/gcs-configure-default-search-field",
-    "gcs-post-sdf": "./bin/gcs/gcs-post-sdf"
+    "gcs-post-sdf": "./bin/gcs/gcs-post-sdf",
+    "gcs-import-examples-http": "./bin/gcs-import-examples-http"
   },
   "main": "./lib/server",
   "engines": {
