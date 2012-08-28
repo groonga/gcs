@@ -64,9 +64,19 @@ if [ ! -f "${groonga_list}" ]; then
 	    ;;
     esac
     downcased_distribtion=$(echo ${distribution} | tr A-Z a-z)
+
+    case ${code_name} in
+	sid)
+	    groonga_code_name=unstable
+	    ;;
+	*)
+	    groonga_code_name=${code_name}
+	    ;;
+    esac
+
     run cat <<EOF | run tee ${groonga_list}
-deb http://packages.groonga.org/${downcased_distribtion}/ ${code_name} ${component}
-deb-src http://packages.groonga.org/${downcased_distribtion}/ ${code_name} ${component}
+deb http://packages.groonga.org/${downcased_distribtion}/ ${groonga_code_name} ${component}
+deb-src http://packages.groonga.org/${downcased_distribtion}/ ${groonga_code_name} ${component}
 EOF
     apt-get update -V
     run apt-get -V -y --allow-unauthenticated install groonga-keyring
