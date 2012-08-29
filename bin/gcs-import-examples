@@ -71,7 +71,7 @@ echo
 
 echo
 echo "==== Indexing data"
-$bin_path/gcs-post-sdf --domain-name example $base_path/examples/example.sdf.json
+$bin_path/gcs-post-sdf --domain-name example --source $base_path/examples/example.sdf.json
 echo
 
 echo
