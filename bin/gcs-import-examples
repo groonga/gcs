@@ -25,14 +25,31 @@ EOT
 read enter
 
 
+path_prefixes="`dirname $0`/.."
+if [ -L "$0" ]; then
+  real_dirname="`dirname $0`/`readlink $0`"
+  path_prefixes="$path_prefixes `dirname $real_dirname`/.."
+fi
+path_prefixes="$path_prefixes `npm root`/gcs `npm -g root`/gcs"
 base_path=
 bin_path=
-for path_prefix in "`dirname $0`/.." "`npm root`/gcs" "`npm -g root`/gcs"
+examples_path=
+for path_prefix in $path_prefixes
 do
   base_path="$path_prefix"
-  bin_path="$base_path/bin"
-  if [ -d "$base_path" ]; then
-    break
+
+  if [ -z "$bin_path" ]; then
+    bin_path="$base_path/bin"
+    if [ ! -d "$bin_path" ]; then
+      bin_path=
+    fi
+  fi
+
+  if [ -z "$examples_path" ]; then
+    examples_path="$base_path/examples"
+    if [ ! -d "$examples_path" ]; then
+      examples_path=
+    fi
   fi
 done
 
@@ -71,7 +88,7 @@ echo
 
 echo
 echo "==== Indexing data"
-$bin_path/gcs-post-sdf --domain-name example --source $base_path/examples/example.sdf.json
+$bin_path/gcs-post-sdf --domain-name example --source $examples_path/example.sdf.json
 echo
 
 echo
