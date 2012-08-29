@@ -46,6 +46,34 @@ EOT
 read enter
 
 
+path_prefixes="`dirname $0`/.."
+if [ -L "$0" ]; then
+  real_dirname="`dirname $0`/`readlink $0`"
+  path_prefixes="$path_prefixes `dirname $real_dirname`/.."
+fi
+path_prefixes="$path_prefixes `npm root`/gcs `npm -g root`/gcs"
+base_path=
+bin_path=
+examples_path=
+for path_prefix in $path_prefixes
+do
+  base_path="$path_prefix"
+
+  if [ -z "$bin_path" ]; then
+    bin_path="$base_path/bin"
+    if [ ! -d "$bin_path" ]; then
+      bin_path=
+    fi
+  fi
+
+  if [ -z "$examples_path" ]; then
+    examples_path="$base_path/examples"
+    if [ ! -d "$examples_path" ]; then
+      examples_path=
+    fi
+  fi
+done
+
 
 echo "==== Deleting 'example' domain (if exists)"
 curl -s "http://localhost:7575/?DomainName=example&Action=DeleteDomain&Version=2011-02-01" > /dev/null
@@ -86,19 +114,7 @@ echo
 
 echo
 echo "==== Indexing data"
-sdf_path=
-sdf_base_path=examples/example.sdf.json
-for sdf_path_prefix in "`dirname $0`/.." "`npm root`/gcs" "`npm -g root`/gcs"
-do
-    sdf_path="$sdf_path_prefix/$sdf_base_path"
-    if [ -f "$sdf_path" ]; then
-	break
-    else
-	sdf_path=
-    fi
-done
-
-curl -X POST --upload-file $sdf_path --header "Content-Type: application/json" http://$documents_endpoint/2011-02-01/documents/batch
+curl -X POST --upload-file $examples_path/example.sdf.json --header "Content-Type: application/json" http://$documents_endpoint/2011-02-01/documents/batch
 echo
 
 echo
