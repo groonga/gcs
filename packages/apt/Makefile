@@ -5,6 +5,7 @@ ARCHITECTURES = i386 amd64
 CODES = unstable precise
 
 PACKAGE = gcs
+PACKAGE_NAME = Groonga CloudSearch
 VERSION = $(shell ruby -rjson -e 'print JSON.parse(ARGF.read)["version"]' ../../package.json)
 RSYNC_PATH = packages@packages.groonga.org:public
 GPG_UID = 45499429
