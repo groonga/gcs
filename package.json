@@ -1,7 +1,7 @@
 {
   "name": "gcs",
   "description": "Groonga CloudSearch",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "author": "Groonga CloudSearch project <gcs@groonga.org>",
   "license": "MIT",
   "keywords": ["Amazon CloudSearch", "groonga", "fulltext", "search", "database"],
