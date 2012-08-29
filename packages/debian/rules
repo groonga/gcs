@@ -21,6 +21,7 @@ INSTALL_PATHS =					\
 	node_modules/				\
 	npm-shrinkwrap.json			\
 	package.json				\
+	public/					\
 	tools/					\
 	views/
 
