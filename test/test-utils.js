@@ -8,6 +8,7 @@ var nativeNroonga = require('nroonga');
 var wrappedNroonga = require(__dirname + '/../lib/wrapped-nroonga');
 var xml2js = require('xml2js');
 var spawn = require('child_process').spawn;
+var url = require('url');
 
 var temporaryDirectory = exports.temporaryDirectory = path.join(__dirname, 'tmp');
 
@@ -27,6 +28,12 @@ function setupServer(context, extraOptions) {
     });
   var server = gcsServer.createServer(options);
   server.listen(testPort);
+
+  server.dashboardUrl = url.format({
+    protocol: 'http',
+    hostname: 'localhost',
+    port: options.port
+  });
   return server;
 }
 exports.setupServer = setupServer;
