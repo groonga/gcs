@@ -23,7 +23,14 @@ function casper(options, callback) {
   });
 }
 
-var server = utils.setupServer();
+var temporaryDatabase = utils.createTemporaryDatabase();
+var context = temporaryDatabase.get();
+var server = utils.setupServer(context);
+
+utils.loadDumpFile(context, __dirname + '/../test/fixture/companies/ddl.grn');
+utils.loadDumpFile(context, __dirname + '/../test/fixture/companies/configurations.grn');
+utils.loadDumpFile(context, __dirname + '/../test/fixture/companies/data.grn');
+
 var options = [
   'test',
   __dirname + '/test',
