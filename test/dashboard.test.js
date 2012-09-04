@@ -26,9 +26,9 @@ suite('dashboard', function() {
       });
   });
 
-  test('GET /javascripts/templates.js', function(done) {
+  test('GET /js/templates.js', function(done) {
     utils
-      .get('/javascripts/templates.js')
+      .get('/js/templates.js')
       .next(function(response) {
         assert.equal(response.statusCode, 200);
         assert.include(response.body, "this.JST");
