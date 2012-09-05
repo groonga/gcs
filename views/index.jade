@@ -22,12 +22,15 @@ html
       .container
         .row
           .span12
-            form#search.form-search(onsubmit="searchExecute(); return false;")
-              input.search-query(type="text", name="query", value="")
-              input.btn(type="submit", value="Search")
-              input(type="hidden", name="start", value="")
+            {{outlet}}
 
-            #request-information
-            #results
+    script(data-template-name="index", type="text/x-handlebars")
+      form#search.form-search(onsubmit="searchExecute(); return false;")
+        input.search-query(type="text", name="query", value="")
+        input.btn(type="submit", value="Search")
+        input(type="hidden", name="start", value="")
+
+      #request-information
+      #results
 
   body

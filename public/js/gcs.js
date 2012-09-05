@@ -1,14 +1,23 @@
 $(document).ready(function($) {
   var App = Ember.Application.create();
 
+  App.ApplicationController = Ember.Controller.extend();
+
   App.ApplicationView = Ember.View.extend({
     templateName: 'application'
+  });
+
+  App.IndexView = Ember.View.extend({
+    templateName: 'index'
   });
 
   App.Router = Ember.Router.extend({
     root: Ember.Route.extend({
       index: Ember.Route.extend({
-        route: '/'
+        route: '/',
+        connectOutlets: function(router) {
+          router.get('applicationController').connectOutlet('index');
+        }
       })
     })
   });
