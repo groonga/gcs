@@ -11,15 +11,23 @@ html
     link(href="/css/bootstrap.min.css", rel="stylesheet")
     link(href="/css/gcs.css", rel="stylesheet")
 
+    script(data-template-name="application", type="text/x-handlebars")
+      .navbar.navbar-fixed-top
+        .navbar-inner
+          .container
+            a.brand(href="/") Groonga CloudSearch
+            form.navbar-form.pull-right#domain
+              select(id="domain-and-id", name="domain-and-id")
+            p.navbar-text.pull-right Domain:
+      .container
+        .row
+          .span12
+            form#search.form-search(onsubmit="searchExecute(); return false;")
+              input.search-query(type="text", name="query", value="")
+              input.btn(type="submit", value="Search")
+              input(type="hidden", name="start", value="")
+
+            #request-information
+            #results
+
   body
-    .navbar.navbar-fixed-top
-      .navbar-inner
-        .container
-          a.brand(href="/") Groonga CloudSearch
-          form.navbar-form.pull-right#domain
-            select(id="domain-and-id", name="domain-and-id")
-          p.navbar-text.pull-right Domain:
-    .container
-      .row
-        .span12
-          != body

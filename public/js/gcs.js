@@ -1,3 +1,20 @@
+$(document).ready(function($) {
+  var App = Ember.Application.create();
+
+  App.ApplicationView = Ember.View.extend({
+    templateName: 'application'
+  });
+
+  App.Router = Ember.Router.extend({
+    root: Ember.Route.extend({
+      index: Ember.Route.extend({
+        route: '/'
+      })
+    })
+  });
+  App.initialize();
+});
+
 var configurationEndpoint = 'http://' + location.host + '/';
 var hostAndPort = getHostAndPort();
 
@@ -121,7 +138,4 @@ $(document).ready(function($) {
         });
     }
   });
-
-  $('form#domain').submit(searchExecute);
-  $('form#search').submit(searchExecute);
 });
