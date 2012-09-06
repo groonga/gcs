@@ -1,36 +1,49 @@
-$(document).ready(function($) {
-  var App = Ember.Application.create();
+var App = Ember.Application.create();
 
-  App.ApplicationController = Ember.Controller.extend();
+App.ApplicationController = Ember.Controller.extend();
 
-  App.ApplicationView = Ember.View.extend({
-    templateName: 'application'
-  });
-
-  App.IndexView = Ember.View.extend({
-    templateName: 'index'
-  });
-
-  App.SearchView = Ember.View.extend({
-    templateName: 'search'
-  });
-
-  App.Router = Ember.Router.extend({
-    root: Ember.Route.extend({
-      index: Ember.Route.extend({
-        route: '/',
-        redirectsTo: 'search'
-      }),
-      search: Ember.Route.extend({
-        route: 'search',
-        connectOutlets: function(router) {
-          router.get('applicationController').connectOutlet('search');
-        }
-      })
-    })
-  });
-  App.initialize();
+App.ApplicationView = Ember.View.extend({
+  templateName: 'application'
 });
+
+App.IndexView = Ember.View.extend({
+  templateName: 'index'
+});
+
+App.SearchController = Ember.ObjectController.extend({
+  content: {query: null}
+});
+
+App.SearchView = Ember.View.extend({
+  templateName: 'search'
+});
+
+App.SearchFormView = Ember.View.extend({
+  tagName: 'form',
+  classNames: ['form-search'],
+
+  submit: function(event) {
+    var query = this.get('controller.queryField');
+    event.preventDefault();
+    this.get('controller').set('content.query', query);
+  }
+});
+
+App.Router = Ember.Router.extend({
+  root: Ember.Route.extend({
+    index: Ember.Route.extend({
+      route: '/',
+      redirectsTo: 'search'
+    }),
+    search: Ember.Route.extend({
+      route: 'search',
+      connectOutlets: function(router) {
+        router.get('applicationController').connectOutlet('search');
+      }
+    })
+  })
+});
+App.initialize();
 
 var configurationEndpoint = 'http://' + location.host + '/';
 var hostAndPort = getHostAndPort();
