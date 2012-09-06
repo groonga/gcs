@@ -24,7 +24,7 @@ $(document).ready(function($) {
       search: Ember.Route.extend({
         route: 'search',
         connectOutlets: function(router) {
-          router.get('applicationController').connectOutlet('index');
+          router.get('applicationController').connectOutlet('search');
         }
       })
     })

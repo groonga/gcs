@@ -25,6 +25,9 @@ html
             {{outlet}}
 
     script(data-template-name="index", type="text/x-handlebars")
+      h1 TODO
+
+    script(data-template-name="search", type="text/x-handlebars")
       form#search.form-search(onsubmit="searchExecute(); return false;")
         input.search-query(type="text", name="query", value="")
         input.btn(type="submit", value="Search")
@@ -32,5 +35,4 @@ html
 
       #request-information
       #results
-
   body
