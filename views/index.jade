@@ -28,6 +28,18 @@ html
       h1 TODO
 
     script(data-template-name="search", type="text/x-handlebars")
+      {{#view App.SearchFormView}}
+      {{view Ember.TextField valueBinding="queryField"}}
+      button(type="submit", class="btn") Search
+      {{/view}}
+
+      {{#if query}}
+      p
+        span Search results for 
+        strong {{query}}
+      {{/if}}
+
+
       form#search.form-search(onsubmit="searchExecute(); return false;")
         input.search-query(type="text", name="query", value="")
         input.btn(type="submit", value="Search")
