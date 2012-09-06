@@ -11,10 +11,18 @@ $(document).ready(function($) {
     templateName: 'index'
   });
 
+  App.SearchView = Ember.View.extend({
+    templateName: 'search'
+  });
+
   App.Router = Ember.Router.extend({
     root: Ember.Route.extend({
       index: Ember.Route.extend({
         route: '/',
+        redirectsTo: 'search'
+      }),
+      search: Ember.Route.extend({
+        route: 'search',
         connectOutlets: function(router) {
           router.get('applicationController').connectOutlet('index');
         }
