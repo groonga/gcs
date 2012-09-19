@@ -11,7 +11,26 @@ App.IndexView = Ember.View.extend({
 });
 
 App.SearchController = Ember.ObjectController.extend({
-  content: {query: null}
+  content: {query: null},
+  urlForRawRequest: function() {
+    var query = this.get('content.query');
+
+    // FIXME get domain related info and start parameter in ember.js way
+    var domains = $('#domain-and-id');
+    var domain = domains.find('option[value="' + domains.val() + '"]');
+    var searchEndpoint = 'http://' + domain.attr('value') + '/2011-02-01/search';
+    var fields = domain.attr('data-field-names');
+    var perPage = 5;
+    var start = parseInt($('form#search input[name="start"]').val() || '0', 10);
+    var params = {
+      q:     query,
+      size:  perPage,
+      start: start,
+      'return-fields': fields
+    };
+    var urlForRawRequest = searchEndpoint + '?' + jQuery.param(params);
+    return urlForRawRequest;
+  }.property('content.query')
 });
 
 App.SearchView = Ember.View.extend({

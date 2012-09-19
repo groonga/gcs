@@ -30,6 +30,7 @@ html
     script(data-template-name="search", type="text/x-handlebars")
       {{#view App.SearchFormView}}
       {{view Ember.TextField valueBinding="queryField"}}
+      input(type="hidden", name="start", value="")
       button(type="submit", class="btn") Search
       {{/view}}
 
@@ -37,8 +38,10 @@ html
       p
         span Search results for 
         strong {{query}}
-      {{/if}}
 
+      p View raw:
+        <a {{bindAttr href="urlForRawRequest"}}>{{urlForRawRequest}}</a>
+      {{/if}}
 
       form#search.form-search(onsubmit="searchExecute(); return false;")
         input.search-query(type="text", name="query", value="")
