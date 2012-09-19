@@ -10,27 +10,33 @@ App.IndexView = Ember.View.extend({
   templateName: 'index'
 });
 
+App.currentDomain = Ember.Object.create();
+
+App.DomainsController = Ember.ArrayController.create();
+App.DomainSelectorView = Ember.View.extend({
+  classNames: ["navbar-form", "pull-right"],
+  contentBinding: "App.DomainsController.content"
+});
+
 App.SearchController = Ember.ObjectController.extend({
   content: {query: null},
   urlForRawRequest: function() {
     var query = this.get('content.query');
+    var domain = App.currentDomain;
+    var searchEndpoint = 'http://' + domain.endpoint + '/2011-02-01/search';
 
     // FIXME get domain related info and start parameter in ember.js way
-    var domains = $('#domain-and-id');
-    var domain = domains.find('option[value="' + domains.val() + '"]');
-    var searchEndpoint = 'http://' + domain.attr('value') + '/2011-02-01/search';
-    var fields = domain.attr('data-field-names');
     var perPage = 5;
     var start = parseInt($('form#search input[name="start"]').val() || '0', 10);
     var params = {
       q:     query,
       size:  perPage,
       start: start,
-      'return-fields': fields
+      'return-fields': domain.fieldNames ? domain.fieldNames.join(',') : []
     };
     var urlForRawRequest = searchEndpoint + '?' + jQuery.param(params);
     return urlForRawRequest;
-  }.property('content.query')
+  }.property('content.query', 'App.currentDomain')
 });
 
 App.SearchView = Ember.View.extend({
@@ -42,9 +48,9 @@ App.SearchFormView = Ember.View.extend({
   classNames: ['form-search'],
 
   submit: function(event) {
-    var query = this.get('controller.queryField');
+    var query = this.get('controller.query');
     event.preventDefault();
-    this.get('controller').set('content.query', query);
+    this.get('controller').set('content.queryExcuted', query);
   }
 });
 
@@ -155,8 +161,9 @@ $(document).ready(function($) {
     },
     dataType: 'xml',
     success: function(data) {
-      $(data).find('DomainStatusList > member')
-        .each(function(index) {
+      var domains = [];
+      var domainStatusMembers = $(data).find('DomainStatusList > member');
+      domainStatusMembers.each(function(index) {
           var domain = $(this);
           var name = domain.find('DomainName').text();
           var endpoint = domain.find('SearchService > Endpoint').text();
@@ -181,9 +188,25 @@ $(document).ready(function($) {
                     .attr('value', endpoint)
                     .attr('data-field-names', fieldNames.join(','));
               $('#domain-and-id').append(option);
+              domains.push({
+                name: name,
+                endpoint: endpoint,
+                fieldNames: fieldNames
+              });
             }
           });
         });
+      var timer = setInterval(function() {
+        if (domains.length == domainStatusMembers.size()) {
+          // Now all DescribeIndexFields requests are done
+          clearInterval(timer);
+          App.DomainsController.set('content', domains);
+          if (domains.length > 0) {
+            // set default domain
+            App.set('currentDomain', domains[0]);
+          }
+        }
+      }, 100);
     }
   });
 });

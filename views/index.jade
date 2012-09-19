@@ -18,6 +18,9 @@ html
             a.brand(href="/") Groonga CloudSearch
             form.navbar-form.pull-right#domain
               select(id="domain-and-id", name="domain-and-id")
+            {{#view App.DomainSelectorView}}
+            {{view Ember.Select contentBinding="App.DomainsController.content" optionLabelPath="content.name" selectionBinding="App.currentDomain"}}
+            {{/view}}
             p.navbar-text.pull-right Domain:
       .container
         .row
@@ -29,19 +32,17 @@ html
 
     script(data-template-name="search", type="text/x-handlebars")
       {{#view App.SearchFormView}}
-      {{view Ember.TextField valueBinding="queryField"}}
+      {{view Ember.TextField valueBinding="query"}}
       input(type="hidden", name="start", value="")
       button(type="submit", class="btn") Search
       {{/view}}
 
-      {{#if query}}
       p
-        span Search results for 
+        span Query: 
         strong {{query}}
 
       p View raw:
         <a {{bindAttr href="urlForRawRequest"}}>{{urlForRawRequest}}</a>
-      {{/if}}
 
       form#search.form-search(onsubmit="searchExecute(); return false;")
         input.search-query(type="text", name="query", value="")
