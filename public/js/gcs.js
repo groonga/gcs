@@ -62,7 +62,6 @@ App.Router = Ember.Router.extend({
     })
   })
 });
-App.initialize();
 
 var configurationEndpoint = 'http://' + location.host + '/';
 var hostAndPort = getHostAndPort();
