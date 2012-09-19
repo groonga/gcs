@@ -18,25 +18,49 @@ App.DomainSelectorView = Ember.View.extend({
   contentBinding: "App.DomainsController.content"
 });
 
+App.SearchResultsController = Ember.ArrayController.create();
+
 App.SearchController = Ember.ObjectController.extend({
-  content: {query: null},
+  content: {query: null, perPage: 5, start: 0},
   urlForRawRequest: function() {
-    var query = this.get('content.query');
     var domain = App.currentDomain;
     var searchEndpoint = 'http://' + domain.endpoint + '/2011-02-01/search';
+    var params = this.get('paramsForRequest');
+    var urlForRawRequest = searchEndpoint + '?' + jQuery.param(params);
+    return urlForRawRequest;
+  }.property('paramsForRequest'),
+  paramsForRequest: function() {
+    var domain = App.currentDomain;
+    var query = this.get('content.query');
 
-    // FIXME get domain related info and start parameter in ember.js way
-    var perPage = 5;
-    var start = parseInt($('form#search input[name="start"]').val() || '0', 10);
+    var start = this.get('content.start');
     var params = {
       q:     query,
-      size:  perPage,
+      size:  this.get('content.perPage'),
       start: start,
       'return-fields': domain.fieldNames ? domain.fieldNames.join(',') : []
     };
-    var urlForRawRequest = searchEndpoint + '?' + jQuery.param(params);
-    return urlForRawRequest;
-  }.property('content.query', 'App.currentDomain')
+    return params;
+  }.property('content.query', 'content.perPage', 'content.start', 'App.currentDomain'),
+  executeSearch: function(query) {
+    this.set('queryExcuted', query);
+
+    var domain = App.currentDomain;
+    var searchEndpoint = 'http://' + domain.endpoint + '/2011-02-01/search';
+
+    var perPage = this.get('content.perPage');
+    var params = this.get('paramsForRequest');
+    $.ajax({
+      type: 'GET',
+      url: searchEndpoint,
+      data: params,
+      dataType: 'jsonp',
+      success: function(data) {
+        renderResults(data, perPage);
+        $('#results').show();
+      }
+    });
+  }
 });
 
 App.SearchView = Ember.View.extend({
@@ -49,8 +73,10 @@ App.SearchFormView = Ember.View.extend({
 
   submit: function(event) {
     var query = this.get('controller.query');
+    var controller = this.get('controller');
+    controller.executeSearch(query);
+
     event.preventDefault();
-    this.get('controller').set('content.queryExcuted', query);
   }
 });
 
