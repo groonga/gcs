@@ -16,8 +16,6 @@ html
         .navbar-inner
           .container
             a.brand(href="/") Groonga CloudSearch
-            form.navbar-form.pull-right#domain
-              select(id="domain-and-id", name="domain-and-id")
             {{#view App.DomainSelectorView}}
             {{view Ember.Select contentBinding="App.DomainsController.content" optionLabelPath="content.name" selectionBinding="App.currentDomain"}}
             {{/view}}
@@ -43,11 +41,6 @@ html
 
       p View raw:
         <a {{bindAttr href="urlForRawRequest"}}>{{urlForRawRequest}}</a>
-
-      form#search.form-search(onsubmit="searchExecute(); return false;")
-        input.search-query(type="text", name="query", value="")
-        input.btn(type="submit", value="Search")
-        input(type="hidden", name="start", value="")
 
       #request-information
       #results

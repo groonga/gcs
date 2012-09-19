@@ -32,7 +32,6 @@ App.SearchController = Ember.ObjectController.extend({
   paramsForRequest: function() {
     var domain = App.currentDomain;
     var query = this.get('content.query');
-
     var start = this.get('content.start');
     var params = {
       q:     query,
@@ -43,8 +42,6 @@ App.SearchController = Ember.ObjectController.extend({
     return params;
   }.property('content.query', 'content.perPage', 'content.start', 'App.currentDomain'),
   executeSearch: function(query) {
-    this.set('queryExcuted', query);
-
     var domain = App.currentDomain;
     var searchEndpoint = 'http://' + domain.endpoint + '/2011-02-01/search';
 
@@ -209,11 +206,6 @@ $(document).ready(function($) {
                   var field = $(this);
                   fieldNames.push(field.find('IndexFieldName').text());
                 });
-              var option = $("<option/>")
-                    .text(name)
-                    .attr('value', endpoint)
-                    .attr('data-field-names', fieldNames.join(','));
-              $('#domain-and-id').append(option);
               domains.push({
                 name: name,
                 endpoint: endpoint,
