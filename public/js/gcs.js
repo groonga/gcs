@@ -19,7 +19,10 @@ App.DomainSelectorView = Ember.View.extend({
 });
 
 App.SearchController = Ember.ObjectController.extend({
-  content: {query: null, perPage: 5, start: 0},
+  content: null,
+  query: null,
+  perPage: 5,
+  start: 0,
   urlForRawRequest: function() {
     var domain = App.currentDomain;
     var searchEndpoint = 'http://' + domain.endpoint + '/2011-02-01/search';
@@ -29,21 +32,21 @@ App.SearchController = Ember.ObjectController.extend({
   }.property('paramsForRequest'),
   paramsForRequest: function() {
     var domain = App.currentDomain;
-    var query = this.get('content.query');
-    var start = this.get('content.start');
+    var query = this.get('query');
+    var start = this.get('start');
     var params = {
       q:     query,
-      size:  this.get('content.perPage'),
+      size:  this.get('perPage'),
       start: start,
       'return-fields': domain.fieldNames ? domain.fieldNames.join(',') : []
     };
     return params;
-  }.property('content.query', 'content.perPage', 'content.start', 'App.currentDomain'),
+  }.property('query', 'perPage', 'start', 'App.currentDomain'),
   executeSearch: function(query) {
     var domain = App.currentDomain;
     var searchEndpoint = 'http://' + domain.endpoint + '/2011-02-01/search';
 
-    var perPage = this.get('content.perPage');
+    var perPage = this.get('perPage');
     var params = this.get('paramsForRequest');
     $.ajax({
       type: 'GET',
