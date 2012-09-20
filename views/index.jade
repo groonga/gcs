@@ -17,7 +17,7 @@ html
           .container
             a.brand(href="/") Groonga CloudSearch
             {{#view App.DomainSelectorView}}
-            {{view Ember.Select contentBinding="App.DomainsController.content" optionLabelPath="content.name" selectionBinding="App.currentDomain"}}
+            {{view Ember.Select contentBinding="App.domainsController.content" optionLabelPath="content.name" selectionBinding="App.currentDomain"}}
             {{/view}}
             p.navbar-text.pull-right Domain:
       .container

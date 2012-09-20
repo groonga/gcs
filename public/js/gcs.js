@@ -12,7 +12,7 @@ App.IndexView = Ember.View.extend({
 
 App.currentDomain = Ember.Object.create();
 
-App.DomainsController = Ember.ArrayController.create();
+App.domainsController = Ember.ArrayController.create();
 App.DomainSelectorView = Ember.View.extend({
   classNames: ["navbar-form", "pull-right"],
   contentBinding: "App.DomainsController.content"
@@ -218,7 +218,7 @@ $(document).ready(function($) {
         if (domains.length == domainStatusMembers.size()) {
           // Now all DescribeIndexFields requests are done
           clearInterval(timer);
-          App.DomainsController.set('content', domains);
+          App.domainsController.set('content', domains);
           if (domains.length > 0) {
             // set default domain
             App.set('currentDomain', domains[0]);
