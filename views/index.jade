@@ -42,6 +42,13 @@ html
       p View raw:
         <a {{bindAttr href="urlForRawRequest"}}>{{urlForRawRequest}}</a>
 
-      #request-information
+      {{#if searched}}
+      {{#if resultsAvailable}}
+      .alert.alert-info Showing {{numStart}} to {{numEnd}} of {{numHits}} results
+      {{else}}
+      .alert.alert-info Record not found
+      {{/if}}
+      {{/if}}
+
       #results
   body

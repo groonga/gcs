@@ -23,6 +23,13 @@ App.SearchController = Ember.ObjectController.extend({
   query: null,
   perPage: 5,
   start: 0,
+  numEnd: null,
+  numHits: null,
+  resultsAvailable: null,
+  searched: false,
+  numStart: function() {
+    return this.get('start') + 1;
+  }.property('start'),
   urlForRawRequest: function() {
     var domain = App.currentDomain;
     var searchEndpoint = 'http://' + domain.endpoint + '/2011-02-01/search';
@@ -48,12 +55,18 @@ App.SearchController = Ember.ObjectController.extend({
 
     var perPage = this.get('perPage');
     var params = this.get('paramsForRequest');
+    var start = this.get('start');
+    var self = this;
     $.ajax({
       type: 'GET',
       url: searchEndpoint,
       data: params,
       dataType: 'jsonp',
       success: function(data) {
+        self.set('searched', true);
+        self.set('resultsAvailable', data.hits.found > 0);
+        self.set('numHits', data.hits.found);
+        self.set('numEnd', start + data.hits.found);
         renderResults(data, perPage);
         $('#results').show();
       }
@@ -136,7 +149,6 @@ function renderResults(data, perPage) {
 
   var from = start + 1;
   var to = start + returned;
-  $('#showing').text('Showing ' + from + ' to ' + to + ' of ' + found + ' Results');
 }
 
 function renderRequestInformation(data) {
