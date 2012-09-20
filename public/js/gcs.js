@@ -18,8 +18,6 @@ App.DomainSelectorView = Ember.View.extend({
   contentBinding: "App.DomainsController.content"
 });
 
-App.SearchResultsController = Ember.ArrayController.create();
-
 App.SearchController = Ember.ObjectController.extend({
   content: {query: null, perPage: 5, start: 0},
   urlForRawRequest: function() {
