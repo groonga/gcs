@@ -205,7 +205,7 @@ App.SearchController = Ember.ArrayController.extend({
     }
     this.set('start', newStart);
     this.executeSearch();
-  },
+  }
 });
 
 App.SearchView = Ember.View.extend({
