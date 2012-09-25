@@ -147,7 +147,7 @@ App.SearchController = Ember.ArrayController.extend({
   urlForRawRequest: function() {
     var domain = this.get('domain');
     if (!domain) {
-      return ''
+      return '';
     }
     var searchEndpoint = domain.get('searchEndpoint');
     var params = this.get('paramsForRequest');
