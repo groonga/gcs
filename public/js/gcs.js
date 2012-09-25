@@ -20,11 +20,16 @@ App.Domain = Ember.Object.extend({
 
 App.Domains = Ember.Object.extend({
   all: [],
+  host: location.host,
+  configurationEndpoint: function() {
+    return 'http://' + this.get('host') + '/';
+  }.property('host'),
   fetch: function() {
+    console.log(this.get('configurationEndpoint'));
     var self = this;
     $.ajax({
       type: 'GET',
-      url:  configurationEndpoint,
+      url:  self.get('configurationEndpoint'),
       data: {
         Version: '2011-02-01',
         Action:  'DescribeDomains'
@@ -39,7 +44,7 @@ App.Domains = Ember.Object.extend({
             var endpoint = domain.find('SearchService > Endpoint').text();
             $.ajax({
               type: 'GET',
-              url:  configurationEndpoint,
+              url:  self.get('configurationEndpoint'),
               data: {
                 Version:    '2011-02-01',
                 Action:     'DescribeIndexFields',
@@ -142,6 +147,9 @@ App.SearchController = Ember.ArrayController.extend({
   }.property('data'),
   urlForRawRequest: function() {
     var domain = this.get('domain');
+    if (!domain) {
+      return ''
+    }
     var searchEndpoint = domain.get('searchEndpoint');
     var params = this.get('paramsForRequest');
     var urlForRawRequest = searchEndpoint + '?' + jQuery.param(params);
@@ -241,7 +249,6 @@ App.Router = Ember.Router.extend({
   })
 });
 
-var configurationEndpoint = 'http://' + location.host + '/';
 var hostAndPort = getHostAndPort();
 
 function getHostAndPort() {
