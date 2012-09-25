@@ -24,6 +24,7 @@ App.SearchController = Ember.ArrayController.extend({
   perPage: 5,
   start: 0,
   data: null,
+  domainBinding: 'App.currentDomain',
   numStart: function() {
     return this.get('start') + 1;
   }.property('start'),
@@ -62,18 +63,16 @@ App.SearchController = Ember.ArrayController.extend({
     return content;
   }.property('data'),
   searchEndpoint: function() {
-    var domain = App.currentDomain;
-    return 'http://' + domain.endpoint + '/2011-02-01/search';
-  }.property('App.currentDomain'),
+    return 'http://' + this.get('domain').endpoint + '/2011-02-01/search';
+  }.property('domain'),
   urlForRawRequest: function() {
-    var domain = App.currentDomain;
     var searchEndpoint = this.get('searchEndpoint');
     var params = this.get('paramsForRequest');
     var urlForRawRequest = searchEndpoint + '?' + jQuery.param(params);
     return urlForRawRequest;
-  }.property('paramsForRequest'),
+  }.property('paramsForRequest', 'searchEndpoint'),
   paramsForRequest: function() {
-    var domain = App.currentDomain;
+    var domain = this.get('domain');
     var query = this.get('query');
     var start = this.get('start');
     var params = {
@@ -85,7 +84,6 @@ App.SearchController = Ember.ArrayController.extend({
     return params;
   }.property('query', 'perPage', 'start', 'searchEndpoint'),
   executeSearch: function(query) {
-    var domain = App.currentDomain;
     var searchEndpoint = this.get('searchEndpoint');
     var params = this.get('paramsForRequest');
     var self = this;
