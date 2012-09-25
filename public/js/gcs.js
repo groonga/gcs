@@ -92,7 +92,29 @@ App.SearchController = Ember.ArrayController.extend({
         self.set('data', data);
       }
     });
-  }
+  },
+  nextPageAvailable: function() {
+    return this.get('start') + this.get('perPage') < this.get('numHits');
+  }.property('start', 'perPage', 'numHits'),
+  nextPage: function() {
+    console.log("nextPage");
+    var newStart = this.get('start') + this.get('perPage');
+    if (newStart < this.get('numHits')) {
+      this.set('start', newStart);
+      this.executeSearch();
+    }
+  },
+  previousPageAvailable: function() {
+    return this.get('start') > 0;
+  }.property('start'),
+  previousPage: function() {
+    var newStart = this.get('start') - this.get('perPage');
+    if (newStart < 0) {
+      newStart = 0;
+    }
+    this.set('start', newStart);
+    this.executeSearch();
+  },
 });
 
 App.SearchView = Ember.View.extend({
@@ -122,6 +144,12 @@ App.Router = Ember.Router.extend({
       route: 'search',
       connectOutlets: function(router) {
         router.get('applicationController').connectOutlet('search');
+      },
+      nextPage: function(router) {
+        router.get('searchController').nextPage();
+      },
+      previousPage: function(router) {
+        router.get('searchController').previousPage();
       }
     })
   })

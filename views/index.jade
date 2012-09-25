@@ -51,6 +51,22 @@ html
 
       {{#if resultsAvailable}}
       //- DOM structure of this table seems to be broken. The issue https://github.com/wycats/handlebars.js/issues/184 may be related with this.
+      ul.pager
+        {{#if previousPageAvailable}}
+        li.previous
+          <a class="previous" {{action previousPage}}>&larr; Previous</a>
+        {{else}}
+        li.previous.disabled
+          a &larr; Previous
+        {{/if}}
+        {{#if nextPageAvailable}}
+        li.next
+          <a class="next" {{action nextPage}}>Next &rarr;</a>
+        {{else}}
+        li.next.disabled
+          a Next &rarr;
+        {{/if}}
+
       table.table.table-bordered
         tbody
           {{#each controller}}
