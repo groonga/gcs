@@ -61,9 +61,13 @@ App.SearchController = Ember.ArrayController.extend({
     });
     return content;
   }.property('data'),
+  searchEndpoint: function() {
+    var domain = App.currentDomain;
+    return 'http://' + domain.endpoint + '/2011-02-01/search';
+  }.property('App.currentDomain'),
   urlForRawRequest: function() {
     var domain = App.currentDomain;
-    var searchEndpoint = 'http://' + domain.endpoint + '/2011-02-01/search';
+    var searchEndpoint = this.get('searchEndpoint');
     var params = this.get('paramsForRequest');
     var urlForRawRequest = searchEndpoint + '?' + jQuery.param(params);
     return urlForRawRequest;
@@ -79,11 +83,10 @@ App.SearchController = Ember.ArrayController.extend({
       'return-fields': domain.fieldNames ? domain.fieldNames.join(',') : []
     };
     return params;
-  }.property('query', 'perPage', 'start', 'App.currentDomain'),
+  }.property('query', 'perPage', 'start', 'searchEndpoint'),
   executeSearch: function(query) {
     var domain = App.currentDomain;
-    var searchEndpoint = 'http://' + domain.endpoint + '/2011-02-01/search';
-
+    var searchEndpoint = this.get('searchEndpoint');
     var params = this.get('paramsForRequest');
     var self = this;
     $.ajax({
