@@ -13,6 +13,9 @@ App.IndexView = Ember.View.extend({
 App.currentDomain = Ember.Object.create();
 
 App.Domain = Ember.Object.extend({
+  searchEndpoint: function() {
+    return 'http://' + this.get('endpoint') + '/2011-02-01/search';
+  }.property('endpoint')
 });
 
 App.Domains = Ember.Object.extend({
@@ -137,19 +140,13 @@ App.SearchController = Ember.ArrayController.extend({
     });
     return content;
   }.property('data'),
-  searchEndpoint: function() {
-    var domain = this.get('domain');
-    if (!domain) {
-      return '';
-    }
-    return 'http://' + this.get('domain').endpoint + '/2011-02-01/search';
-  }.property('domain'),
   urlForRawRequest: function() {
-    var searchEndpoint = this.get('searchEndpoint');
+    var domain = this.get('domain');
+    var searchEndpoint = domain.get('searchEndpoint');
     var params = this.get('paramsForRequest');
     var urlForRawRequest = searchEndpoint + '?' + jQuery.param(params);
     return urlForRawRequest;
-  }.property('paramsForRequest', 'searchEndpoint'),
+  }.property('paramsForRequest', 'domain'),
   paramsForRequest: function() {
     var domain = this.get('domain');
     if (!domain) {
@@ -163,16 +160,17 @@ App.SearchController = Ember.ArrayController.extend({
       'return-fields': returnFields
     };
     return params;
-  }.property('query', 'perPage', 'start', 'searchEndpoint'),
+  }.property('query', 'perPage', 'start', 'domain'),
   reset: function() {
     this.set('data', null);
     this.set('start', 0);
   },
   executeSearch: function() {
     var self = this;
+    var domain = this.get('domain');
     $.ajax({
       type: 'GET',
-      url: self.get('searchEndpoint'),
+      url: domain.get('searchEndpoint'),
       data: self.get('paramsForRequest'),
       dataType: 'jsonp',
       success: function(data) {
