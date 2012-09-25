@@ -23,13 +23,16 @@ App.SearchController = Ember.ArrayController.extend({
   query: null,
   perPage: 5,
   start: 0,
-  numEnd: null,
   numHits: null,
+  numReceived: null,
   resultsAvailable: null,
   searched: false,
   numStart: function() {
     return this.get('start') + 1;
   }.property('start'),
+  numEnd: function() {
+    return this.get('start') + this.get('numReceived');
+  }.property('numReceived', 'start'),
   urlForRawRequest: function() {
     var domain = App.currentDomain;
     var searchEndpoint = 'http://' + domain.endpoint + '/2011-02-01/search';
@@ -66,7 +69,7 @@ App.SearchController = Ember.ArrayController.extend({
         self.set('searched', true);
         self.set('resultsAvailable', data.hits.found > 0);
         self.set('numHits', data.hits.found);
-        self.set('numEnd', start + data.hits.found);
+        self.set('numReceived', data.hits.hit.length);
         var content = data.hits.hit.map(function(hit, index) {
           var pairs = [];
           jQuery.each(hit.data, function(columnName, value) {
