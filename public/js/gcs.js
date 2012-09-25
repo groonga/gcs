@@ -13,9 +13,36 @@ App.IndexView = Ember.View.extend({
 App.currentDomain = Ember.Object.create();
 
 App.Domain = Ember.Object.extend({
+  name: null,
+  endpoint: null,
+  configurationEndpoint: null,
+  fieldNames: [],
+
   searchEndpoint: function() {
     return 'http://' + this.get('endpoint') + '/2011-02-01/search';
-  }.property('endpoint')
+  }.property('endpoint'),
+  fetchFields: function() {
+    var self = this;
+    $.ajax({
+      type: 'GET',
+      url:  this.get('configurationEndpoint'),
+      data: {
+        Version:    '2011-02-01',
+        Action:     'DescribeIndexFields',
+        DomainName: this.get('name')
+      },
+      dataType: 'xml',
+      success: function(data) {
+        var fieldNames = [];
+        $(data).find('IndexFields > member')
+        .each(function(index) {
+          var field = $(this);
+          fieldNames.push(field.find('IndexFieldName').text());
+        });
+        self.set('fieldNames', fieldNames);
+      }
+    });
+  }
 });
 
 App.Domains = Ember.Object.extend({
@@ -38,33 +65,16 @@ App.Domains = Ember.Object.extend({
         var domains = [];
         var domainStatusMembers = $(data).find('DomainStatusList > member');
         domainStatusMembers.each(function(index) {
-            var domain = $(this);
-            var name = domain.find('DomainName').text();
-            var endpoint = domain.find('SearchService > Endpoint').text();
-            $.ajax({
-              type: 'GET',
-              url:  self.get('configurationEndpoint'),
-              data: {
-                Version:    '2011-02-01',
-                Action:     'DescribeIndexFields',
-                DomainName: name
-              },
-              dataType: 'xml',
-              success: function(data) {
-                var fieldNames = [];
-                $(data).find('IndexFields > member')
-                  .each(function(index) {
-                    var field = $(this);
-                    fieldNames.push(field.find('IndexFieldName').text());
-                  });
-                var domain = App.Domain.create({
-                  name: name,
-                  endpoint: endpoint,
-                  fieldNames: fieldNames
-                });
-                domains.push(domain);
-              }
+            var domainElement = $(this);
+            var name = domainElement.find('DomainName').text();
+            var endpoint = domainElement.find('SearchService > Endpoint').text();
+            var domain = App.Domain.create({
+              name: name,
+              endpoint: endpoint,
+              configurationEndpoint: self.get('configurationEndpoint')
             });
+            domain.fetchFields();
+            domains.push(domain);
           });
         var timer = setInterval(function() {
           if (domains.length == domainStatusMembers.size()) {
