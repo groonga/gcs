@@ -83,13 +83,11 @@ App.SearchController = Ember.ArrayController.extend({
     return params;
   }.property('query', 'perPage', 'start', 'searchEndpoint'),
   executeSearch: function(query) {
-    var searchEndpoint = this.get('searchEndpoint');
-    var params = this.get('paramsForRequest');
     var self = this;
     $.ajax({
       type: 'GET',
-      url: searchEndpoint,
-      data: params,
+      url: self.get('searchEndpoint'),
+      data: self.get('paramsForRequest'),
       dataType: 'jsonp',
       success: function(data) {
         self.set('data', data);
