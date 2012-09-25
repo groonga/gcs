@@ -25,17 +25,4 @@ suite('dashboard', function() {
         done(error);
       });
   });
-
-  test('GET /js/templates.js', function(done) {
-    utils
-      .get('/js/templates.js')
-      .next(function(response) {
-        assert.equal(response.statusCode, 200);
-        assert.include(response.body, "this.JST");
-        done();
-      })
-      .error(function(error) {
-        done(error);
-      });
-  });
 });
