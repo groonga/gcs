@@ -12,10 +12,86 @@ App.IndexView = Ember.View.extend({
 
 App.currentDomain = Ember.Object.create();
 
-App.domainsController = Ember.ArrayController.create();
+App.Domain = Ember.Object.extend({
+});
+
+App.Domains = Ember.Object.extend({
+  all: [],
+  fetch: function() {
+    var self = this;
+    $.ajax({
+      type: 'GET',
+      url:  configurationEndpoint,
+      data: {
+        Version: '2011-02-01',
+        Action:  'DescribeDomains'
+      },
+      dataType: 'xml',
+      success: function(data) {
+        var domains = [];
+        var domainStatusMembers = $(data).find('DomainStatusList > member');
+        domainStatusMembers.each(function(index) {
+            var domain = $(this);
+            var name = domain.find('DomainName').text();
+            var endpoint = domain.find('SearchService > Endpoint').text();
+            $.ajax({
+              type: 'GET',
+              url:  configurationEndpoint,
+              data: {
+                Version:    '2011-02-01',
+                Action:     'DescribeIndexFields',
+                DomainName: name
+              },
+              dataType: 'xml',
+              success: function(data) {
+                var fieldNames = [];
+                $(data).find('IndexFields > member')
+                  .each(function(index) {
+                    var field = $(this);
+                    fieldNames.push(field.find('IndexFieldName').text());
+                  });
+                var domain = App.Domain.create({
+                  name: name,
+                  endpoint: endpoint,
+                  fieldNames: fieldNames
+                });
+                domains.push(domain);
+              }
+            });
+          });
+        var timer = setInterval(function() {
+          if (domains.length == domainStatusMembers.size()) {
+            // Now all DescribeIndexFields requests are done
+            clearInterval(timer);
+            self.set('all', domains);
+          }
+        }, 100);
+      }
+    });
+  },
+  first: function() {
+    if (this.all.length > 0) {
+      return this.all[0];
+    } else {
+      return null;
+    }
+  }.property('all')
+});
+
+App.domains = App.Domains.create();
+App.domains.fetch();
+
+App.domainsController = Ember.ArrayController.create({
+  contentBinding: "App.domains.all",
+  domainsUpdated: function() {
+    if (!App.currentDomain) {
+      var first = App.domains.get('first');
+      App.set('currentDomain', first);
+    }
+  }.observes("App.domains.all")
+});
 App.DomainSelectorView = Ember.View.extend({
-  classNames: ["navbar-form", "pull-right"],
-  contentBinding: "App.DomainsController.content"
+  classNames: ["navbar-form", "pull-right"]
 });
 
 App.SearchController = Ember.ArrayController.extend({
@@ -62,6 +138,10 @@ App.SearchController = Ember.ArrayController.extend({
     return content;
   }.property('data'),
   searchEndpoint: function() {
+    var domain = this.get('domain');
+    if (!domain) {
+      return '';
+    }
     return 'http://' + this.get('domain').endpoint + '/2011-02-01/search';
   }.property('domain'),
   urlForRawRequest: function() {
@@ -72,6 +152,9 @@ App.SearchController = Ember.ArrayController.extend({
   }.property('paramsForRequest', 'searchEndpoint'),
   paramsForRequest: function() {
     var domain = this.get('domain');
+    if (!domain) {
+      return {};
+    }
     var returnFields = domain.fieldNames ? domain.fieldNames.join(',') : [];
     var params = {
       q:     this.get('query'),
@@ -171,58 +254,3 @@ function getHostAndPort() {
     hostAndPort[0] += '.xip.io';
   return hostAndPort.join(':');
 }
-
-$(document).ready(function($) {
-  $.ajax({
-    type: 'GET',
-    url:  configurationEndpoint,
-    data: {
-      Version: '2011-02-01',
-      Action:  'DescribeDomains'
-    },
-    dataType: 'xml',
-    success: function(data) {
-      var domains = [];
-      var domainStatusMembers = $(data).find('DomainStatusList > member');
-      domainStatusMembers.each(function(index) {
-          var domain = $(this);
-          var name = domain.find('DomainName').text();
-          var endpoint = domain.find('SearchService > Endpoint').text();
-          $.ajax({
-            type: 'GET',
-            url:  configurationEndpoint,
-            data: {
-              Version:    '2011-02-01',
-              Action:     'DescribeIndexFields',
-              DomainName: name
-            },
-            dataType: 'xml',
-            success: function(data) {
-              var fieldNames = [];
-              $(data).find('IndexFields > member')
-                .each(function(index) {
-                  var field = $(this);
-                  fieldNames.push(field.find('IndexFieldName').text());
-                });
-              domains.push({
-                name: name,
-                endpoint: endpoint,
-                fieldNames: fieldNames
-              });
-            }
-          });
-        });
-      var timer = setInterval(function() {
-        if (domains.length == domainStatusMembers.size()) {
-          // Now all DescribeIndexFields requests are done
-          clearInterval(timer);
-          App.domainsController.set('content', domains);
-          if (domains.length > 0) {
-            // set default domain
-            App.set('currentDomain', domains[0]);
-          }
-        }
-      }, 100);
-    }
-  });
-});
