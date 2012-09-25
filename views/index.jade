@@ -50,5 +50,22 @@ html
       {{/if}}
       {{/if}}
 
+      {{#if resultsAvailable}}
+      //- DOM structure of this table seems to be broken. The issue https://github.com/wycats/handlebars.js/issues/184 may be related with this.
+      table.table.table-bordered
+        tbody
+          {{#each controller}}
+          tr.id-row
+            td {{index}}
+            td.id-cell(colspan=2) {{id}}
+          {{#each data}}
+          tr
+            td
+            td {{columnName}}
+            td {{value}}
+          {{/each}}
+          {{/each}}
+      {{/if}}
+
       #results
   body

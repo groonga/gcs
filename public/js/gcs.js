@@ -18,8 +18,8 @@ App.DomainSelectorView = Ember.View.extend({
   contentBinding: "App.DomainsController.content"
 });
 
-App.SearchController = Ember.ObjectController.extend({
-  content: null,
+App.SearchController = Ember.ArrayController.extend({
+  content: [],
   query: null,
   perPage: 5,
   start: 0,
@@ -67,8 +67,18 @@ App.SearchController = Ember.ObjectController.extend({
         self.set('resultsAvailable', data.hits.found > 0);
         self.set('numHits', data.hits.found);
         self.set('numEnd', start + data.hits.found);
-        renderResults(data, perPage);
-        $('#results').show();
+        var content = data.hits.hit.map(function(hit, index) {
+          var pairs = [];
+          jQuery.each(hit.data, function(columnName, value) {
+            pairs.push({columnName: columnName, value: value});
+          });
+          return {
+            index: start + index + 1,
+            id: hit.id,
+            data: pairs
+          };
+        });
+        self.set('content', content);
       }
     });
   }
@@ -116,75 +126,6 @@ function getHostAndPort() {
   if (hostAndPort[0].match(/^\d+\.\d+\.\d+\.\d+$/))
     hostAndPort[0] += '.xip.io';
   return hostAndPort.join(':');
-}
-
-function renderResults(data, perPage) {
-  var rendered = JST['results'](data);
-  var found = data.hits.found;
-  var start = data.hits.start;
-  var returned = data.hits.hit.length;
-  var nextStart = start + perPage;
-  var previousStart = data.hits.start - perPage;
-  $('#results').html(rendered);
-
-  if (previousStart < 0) {
-    $('#pager .previous').addClass('disabled');
-    $('#pager .previous a').click(function() { return false; });
-  } else {
-    $('#pager .previous a').click(function() {
-      $('form#search input[name="start"]').val(previousStart);
-      searchExecute();
-    });
-  }
-
-  if (nextStart >= data.hits.found) {
-    $('#pager .next').addClass('disabled');
-    $('#pager .previous a').click(function() { return false; });
-  } else {
-    $('#pager .next a').click(function() {
-      $('form#search input[name="start"]').val(nextStart);
-      searchExecute();
-    });
-  }
-
-  var from = start + 1;
-  var to = start + returned;
-}
-
-function renderRequestInformation(data) {
-  var rendered = JST['request_information'](data);
-  $('#request-information').html(rendered);
-}
-
-function searchExecute() {
-  var query = $('form#search input[name="query"]').val();
-  var domains = $('#domain-and-id');
-  var domain = domains.find('option[value="' + domains.val() + '"]');
-  var searchEndpoint = 'http://' + domain.attr('value') + '/2011-02-01/search';
-  var fields = domain.attr('data-field-names');
-  var perPage = 5;
-  var start = parseInt($('form#search input[name="start"]').val() || '0', 10);
-  var params = {
-        q:     query,
-        size:  perPage,
-        start: start,
-        'return-fields': fields
-      };
-  var urlForRawRequest = searchEndpoint + '?' + jQuery.param(params);
-  renderRequestInformation({urlForRawRequest: urlForRawRequest});
-
-  $('#results').empty();
-  $.ajax({
-    type: 'GET',
-    url: searchEndpoint,
-    data: params,
-    dataType: 'jsonp',
-    success: function(data) {
-      renderResults(data, perPage);
-      $('#results').show();
-    }
-  });
-  return false;
 }
 
 $(document).ready(function($) {
