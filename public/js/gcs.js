@@ -73,13 +73,12 @@ App.SearchController = Ember.ArrayController.extend({
   }.property('paramsForRequest', 'searchEndpoint'),
   paramsForRequest: function() {
     var domain = this.get('domain');
-    var query = this.get('query');
-    var start = this.get('start');
+    var returnFields = domain.fieldNames ? domain.fieldNames.join(',') : [];
     var params = {
-      q:     query,
+      q:     this.get('query'),
       size:  this.get('perPage'),
-      start: start,
-      'return-fields': domain.fieldNames ? domain.fieldNames.join(',') : []
+      start: this.get('start'),
+      'return-fields': returnFields
     };
     return params;
   }.property('query', 'perPage', 'start', 'searchEndpoint'),
