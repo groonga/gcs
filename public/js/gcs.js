@@ -248,14 +248,3 @@ App.Router = Ember.Router.extend({
     })
   })
 });
-
-var hostAndPort = getHostAndPort();
-
-function getHostAndPort() {
-  var hostAndPort = location.host.split(':');
-  if (hostAndPort[0] == 'localhost')
-    hostAndPort[0] = '127.0.0.1';
-  if (hostAndPort[0].match(/^\d+\.\d+\.\d+\.\d+$/))
-    hostAndPort[0] += '.xip.io';
-  return hostAndPort.join(':');
-}
