@@ -19,7 +19,6 @@ App.DomainSelectorView = Ember.View.extend({
 });
 
 App.SearchController = Ember.ArrayController.extend({
-  content: [],
   query: null,
   perPage: 5,
   start: 0,
