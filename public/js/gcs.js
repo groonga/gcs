@@ -25,7 +25,6 @@ App.Domains = Ember.Object.extend({
     return 'http://' + this.get('host') + '/';
   }.property('host'),
   fetch: function() {
-    console.log(this.get('configurationEndpoint'));
     var self = this;
     $.ajax({
       type: 'GET',
@@ -190,7 +189,6 @@ App.SearchController = Ember.ArrayController.extend({
     return this.get('start') + this.get('perPage') < this.get('numHits');
   }.property('start', 'perPage', 'numHits'),
   nextPage: function() {
-    console.log("nextPage");
     var newStart = this.get('start') + this.get('perPage');
     if (newStart < this.get('numHits')) {
       this.set('start', newStart);
