@@ -81,6 +81,10 @@ App.SearchController = Ember.ArrayController.extend({
     };
     return params;
   }.property('query', 'perPage', 'start', 'searchEndpoint'),
+  reset: function() {
+    this.set('data', null);
+    this.set('start', 0);
+  },
   executeSearch: function(query) {
     var self = this;
     $.ajax({
@@ -128,6 +132,7 @@ App.SearchFormView = Ember.View.extend({
   submit: function(event) {
     var query = this.get('controller.query');
     var controller = this.get('controller');
+    controller.reset();
     controller.executeSearch(query);
 
     event.preventDefault();
