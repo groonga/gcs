@@ -10,8 +10,6 @@ App.IndexView = Ember.View.extend({
   templateName: 'index'
 });
 
-App.currentDomain = Ember.Object.create();
-
 App.Domain = Ember.Object.extend({
   name: null,
   endpoint: null,
@@ -98,25 +96,11 @@ App.Domains = Ember.Object.extend({
 App.domains = App.Domains.create();
 App.domains.fetch();
 
-App.domainsController = Ember.ArrayController.create({
-  contentBinding: "App.domains.all",
-  domainsUpdated: function() {
-    if (!App.currentDomain) {
-      var first = App.domains.get('first');
-      App.set('currentDomain', first);
-    }
-  }.observes("App.domains.all")
-});
-App.DomainSelectorView = Ember.View.extend({
-  classNames: ["navbar-form", "pull-right"]
-});
-
 App.SearchController = Ember.ArrayController.extend({
   query: null,
   perPage: 5,
   start: 0,
   data: null,
-  domainBinding: 'App.currentDomain',
   numStart: function() {
     return this.get('start') + 1;
   }.property('start'),
@@ -236,15 +220,31 @@ App.SearchFormView = Ember.View.extend({
   }
 });
 
+App.IndexController = Ember.ArrayController.extend({
+  contentBinding: 'App.domains.all'
+});
+
+App.IndexView = Ember.View.extend({
+  templateName: 'index'
+});
+
 App.Router = Ember.Router.extend({
   root: Ember.Route.extend({
+    showIndex: Ember.State.transitionTo('root.index'),
     index: Ember.Route.extend({
       route: '/',
-      redirectsTo: 'search'
+      connectOutlets: function(router) {
+        router.get('applicationController').connectOutlet('index');
+      },
+      search: function(router, event) {
+        router.transitionTo('search', {domain: event.context});
+      },
     }),
     search: Ember.Route.extend({
-      route: 'search',
-      connectOutlets: function(router) {
+      route: 'search/:domainName',
+      connectOutlets: function(router, context) {
+        var controller = router.get('searchController');
+        controller.set('domain', context.domain);
         router.get('applicationController').connectOutlet('search');
       },
       nextPage: function(router) {
@@ -252,6 +252,11 @@ App.Router = Ember.Router.extend({
       },
       previousPage: function(router) {
         router.get('searchController').previousPage();
+      },
+      serialize: function(router, context) {
+        return {
+          domainName: context.domain.name
+        };
       }
     })
   })
