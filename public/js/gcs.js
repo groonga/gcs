@@ -238,7 +238,7 @@ App.Router = Ember.Router.extend({
       route: '/',
       connectOutlets: function(router) {
         router.get('applicationController').connectOutlet('index');
-      },
+      }
     }),
     search: Ember.Route.extend({
       route: 'search/:domainName',
