@@ -14,10 +14,19 @@ html
       .navbar.navbar-fixed-top
         .navbar-inner
           .container
-            <a class="brand" {{action showIndex}}>Groonga CloudSearch</a>
+            <a class="brand" href {{action showIndex}}>Groonga CloudSearch</a>
+            ul.nav
+              li <a href {{action showIndex}}>Home</a>
       .container
         .row
-          .span12
+          .span2
+            .well(style="padding: 10px 0 10px 0;")
+              ul.nav.nav-list
+                li.nav-header Domains
+                {{#each App.domains.all}}
+                li <a href {{action showSearch this}}>{{name}}</a>
+                {{/each}}
+          .span10
             {{outlet}}
 
     script(data-template-name="index", type="text/x-handlebars")
@@ -27,26 +36,9 @@ html
           tr
             th Configuration Endpoint
             td {{App.domains.configurationEndpoint}}
-      h1 Available Domains
-      {{#each controller}}
-      h2 <a {{action search this}}>{{name}}</a>
-      table.table.table-bordered
-        tbody
-          tr
-            th Search Endpoint
-            td {{searchEndpoint}}
-          tr
-            th Fields
-            td
-              ul
-                {{#each fieldNames}}
-                li {{this}}
-                {{/each}}
-      {{/each}}
-
 
     script(data-template-name="search", type="text/x-handlebars")
-      h2 Search domain '{{domain.name}}'
+      h1 Search domain '{{domain.name}}'
       {{#view App.SearchFormView}}
       {{view Ember.TextField valueBinding="query"}}
       input(type="hidden", name="start", value="")

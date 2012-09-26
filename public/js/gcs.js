@@ -231,13 +231,13 @@ App.IndexView = Ember.View.extend({
 App.Router = Ember.Router.extend({
   root: Ember.Route.extend({
     showIndex: Ember.State.transitionTo('root.index'),
+    showSearch: function(router, event) {
+      router.transitionTo('search', {domain: event.context});
+    },
     index: Ember.Route.extend({
       route: '/',
       connectOutlets: function(router) {
         router.get('applicationController').connectOutlet('index');
-      },
-      search: function(router, event) {
-        router.transitionTo('search', {domain: event.context});
       },
     }),
     search: Ember.Route.extend({
@@ -245,6 +245,8 @@ App.Router = Ember.Router.extend({
       connectOutlets: function(router, context) {
         var controller = router.get('searchController');
         controller.set('domain', context.domain);
+        controller.set('query', null);
+        controller.reset();
         router.get('applicationController').connectOutlet('search');
       },
       nextPage: function(router) {
