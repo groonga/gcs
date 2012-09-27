@@ -23,7 +23,7 @@ html
             .well(style="padding: 10px 0 10px 0;")
               ul.nav.nav-list
                 li.nav-header Domains
-                {{#each App.domains.all}}
+                {{#each App.domains}}
                 li <a href {{action showSearch this}}>{{name}}</a>
                 {{/each}}
           .span10
@@ -35,7 +35,7 @@ html
         tbody
           tr
             th Configuration Endpoint
-            td {{App.domains.configurationEndpoint}}
+            td {{App.Domain.configurationEndpoint}}
 
     script(data-template-name="search", type="text/x-handlebars")
       h1 Search domain '{{domain.name}}'

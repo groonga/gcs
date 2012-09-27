@@ -43,58 +43,41 @@ App.Domain = Ember.Object.extend({
   }
 });
 
-App.Domains = Ember.Object.extend({
-  all: [],
+App.Domain.reopenClass({
   host: location.host,
-  configurationEndpoint: function() {
-    return 'http://' + this.get('host') + '/';
-  }.property('host'),
-  fetch: function() {
+  get configurationEndpoint() {
+    return 'http://' + this.host + '/';
+  },
+  findAll: function() {
+    var domains = Ember.ArrayProxy.create({content: Ember.A()});
     var self = this;
     $.ajax({
       type: 'GET',
-      url:  self.get('configurationEndpoint'),
+      url:  self.configurationEndpoint,
       data: {
         Version: '2011-02-01',
         Action:  'DescribeDomains'
       },
       dataType: 'xml',
       success: function(data) {
-        var domains = [];
         var domainStatusMembers = $(data).find('DomainStatusList > member');
         domainStatusMembers.each(function(index) {
-            var domainElement = $(this);
-            var name = domainElement.find('DomainName').text();
-            var endpoint = domainElement.find('SearchService > Endpoint').text();
-            var domain = App.Domain.create({
-              name: name,
-              endpoint: endpoint,
-              configurationEndpoint: self.get('configurationEndpoint')
-            });
-            domain.fetchFields();
-            domains.push(domain);
+          var domainElement = $(this);
+          var name = domainElement.find('DomainName').text();
+          var endpoint = domainElement.find('SearchService > Endpoint').text();
+          var domain = App.Domain.create({
+            name: name,
+            endpoint: endpoint,
+            configurationEndpoint: self.configurationEndpoint
           });
-        var timer = setInterval(function() {
-          if (domains.length == domainStatusMembers.size()) {
-            // Now all DescribeIndexFields requests are done
-            clearInterval(timer);
-            self.set('all', domains);
-          }
-        }, 100);
+          domain.fetchFields();
+          domains.pushObject(domain);
+        });
       }
     });
-  },
-  first: function() {
-    if (this.all.length > 0) {
-      return this.all[0];
-    } else {
-      return null;
-    }
-  }.property('all')
+    return domains;
+  }
 });
-
-App.domains = App.Domains.create();
-App.domains.fetch();
 
 App.SearchController = Ember.ArrayController.extend({
   query: null,
@@ -220,8 +203,10 @@ App.SearchFormView = Ember.View.extend({
   }
 });
 
+App.domains = App.Domain.findAll();
+
 App.IndexController = Ember.ArrayController.extend({
-  contentBinding: 'App.domains.all'
+  contentBinding: 'App.domains'
 });
 
 App.IndexView = Ember.View.extend({
@@ -236,7 +221,7 @@ App.Router = Ember.Router.extend({
     },
     index: Ember.Route.extend({
       route: '/',
-      connectOutlets: function(router) {
+      connectOutlets: function(router, context) {
         router.get('applicationController').connectOutlet('index');
       }
     }),
@@ -260,6 +245,7 @@ App.Router = Ember.Router.extend({
           domainName: context.domain.name
         };
       }
-    })
+    }),
+    loading: Em.State.extend({})
   })
 });
