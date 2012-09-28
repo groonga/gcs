@@ -24,7 +24,9 @@ html
               ul.nav.nav-list
                 li.nav-header Domains
                 {{#each App.domains}}
-                li <a href {{action showSearch this}}>{{name}}</a>
+                li <a href {{action showDomain this}}>{{name}}</a>
+                ul.nav.nav-list
+                  li <a href {{action showSearch this}}>search</a>
                 {{/each}}
           .span10
             {{outlet}}
@@ -36,6 +38,22 @@ html
           tr
             th Configuration Endpoint
             td {{App.Domain.configurationEndpoint}}
+
+    script(data-template-name="domain", type="text/x-handlebars")
+      h1 Domain '{{name}}'
+
+      table.table.table-bordered
+        tbody
+          tr
+            th Search Endpoint
+            td {{searchEndpoint}}
+          tr
+            th Fields
+            td
+              ul
+                {{#each fieldNames}}
+                li {{this}}
+                {{/each}}
 
     script(data-template-name="search", type="text/x-handlebars")
       h1 Search domain '{{domain.name}}'

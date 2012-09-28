@@ -48,8 +48,12 @@ App.Domain.reopenClass({
   get configurationEndpoint() {
     return 'http://' + this.host + '/';
   },
+  all: null,
   findAll: function() {
-    var domains = Ember.ArrayProxy.create({content: Ember.A()});
+    var domains = Ember.ArrayProxy.create({
+      content: Ember.A(),
+      didLoad: false
+    });
     var self = this;
     $.ajax({
       type: 'GET',
@@ -73,9 +77,19 @@ App.Domain.reopenClass({
           domain.fetchFields();
           domains.pushObject(domain);
         });
+        domains.set('didLoad', true);
       }
     });
     return domains;
+  },
+  find: function(name) {
+    var deferred = $.Deferred();
+    var domains = this.findAll();
+    domains.addObserver('didLoad', function() {
+      var domain = domains.findProperty('name', name);
+      deferred.resolve(domain);
+    });
+    return deferred.promise();
   }
 });
 
@@ -213,17 +227,44 @@ App.IndexView = Ember.View.extend({
   templateName: 'index'
 });
 
+App.DomainController = Ember.ObjectController.extend({
+});
+
+App.DomainView = Ember.View.extend({
+  templateName: 'domain'
+});
+
 App.Router = Ember.Router.extend({
   root: Ember.Route.extend({
     showIndex: Ember.State.transitionTo('root.index'),
     showSearch: function(router, event) {
       router.transitionTo('search', {domain: event.context});
     },
+    showDomain: function(router, event) {
+      router.transitionTo('domains.show', event.context);
+    },
     index: Ember.Route.extend({
       route: '/',
       connectOutlets: function(router, context) {
         router.get('applicationController').connectOutlet('index');
       }
+    }),
+    domains: Ember.Route.extend({
+      route: 'domains',
+      show: Ember.Route.extend({
+        route: ':domainName',
+        connectOutlets: function(router, context) {
+          router.get('applicationController').connectOutlet('domain', context);
+        },
+        serialize: function(router, context) {
+          return {
+            domainName: context.name
+          };
+        },
+        deserialize: function(router, params) {
+          return App.Domain.find(params.domainName);
+        }
+      })
     }),
     search: Ember.Route.extend({
       route: 'search/:domainName',
