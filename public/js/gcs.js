@@ -275,7 +275,7 @@ App.Router = Ember.Router.extend({
           controller.set('domain', context);
           controller.set('query', null);
           controller.reset();
-          router.get('domainController').connectOutlet('search');
+          router.get('applicationController').connectOutlet('search');
         },
         nextPage: function(router) {
           router.get('searchController').nextPage();
