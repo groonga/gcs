@@ -1,5 +1,9 @@
 var App = Ember.Application.create();
 
+App.store = DS.Store.create({
+  revision: 4
+});
+
 App.ApplicationController = Ember.Controller.extend();
 
 App.ApplicationView = Ember.View.extend({
