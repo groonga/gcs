@@ -54,6 +54,7 @@ html
                 {{#each fieldNames}}
                 li {{this}}
                 {{/each}}
+      {{outlet}}
 
     script(data-template-name="search", type="text/x-handlebars")
       h1 Search domain '{{domain.name}}'
