@@ -113,6 +113,7 @@ App.IndexController = Ember.ArrayController.extend({
 });
 
 App.DomainController = Ember.ObjectController.extend({
+  selectedAction: null
 });
 
 App.DomainShowController = Ember.ObjectController.extend({
@@ -152,6 +153,7 @@ App.Router = Ember.Router.extend({
         connectOutlets: function(router) {
           var domainController = router.get('domainController');
           var domain = domainController.get('content');
+          domainController.set('selectedAction', 'About');
           domainController.connectOutlet('domainShow', domain);
         }
       }),
@@ -161,6 +163,7 @@ App.Router = Ember.Router.extend({
           var domainController = router.get('domainController');
           var domain = domainController.get('content');
           var domainSearchController = router.get('domainSearchController');
+          domainController.set('selectedAction', 'Search');
           domainSearchController.set('domain', domain);
           domainSearchController.set('query', null);
           domainSearchController.reset();

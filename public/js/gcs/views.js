@@ -29,7 +29,16 @@ App.IndexView = Ember.View.extend({
 });
 
 App.DomainView = Ember.View.extend({
-  templateName: 'domain'
+  templateName: 'domain',
+  selectedActionBinding: 'controller.selectedAction',
+
+  NavItemView: Ember.View.extend({
+    tagName: 'li',
+    classNameBindings: 'isActive:active'.w(),
+    isActive: function() {
+      return this.get('item') === this.get('parentView.selectedAction');
+    }.property('item', 'parentView.selectedAction')
+  })
 });
 
 App.DomainShowView = Ember.View.extend({

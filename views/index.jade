@@ -29,8 +29,6 @@ html
                 li.nav-header Domains
                 {{#each App.domains}}
                 li <a href {{action showDomain this}}>{{name}}</a>
-                ul.nav.nav-list
-                  li <a href {{action showSearch this}}>search</a>
                 {{/each}}
           .span10
             {{outlet}}
@@ -43,8 +41,20 @@ html
             th Configuration Endpoint
             td {{App.configurationEndpoint}}
 
+    script(data-template-name="domain-action-tabs", type="text/x-handlebars")
+      ul.nav.nav-tabs
+
     script(data-template-name="domain", type="text/x-handlebars")
       h1 Domain '{{name}}'
+
+      ul.nav.nav-tabs
+        {{#view view.NavItemView item="About"}}
+        <a href {{action showDomain this.content}}>About</a>
+        {{/view}}
+        {{#view view.NavItemView item="Search"}}
+        <a href {{action showSearch this.content}}>Search</a>
+        {{/view}}
+
       {{outlet}}
 
     script(data-template-name="domain-show", type="text/x-handlebars")
@@ -65,7 +75,6 @@ html
                 {{/each}}
 
     script(data-template-name="domain-search", type="text/x-handlebars")
-      h2 Search
       {{#view App.SearchFormView}}
       {{view Ember.TextField valueBinding="query"}}
       input(type="hidden", name="start", value="")
