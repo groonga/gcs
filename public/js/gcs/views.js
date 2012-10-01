@@ -6,7 +6,6 @@ App.ApplicationView = Ember.View.extend({
     tagName: 'li',
     classNameBindings: 'isActive:active'.w(),
     isActive: function() {
-      console.log("ISAC", this.get('item'), this.get('parentView.selected'));
       return this.get('item') === this.get('parentView.selected');
     }.property('item', 'parentView.selected')
   })
