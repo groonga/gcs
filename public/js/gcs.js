@@ -15,6 +15,7 @@ App.Domain = Ember.Object.extend({
   endpoint: null,
   configurationEndpoint: null,
   fieldNames: [],
+  didLoad: false,
 
   searchEndpoint: function() {
     return 'http://' + this.get('endpoint') + '/2011-02-01/search';
@@ -38,6 +39,7 @@ App.Domain = Ember.Object.extend({
           fieldNames.push(field.find('IndexFieldName').text());
         });
         self.set('fieldNames', fieldNames);
+        self.set('didLoad', true);
       }
     });
   }
@@ -87,7 +89,9 @@ App.Domain.reopenClass({
     var domains = this.findAll();
     domains.addObserver('didLoad', function() {
       var domain = domains.findProperty('name', name);
-      deferred.resolve(domain);
+      domain.addObserver('didLoad', function() {
+        deferred.resolve(domain);
+      });
     });
     return deferred.promise();
   }
@@ -234,6 +238,17 @@ App.DomainView = Ember.View.extend({
   templateName: 'domain'
 });
 
+App.DomainsRoute = Ember.Route.extend({
+  serialize: function(router, context) {
+    return {
+      domainName: context.name
+    };
+  },
+  deserialize: function(router, params) {
+    return App.Domain.find(params.domainName);
+  }
+});
+
 App.Router = Ember.Router.extend({
   root: Ember.Route.extend({
     showIndex: Ember.State.transitionTo('root.index'),
@@ -251,41 +266,28 @@ App.Router = Ember.Router.extend({
     }),
     domains: Ember.Route.extend({
       route: 'domains',
-      show: Ember.Route.extend({
+      show: App.DomainsRoute.extend({
         route: ':domainName',
         connectOutlets: function(router, context) {
           router.get('applicationController').connectOutlet('domain', context);
+        }
+      }),
+      search: App.DomainsRoute.extend({
+        route: ':domainName/search',
+        connectOutlets: function(router, context) {
+          var controller = router.get('searchController');
+          controller.set('domain', context);
+          controller.set('query', null);
+          controller.reset();
+          router.get('applicationController').connectOutlet('search');
         },
-        serialize: function(router, context) {
-          return {
-            domainName: context.name
-          };
+        nextPage: function(router) {
+          router.get('searchController').nextPage();
         },
-        deserialize: function(router, params) {
-          return App.Domain.find(params.domainName);
+        previousPage: function(router) {
+          router.get('searchController').previousPage();
         }
       })
-    }),
-    search: Ember.Route.extend({
-      route: 'search/:domainName',
-      connectOutlets: function(router, context) {
-        var controller = router.get('searchController');
-        controller.set('domain', context);
-        controller.set('query', null);
-        controller.reset();
-        router.get('applicationController').connectOutlet('search');
-      },
-      nextPage: function(router) {
-        router.get('searchController').nextPage();
-      },
-      previousPage: function(router) {
-        router.get('searchController').previousPage();
-      },
-      serialize: function(router, context) {
-        return {
-          domainName: context.name
-        };
-      }
     }),
     loading: Em.State.extend({})
   })
