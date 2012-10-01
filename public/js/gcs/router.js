@@ -6,7 +6,9 @@ App.Router = Ember.Router.extend({
     index: Ember.Route.extend({
       route: '/',
       connectOutlets: function(router, context) {
-        router.get('applicationController').connectOutlet('index');
+        var applicationController = router.get('applicationController');
+        applicationController.set('selected', null);
+        applicationController.connectOutlet('index');
       }
     }),
     domains: Ember.Route.extend({
