@@ -26,12 +26,12 @@ html
             .well(style="padding: 10px 0 10px 0;")
               ul.nav.nav-list
                 {{#view view.NavItemView section="Home" item=null}}
-                <a href {{action showIndex this}}>Home</a>
+                <a href {{action showIndex this}}><i class="icon-home"></i> Home</a>
                 {{/view}}
                 li.nav-header Domains
                 {{#each App.domains}}
                 {{#view view.NavItemView section="Domain" itemBinding="name"}}
-                <a href {{action showDomain this}}>{{name}}</a>
+                <a href {{action showDomain this}}><i class="icon-hdd"></i> {{name}}</a>
                 {{/view}}
                 {{/each}}
           .span10
