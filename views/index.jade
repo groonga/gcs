@@ -42,7 +42,9 @@ html
 
     script(data-template-name="domain", type="text/x-handlebars")
       h1 Domain '{{name}}'
+      {{outlet}}
 
+    script(data-template-name="domain-show", type="text/x-handlebars")
       table.table.table-bordered
         tbody
           tr
@@ -59,8 +61,8 @@ html
                 li {{name}}
                 {{/each}}
 
-    script(data-template-name="search", type="text/x-handlebars")
-      h1 Search domain '{{domain.name}}'
+    script(data-template-name="domain-search", type="text/x-handlebars")
+      h2 Search
       {{#view App.SearchFormView}}
       {{view Ember.TextField valueBinding="query"}}
       input(type="hidden", name="start", value="")

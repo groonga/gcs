@@ -99,7 +99,7 @@ App.IndexView = Ember.View.extend({
   templateName: 'index'
 });
 
-App.SearchController = Ember.ArrayController.extend({
+App.DomainSearchController = Ember.ArrayController.extend({
   query: null,
   perPage: 5,
   start: 0,
@@ -207,8 +207,8 @@ App.SearchController = Ember.ArrayController.extend({
   }
 });
 
-App.SearchView = Ember.View.extend({
-  templateName: 'search'
+App.DomainSearchView = Ember.View.extend({
+  templateName: 'domain-search'
 });
 
 App.SearchFormView = Ember.View.extend({
@@ -242,20 +242,11 @@ App.DomainView = Ember.View.extend({
   templateName: 'domain'
 });
 
-App.DomainsRoute = Ember.Route.extend({
-  serialize: function(router, context) {
-    return {
-      domainName: context.get('name')
-    };
-  },
-  deserialize: function(router, params) {
-    var domain = App.store.find(App.Domain, params.domainName);
-    var deferred = Ember.$.Deferred();
-    domain.addObserver('isLoaded', function() {
-      deferred.resolve(domain);
-    });
-    return deferred.promise(domain);
-  }
+App.DomainShowController = Ember.ObjectController.extend({
+});
+
+App.DomainShowView = Ember.View.extend({
+  templateName: 'domain-show'
 });
 
 App.Router = Ember.Router.extend({
@@ -270,27 +261,48 @@ App.Router = Ember.Router.extend({
       }
     }),
     domains: Ember.Route.extend({
-      route: 'domains',
-      show: App.DomainsRoute.extend({
-        route: ':domainName',
-        connectOutlets: function(router, context) {
-          router.get('applicationController').connectOutlet('domain', context);
+      route: 'domains/:domainName',
+      connectOutlets: function(router, context) {
+        console.log(context);
+        router.get('applicationController').connectOutlet('domain', context);
+      },
+      serialize: function(router, context) {
+        return {
+          domainName: context.get('name')
+        };
+      },
+      deserialize: function(router, params) {
+        var domain = App.store.find(App.Domain, params.domainName);
+        var deferred = Ember.$.Deferred();
+        domain.addObserver('isLoaded', function() {
+          deferred.resolve(domain);
+        });
+        return deferred.promise(domain);
+      },
+      show: Ember.Route.extend({
+        route: '/',
+        connectOutlets: function(router) {
+          var domainController = router.get('domainController');
+          var domain = domainController.get('content');
+          domainController.connectOutlet('domainShow', domain);
         }
       }),
-      search: App.DomainsRoute.extend({
-        route: ':domainName/search',
-        connectOutlets: function(router, context) {
-          var controller = router.get('searchController');
-          controller.set('domain', context);
-          controller.set('query', null);
-          controller.reset();
-          router.get('applicationController').connectOutlet('search');
+      search: Ember.Route.extend({
+        route: '/search',
+        connectOutlets: function(router) {
+          var domainController = router.get('domainController');
+          var domain = domainController.get('content');
+          var domainSearchController = router.get('domainSearchController');
+          domainSearchController.set('domain', domain);
+          domainSearchController.set('query', null);
+          domainSearchController.reset();
+          domainController.connectOutlet('domainSearch');
         },
         nextPage: function(router) {
-          router.get('searchController').nextPage();
+          router.get('domainSearchController').nextPage();
         },
         previousPage: function(router) {
-          router.get('searchController').previousPage();
+          router.get('domainSearchController').previousPage();
         }
       })
     }),
