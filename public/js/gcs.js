@@ -238,7 +238,7 @@ App.Router = Ember.Router.extend({
   root: Ember.Route.extend({
     showIndex: Ember.State.transitionTo('root.index'),
     showSearch: function(router, event) {
-      router.transitionTo('search', {domain: event.context});
+      router.transitionTo('search', event.context);
     },
     showDomain: function(router, event) {
       router.transitionTo('domains.show', event.context);
@@ -270,7 +270,7 @@ App.Router = Ember.Router.extend({
       route: 'search/:domainName',
       connectOutlets: function(router, context) {
         var controller = router.get('searchController');
-        controller.set('domain', context.domain);
+        controller.set('domain', context);
         controller.set('query', null);
         controller.reset();
         router.get('applicationController').connectOutlet('search');
@@ -283,7 +283,7 @@ App.Router = Ember.Router.extend({
       },
       serialize: function(router, context) {
         return {
-          domainName: context.domain.name
+          domainName: context.name
         };
       }
     }),
