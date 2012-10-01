@@ -1,5 +1,15 @@
 App.ApplicationView = Ember.View.extend({
-  templateName: 'application'
+  templateName: 'application',
+  selectedBinding: 'controller.selected',
+
+  NavItemView: Ember.View.extend({
+    tagName: 'li',
+    classNameBindings: 'isActive:active'.w(),
+    isActive: function() {
+      console.log("ISAC", this.get('item'), this.get('parentView.selected'));
+      return this.get('item') === this.get('parentView.selected');
+    }.property('item', 'parentView.selected')
+  })
 });
 
 App.IndexView = Ember.View.extend({

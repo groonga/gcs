@@ -28,7 +28,9 @@ html
               ul.nav.nav-list
                 li.nav-header Domains
                 {{#each App.domains}}
-                li <a href {{action showDomain this}}>{{name}}</a>
+                {{#view view.NavItemView itemBinding="name"}}
+                <a href {{action showDomain this}}>{{name}}</a>
+                {{/view}}
                 {{/each}}
           .span10
             {{outlet}}
