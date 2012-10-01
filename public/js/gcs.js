@@ -1,7 +1,90 @@
 var App = Ember.Application.create();
 
+App.Adapter = DS.Adapter.extend({
+  findAll: function(store, type) {
+    if (type === App.Domain) {
+      var self = this;
+      $.ajax({
+        type: 'GET',
+        url:  self.configurationEndpoint,
+        data: {
+          Version: '2011-02-01',
+          Action:  'DescribeDomains'
+        },
+        dataType: 'xml',
+        success: function(data) {
+          var domainStatusMembers = $(data).find('DomainStatusList > member');
+          domainStatusMembers.each(function(index) {
+            var domainElement = $(this);
+            var name = domainElement.find('DomainName').text();
+            var endpoint = domainElement.find('SearchService > Endpoint').text();
+
+            var self = this;
+            $.ajax({
+              type: 'GET',
+              url:  self.configurationEndpoint,
+              data: {
+                Version:    '2011-02-01',
+                Action:     'DescribeIndexFields',
+                DomainName: name
+              },
+              dataType: 'xml',
+              success: function(data) {
+                var fieldNames = [];
+                var indexFields = [];
+                $(data).find('IndexFields > member').each(function(index) {
+                  var field = $(this);
+                  fieldNames.push(field.find('IndexFieldName').text());
+                  var name = field.find('IndexFieldName').text();
+                  indexFields.push({
+                    id: name,
+                    name: name
+                  });
+                });
+
+                var domain = {
+                  id: name,
+                  name: name,
+                  endpoint: endpoint,
+                  index_fields: indexFields,
+                  configuration_endpoint: self.configurationEndpoint
+                };
+                store.load(type, name, domain);
+              }
+            });
+          });
+        }
+      });
+    } else {
+      throw "Unspported model";
+    }
+  },
+  find: function(store, type, id) {
+    this.findAll(store, type); // Fetch all for the simplicity
+  }
+});
+
+App.configurationEndpoint = 'http://' + location.host + '/';
+
 App.store = DS.Store.create({
-  revision: 4
+  revision: 4,
+  adapter: App.Adapter.create({
+    configurationEndpoint: App.configurationEndpoint
+  })
+});
+
+App.IndexField = DS.Model.extend({
+  name: DS.attr('string')
+});
+
+App.Domain = DS.Model.extend({
+  name: DS.attr('string'),
+  endpoint: DS.attr('string'),
+  searchEndpoint: function() {
+    return 'http://' + this.get('endpoint') + '/2011-02-01/search';
+  }.property('endpoint'),
+  indexFields: DS.hasMany('App.IndexField', {embedded: true}),
+  configurationEndpoint: DS.attr('string')
 });
 
 App.ApplicationController = Ember.Controller.extend();
@@ -12,93 +95,6 @@ App.ApplicationView = Ember.View.extend({
 
 App.IndexView = Ember.View.extend({
   templateName: 'index'
-});
-
-App.Domain = Ember.Object.extend({
-  name: null,
-  endpoint: null,
-  configurationEndpoint: null,
-  fieldNames: [],
-  didLoad: false,
-
-  searchEndpoint: function() {
-    return 'http://' + this.get('endpoint') + '/2011-02-01/search';
-  }.property('endpoint'),
-  fetchFields: function() {
-    var self = this;
-    $.ajax({
-      type: 'GET',
-      url:  this.get('configurationEndpoint'),
-      data: {
-        Version:    '2011-02-01',
-        Action:     'DescribeIndexFields',
-        DomainName: this.get('name')
-      },
-      dataType: 'xml',
-      success: function(data) {
-        var fieldNames = [];
-        $(data).find('IndexFields > member')
-        .each(function(index) {
-          var field = $(this);
-          fieldNames.push(field.find('IndexFieldName').text());
-        });
-        self.set('fieldNames', fieldNames);
-        self.set('didLoad', true);
-      }
-    });
-  }
-});
-
-App.Domain.reopenClass({
-  host: location.host,
-  get configurationEndpoint() {
-    return 'http://' + this.host + '/';
-  },
-  all: null,
-  findAll: function() {
-    var domains = Ember.ArrayProxy.create({
-      content: Ember.A(),
-      didLoad: false
-    });
-    var self = this;
-    $.ajax({
-      type: 'GET',
-      url:  self.configurationEndpoint,
-      data: {
-        Version: '2011-02-01',
-        Action:  'DescribeDomains'
-      },
-      dataType: 'xml',
-      success: function(data) {
-        var domainStatusMembers = $(data).find('DomainStatusList > member');
-        domainStatusMembers.each(function(index) {
-          var domainElement = $(this);
-          var name = domainElement.find('DomainName').text();
-          var endpoint = domainElement.find('SearchService > Endpoint').text();
-          var domain = App.Domain.create({
-            name: name,
-            endpoint: endpoint,
-            configurationEndpoint: self.configurationEndpoint
-          });
-          domain.fetchFields();
-          domains.pushObject(domain);
-        });
-        domains.set('didLoad', true);
-      }
-    });
-    return domains;
-  },
-  find: function(name) {
-    var deferred = $.Deferred();
-    var domains = this.findAll();
-    domains.addObserver('didLoad', function() {
-      var domain = domains.findProperty('name', name);
-      domain.addObserver('didLoad', function() {
-        deferred.resolve(domain);
-      });
-    });
-    return deferred.promise();
-  }
 });
 
 App.SearchController = Ember.ArrayController.extend({
@@ -158,7 +154,9 @@ App.SearchController = Ember.ArrayController.extend({
     if (!domain) {
       return {};
     }
-    var returnFields = domain.fieldNames ? domain.fieldNames.join(',') : [];
+    var returnFields = domain.get('indexFields').map(function(field) {
+      return field.get('name');
+    }).join(',');
     var params = {
       q:     this.get('query'),
       size:  this.get('perPage'),
@@ -166,7 +164,7 @@ App.SearchController = Ember.ArrayController.extend({
       'return-fields': returnFields
     };
     return params;
-  }.property('query', 'perPage', 'start', 'domain'),
+  }.property('query', 'perPage', 'start', 'domain', 'domain.indexFields'),
   reset: function() {
     this.set('data', null);
     this.set('start', 0);
@@ -225,7 +223,7 @@ App.SearchFormView = Ember.View.extend({
   }
 });
 
-App.domains = App.Domain.findAll();
+App.domains = App.store.findAll(App.Domain);
 
 App.IndexController = Ember.ArrayController.extend({
   contentBinding: 'App.domains'
@@ -245,11 +243,16 @@ App.DomainView = Ember.View.extend({
 App.DomainsRoute = Ember.Route.extend({
   serialize: function(router, context) {
     return {
-      domainName: context.name
+      domainName: context.get('name')
     };
   },
   deserialize: function(router, params) {
-    return App.Domain.find(params.domainName);
+    var domain = App.store.find(App.Domain, params.domainName);
+    var deferred = Ember.$.Deferred();
+    domain.addObserver('isLoaded', function() {
+      deferred.resolve(domain);
+    });
+    return deferred.promise(domain);
   }
 });
 

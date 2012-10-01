@@ -38,7 +38,7 @@ html
         tbody
           tr
             th Configuration Endpoint
-            td {{App.Domain.configurationEndpoint}}
+            td {{App.configurationEndpoint}}
 
     script(data-template-name="domain", type="text/x-handlebars")
       h1 Domain '{{name}}'
@@ -52,8 +52,8 @@ html
             th Fields
             td
               ul
-                {{#each fieldNames}}
-                li {{this}}
+                {{#each indexFields}}
+                li {{name}}
                 {{/each}}
 
     script(data-template-name="search", type="text/x-handlebars")
