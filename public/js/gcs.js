@@ -17,7 +17,7 @@ App.Adapter = DS.Adapter.extend({
           domainStatusMembers.each(function(index) {
             var domainElement = $(this);
             var name = domainElement.find('DomainName').text();
-            var endpoint = domainElement.find('SearchService > Endpoint').text();
+            var searchEndpoint = domainElement.find('SearchService > Endpoint').text();
 
             var self = this;
             $.ajax({
@@ -45,7 +45,7 @@ App.Adapter = DS.Adapter.extend({
                 var domain = {
                   id: name,
                   name: name,
-                  endpoint: endpoint,
+                  search_endpoint: searchEndpoint,
                   index_fields: indexFields,
                   configuration_endpoint: self.configurationEndpoint
                 };
@@ -79,9 +79,9 @@ App.IndexField = DS.Model.extend({
 
 App.Domain = DS.Model.extend({
   name: DS.attr('string'),
-  endpoint: DS.attr('string'),
-  searchEndpoint: function() {
-    return 'http://' + this.get('endpoint') + '/2011-02-01/search';
+  searchEndpoint: DS.attr('string'),
+  searchURL: function() {
+    return 'http://' + this.get('searchEndpoint') + '/2011-02-01/search';
   }.property('endpoint'),
   indexFields: DS.hasMany('App.IndexField', {embedded: true}),
   configurationEndpoint: DS.attr('string')
@@ -144,9 +144,9 @@ App.SearchController = Ember.ArrayController.extend({
     if (!domain) {
       return '';
     }
-    var searchEndpoint = domain.get('searchEndpoint');
+    var searchURL = domain.get('searchURL');
     var params = this.get('paramsForRequest');
-    var urlForRawRequest = searchEndpoint + '?' + jQuery.param(params);
+    var urlForRawRequest = searchURL + '?' + jQuery.param(params);
     return urlForRawRequest;
   }.property('paramsForRequest', 'domain'),
   paramsForRequest: function() {
@@ -174,7 +174,7 @@ App.SearchController = Ember.ArrayController.extend({
     var domain = this.get('domain');
     $.ajax({
       type: 'GET',
-      url: domain.get('searchEndpoint'),
+      url: domain.get('searchURL'),
       data: self.get('paramsForRequest'),
       dataType: 'jsonp',
       success: function(data) {
