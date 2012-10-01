@@ -1,5 +1,3 @@
-var App = Ember.Application.create();
-
 App.Adapter = DS.Adapter.extend({
   findAll: function(store, type) {
     if (type === App.Domain) {
