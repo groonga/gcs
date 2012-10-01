@@ -19,19 +19,19 @@ html
       .navbar.navbar-fixed-top
         .navbar-inner
           .container
-            <a class="brand" href {{action showIndex}}>Groonga CloudSearch</a>
+            <a class="brand" href {{action gotoIndex}}>Groonga CloudSearch</a>
       .container
         .row
           .span2
             .well(style="padding: 10px 0 10px 0;")
               ul.nav.nav-list
                 {{#view view.NavItemView section="Home" item=null}}
-                <a href {{action showIndex this}}><i class="icon-home"></i> Home</a>
+                <a href {{action gotoIndex this}}><i class="icon-home"></i> Home</a>
                 {{/view}}
                 li.nav-header Domains
                 {{#each App.domains}}
                 {{#view view.NavItemView section="Domain" itemBinding="name"}}
-                <a href {{action showDomain this}}><i class="icon-hdd"></i> {{name}}</a>
+                <a href {{action gotoDomain this}}><i class="icon-hdd"></i> {{name}}</a>
                 {{/view}}
                 {{/each}}
           .span10
@@ -53,10 +53,10 @@ html
 
       ul.nav.nav-tabs
         {{#view view.NavItemView item="About"}}
-        <a href {{action showDomain this.content}}>About</a>
+        <a href {{action gotoDomain this.content}}>About</a>
         {{/view}}
         {{#view view.NavItemView item="Search"}}
-        <a href {{action showSearch this.content}}>Search</a>
+        <a href {{action gotoSearch this.content}}>Search</a>
         {{/view}}
 
       {{outlet}}

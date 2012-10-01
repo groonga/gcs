@@ -1,8 +1,8 @@
 App.Router = Ember.Router.extend({
   root: Ember.Route.extend({
-    showIndex: Ember.State.transitionTo('root.index'),
-    showSearch: Ember.State.transitionTo('domains.search'),
-    showDomain: Ember.State.transitionTo('domains.show'),
+    gotoIndex: Ember.State.transitionTo('root.index'),
+    gotoSearch: Ember.State.transitionTo('domains.search'),
+    gotoDomain: Ember.State.transitionTo('domains.show'),
     index: Ember.Route.extend({
       route: '/',
       connectOutlets: function(router, context) {
