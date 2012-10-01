@@ -30,11 +30,9 @@ App.Adapter = DS.Adapter.extend({
               },
               dataType: 'xml',
               success: function(data) {
-                var fieldNames = [];
                 var indexFields = [];
                 $(data).find('IndexFields > member').each(function(index) {
                   var field = $(this);
-                  fieldNames.push(field.find('IndexFieldName').text());
                   var name = field.find('IndexFieldName').text();
                   indexFields.push({
                     id: name,
