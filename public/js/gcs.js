@@ -17,7 +17,6 @@ App.Adapter = DS.Adapter.extend({
           domainStatusMembers.each(function(index) {
             var domainElement = $(this);
             var name = domainElement.find('DomainName').text();
-            console.log(domainElement);
             var searchEndpoint = domainElement.find('SearchService > Endpoint').text();
             var docEndpoint = domainElement.find('DocService > Endpoint').text();
 
@@ -263,7 +262,6 @@ App.Router = Ember.Router.extend({
     domains: Ember.Route.extend({
       route: 'domains/:domainName',
       connectOutlets: function(router, context) {
-        console.log(context);
         router.get('applicationController').connectOutlet('domain', context);
       },
       serialize: function(router, context) {
