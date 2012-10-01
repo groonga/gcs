@@ -17,7 +17,9 @@ App.Adapter = DS.Adapter.extend({
           domainStatusMembers.each(function(index) {
             var domainElement = $(this);
             var name = domainElement.find('DomainName').text();
+            console.log(domainElement);
             var searchEndpoint = domainElement.find('SearchService > Endpoint').text();
+            var docEndpoint = domainElement.find('DocService > Endpoint').text();
 
             var self = this;
             $.ajax({
@@ -44,6 +46,7 @@ App.Adapter = DS.Adapter.extend({
                   id: name,
                   name: name,
                   search_endpoint: searchEndpoint,
+                  doc_endpoint: docEndpoint,
                   index_fields: indexFields,
                   configuration_endpoint: self.configurationEndpoint
                 };
@@ -78,6 +81,7 @@ App.IndexField = DS.Model.extend({
 App.Domain = DS.Model.extend({
   name: DS.attr('string'),
   searchEndpoint: DS.attr('string'),
+  docEndpoint: DS.attr('string'),
   searchURL: function() {
     return 'http://' + this.get('searchEndpoint') + '/2011-02-01/search';
   }.property('endpoint'),
