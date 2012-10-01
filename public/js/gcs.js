@@ -252,12 +252,8 @@ App.DomainsRoute = Ember.Route.extend({
 App.Router = Ember.Router.extend({
   root: Ember.Route.extend({
     showIndex: Ember.State.transitionTo('root.index'),
-    showSearch: function(router, event) {
-      router.transitionTo('domains.search', event.context);
-    },
-    showDomain: function(router, event) {
-      router.transitionTo('domains.show', event.context);
-    },
+    showSearch: Ember.State.transitionTo('domains.search'),
+    showDomain: Ember.State.transitionTo('domains.show'),
     index: Ember.Route.extend({
       route: '/',
       connectOutlets: function(router, context) {
