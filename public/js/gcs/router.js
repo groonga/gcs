@@ -7,7 +7,7 @@ App.Router = Ember.Router.extend({
       route: '/',
       connectOutlets: function(router, context) {
         var applicationController = router.get('applicationController');
-        applicationController.set('selected', null);
+        applicationController.set('selected', ['Home']);
         applicationController.connectOutlet('index');
       }
     }),
@@ -37,7 +37,7 @@ App.Router = Ember.Router.extend({
           var domainController = router.get('domainController');
           var domain = domainController.get('content');
           domainController.set('selectedAction', 'About');
-          applicationController.set('selected', domain.get('name'));
+          applicationController.set('selected', ['Domain', domain.get('name')]);
           domainController.connectOutlet('domainShow', domain);
         }
       }),
@@ -50,7 +50,7 @@ App.Router = Ember.Router.extend({
           var domainSearchController = router.get('domainSearchController');
           domainController.set('selectedAction', 'Search');
           domainSearchController.set('domain', domain);
-          applicationController.set('selected', domain.get('name'));
+          applicationController.set('selected', ['Domain', domain.get('name')]);
           domainSearchController.set('query', null);
           domainSearchController.reset();
           domainController.connectOutlet('domainSearch');

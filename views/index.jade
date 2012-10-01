@@ -20,16 +20,17 @@ html
         .navbar-inner
           .container
             <a class="brand" href {{action showIndex}}>Groonga CloudSearch</a>
-            ul.nav
-              li <a href {{action showIndex}}>Home</a>
       .container
         .row
           .span2
             .well(style="padding: 10px 0 10px 0;")
               ul.nav.nav-list
+                {{#view view.NavItemView section="Home" item=null}}
+                <a href {{action showIndex this}}>Home</a>
+                {{/view}}
                 li.nav-header Domains
                 {{#each App.domains}}
-                {{#view view.NavItemView itemBinding="name"}}
+                {{#view view.NavItemView section="Domain" itemBinding="name"}}
                 <a href {{action showDomain this}}>{{name}}</a>
                 {{/view}}
                 {{/each}}

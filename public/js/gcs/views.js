@@ -6,8 +6,10 @@ App.ApplicationView = Ember.View.extend({
     tagName: 'li',
     classNameBindings: 'isActive:active'.w(),
     isActive: function() {
-      return this.get('item') === this.get('parentView.selected');
-    }.property('item', 'parentView.selected')
+      var thisKey = [this.get('section'), this.get('item')||null].compact();
+      var selectedKey = this.get('parentView.selected');
+      return JSON.stringify(thisKey) === JSON.stringify(selectedKey);
+    }.property('section', 'item', 'parentView.selected')
   })
 });
 
