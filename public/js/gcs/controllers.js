@@ -141,6 +141,7 @@ App.Router = Ember.Router.extend({
         };
       },
       deserialize: function(router, params) {
+        // FIXME never called... why?
         var domain = App.store.find(App.Domain, params.domainName);
         var deferred = Ember.$.Deferred();
         domain.addObserver('isLoaded', function() {
