@@ -1,3 +1,24 @@
+App.WithDomain = Ember.Mixin.create({
+  serialize: function(router, context) {
+    return {
+      domainName: context.get('name')
+    };
+  },
+  deserialize: function(router, params) {
+    var domain = App.store.find(App.Domain, params.domainName);
+    var deferred = Ember.$.Deferred();
+    domain.addObserver('isLoaded', function() {
+      deferred.resolve(domain);
+    });
+    return deferred.promise(domain);
+  },
+  connectDomainOutlet: function(router, domain) {
+    var applicationController = router.get('applicationController');
+    applicationController.set('selected', ['Domain', domain.get('name')]);
+    applicationController.connectOutlet('domain', domain);
+  }
+});
+
 App.Router = Ember.Router.extend({
   root: Ember.Route.extend({
     gotoIndex: Ember.State.transitionTo('root.index'),
@@ -5,52 +26,31 @@ App.Router = Ember.Router.extend({
     gotoDomainShow: Ember.State.transitionTo('domains.show'),
     index: Ember.Route.extend({
       route: '/',
-      connectOutlets: function(router, context) {
+      connectOutlets: function(router) {
         var applicationController = router.get('applicationController');
         applicationController.set('selected', ['Home']);
         applicationController.connectOutlet('index');
       }
     }),
     domains: Ember.Route.extend({
-      route: 'domains/:domainName',
-      connectOutlets: function(router, context) {
-        router.get('applicationController').connectOutlet('domain', context);
-      },
-      serialize: function(router, context) {
-        return {
-          domainName: context.get('name')
-        };
-      },
-      deserialize: function(router, params) {
-        // FIXME never called... why?
-        var domain = App.store.find(App.Domain, params.domainName);
-        var deferred = Ember.$.Deferred();
-        domain.addObserver('isLoaded', function() {
-          deferred.resolve(domain);
-        });
-        return deferred.promise(domain);
-      },
-      show: Ember.Route.extend({
-        route: '/',
-        connectOutlets: function(router) {
-          var applicationController = router.get('applicationController');
+      route: 'domains',
+      show: Ember.Route.extend(App.WithDomain, {
+        route: ':domainName',
+        connectOutlets: function(router, domain) {
+          this.connectDomainOutlet(router, domain);
           var domainController = router.get('domainController');
-          var domain = domainController.get('content');
           domainController.set('selectedAction', 'About');
-          applicationController.set('selected', ['Domain', domain.get('name')]);
           domainController.connectOutlet('domainShow', domain);
         }
       }),
-      search: Ember.Route.extend({
-        route: '/search',
-        connectOutlets: function(router) {
-          var applicationController = router.get('applicationController');
+      search: Ember.Route.extend(App.WithDomain, {
+        route: ':domainName/search',
+        connectOutlets: function(router, domain) {
+          this.connectDomainOutlet(router, domain);
           var domainController = router.get('domainController');
-          var domain = domainController.get('content');
           var domainSearchController = router.get('domainSearchController');
           domainController.set('selectedAction', 'Search');
           domainSearchController.set('domain', domain);
-          applicationController.set('selected', ['Domain', domain.get('name')]);
           domainSearchController.set('query', null);
           domainSearchController.reset();
           domainController.connectOutlet('domainSearch');
