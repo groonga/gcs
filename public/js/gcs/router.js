@@ -24,6 +24,7 @@ App.Router = Ember.Router.extend({
     gotoIndex: Ember.State.transitionTo('root.index'),
     gotoDomainSearch: Ember.State.transitionTo('domains.search'),
     gotoDomainShow: Ember.State.transitionTo('domains.show'),
+    gotoDomainCreate: Ember.State.transitionTo('domains.create'),
     index: Ember.Route.extend({
       route: '/',
       connectOutlets: function(router) {
@@ -60,6 +61,14 @@ App.Router = Ember.Router.extend({
         },
         previousPage: function(router) {
           router.get('domainSearchController').previousPage();
+        }
+      }),
+      create: Ember.Route.extend({
+        route: 'create',
+        connectOutlets: function(router) {
+          var applicationController = router.get('applicationController');
+          applicationController.set('selected', ['DomainCreate']);
+          applicationController.connectOutlet('domainCreate');
         }
       })
     }),

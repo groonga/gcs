@@ -55,3 +55,18 @@ App.DomainView = Ember.View.extend({
 App.DomainShowView = Ember.View.extend({
   templateName: 'domain-show'
 });
+
+App.DomainCreateView = Ember.View.extend({
+  templateName: 'domain-create',
+
+  DomainCreateFormView: Ember.View.extend({
+    tagName: 'form',
+    classNames: 'form-horizontal',
+
+    submit: function(event) {
+      event.preventDefault();
+      var domainName = this.get('controller.domainName');
+      alert("TODO: create " + domainName);
+    }
+  })
+});

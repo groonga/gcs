@@ -24,6 +24,9 @@ html
                 <a href {{action gotoDomainShow this}}><i class="icon-hdd"></i> {{name}}</a>
                 {{/view}}
                 {{/each}}
+                {{#view view.NavItemView section="DomainCreate"}}
+                <a href {{action gotoDomainCreate}}><i class="icon-plus"></i> New domain</a>
+                {{/view}}
           .span10
             {{outlet}}
 
@@ -67,6 +70,19 @@ html
                 {{#each indexFields}}
                 li {{name}}
                 {{/each}}
+
+    script(data-template-name="domain-create", type="text/x-handlebars")
+      h1 Creating new domain
+
+      {{#view view.DomainCreateFormView}}
+      .control-group
+        label.control-label Domain Name
+        .controls
+          {{view Ember.TextField valueBinding="domainName"}}
+      .control-group
+        .controls
+          button(type="submit", class="btn btn-primary") Create
+      {{/view}}
 
     script(data-template-name="domain-search", type="text/x-handlebars")
       {{#view App.SearchFormView}}

@@ -118,3 +118,7 @@ App.DomainController = Ember.ObjectController.extend({
 
 App.DomainShowController = Ember.ObjectController.extend({
 });
+
+App.DomainCreateController = Ember.ObjectController.extend({
+  domainName: null
+});
