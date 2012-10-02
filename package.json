@@ -27,7 +27,8 @@
     "node-uuid": "",
     "nroonga": "",
     "xml2js": "",
-    "xmlbuilder": ""
+    "xmlbuilder": "",
+    "connect-assetmanager": ""
   },
   "scripts": {
     "test": "NODE_ENV=test ./node_modules/.bin/mocha --reporter list --ui tdd",
