@@ -21,7 +21,7 @@ html
                 li.nav-header Domains
                 {{#each App.domains}}
                 {{#view view.NavItemView section="Domain" itemBinding="name"}}
-                <a href {{action gotoDomain this}}><i class="icon-hdd"></i> {{name}}</a>
+                <a href {{action gotoDomainShow this}}><i class="icon-hdd"></i> {{name}}</a>
                 {{/view}}
                 {{/each}}
           .span10
@@ -43,10 +43,10 @@ html
 
       ul.nav.nav-tabs
         {{#view view.NavItemView item="About"}}
-        <a href {{action gotoDomain this.content}}>About</a>
+        <a href {{action gotoDomainShow this.content}}>About</a>
         {{/view}}
         {{#view view.NavItemView item="Search"}}
-        <a href {{action gotoSearch this.content}}>Search</a>
+        <a href {{action gotoDomainSearch this.content}}>Search</a>
         {{/view}}
 
       {{outlet}}
