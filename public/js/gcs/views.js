@@ -18,21 +18,21 @@ App.IndexView = Ember.View.extend({
 });
 
 App.DomainSearchView = Ember.View.extend({
-  templateName: 'domain-search'
-});
+  templateName: 'domain-search',
 
-App.SearchFormView = Ember.View.extend({
-  tagName: 'form',
-  classNames: ['form-search'],
+  SearchFormView: Ember.View.extend({
+    tagName: 'form',
+    classNames: ['form-search'],
 
-  submit: function(event) {
-    var query = this.get('controller.query');
-    var controller = this.get('controller');
-    controller.reset();
-    controller.executeSearch();
+    submit: function(event) {
+      var query = this.get('controller.query');
+      var controller = this.get('controller');
+      controller.reset();
+      controller.executeSearch();
 
-    event.preventDefault();
-  }
+      event.preventDefault();
+    }
+  })
 });
 
 App.IndexView = Ember.View.extend({

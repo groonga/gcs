@@ -82,7 +82,7 @@ html
       {{/view}}
 
     script(data-template-name="domain-search", type="text/x-handlebars")
-      {{#view App.SearchFormView}}
+      {{#view view.SearchFormView}}
       {{view Ember.TextField valueBinding="query"}}
       input(type="hidden", name="start", value="")
       button(type="submit", class="btn") Search
