@@ -45,7 +45,8 @@ App.Router = Ember.Router.extend({
           domainController.connectOutlet('domainShow', domain);
         },
         delete: function(router) {
-          router.get('domainController').delete();
+          if (router.get('domainController').delete())
+            router.transitionTo('root.index');
         }
       }),
       search: Ember.Route.extend(App.WithDomain, {

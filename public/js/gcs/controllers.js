@@ -121,7 +121,9 @@ App.DomainController = Ember.ObjectController.extend({
     if (record && confirm('Do you really want this domain to be deleted?')) {
       App.store.deleteRecord(record);
       App.store.commit();
+      return true;
     }
+    return false;
   }
 });
 
