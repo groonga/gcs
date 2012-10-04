@@ -65,6 +65,18 @@ suite('Configuration API', function() {
         });
     });
 
+    test('multiple Action=CreateDomain requests for the same domain', function(done) {
+      utils
+        .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
+        .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
+        .next(function(response) {
+          assert.notEqual(response.statusCode, 200);
+          done();
+        }).error(function(error) {
+          done(error)
+        });
+    });
+
     test('Action=DeleteDomain', function(done) {
       var domain;
       utils
