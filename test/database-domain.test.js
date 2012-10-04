@@ -494,6 +494,14 @@ suite('database', function() {
         assert.equal(dump, expectedDump);
       });
 
+      test('createSync again', function() {
+        var domain = new Domain('companies', context);
+        domain.createSync();
+        assert.throw(function() {
+          domain.createSync();
+        }, new RegExp(Domain.DOMAIN_ALREADY_EXISTS));
+      });
+
       test('deleteSync', function() {
         var domain = new Domain('companies', context);
         domain.createSync();
@@ -505,6 +513,15 @@ suite('database', function() {
         var dump = context.commandSync('dump');
         var expectedDump = '';
         assert.equal(dump, expectedDump);
+      });
+
+      test('deleteSync again', function() {
+        var domain = new Domain('companies', context);
+        domain.createSync();
+        domain.deleteSync();
+        assert.throw(function() {
+          domain.deleteSync();
+        }, new RegExp(Domain.DOMAIN_DOES_NOT_EXIST));
       });
 
       test('updateSynonymsSync, initialize', function() {
