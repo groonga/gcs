@@ -92,7 +92,34 @@ App.Adapter = DS.Adapter.extend({
     }
   },
   deleteRecord: function(store, type, model) {
-    store.didDeleteRecord(model);
+    var self = this;
+    if (type === App.Domain) {
+      if (!model.get('id')) {
+        // the record is invalid (duplicated) so delete it immidiately.
+        store.didDeleteRecord(model);
+        return;
+      }
+      $.ajax({
+        type: 'GET',
+        url: self.configurationEndpoint,
+        data: {
+          Version: '2011-02-01',
+          Action: 'DeleteDomain',
+          DomainName: model.get('name')
+        },
+        success: function(data) {
+          var domainStatus = $(data).find('DeleteDomainResult > DomainStatus');
+          self.processDomainStatus(domainStatus, function(domain) {
+            store.didDeleteRecord(model);
+          });
+        },
+        error: function(data) {
+          console.log(data);
+        }
+      });
+    } else {
+      throw "Unsupported model";
+    }
   }
 });
 

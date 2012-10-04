@@ -122,3 +122,7 @@ App.DomainShowController = Ember.ObjectController.extend({
 App.DomainCreateController = Ember.ObjectController.extend({
   domainName: null
 });
+
+App.DomainDeleteController = Ember.ObjectController.extend({
+  domainName: null
+});

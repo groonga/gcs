@@ -39,6 +39,9 @@ html
                 {{#view view.NavItemView section="DomainCreate"}}
                 <a href {{action gotoDomainCreate}}><i class="icon-plus"></i> New domain</a>
                 {{/view}}
+                {{#view view.NavItemView section="DomainDelete"}}
+                <a href {{action gotoDomainDelete}}><i class="icon-remove"></i> Delete domain</a>
+                {{/view}}
           .span10
             {{outlet}}
 
@@ -60,6 +63,7 @@ html
         {{#view view.NavItemView item="Search"}}
         <a href {{action gotoDomainSearch this.content}}>Search</a>
         {{/view}}
+        // <a href {{action gotoDomainDelete}} class="pull-right"><i class="icon-remove"></i> Delete</a>
 
       {{outlet}}
 
@@ -91,6 +95,19 @@ html
       .control-group
         .controls
           button(type="submit", class="btn btn-primary") Create
+      {{/view}}
+
+    script(data-template-name="domain-delete", type="text/x-handlebars")
+      h1 Creating new domain
+
+      {{#view view.DomainDeleteFormView}}
+      .control-group
+        label.control-label Domain Name
+        .controls
+          {{view Ember.TextField valueBinding="domainName"}}
+      .control-group
+        .controls
+          button(type="submit", class="btn btn-primary") Delete
       {{/view}}
 
     script(data-template-name="domain-search", type="text/x-handlebars")
