@@ -83,8 +83,11 @@ App.DomainDeleteView = Ember.View.extend({
     submit: function(event) {
       event.preventDefault();
       var domainName = this.get('controller.domainName');
-      var domain = App.store.deleteRecord(App.Domain, {name: domainName});
-      App.store.commit();
+      var record = App.store.find(App.Domain, domainName);
+      if (record) {
+        App.store.deleteRecord(record);
+        App.store.commit();
+      }
     }
   })
 });

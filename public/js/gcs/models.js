@@ -108,10 +108,7 @@ App.Adapter = DS.Adapter.extend({
           DomainName: model.get('name')
         },
         success: function(data) {
-          var domainStatus = $(data).find('DeleteDomainResult > DomainStatus');
-          self.processDomainStatus(domainStatus, function(domain) {
-            store.didDeleteRecord(model);
-          });
+          store.didDeleteRecord(model);
         },
         error: function(data) {
           console.log(data);
