@@ -72,22 +72,3 @@ App.DomainCreateView = Ember.View.extend({
     }
   })
 });
-
-App.DomainDeleteView = Ember.View.extend({
-  templateName: 'domain-delete',
-
-  DomainDeleteFormView: Ember.View.extend({
-    tagName: 'form',
-    classNames: 'form-horizontal',
-
-    submit: function(event) {
-      event.preventDefault();
-      var domainName = this.get('controller.domainName');
-      var record = App.store.find(App.Domain, domainName);
-      if (record) {
-        App.store.deleteRecord(record);
-        App.store.commit();
-      }
-    }
-  })
-});

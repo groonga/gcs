@@ -113,7 +113,16 @@ App.IndexController = Ember.ArrayController.extend({
 });
 
 App.DomainController = Ember.ObjectController.extend({
-  selectedAction: null
+  selectedAction: null,
+
+  delete: function() {
+    var domainName = this.get('domain').get('name');
+    var record = App.store.find(App.Domain, domainName);
+    if (record && confirm('Do you really want this domain to be deleted?')) {
+      App.store.deleteRecord(record);
+      App.store.commit();
+    }
+  }
 });
 
 App.DomainShowController = Ember.ObjectController.extend({

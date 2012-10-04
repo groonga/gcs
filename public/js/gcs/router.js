@@ -25,7 +25,6 @@ App.Router = Ember.Router.extend({
     gotoDomainSearch: Ember.State.transitionTo('domains.search'),
     gotoDomainShow: Ember.State.transitionTo('domains.show'),
     gotoDomainCreate: Ember.State.transitionTo('domains.create'),
-    gotoDomainDelete: Ember.State.transitionTo('domains.delete'),
     index: Ember.Route.extend({
       route: '/',
       connectOutlets: function(router) {
@@ -42,7 +41,11 @@ App.Router = Ember.Router.extend({
           this.connectDomainOutlet(router, domain);
           var domainController = router.get('domainController');
           domainController.set('selectedAction', 'About');
+          domainController.set('domain', domain);
           domainController.connectOutlet('domainShow', domain);
+        },
+        delete: function(router) {
+          router.get('domainController').delete();
         }
       }),
       search: Ember.Route.extend(App.WithDomain, {
@@ -70,14 +73,6 @@ App.Router = Ember.Router.extend({
           var applicationController = router.get('applicationController');
           applicationController.set('selected', ['DomainCreate']);
           applicationController.connectOutlet('domainCreate');
-        }
-      }),
-      'delete': Ember.Route.extend({
-        route: 'delete',
-        connectOutlets: function(router) {
-          var applicationController = router.get('applicationController');
-          applicationController.set('selected', ['DomainDelete']);
-          applicationController.connectOutlet('domainDelete');
         }
       })
     }),
