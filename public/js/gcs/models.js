@@ -84,7 +84,7 @@ App.Adapter = DS.Adapter.extend({
         error: function(data) {
           // console.log(data);
           store.recordWasInvalid(model, {name: "invalid"});
-          store.deleteRecord(model);
+          model.get("transaction").rollback();
         }
       });
     } else {
