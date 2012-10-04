@@ -6,7 +6,9 @@ var commandLine = new CLI();
 
 commandLine
   .option('-p, --port <port>',
-          'specify port (GCS_PORT) [' + CLI.defaultPort + ']',
+          'specify port' +
+            '(GCS_PORT) ' +
+            '[' + CLI.defaultPort + ']',
           Number,
           CLI.defaultPort)
   .option('--privilege <ip range>',
