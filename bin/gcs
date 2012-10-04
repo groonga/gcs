@@ -10,19 +10,19 @@ commandLine
           Number,
           CLI.defaultPort)
   .option('--privilege <ip range>',
-          'list of IP ranges for privileged client '+
-          '(GCS_PRIVILEGED_RANGES) '+
+          'list of IP ranges for privileged client ' +
+          '(GCS_PRIVILEGED_RANGES) ' +
             '[' + CLI.defaultPrivilegedRanges + ']',
           String,
           CLI.defaultPrivilegedRanges)
   .option('--base-host <hostname>',
-          'The base host name assigned to the service '+
-          '(GCS_BASE_HOST) '+
+          'The base host name assigned to the service ' +
+          '(GCS_BASE_HOST) ' +
             '[' + CLI.defaultBaseHost + ']',
           String)
   .option('--configuration-host <hostname>',
-          'The host name for configuration API of the service '+
-          '(GCS_CONFIGURATION_HOST) '+
+          'The host name for configuration API of the service ' +
+          '(GCS_CONFIGURATION_HOST) ' +
             '[' + CLI.defaultConfigurationHost + ']',
           String)
   .parse();
