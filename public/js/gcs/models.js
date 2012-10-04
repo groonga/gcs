@@ -82,13 +82,17 @@ App.Adapter = DS.Adapter.extend({
           });
         },
         error: function(data) {
-                 console.log(data);
+          // console.log(data);
           store.recordWasInvalid(model, {name: "invalid"});
+          store.deleteRecord(model);
         }
       });
     } else {
       throw "Unsupported model";
     }
+  },
+  deleteRecord: function(store, type, model) {
+    store.didDeleteRecord(model);
   }
 });
 
