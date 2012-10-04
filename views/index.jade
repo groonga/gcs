@@ -2,36 +2,31 @@ doctype 5
 html
   head
     title Groonga CloudSearch
-    script(src="/js/lib/jquery-1.8.1.min.js", type="text/javascript")
-    script(src="/js/lib/runtime.min.js", type="text/javascript")
-    script(src="/js/lib/handlebars-1.0.rc.1.js", type="text/javascript")
-    script(src="/js/lib/ember-latest.js", type="text/javascript")
-    script(src="/js/lib/ember-data-latest.js", type="text/javascript")
-    script(src="/js/gcs/base.js", type="text/javascript")
-    script(src="/js/gcs/models.js", type="text/javascript")
-    script(src="/js/gcs/controllers.js", type="text/javascript")
-    script(src="/js/gcs/views.js", type="text/javascript")
-    link(href="/css/bootstrap.min.css", rel="stylesheet")
-    link(href="/css/gcs.css", rel="stylesheet")
+    script(src="/js/gcs.min.js", type="text/javascript")
+    link(href="/css/gcs.min.css", rel="stylesheet")
 
     script(data-template-name="application", type="text/x-handlebars")
       .navbar.navbar-fixed-top
         .navbar-inner
           .container
-            <a class="brand" href {{action showIndex}}>Groonga CloudSearch</a>
-            ul.nav
-              li <a href {{action showIndex}}>Home</a>
+            <a class="brand" href {{action gotoIndex}}>Groonga CloudSearch</a>
       .container
         .row
           .span2
             .well(style="padding: 10px 0 10px 0;")
               ul.nav.nav-list
+                {{#view view.NavItemView section="Home" item=null}}
+                <a href {{action gotoIndex this}}><i class="icon-home"></i> Home</a>
+                {{/view}}
                 li.nav-header Domains
                 {{#each App.domains}}
-                li <a href {{action showDomain this}}>{{name}}</a>
-                ul.nav.nav-list
-                  li <a href {{action showSearch this}}>search</a>
+                {{#view view.NavItemView section="Domain" itemBinding="name"}}
+                <a href {{action gotoDomainShow this}}><i class="icon-hdd"></i> {{name}}</a>
+                {{/view}}
                 {{/each}}
+                {{#view view.NavItemView section="DomainCreate"}}
+                <a href {{action gotoDomainCreate}}><i class="icon-plus"></i> New domain</a>
+                {{/view}}
           .span10
             {{outlet}}
 
@@ -45,16 +40,25 @@ html
 
     script(data-template-name="domain", type="text/x-handlebars")
       h1 Domain '{{name}}'
+
+      ul.nav.nav-tabs
+        {{#view view.NavItemView item="About"}}
+        <a href {{action gotoDomainShow this.content}}>About</a>
+        {{/view}}
+        {{#view view.NavItemView item="Search"}}
+        <a href {{action gotoDomainSearch this.content}}>Search</a>
+        {{/view}}
+
       {{outlet}}
 
     script(data-template-name="domain-show", type="text/x-handlebars")
       table.table.table-bordered
         tbody
           tr
-            th Document Service endpoint
+            th Document Service Endpoint
             td {{docEndpoint}}
           tr
-            th Search Service endpoint
+            th Search Service Endpoint
             td {{searchEndpoint}}
           tr
             th Fields
@@ -64,9 +68,21 @@ html
                 li {{name}}
                 {{/each}}
 
+    script(data-template-name="domain-create", type="text/x-handlebars")
+      h1 Creating new domain
+
+      {{#view view.DomainCreateFormView}}
+      .control-group
+        label.control-label Domain Name
+        .controls
+          {{view Ember.TextField valueBinding="domainName"}}
+      .control-group
+        .controls
+          button(type="submit", class="btn btn-primary") Create
+      {{/view}}
+
     script(data-template-name="domain-search", type="text/x-handlebars")
-      h2 Search
-      {{#view App.SearchFormView}}
+      {{#view view.SearchFormView}}
       {{view Ember.TextField valueBinding="query"}}
       input(type="hidden", name="start", value="")
       button(type="submit", class="btn") Search

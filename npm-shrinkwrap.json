@@ -1,6 +1,6 @@
 {
   "name": "gcs",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "dependencies": {
     "commander": {
       "version": "1.0.1"
@@ -99,6 +99,38 @@
     },
     "xmlbuilder": {
       "version": "0.3.11"
+    },
+    "connect-assetmanager": {
+      "version": "0.0.28",
+      "dependencies": {
+        "request": {
+          "version": "2.11.4",
+          "dependencies": {
+            "form-data": {
+              "version": "0.0.3",
+              "dependencies": {
+                "combined-stream": {
+                  "version": "0.0.3",
+                  "dependencies": {
+                    "delayed-stream": {
+                      "version": "0.0.5"
+                    }
+                  }
+                },
+                "async": {
+                  "version": "0.1.9"
+                }
+              }
+            },
+            "mime": {
+              "version": "1.2.7"
+            }
+          }
+        },
+        "step": {
+          "version": "0.0.5"
+        }
+      }
     },
     "chai": {
       "version": "1.2.0"
