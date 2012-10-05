@@ -45,8 +45,9 @@ App.Router = Ember.Router.extend({
           domainController.connectOutlet('domainShow', domain);
         },
         delete: function(router) {
-          if (router.get('domainController').delete())
+          router.get('domainController').delete(function() {
             router.transitionTo('root.index');
+          });
         }
       }),
       search: Ember.Route.extend(App.WithDomain, {
@@ -74,6 +75,11 @@ App.Router = Ember.Router.extend({
           var applicationController = router.get('applicationController');
           applicationController.set('selected', ['DomainCreate']);
           applicationController.connectOutlet('domainCreate');
+        },
+        createAndShow: function(router, event) {
+          router.get('domainCreateController').create(function(domain) {
+            router.transitionTo('domains.show', domain);
+          });
         }
       })
     }),

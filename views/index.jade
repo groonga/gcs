@@ -91,7 +91,7 @@ html
           {{view Ember.TextField valueBinding="domainName"}}
       .control-group
         .controls
-          button(type="submit", class="btn btn-primary") Create
+          <button class="btn btn-primary" {{action createAndShow}}>Create</button>
       {{/view}}
 
     script(data-template-name="domain-search", type="text/x-handlebars")

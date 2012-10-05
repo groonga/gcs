@@ -115,15 +115,14 @@ App.IndexController = Ember.ArrayController.extend({
 App.DomainController = Ember.ObjectController.extend({
   selectedAction: null,
 
-  delete: function() {
+  delete: function(callback) {
     var domainName = this.get('domain').get('name');
     var record = App.store.find(App.Domain, domainName);
     if (record && confirm('Do you really want this domain to be deleted?')) {
       App.store.deleteRecord(record);
       App.store.commit();
-      return true;
+      callback();
     }
-    return false;
   }
 });
 
@@ -131,9 +130,12 @@ App.DomainShowController = Ember.ObjectController.extend({
 });
 
 App.DomainCreateController = Ember.ObjectController.extend({
-  domainName: null
-});
+  domainName: null,
 
-App.DomainDeleteController = Ember.ObjectController.extend({
-  domainName: null
+  create: function(callback) {
+    var domainName = this.get('domainName');
+    var domain = App.store.createRecord(App.Domain, {name: domainName});
+    App.store.commit();
+    callback(domain);
+  }
 });

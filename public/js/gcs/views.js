@@ -64,11 +64,6 @@ App.DomainCreateView = Ember.View.extend({
     classNames: 'form-horizontal',
 
     submit: function(event) {
-      event.preventDefault();
-      var domainName = this.get('controller.domainName');
-      var domain = App.store.createRecord(App.Domain, {name: domainName});
-      // TODO treat ajax errors (but how?)
-      App.store.commit();
     }
   })
 });
