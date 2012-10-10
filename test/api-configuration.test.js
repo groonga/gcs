@@ -337,7 +337,7 @@ suite('Configuration API', function() {
                 IndexFieldType: 'text',
                 TextOptions: {
                   DefaultValue: {},
-                  FacetEnabled: 'false',  
+                  FacetEnabled: 'false',
                   ResultEnabled: 'false'
                 }
               };
