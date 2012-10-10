@@ -842,29 +842,6 @@ suite('Configuration API', function() {
     setup(commonSetup);
     teardown(commonTeardown);
 
-    test('no version', function(done) {
-      utils
-        .get('/?Action=unknown')
-        .next(function(response) {
-          response = xmlResponses.toParsedResponse(response);
-          assert.deepEqual(response.pattern,
-                           { statusCode: 400,
-                             body: xmlResponses.COMMON_ERROR_RESPONSE });
-
-          var expectedError = {
-                Code: 'MissingParameter',
-                Message: 'An input parameter "Version" that is mandatory for ' +
-                         'processing the request is not supplied.'
-              };
-          assert.deepEqual(response.body.Response.Errors.Error, expectedError);
-
-          done();
-        })
-        .error(function(error) {
-          done(error);
-        });
-    });
-
     test('invalid version', function(done) {
       utils
         .get('/?Version=2011-02-02&Action=unknown')
