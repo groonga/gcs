@@ -156,6 +156,30 @@ suite('Configuration API', function() {
         });
     });
 
+    test('Action=DescribeDomains (all domains, via POST)', function(done) {
+      var domain;
+      utils
+        .post('/?DomainName=domain3&Action=CreateDomain&Version=2011-02-01')
+        .post('/?DomainName=domain1&Action=CreateDomain&Version=2011-02-01')
+        .post('/?DomainName=domain2&Action=CreateDomain&Version=2011-02-01')
+        .post('/?Action=DescribeDomains&Version=2011-02-01')
+        .next(function(response) {
+          response = xmlResponses.toParsedResponse(response);
+          var expectedDomains = ['domain1', 'domain2', 'domain3'];
+          assert.deepEqual(response.pattern,
+                           { statusCode: 200,
+                             body: xmlResponses.DescribeDomainsResponse(expectedDomains) });
+
+          var actualDomains = getActualDescribedDomains(response);
+          assert.deepEqual(actualDomains, expectedDomains);
+
+          done();
+        })
+        .error(function(error) {
+          done(error);
+        });
+    });
+
     test('Action=DescribeDomains (specified domains)', function(done) {
       utils
         .get('/?DomainName=domain3&Action=CreateDomain&Version=2011-02-01')
