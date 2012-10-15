@@ -18,6 +18,7 @@
     "chai": ""
   },
   "dependencies": {
+    "awssum": "",
     "commander": "",
     "dateformat": "",
     "express": "~ 2.5.10",

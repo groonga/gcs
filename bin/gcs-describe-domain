@@ -52,6 +52,43 @@ function report(domain) {
   console.log('======================');
 }
 
+function reportDomainStatus(status) {
+  console.log('=== Domain Summary ===');
+  console.log('Domain Name: %s',
+              status.DomainName);
+  console.log('Document Service endpoint: %s',
+              status.DocService.Endpoint);
+  console.log('Search Service endpoint: %s',
+               status.SearchService.Endpoint);
+  console.log('SearchInstanceType: %s',
+              null);
+  console.log('SearchPartitionCount: %s',
+              status.SearchPartitionCount);
+  console.log('SearchInstanceCount: %s',
+              status.SearchInstanceCount);
+  console.log('Searchable Documents: %s',
+              status.NumSearchableDocs);
+  console.log('Current configuration changes require a call to ' +
+                'IndexDocuments: %s',
+              status.RequiresIndexDocuments ? 'Yes' : 'No' );
+
+//  // additional information for the default search field!
+//  var field = status.defaultSearchField;
+//  if (field)
+//    console.log('Default search field: %s', field.name);
+
+  console.log('');
+  console.log('=== Domain Configuration ===');
+
+  console.log('');
+  console.log('Fields:');
+  console.log('=======');
+//  domain.indexFields.forEach(function(field) {
+//    console.log(field.summary);
+//  });
+  console.log('======================');
+}
+
 function outputNotesForHostAndPort() {
   console.log('*Note: the hostname and the port number is detected from ' +
               'the default options. If you run the service with your ' +
@@ -60,9 +97,10 @@ function outputNotesForHostAndPort() {
 }
 
 if (commandLine.options.domainName) {
-  commandLine.assertDomainExists();
-  report(commandLine.domain);
-  outputNotesForHostAndPort();
+  commandLine.getDomainStatus(function(error, domainStatus) {
+    reportDomainStatus(domainStatus);
+    outputNotesForHostAndPort();
+  });
 } else {
   var domains = CLI.Domain.getAll(commandLine.context);
   domains.forEach(function(domain, index) {
