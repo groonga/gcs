@@ -170,7 +170,7 @@ suite('gcs-describe-domain', function() {
   setup(commonSetup);
   teardown(commonTeardown);
 
-  var hostPort = '127.0.0.1.xip.io:7575';
+  var hostPort = '127.0.0.1.xip.io:' + utils.testPort;
 
   test('describe one', function(done) {
     var domain2 = new Domain('domain2', context).createSync();
