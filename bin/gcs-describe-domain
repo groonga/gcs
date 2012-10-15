@@ -52,25 +52,25 @@ function report(domain) {
   console.log('======================');
 }
 
-function reportDomainStatus(status) {
+function reportStatus(domain, indexFields) {
   console.log('=== Domain Summary ===');
   console.log('Domain Name: %s',
-              status.DomainName);
+              domain.DomainName);
   console.log('Document Service endpoint: %s',
-              status.DocService.Endpoint);
+              domain.DocService.Endpoint);
   console.log('Search Service endpoint: %s',
-               status.SearchService.Endpoint);
+              domain.SearchService.Endpoint);
   console.log('SearchInstanceType: %s',
               null);
   console.log('SearchPartitionCount: %s',
-              status.SearchPartitionCount);
+              domain.SearchPartitionCount);
   console.log('SearchInstanceCount: %s',
-              status.SearchInstanceCount);
+              domain.SearchInstanceCount);
   console.log('Searchable Documents: %s',
-              status.NumSearchableDocs);
+              domain.NumSearchableDocs);
   console.log('Current configuration changes require a call to ' +
                 'IndexDocuments: %s',
-              status.RequiresIndexDocuments ? 'Yes' : 'No' );
+              domain.RequiresIndexDocuments == 'true' ? 'Yes' : 'No' );
 
 //  // additional information for the default search field!
 //  var field = status.defaultSearchField;
@@ -83,9 +83,9 @@ function reportDomainStatus(status) {
   console.log('');
   console.log('Fields:');
   console.log('=======');
-//  domain.indexFields.forEach(function(field) {
-//    console.log(field.summary);
-//  });
+  indexFields.forEach(function(indexField) {
+    console.log(commandLine.summarizeIndexFieldStatus(indexField));
+  });
   console.log('======================');
 }
 
@@ -96,11 +96,19 @@ function outputNotesForHostAndPort() {
               'default information.');
 }
 
-if (commandLine.options.domainName) {
-  commandLine.getDomainStatus(function(error, domainStatus) {
-    reportDomainStatus(domainStatus);
-    outputNotesForHostAndPort();
-  });
+if (commandLine.domainName) {
+  commandLine.getDomainStatus(
+    commandLine.domainName,
+    function(error, domainStatus) {
+      commandLine.getIndexFieldStatus(
+        commandLine.domainName,
+        function(error, indexFieldStatuses) {
+          reportStatus(domainStatus, indexFieldStatuses);
+          outputNotesForHostAndPort();
+        }
+      );
+    }
+  );
 } else {
   var domains = CLI.Domain.getAll(commandLine.context);
   domains.forEach(function(domain, index) {
