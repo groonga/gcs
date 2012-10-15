@@ -49,74 +49,55 @@ function reportStatus(domain, indexFields, defaultSearchField) {
   console.log('======================');
 }
 
-var domainName = commandLine.domainName;
-if (domainName) {
-  commandLine.getDomainStatus(domainName, function(error, domain) {
-    if (error)
-      commandLine.raiseFatalError(error);
+function reportDomains(domains) {
+  var indexFieldStatuses = {};
+  var defaultSearchFields = {};
+  var indexFieldStatusesCount = 0;
+  var defaultSearchFieldsCount = 0;
 
-    var indexFields = null;
-    var defaultSearchField = null;
-
-    function tryDoReport() {
-      if (indexFields !== null &&
-          defaultSearchField !== null) {
+  function tryDoReport() {
+    if (indexFieldStatusesCount == domains.length &&
+        defaultSearchFieldsCount == domains.length) {
+      domains.forEach(function(domain, index) {
+        if (index) console.log('');
+        var indexFields = indexFieldStatuses[domain.DomainName];
+        var defaultSearchField = defaultSearchFields[domain.DomainName];
         reportStatus(domain, indexFields, defaultSearchField);
-        process.exit(0);
-      }
+      });
+      process.exit(0);
     }
+  }
 
-    commandLine.getIndexFieldStatuses(domainName, function(error, indexFieldStatuses) {
+  domains.forEach(function(domain) {
+    var domainName = domain.DomainName;
+    commandLine.getIndexFieldStatuses(domainName, function(error, indexFields) {
       if (error)
         commandLine.raiseFatalError(error);
-      indexFields = indexFieldStatuses;
+      indexFieldStatuses[domainName] = indexFields;
+      indexFieldStatusesCount++;
       tryDoReport();
     });
     commandLine.getDefaultSearchField(domainName, function(error, defaultSearchFieldResult) {
       if (error)
         commandLine.raiseFatalError(error);
-      defaultSearchField = defaultSearchFieldResult;
+      defaultSearchFields[domainName] = defaultSearchFieldResult;
+      defaultSearchFieldsCount++;
       tryDoReport();
     });
+  });
+}
+
+var domainName = commandLine.domainName;
+if (domainName) {
+  commandLine.getDomainStatus(domainName, function(error, domain) {
+    if (error)
+      commandLine.raiseFatalError(error);
+    reportDomains([domain]);
   });
 } else {
   commandLine.getDomainStatuses(function(error, domains) {
     if (error)
       commandLine.raiseFatalError(error);
-    var indexFieldStatuses = {};
-    var defaultSearchFields = {};
-    var indexFieldStatusesCount = 0;
-    var defaultSearchFieldsCount = 0;
-
-    function tryDoReport() {
-      if (indexFieldStatusesCount == domains.length &&
-          defaultSearchFieldsCount == domains.length) {
-        domains.forEach(function(domain, index) {
-          if (index) console.log('');
-          var indexFields = indexFieldStatuses[domain.DomainName];
-          var defaultSearchField = defaultSearchFields[domain.DomainName];
-          reportStatus(domain, indexFields, defaultSearchField);
-        });
-        process.exit(0);
-      }
-    }
-
-    domains.forEach(function(domain) {
-      var domainName = domain.DomainName;
-      commandLine.getIndexFieldStatuses(domainName, function(error, indexFields) {
-        if (error)
-          commandLine.raiseFatalError(error);
-        indexFieldStatuses[domainName] = indexFields;
-        indexFieldStatusesCount++;
-        tryDoReport();
-      });
-      commandLine.getDefaultSearchField(domainName, function(error, defaultSearchFieldResult) {
-        if (error)
-          commandLine.raiseFatalError(error);
-        defaultSearchFields[domainName] = defaultSearchFieldResult;
-        defaultSearchFieldsCount++;
-        tryDoReport();
-      });
-    });
+    reportDomains(domains);
   });
 }
