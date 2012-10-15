@@ -715,7 +715,8 @@ suite('gcs-configure-default-search-field', function() {
       .run('gcs-configure-default-search-field',
            '--domain-name', 'companies',
            '--name', 'name',
-           '--database-path', temporaryDatabase.path)
+           '--port', utils.testPort,
+           '--base-host', 'localhost:' + utils.testPort)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
@@ -739,11 +740,13 @@ suite('gcs-configure-default-search-field', function() {
       .run('gcs-configure-default-search-field',
            '--domain-name', 'companies',
            '--name', 'name',
-           '--database-path', temporaryDatabase.path)
+           '--port', utils.testPort,
+           '--base-host', 'localhost:' + utils.testPort)
       .run('gcs-configure-default-search-field',
            '--domain-name', 'companies',
            '--name', 'address',
-           '--database-path', temporaryDatabase.path)
+           '--port', utils.testPort,
+           '--base-host', 'localhost:' + utils.testPort)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
@@ -765,11 +768,13 @@ suite('gcs-configure-default-search-field', function() {
       .run('gcs-configure-default-search-field',
            '--domain-name', 'companies',
            '--name', 'name',
-           '--database-path', temporaryDatabase.path)
+           '--port', utils.testPort,
+           '--base-host', 'localhost:' + utils.testPort)
       .run('gcs-configure-default-search-field',
            '--domain-name', 'companies',
            '--name', '',
-           '--database-path', temporaryDatabase.path)
+           '--port', utils.testPort,
+           '--base-host', 'localhost:' + utils.testPort)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
@@ -794,10 +799,12 @@ suite('gcs-configure-default-search-field', function() {
       .run('gcs-configure-default-search-field',
            '--domain-name', 'companies',
            '--name', 'name',
-           '--database-path', temporaryDatabase.path)
+           '--port', utils.testPort,
+           '--base-host', 'localhost:' + utils.testPort)
       .run('gcs-configure-default-search-field',
            '--domain-name', 'companies',
-           '--database-path', temporaryDatabase.path)
+           '--port', utils.testPort,
+           '--base-host', 'localhost:' + utils.testPort)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
@@ -822,10 +829,12 @@ suite('gcs-configure-default-search-field', function() {
       .run('gcs-configure-default-search-field',
            '--domain-name', 'companies',
            '--name', 'name',
-           '--database-path', temporaryDatabase.path)
+           '--port', utils.testPort,
+           '--base-host', 'localhost:' + utils.testPort)
       .run('gcs-describe-domain',
            '--domain-name', 'companies',
-           '--database-path', temporaryDatabase.path)
+           '--port', utils.testPort,
+           '--base-host', 'localhost:' + utils.testPort)
       .next(function(result) {
         assert.equal(result.code, 0, result.output.stdout + result.output.stderr);
         console.log(result.output.stdout);
