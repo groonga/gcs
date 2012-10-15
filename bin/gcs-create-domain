@@ -19,7 +19,7 @@ commandLine.getDomainStatus(domainName, function(error, domain) {
     return process.exit(1);
   }
   console.log('Creating domain [' + domainName + ']');
-  commandLine.cloudSearch.CreateDomain(
+  commandLine.configurationAPI.CreateDomain(
     { DomainName: domainName },
     function(error, result) {
       if (error)

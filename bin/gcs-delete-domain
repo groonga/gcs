@@ -15,7 +15,7 @@ commandLine
 commandLine.assertHaveDomainName();
 commandLine.assertDomainExistsHTTP(function() {
   function doDelete(successMessage) {
-    commandLine.cloudSearch.DeleteDomain(
+    commandLine.configurationAPI.DeleteDomain(
       { DomainName: commandLine.domainName },
       function(error, response) {
         if (error)
