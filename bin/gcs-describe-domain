@@ -96,19 +96,14 @@ function outputNotesForHostAndPort() {
               'default information.');
 }
 
-if (commandLine.domainName) {
-  commandLine.getDomainStatus(
-    commandLine.domainName,
-    function(error, domainStatus) {
-      commandLine.getIndexFieldStatus(
-        commandLine.domainName,
-        function(error, indexFieldStatuses) {
-          reportStatus(domainStatus, indexFieldStatuses);
-          outputNotesForHostAndPort();
-        }
-      );
-    }
-  );
+var domainName = commandLine.domainName;
+if (domainName) {
+  commandLine.getDomainStatus(domainName, function(error, domain) {
+    commandLine.getIndexFieldStatuses(domainName, function(error, indexFields) {
+      reportStatus(domain, indexFields);
+      outputNotesForHostAndPort();
+    });
+  });
 } else {
   var domains = CLI.Domain.getAll(commandLine.context);
   domains.forEach(function(domain, index) {
