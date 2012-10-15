@@ -23,7 +23,7 @@ commandLine.assertDomainExistsHTTP(function() {
         console.log(successMessage);
         process.exit(0);
       }
-    });
+    );
   }
   if (commandLine.options.force) {
     doDelete('Domain [' + commandLine.domainName + '] has been deleted successfully.');
