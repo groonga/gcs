@@ -14,7 +14,7 @@ commandLine
 
 commandLine.assertHaveDomainName();
 commandLine.assertDomainExistsHTTP(function() {
-  if (commandLine.options.force) {
+  function doDelete(successMessage) {
     commandLine.cloudSearch.DeleteDomain(
       { DomainName: commandLine.domainName },
       function(error, response) {
@@ -22,26 +22,18 @@ commandLine.assertDomainExistsHTTP(function() {
           console.log('Unexpected error: ' + JSON.stringify(error));
           process.exit(1);
         } else {
-          console.log('Domain [' + commandLine.domainName + '] has been deleted successfully.');
+          console.log(successMessage);
           process.exit(0);
         }
       }
     });
+  }
+  if (commandLine.options.force) {
+    doDelete('Domain [' + commandLine.domainName + '] has been deleted successfully.');
   } else {
     commandLine.confirm('Really delete? [' + commandLine.domainName + '] (y/N) ', function(ok){
       if (ok) {
-        commandLine.cloudSearch.DeleteDomain(
-          { DomainName: commandLine.domainName },
-          function(error, response) {
-            if (error) {
-              console.log('Unexpected error: ' + JSON.stringify(error));
-              process.exit(1);
-            } else {
-              console.log('Successfully deleted.');
-              process.exit(0);
-            }
-          }
-        });
+        doDelete('Successfully deleted.');
       } else {
         process.exit(1);
       }
