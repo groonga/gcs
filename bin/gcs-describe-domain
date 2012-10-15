@@ -13,45 +13,6 @@ commandLine
           String)
   .parse();
 
-var hostPort = '127.0.0.1.xip.io:7575';
-
-function report(domain) {
-  console.log('=== Domain Summary ===');
-  console.log('Domain Name: %s',
-              domain.name);
-  console.log('Document Service endpoint: %s',
-              domain.getDocumentsEndpoint(hostPort));
-  console.log('Search Service endpoint: %s',
-              domain.getSearchEndpoint(hostPort));
-  console.log('SearchInstanceType: %s',
-              domain.searchInstanceType);
-  console.log('SearchPartitionCount: %s',
-              domain.searchPartitionCount);
-  console.log('SearchInstanceCount: %s',
-              domain.searchInstanceCount);
-  console.log('Searchable Documents: %s',
-              domain.searchableDocumentsCount);
-  console.log('Current configuration changes require a call to ' +
-                'IndexDocuments: %s',
-              domain.requiresIndexDocuments ? 'Yes' : 'No' );
-
-  // additional information for the default search field!
-  var field = domain.defaultSearchField;
-  if (field)
-    console.log('Default search field: %s', field.name);
-
-  console.log('');
-  console.log('=== Domain Configuration ===');
-
-  console.log('');
-  console.log('Fields:');
-  console.log('=======');
-  domain.indexFields.forEach(function(field) {
-    console.log(field.summary);
-  });
-  console.log('======================');
-}
-
 function reportStatus(domain, indexFields) {
   console.log('=== Domain Summary ===');
   console.log('Domain Name: %s',
@@ -89,27 +50,28 @@ function reportStatus(domain, indexFields) {
   console.log('======================');
 }
 
-function outputNotesForHostAndPort() {
-  console.log('*Note: the hostname and the port number is detected from ' +
-              'the default options. If you run the service with your ' +
-              'favorite host name and port number, then use it instead of ' +
-              'default information.');
-}
-
 var domainName = commandLine.domainName;
 if (domainName) {
   commandLine.getDomainStatus(domainName, function(error, domain) {
     commandLine.getIndexFieldStatuses(domainName, function(error, indexFields) {
       reportStatus(domain, indexFields);
-      outputNotesForHostAndPort();
     });
   });
 } else {
-  var domains = CLI.Domain.getAll(commandLine.context);
-  domains.forEach(function(domain, index) {
-    if (index) console.log('');
-    report(domain);
+  commandLine.getDomainStatuses(null, function(error, domains) {
+    var statuses = {};
+    var statusPreparedCount = 0;
+    domains.slice(0).forEach(function(domain) {
+      statuses[domain.DomainName] = { domain: domain };
+      commandLine.getIndexFieldStatuses(domain.DomainName, function(error, indexFields) {
+        statuses[domain.DomainName].indexFields = indexFields;
+        statusPreparedCount++;
+        if (statusPreparedCount == domains.length) {
+          statuses.forEach(function(status) {
+            reportStatus(status.domain, status.indexFields);
+          });
+        }
+      });
+    });
   });
-  if (domains.length)
-    outputNotesForHostAndPort();
 }

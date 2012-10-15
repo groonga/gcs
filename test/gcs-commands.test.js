@@ -206,12 +206,7 @@ suite('gcs-describe-domain', function() {
                              '=======\n' +
                              ageField.summary + '\n' +
                              nameField.summary +'\n' +
-                             '======================\n' +
-                             '*Note: the hostname and the port number is ' +
-                             'detected from the default options. If you run ' +
-                             'the service with your favorite host name and ' +
-                             'port number, then use it instead of default ' +
-                             'information.\n' });
+                             '======================\n' });
 
         done();
       })
@@ -226,7 +221,8 @@ suite('gcs-describe-domain', function() {
     utils
       .run('gcs-describe-domain',
            '--show-all',
-           '--database-path', temporaryDatabase.path)
+           '--port', utils.testPort,
+           '--base-host', 'localhost:' + utils.testPort)
       .next(function(result) {
         var domain1 = new Domain('domain1', context);
         var domain2 = new Domain('domain2', context);
@@ -269,12 +265,7 @@ suite('gcs-describe-domain', function() {
                              '\n' +
                              'Fields:\n' +
                              '=======\n' +
-                             '======================\n' +
-                             '*Note: the hostname and the port number is ' +
-                             'detected from the default options. If you run ' +
-                             'the service with your favorite host name and ' +
-                             'port number, then use it instead of default ' +
-                             'information.\n' });
+                             '======================\n' });
 
         done();
       })
