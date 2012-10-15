@@ -30,11 +30,11 @@ function assertDomainNotSpecified(result) {
                    result.output.stderr);
 }
 
-function assertDomainNotExist(result) {
+function assertDomainNotExist(result, domainName) {
   assert.deepEqual({ code:    result.code,
                      message: result.output.stdout },
                    { code:    1,
-                     message: 'You must specify an existing domain name.\n' },
+                     message: domainName + ' does not exist. You must specify an existing domain name.\n' },
                    result.output.stderr);
 }
 
@@ -142,9 +142,10 @@ suite('gcs-delete-domain', function() {
       .run('gcs-delete-domain',
            '--domain-name', 'test',
            '--force',
-           '--database-path', temporaryDatabase.path)
+           '--port', utils.testPort,
+           '--base-host', 'localhost:' + utils.testPort)
       .next(function(result) {
-        assertDomainNotExist(result);
+        assertDomainNotExist(result, 'test');
         done();
       })
       .error(function(e) {
@@ -622,7 +623,7 @@ suite('gcs-configure-text-options', function() {
            '--synonyms', path.join(__dirname, 'fixtures', 'synonyms.txt'),
            '--database-path', temporaryDatabase.path)
       .next(function(result) {
-        assertDomainNotExist(result);
+        assertDomainNotExist(result, 'companies');
         done();
       })
       .error(function(e) {
@@ -677,7 +678,7 @@ suite('gcs-configure-text-options', function() {
            '--print-synonyms',
            '--database-path', temporaryDatabase.path)
       .next(function(result) {
-        assertDomainNotExist(result);
+        assertDomainNotExist(result, 'companies');
         done();
       })
       .error(function(e) {
@@ -877,7 +878,7 @@ suite('gcs-index-documents', function() {
            '--domain-name', 'test',
            '--database-path', temporaryDatabase.path)
       .next(function(result) {
-        assertDomainNotExist(result);
+        assertDomainNotExist(result, 'test');
         done();
       })
       .error(function(e) {
@@ -1078,7 +1079,7 @@ suite('gcs-post-sdf', function() {
            '--domain-name', 'test',
            '--database-path', temporaryDatabase.path)
       .next(function(result) {
-        assertDomainNotExist(result);
+        assertDomainNotExist(result, 'test');
         done();
       })
       .error(function(e) {
