@@ -133,7 +133,7 @@ exports.DefineIndexFieldResponse_Literal = createGenericResponse('DefineIndexFie
 defineGenericResponse('DeleteIndexField');
 
 exports.DescribeIndexFieldsResponse = function(members) {
-  return createGenericResponse('DefineIndexField', {
+  return createGenericResponse('DescribeIndexFields', {
     IndexFields: (function() {
           var pattern = {};
           members.forEach(function(member, index) {
