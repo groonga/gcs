@@ -46,7 +46,8 @@ suite('gcs-create-domain', function() {
     utils
       .run('gcs-create-domain',
            '--domain-name', 'test',
-           '--database-path', temporaryDatabase.path)
+           '--port', utils.testPort,
+           '--base-host', 'localhost:' + utils.testPort)
       .next(function(result) {
         assert.equal(result.code, 0, result.output.stderr);
         assert.include(result.output.stdout,
@@ -68,7 +69,8 @@ suite('gcs-create-domain', function() {
     utils
       .run('gcs-create-domain',
            '--domain-name', 'test',
-           '--database-path', temporaryDatabase.path)
+           '--port', utils.testPort,
+           '--base-host', 'localhost:' + utils.testPort)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
@@ -92,7 +94,8 @@ suite('gcs-create-domain', function() {
   test('missing domain name', function(done) {
     utils
       .run('gcs-create-domain',
-           '--database-path', temporaryDatabase.path)
+           '--port', utils.testPort,
+           '--base-host', 'localhost:' + utils.testPort)
       .next(function(result) {
         assertDomainNotSpecified(result);
 

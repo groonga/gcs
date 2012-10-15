@@ -12,14 +12,21 @@ commandLine
 
 commandLine.assertHaveDomainName();
 
-if (commandLine.domain.exists()) {
-  console.log('The domain [' + commandLine.domain.name + '] already exists.');
-  return process.exit(1);
-}
-
-console.log('Creating domain [' + commandLine.domain.name + ']');
-
-commandLine.domain.createSync();
-
-console.log('Domain endpoints are currently being created. ' +
-            'Use gcs-describe-domain to check for endpoints.');
+var domainName = commandLine.domainName;
+commandLine.getDomainStatus(domainName, function(error, domain) {
+  if (domain) {
+    console.log('The domain [' + domainName + '] already exists.');
+    return process.exit(1);
+  }
+  console.log('Creating domain [' + domainName + ']');
+  commandLine.cloudSearch.CreateDomain(
+    { DomainName: domainName },
+    function(error, result) {
+      if (error)
+        commandLine.raiseFatalError(error);
+      console.log('Domain endpoints are currently being created. ' +
+                  'Use gcs-describe-domain to check for endpoints.');
+      process.exit(0);
+    }
+  });
+});
