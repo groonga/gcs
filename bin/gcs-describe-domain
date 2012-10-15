@@ -13,7 +13,7 @@ commandLine
           String)
   .parse();
 
-function reportStatus(domain, indexFields) {
+function reportStatus(domain, indexFields, defaultSearchField) {
   console.log('=== Domain Summary ===');
   console.log('Domain Name: %s',
               domain.DomainName);
@@ -33,10 +33,9 @@ function reportStatus(domain, indexFields) {
                 'IndexDocuments: %s',
               domain.RequiresIndexDocuments == 'true' ? 'Yes' : 'No' );
 
-//  // additional information for the default search field!
-//  var field = status.defaultSearchField;
-//  if (field)
-//    console.log('Default search field: %s', field.name);
+  // additional information for the default search field!
+  if (defaultSearchField)
+    console.log('Default search field: %s', defaultSearchField);
 
   console.log('');
   console.log('=== Domain Configuration ===');
@@ -55,11 +54,29 @@ if (domainName) {
   commandLine.getDomainStatus(domainName, function(error, domain) {
     if (error)
       commandLine.raiseFatalError(error);
-    commandLine.getIndexFieldStatuses(domainName, function(error, indexFields) {
+
+    var indexFields = null;
+    var defaultSearchField = null;
+
+    function tryDoReport() {
+      if (indexFields !== null &&
+          defaultSearchField !== null) {
+        reportStatus(domain, indexFields, defaultSearchField);
+        process.exit(0);
+      }
+    }
+
+    commandLine.getIndexFieldStatuses(domainName, function(error, indexFieldStatuses) {
       if (error)
         commandLine.raiseFatalError(error);
-      reportStatus(domain, indexFields);
-      process.exit(0);
+      indexFields = indexFieldStatuses;
+      tryDoReport();
+    });
+    commandLine.getDefaultSearchField(domainName, function(error, defaultSearchFieldResult) {
+      if (error)
+        commandLine.raiseFatalError(error);
+      defaultSearchField = defaultSearchFieldResult;
+      tryDoReport();
     });
   });
 } else {
@@ -67,22 +84,38 @@ if (domainName) {
     if (error)
       commandLine.raiseFatalError(error);
     var indexFieldStatuses = {};
-    var preparedStatusesCount = 0;
+    var defaultSearchFields = {};
+    var indexFieldStatusesCount = 0;
+    var defaultSearchFieldsCount = 0;
+
+    function tryDoReport() {
+      if (indexFieldStatusesCount == domains.length &&
+          defaultSearchFieldsCount == domains.length) {
+        domains.forEach(function(domain, index) {
+          if (index) console.log('');
+          var indexFields = indexFieldStatuses[domain.DomainName];
+          var defaultSearchField = defaultSearchFields[domain.DomainName];
+          reportStatus(domain, indexFields, defaultSearchField);
+        });
+        process.exit(0);
+      }
+    }
+
     domains.forEach(function(domain) {
       var domainName = domain.DomainName;
       commandLine.getIndexFieldStatuses(domainName, function(error, indexFields) {
         if (error)
           commandLine.raiseFatalError(error);
         indexFieldStatuses[domainName] = indexFields;
-        preparedStatusesCount++;
-        if (preparedStatusesCount == domains.length) {
-          domains.forEach(function(domain, index) {
-            if (index) console.log('');
-            var statuses = indexFieldStatuses[domain.DomainName];
-            reportStatus(domain, statuses);
-          });
-          process.exit(0);
-        }
+        indexFieldStatusesCount++;
+        tryDoReport();
+      });
+      commandLine.getDefaultSearchField(domainName, function(error, defaultSearchFieldResult) {
+        if (error)
+          commandLine.raiseFatalError(error);
+        defaultSearchFields[domainName] = defaultSearchFieldResult;
+        defaultSearchFieldsCount++;
+        tryDoReport();
       });
     });
   });
