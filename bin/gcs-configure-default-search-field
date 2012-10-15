@@ -20,7 +20,7 @@ var fieldName = commandLine.hasOption('name') && commandLine.options.name;
 commandLine.assertDomainExistsHTTP(function() {
   if (fieldName) {
     commandLine.getIndexFieldStatus(domainName, fieldName, function(error, field) {
-      if (field && field.IndexFieldName == fieldName) {
+      if (field) {
         console.log('Setting "%s" as the default search field of "%s"...',
                     fieldName,
                     domainName);
