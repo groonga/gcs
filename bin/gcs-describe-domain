@@ -58,17 +58,19 @@ if (domainName) {
     });
   });
 } else {
-  commandLine.getDomainStatuses(null, function(error, domains) {
-    var statuses = {};
-    var statusPreparedCount = 0;
-    domains.slice(0).forEach(function(domain) {
-      statuses[domain.DomainName] = { domain: domain };
-      commandLine.getIndexFieldStatuses(domain.DomainName, function(error, indexFields) {
-        statuses[domain.DomainName].indexFields = indexFields;
-        statusPreparedCount++;
-        if (statusPreparedCount == domains.length) {
-          statuses.forEach(function(status) {
-            reportStatus(status.domain, status.indexFields);
+  commandLine.getDomainStatuses(function(error, domains) {
+    var indexFieldStatuses = {};
+    var preparedStatusesCount = 0;
+    domains.forEach(function(domain) {
+      var domainName = domain.DomainName;
+      commandLine.getIndexFieldStatuses(domainName, function(error, indexFields) {
+        indexFieldStatuses[domainName] = indexFields;
+        preparedStatusesCount++;
+        if (preparedStatusesCount == domains.length) {
+          domains.forEach(function(domain, index) {
+            if (index) console.log('');
+            var statuses = indexFieldStatuses[domain.DomainName];
+            reportStatus(domain, statuses);
           });
         }
       });
