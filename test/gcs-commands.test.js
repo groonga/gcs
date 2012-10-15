@@ -117,7 +117,8 @@ suite('gcs-delete-domain', function() {
       .run('gcs-delete-domain',
            '--domain-name', 'test',
            '--force',
-           '--database-path', temporaryDatabase.path)
+           '--port', utils.testPort,
+           '--base-host', 'localhost:' + utils.testPort)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
@@ -155,7 +156,8 @@ suite('gcs-delete-domain', function() {
     utils
       .run('gcs-delete-domain',
            '--force',
-           '--database-path', temporaryDatabase.path)
+           '--port', utils.testPort,
+           '--base-host', 'localhost:' + utils.testPort)
       .next(function(result) {
         assertDomainNotSpecified(result);
         done();
