@@ -2,7 +2,6 @@
 
 var CLI = require(__dirname + '/../lib/command-line').CommandLineInterface;
 var commandLine = new CLI();
-var fs = require('fs');
 
 commandLine
   .option('-d, --domain-name <domain name>',
@@ -15,28 +14,43 @@ commandLine
   .parse();
 
 commandLine.assertHaveDomainName();
-commandLine.assertDomainExists();
 
-var field;
-if (commandLine.hasOption('name') && commandLine.options.name)
-  field = commandLine.domain.getIndexField(commandLine.options.name);
-
-if (field) {
-  if (field.exists()) {
-    console.log('Setting "%s" as the default search field of "%s"...',
-                field.name,
-                commandLine.domain.name);
-    commandLine.domain.defaultSearchField = field;
-    console.log('Done.');
+var domainName = commandLine.domainName;
+var fieldName = commandLine.hasOption('name') && commandLine.options.name;
+commandLine.assertDomainExistsHTTP(function() {
+  if (fieldName) {
+    commandLine.getIndexFieldStatus(domainName, fieldName, function(error, field) {
+      if (field) {
+        console.log('Setting "%s" as the default search field of "%s"...',
+                    fieldName,
+                    domainName);
+        commandLine.configurationAPI.UpdateDefaultSearchField(
+          { DefaultSearchField: fieldName },
+          function(error, result) {
+            if (error)
+              commandLine.raiseFatalError(error);
+            console.log('Done.');
+            process.exit(0);
+          }
+        );
+      } else {
+        console.log('"%s" is not a field of "%s".',
+                    fieldName,
+                    domainName);
+        process.exit(1);
+      }
+    });
   } else {
-    console.log('"%s" is not a field of "%s".',
-                field.name,
-                commandLine.domain.name);
-    return process.exit(1);
+    console.log('Resetting the default search field of "%s"...',
+                domainName);
+    commandLine.configurationAPI.UpdateDefaultSearchField(
+      { DefaultSearchField: '' },
+      function(error, result) {
+        if (error)
+          commandLine.raiseFatalError(error);
+        console.log('Done.');
+        process.exit(0);
+      }
+    );
   }
-} else {
-  console.log('Resetting the default search field of "%s"...',
-              commandLine.domain.name);
-  commandLine.domain.defaultSearchField = null;
-  console.log('Done.');
-}
+});
