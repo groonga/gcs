@@ -6,13 +6,16 @@ var Domain = require('../lib/database/domain').Domain;
 
 var context;
 var temporaryDatabase;
+var server;
 
 function commonSetup() {
   temporaryDatabase = utils.createTemporaryDatabase();
   context = temporaryDatabase.get();
+  server = utils.setupServer(context);
 }
 
 function commonTeardown() {
+  server.close();
   context = undefined;
   temporaryDatabase.clear();
   temporaryDatabase.teardown();
@@ -177,7 +180,8 @@ suite('gcs-describe-domain', function() {
     utils
       .run('gcs-describe-domain',
            '--domain-name', 'domain1',
-           '--database-path', temporaryDatabase.path)
+           '--port', utils.testPort,
+           '--base-host', 'localhost:' + utils.testPort)
       .next(function(result) {
         var domain = new Domain('domain1', context);
         assert.deepEqual({ code: result.code, message: result.output.stdout },
