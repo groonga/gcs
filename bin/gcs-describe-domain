@@ -53,18 +53,26 @@ function reportStatus(domain, indexFields) {
 var domainName = commandLine.domainName;
 if (domainName) {
   commandLine.getDomainStatus(domainName, function(error, domain) {
+    if (error)
+      commandLine.raiseFatalError(error);
     commandLine.getIndexFieldStatuses(domainName, function(error, indexFields) {
+      if (error)
+        commandLine.raiseFatalError(error);
       reportStatus(domain, indexFields);
       process.exit(0);
     });
   });
 } else {
   commandLine.getDomainStatuses(function(error, domains) {
+    if (error)
+      commandLine.raiseFatalError(error);
     var indexFieldStatuses = {};
     var preparedStatusesCount = 0;
     domains.forEach(function(domain) {
       var domainName = domain.DomainName;
       commandLine.getIndexFieldStatuses(domainName, function(error, indexFields) {
+        if (error)
+          commandLine.raiseFatalError(error);
         indexFieldStatuses[domainName] = indexFields;
         preparedStatusesCount++;
         if (preparedStatusesCount == domains.length) {

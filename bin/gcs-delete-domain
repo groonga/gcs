@@ -18,13 +18,10 @@ commandLine.assertDomainExistsHTTP(function() {
     commandLine.cloudSearch.DeleteDomain(
       { DomainName: commandLine.domainName },
       function(error, response) {
-        if (error) {
-          console.log('Unexpected error: ' + JSON.stringify(error));
-          process.exit(1);
-        } else {
-          console.log(successMessage);
-          process.exit(0);
-        }
+        if (error)
+          commandLine.raiseFatalError(error);
+        console.log(successMessage);
+        process.exit(0);
       }
     });
   }
