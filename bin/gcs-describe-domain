@@ -55,6 +55,7 @@ if (domainName) {
   commandLine.getDomainStatus(domainName, function(error, domain) {
     commandLine.getIndexFieldStatuses(domainName, function(error, indexFields) {
       reportStatus(domain, indexFields);
+      process.exit(0);
     });
   });
 } else {
@@ -71,6 +72,7 @@ if (domainName) {
             if (index) console.log('');
             var statuses = indexFieldStatuses[domain.DomainName];
             reportStatus(domain, statuses);
+            process.exit(0);
           });
         }
       });
