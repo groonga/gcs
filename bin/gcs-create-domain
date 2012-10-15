@@ -28,5 +28,5 @@ commandLine.getDomainStatus(domainName, function(error, domain) {
                   'Use gcs-describe-domain to check for endpoints.');
       process.exit(0);
     }
-  });
+  );
 });
