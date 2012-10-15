@@ -25,7 +25,10 @@ commandLine.assertDomainExistsHTTP(function() {
                     fieldName,
                     domainName);
         commandLine.configurationAPI.UpdateDefaultSearchField(
-          { DefaultSearchField: fieldName },
+          {
+            DomainName: domainName,
+            DefaultSearchField: fieldName
+          },
           function(error, result) {
             if (error)
               commandLine.raiseFatalError(error);
@@ -44,7 +47,10 @@ commandLine.assertDomainExistsHTTP(function() {
     console.log('Resetting the default search field of "%s"...',
                 domainName);
     commandLine.configurationAPI.UpdateDefaultSearchField(
-      { DefaultSearchField: '' },
+      {
+        DomainName: domainName,
+        DefaultSearchField: ''
+      },
       function(error, result) {
         if (error)
           commandLine.raiseFatalError(error);
