@@ -27,8 +27,8 @@
     "mkdirp": "",
     "node-uuid": "",
     "nroonga": "",
-    "xml2js": "",
-    "xmlbuilder": ""
+    "xml2js": "0.1.14",
+    "xmlbuilder": "0.3.11"
   },
   "scripts": {
     "test": "NODE_ENV=test ./node_modules/.bin/mocha --reporter list --ui tdd",
