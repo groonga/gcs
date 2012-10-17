@@ -880,7 +880,8 @@ suite('gcs-index-documents', function() {
     utils
       .run('gcs-index-documents',
            '--domain-name', 'companies',
-           '--database-path', temporaryDatabase.path)
+           '--port', utils.testPort,
+           '--base-host', 'localhost:' + utils.testPort)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
@@ -907,7 +908,8 @@ suite('gcs-index-documents', function() {
     utils
       .run('gcs-index-documents',
            '--domain-name', 'test',
-           '--database-path', temporaryDatabase.path)
+           '--port', utils.testPort,
+           '--base-host', 'localhost:' + utils.testPort)
       .next(function(result) {
         assertDomainNotExist(result, 'test');
         done();
@@ -920,7 +922,8 @@ suite('gcs-index-documents', function() {
   test('reindex without domain', function(done) {
     utils
       .run('gcs-index-documents',
-           '--database-path', temporaryDatabase.path)
+           '--port', utils.testPort,
+           '--base-host', 'localhost:' + utils.testPort)
       .next(function(result) {
         assertDomainNotSpecified(result);
         done();

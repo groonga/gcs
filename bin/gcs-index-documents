@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
 var CLI = require(__dirname + '/../lib/command-line').CommandLineInterface;
-var commandLine = new CLI();
+var Client = require(__dirname + '/../lib/client').Client;
 
+var commandLine = new CLI();
 commandLine
   .usage('--domain-name <domain name> [options]')
   .option('-d, --domain-name <domain name>',
@@ -10,17 +11,44 @@ commandLine
           String)
   .parse();
 
-commandLine.assertHaveDomainName();
-commandLine.assertDomainExists();
+var client = new Client(commandLine);
 
-commandLine.domain.reindexSync();
+client.assertHaveDomainName();
+client.assertDomainExists(function() {
+  client.configurationAPI.IndexDocuments(
+    { DomainName: client.domainName },
+    function(error, response) {
+      if (error)
+        client.raiseFatalError(error);
 
-console.log('===========================================');
-console.log('Indexing documents for domain [' + commandLine.domain.name + ']');
-console.log('');
-console.log('Now indexing fields:');
-console.log('===========================================');
-commandLine.domain.indexFields.forEach(function(field) {
-  console.log(field.name);
+      try {
+        var fieldNames = response.Body.IndexDocumentsResponse
+                                      .IndexDocumentsResult
+                                      .FieldNames
+                                      .member;
+        fieldNames = (function() {
+          var names = [];
+          for (var i in fieldNames) {
+            if (fieldNames.hasOwnProperty(i))
+              names.push(fieldNames[i]);
+          }
+          return names;
+        })();
+
+        console.log('===========================================');
+        console.log('Indexing documents for domain [' + client.domainName + ']');
+        console.log('');
+        console.log('Now indexing fields:');
+        console.log('===========================================');
+        fieldNames.forEach(function(fieldName) {
+          console.log(fieldName);
+        });
+        console.log('===========================================');
+
+        process.exit(0);
+      } catch(error) {
+        client.raiseFatalError(error);
+      }
+    }
+  });
 });
-console.log('===========================================');
