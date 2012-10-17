@@ -50,5 +50,5 @@ client.assertDomainExists(function() {
         client.raiseFatalError(error);
       }
     }
-  });
+  );
 });
