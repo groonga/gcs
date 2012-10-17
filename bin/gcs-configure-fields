@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
 var CLI = require(__dirname + '/../lib/command-line').CommandLineInterface;
-var commandLine = new CLI();
+var Client = require(__dirname + '/../lib/client').Client;
 
+var commandLine = new CLI();
 commandLine
   .usage('--name <field name> --type <field type> [options]')
   .option('--name <field name>',
@@ -29,76 +30,126 @@ commandLine
           'Delete the domain without prompting for confirmation.')
   .parse();
 
-commandLine.assertHaveDomainName();
-commandLine.assertDomainExists();
+var client = new Client(commandLine);
 
-if (!commandLine.options.name) {
-  console.log('You must specify the field name.');
-  return process.exit(1);
-}
+client.assertHaveDomainName();
 
-var field = commandLine.domain.getIndexField(commandLine.options.name);
+var fieldName = commandLine.options.name;
+if (!fieldName)
+  client.raiseFatalError('You must specify the field name.');
 
 var option = commandLine.options.option;
 if (typeof option != 'string')
   option = null;
 
-if (commandLine.options.delete) {
-  if (!field.exists()) {
-    console.log('You must specify an existing field.');
-    return process.exit(1);
-  }
-  var doDelete = function() {
-    field.deleteSync();
-    console.log('Updated 1 Index Field:');
-  };
-  if (commandLine.options.force) {
-    doDelete();
-  } else {
-    commandLine.confirm('Really delete? [' + field.name + '] (y/N) ', function(ok){
-      if (ok) {
-        doDelete();
+function doDelete(field) {
+  function sendDeleteRequest() {
+    client.configurationAPI.DeleteIndexField(
+      {
+        DomainName: client.domainName,
+        'IndexField.IndexFieldName': fieldName
+      },
+      function(error, response) {
+        if (error)
+          client.raiseFatalError(error);
+        console.log('Updated 1 Index Field:');
         process.exit(0);
+      }
+    );
+  }
+
+  if (!field)
+    client.raiseFatalError('You must specify an existing field.');
+
+  if (commandLine.options.force) {
+    sendDeleteRequest();
+  } else {
+    commandLine.confirm('Really delete? [' + fieldName + '] (y/N) ', function(ok){
+      if (ok) {
+        sendDeleteRequest();
       } else {
         process.exit(1);
       }
     });
   }
-} else {
-  if (!field.exists()) {
-    if (!commandLine.options.type) {
-      console.log('You must specify the field type.');
-      return process.exit(1);
-    }
-    field.type = commandLine.options.type;
+}
+
+client.getIndexFieldStatus(fieldName, function(error, field) {
+  if (commandLine.options.delete)
+    return doDelete(field);
+
+  var type = commandLine.options.type;
+  if (type && field)
+    type = field.Options.IndexFieldType;
+
+  if (!field) {
+    if (!type)
+      client.raiseFatalErrlr('You must specify the field type.');
   } else if (!option) {
-    console.log('You must specify the configuring option.');
-    return process.exit(1);
+    client.raiseFatalError('You must specify the configuring option.');
   }
+
+  switch (type) {
+    case 'text':
+    case 'uint':
+    case 'literal':
+      break;
+    default:
+      client.raiseFatalError('invalid field type ' + type);
+  }
+
+  var params = {
+        domainName: client.domainName,
+        IndexField: {
+          IndexFieldName: fieldName,
+          IndexFieldType: type
+        }
+      };
 
   if (option) {
-    try {
-      switch (option) {
-        case 'search':   field.searchEnabled = true;  break;
-        case 'nosearch': field.searchEnabled = false; break;
-        case 'facet':    field.facetEnabled =  true;  break;
-        case 'nofacet':  field.facetEnabled =  false; break;
-        case 'result':   field.resultEnabled = true;  break;
-        case 'noresult': field.resultEnabled = false; break;
-        default:
-          throw new Error('invalid field option ' + option);
-      }
-    } catch(error) {
-      console.log((error.message || error).toString());
-      return process.exit(1);
+    var options = {};
+    switch (option) {
+      case 'search':   options.SearchEnabled = 'true';  break;
+      case 'nosearch': options.SearchEnabled = 'false'; break;
+      case 'facet':    options.FacetEnabled =  'true';  break;
+      case 'nofacet':  options.FacetEnabled =  'false'; break;
+      case 'result':   options.ResultEnabled = 'true';  break;
+      case 'noresult': options.ResultEnabled = 'false'; break;
+      default:
+        client.raiseFatalError('invalid field option ' + option);
+    }
+    switch (type) {
+      case 'text':
+        if (option == 'nosearch')
+          client.raiseFatalError('searchable option cannot be configured for the type text.');
+        params.IndexField.TextOptions = options;
+        break;
+
+      case 'uint':
+        if (option == 'facet')
+          client.raiseFatalError('facet option cannot be configured for the type uint.');
+        if (option == 'noresult')
+          client.raiseFatalError('returnable option cannot be configured for the type uint.');
+        if (option == 'nosearch')
+          client.raiseFatalError('searchable option cannot be configured for the type uint.');
+        params.IndexField.UIntOptions = options;
+        break;
+
+      case 'literal':
+        params.IndexField.LiteralOptions = options;
+        break;
     }
   }
 
-  if (!field.exists())
-    field.createSync();
-  else
-    field.saveOptionsSync();
+  client.configurationAPI.DefineIndexField(params, function(error, response) {
+    if (error)
+      client.raiseFatalError(error);
 
-  console.log('Updated 1 Index Field:');
-  console.log(field.summary);
-}
+    console.log('Updated 1 Index Field:');
+
+    var field = response.Body.DefineIndexFieldResponse.DefineIndexFieldResult.IndexField;
+    console.log(client.summarizeIndexFieldStatus(field));
+
+    process.exit(0);
+  });
+});

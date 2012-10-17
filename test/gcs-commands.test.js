@@ -299,12 +299,14 @@ suite('gcs-configure-fields', function() {
     utils
       .run('gcs-create-domain',
            '--domain-name', 'companies',
-           '--database-path', temporaryDatabase.path)
+           '--port', utils.testPort,
+           '--base-host', 'localhost:' + utils.testPort)
       .run('gcs-configure-fields',
            '--domain-name', 'companies',
            '--name', name,
            '--type', type,
-           '--database-path', temporaryDatabase.path)
+           '--port', utils.testPort,
+           '--base-host', 'localhost:' + utils.testPort)
       .next(function(result) {
         assertSuccess(result, name, type, options);
 
@@ -342,7 +344,8 @@ suite('gcs-configure-fields', function() {
            '--name', name,
            '--delete',
            '--force',
-           '--database-path', temporaryDatabase.path)
+           '--port', utils.testPort,
+           '--base-host', 'localhost:' + utils.testPort)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
@@ -382,7 +385,8 @@ suite('gcs-configure-fields', function() {
            '--domain-name', 'companies',
            '--name', name,
            '--type', type,
-           '--database-path', temporaryDatabase.path)
+           '--port', utils.testPort,
+           '--base-host', 'localhost:' + utils.testPort)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
@@ -414,7 +418,8 @@ suite('gcs-configure-fields', function() {
            '--name', 'name',
            '--delete',
            '--force',
-           '--database-path', temporaryDatabase.path)
+           '--port', utils.testPort,
+           '--base-host', 'localhost:' + utils.testPort)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
@@ -434,7 +439,8 @@ suite('gcs-configure-fields', function() {
       .run('gcs-configure-fields',
            '--domain-name', 'companies',
            '--name', 'name',
-           '--database-path', temporaryDatabase.path)
+           '--port', utils.testPort,
+           '--base-host', 'localhost:' + utils.testPort)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
@@ -452,7 +458,8 @@ suite('gcs-configure-fields', function() {
     utils
       .run('gcs-configure-fields',
            '--name', 'name',
-           '--database-path', temporaryDatabase.path)
+           '--port', utils.testPort,
+           '--base-host', 'localhost:' + utils.testPort)
       .next(function(result) {
         assertDomainNotSpecified(result);
         done();
@@ -493,7 +500,8 @@ suite('gcs-configure-fields', function() {
            '--domain-name', 'companies',
            '--name', name,
            '--option', 'search',
-           '--database-path', temporaryDatabase.path)
+           '--port', utils.testPort,
+           '--base-host', 'localhost:' + utils.testPort)
       .next(function(result) {
         if (results.search == 'error')
           assertOptionNotConfigurable(result, 'search', type);
@@ -504,7 +512,8 @@ suite('gcs-configure-fields', function() {
            '--domain-name', 'companies',
            '--name', name,
            '--option', 'nosearch',
-           '--database-path', temporaryDatabase.path)
+           '--port', utils.testPort,
+           '--base-host', 'localhost:' + utils.testPort)
       .next(function(result) {
         if (results.nosearch == 'error')
           assertOptionNotConfigurable(result, 'nosearch', type);
@@ -515,7 +524,8 @@ suite('gcs-configure-fields', function() {
            '--domain-name', 'companies',
            '--name', name,
            '--option', 'result',
-           '--database-path', temporaryDatabase.path)
+           '--port', utils.testPort,
+           '--base-host', 'localhost:' + utils.testPort)
       .next(function(result) {
         if (results.result == 'error')
           assertOptionNotConfigurable(result, 'result', type);
@@ -526,7 +536,8 @@ suite('gcs-configure-fields', function() {
            '--domain-name', 'companies',
            '--name', name,
            '--option', 'noresult',
-           '--database-path', temporaryDatabase.path)
+           '--port', utils.testPort,
+           '--base-host', 'localhost:' + utils.testPort)
       .next(function(result) {
         if (results.noresult == 'error')
           assertOptionNotConfigurable(result, 'noresult', type);
@@ -537,7 +548,8 @@ suite('gcs-configure-fields', function() {
            '--domain-name', 'companies',
            '--name', name,
            '--option', 'facet',
-           '--database-path', temporaryDatabase.path)
+           '--port', utils.testPort,
+           '--base-host', 'localhost:' + utils.testPort)
       .next(function(result) {
         if (results.facet == 'error')
           assertOptionNotConfigurable(result, 'facet', type);
@@ -548,7 +560,8 @@ suite('gcs-configure-fields', function() {
            '--domain-name', 'companies',
            '--name', name,
            '--option', 'nofacet',
-           '--database-path', temporaryDatabase.path)
+           '--port', utils.testPort,
+           '--base-host', 'localhost:' + utils.testPort)
       .next(function(result) {
         if (results.nofacet == 'error')
           assertOptionNotConfigurable(result, 'nofacet', type);
