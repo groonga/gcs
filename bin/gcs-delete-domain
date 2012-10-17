@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
 var CLI = require(__dirname + '/../lib/command-line').CommandLineInterface;
-var commandLine = new CLI();
+var Client = require(__dirname + '/../lib/client').Client;
 
+var commandLine = new CLI();
 commandLine
   .usage('--domain-name <domain name> [options]')
   .option('-d, --domain-name <domain name>',
@@ -12,23 +13,25 @@ commandLine
           'Delete the domain without prompting for confirmation.')
   .parse();
 
-commandLine.assertHaveDomainName();
-commandLine.assertDomainExistsHTTP(function() {
+var client = new Client(commandLine);
+
+client.assertHaveDomainName();
+client.assertDomainExists(function() {
   function doDelete(successMessage) {
-    commandLine.configurationAPI.DeleteDomain(
-      { DomainName: commandLine.domainName },
+    client.configurationAPI.DeleteDomain(
+      { DomainName: client.domainName },
       function(error, response) {
         if (error)
-          commandLine.raiseFatalError(error);
+          client.raiseFatalError(error);
         console.log(successMessage);
         process.exit(0);
       }
     );
   }
   if (commandLine.options.force) {
-    doDelete('Domain [' + commandLine.domainName + '] has been deleted successfully.');
+    doDelete('Domain [' + client.domainName + '] has been deleted successfully.');
   } else {
-    commandLine.confirm('Really delete? [' + commandLine.domainName + '] (y/N) ', function(ok){
+    commandLine.confirm('Really delete? [' + client.domainName + '] (y/N) ', function(ok){
       if (ok) {
         doDelete('Successfully deleted.');
       } else {

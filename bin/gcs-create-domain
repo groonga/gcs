@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
 var CLI = require(__dirname + '/../lib/command-line').CommandLineInterface;
-var commandLine = new CLI();
+var Client = require(__dirname + '/../lib/client').Client;
 
+var commandLine = new CLI();
 commandLine
   .usage('--domain-name <domain name> [options]')
   .option('-d, --domain-name <domain name>',
@@ -10,20 +11,22 @@ commandLine
           String)
   .parse();
 
-commandLine.assertHaveDomainName();
+var client = new Client(commandLine);
+
+client.assertHaveDomainName();
 
 var domainName = commandLine.domainName;
-commandLine.getDomainStatus(domainName, function(error, domain) {
+client.getDomainStatus(function(error, domain) {
   if (domain) {
     console.log('The domain [' + domainName + '] already exists.');
     return process.exit(1);
   }
   console.log('Creating domain [' + domainName + ']');
-  commandLine.configurationAPI.CreateDomain(
+  client.configurationAPI.CreateDomain(
     { DomainName: domainName },
     function(error, result) {
       if (error)
-        commandLine.raiseFatalError(error);
+        client.raiseFatalError(error);
       console.log('Domain endpoints are currently being created. ' +
                   'Use gcs-describe-domain to check for endpoints.');
       process.exit(0);

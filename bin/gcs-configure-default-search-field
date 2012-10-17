@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
 var CLI = require(__dirname + '/../lib/command-line').CommandLineInterface;
-var commandLine = new CLI();
+var Client = require(__dirname + '/../lib/client').Client;
 
+var commandLine = new CLI();
 commandLine
   .option('-d, --domain-name <domain name>',
           'The name of the domain that you are configuring. Required.',
@@ -13,25 +14,27 @@ commandLine
           String)
   .parse();
 
-commandLine.assertHaveDomainName();
+var client = new Client(commandLine);
+
+client.assertHaveDomainName();
 
 var domainName = commandLine.domainName;
 var fieldName = commandLine.hasOption('name') && commandLine.options.name;
-commandLine.assertDomainExistsHTTP(function() {
+client.assertDomainExists(function() {
   if (fieldName) {
-    commandLine.getIndexFieldStatus(domainName, fieldName, function(error, field) {
+    client.getIndexFieldStatus(fieldName, function(error, field) {
       if (field) {
         console.log('Setting "%s" as the default search field of "%s"...',
                     fieldName,
                     domainName);
-        commandLine.configurationAPI.UpdateDefaultSearchField(
+        client.configurationAPI.UpdateDefaultSearchField(
           {
             DomainName: domainName,
             DefaultSearchField: fieldName
           },
           function(error, result) {
             if (error)
-              commandLine.raiseFatalError(error);
+              client.raiseFatalError(error);
             console.log('Done.');
             process.exit(0);
           }
@@ -46,14 +49,14 @@ commandLine.assertDomainExistsHTTP(function() {
   } else {
     console.log('Resetting the default search field of "%s"...',
                 domainName);
-    commandLine.configurationAPI.UpdateDefaultSearchField(
+    client.configurationAPI.UpdateDefaultSearchField(
       {
         DomainName: domainName,
         DefaultSearchField: ''
       },
       function(error, result) {
         if (error)
-          commandLine.raiseFatalError(error);
+          client.raiseFatalError(error);
         console.log('Done.');
         process.exit(0);
       }

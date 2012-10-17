@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
 var CLI = require(__dirname + '/../lib/command-line').CommandLineInterface;
-var commandLine = new CLI();
+var Client = require(__dirname + '/../lib/client').Client;
 
+var commandLine = new CLI();
 commandLine
   .option('-d, --domain-name <domain name>',
           'The name of the domain that you are creating. Required.',
@@ -12,6 +13,8 @@ commandLine
              + 'including configured fields.',
           String)
   .parse();
+
+var client = new Client(commandLine);
 
 function reportStatus(domain, indexFields, defaultSearchField) {
   console.log('=== Domain Summary ===');
@@ -44,7 +47,7 @@ function reportStatus(domain, indexFields, defaultSearchField) {
   console.log('Fields:');
   console.log('=======');
   indexFields.forEach(function(indexField) {
-    console.log(commandLine.summarizeIndexFieldStatus(indexField));
+    console.log(client.summarizeIndexFieldStatus(indexField));
   });
   console.log('======================');
 }
@@ -70,16 +73,16 @@ function reportDomains(domains) {
 
   domains.forEach(function(domain) {
     var domainName = domain.DomainName;
-    commandLine.getIndexFieldStatuses(domainName, function(error, indexFields) {
+    client.getIndexFieldStatuses(domainName, function(error, indexFields) {
       if (error)
-        commandLine.raiseFatalError(error);
+        client.raiseFatalError(error);
       indexFieldStatuses[domainName] = indexFields;
       indexFieldStatusesCount++;
       tryDoReport();
     });
-    commandLine.getDefaultSearchField(domainName, function(error, defaultSearchFieldResult) {
+    client.getDefaultSearchField(domainName, function(error, defaultSearchFieldResult) {
       if (error)
-        commandLine.raiseFatalError(error);
+        client.raiseFatalError(error);
       defaultSearchFields[domainName] = defaultSearchFieldResult;
       defaultSearchFieldsCount++;
       tryDoReport();
@@ -87,17 +90,17 @@ function reportDomains(domains) {
   });
 }
 
-var domainName = commandLine.domainName;
+var domainName = client.domainName;
 if (domainName) {
-  commandLine.getDomainStatus(domainName, function(error, domain) {
+  client.getDomainStatus(function(error, domain) {
     if (error)
-      commandLine.raiseFatalError(error);
+      client.raiseFatalError(error);
     reportDomains([domain]);
   });
 } else {
-  commandLine.getDomainStatuses(function(error, domains) {
+  client.getDomainStatuses(function(error, domains) {
     if (error)
-      commandLine.raiseFatalError(error);
+      client.raiseFatalError(error);
     reportDomains(domains);
   });
 }
