@@ -356,7 +356,8 @@ suite('Configuration API', function() {
         .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
         .get('/?DomainName=companies&IndexField.IndexFieldName=name&' +
              'IndexField.IndexFieldType=text&' +
-             'TextOptions.FacetEnabled=true&TextOptions.ResultEnabled=true&' +
+             'IndexField.TextOptions.FacetEnabled=true&' +
+             'IndexField.TextOptions.ResultEnabled=true&' +
              'Action=DefineIndexField&Version=2011-02-01')
         .next(function(response) {
           var domain = new Domain('companies', context);
@@ -458,9 +459,9 @@ suite('Configuration API', function() {
         .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
         .get('/?DomainName=companies&IndexField.IndexFieldName=product&' +
              'IndexField.IndexFieldType=literal&' +
-             'LiteralOptions.SearchEnabled=true&' +
-             'LiteralOptions.FacetEnabled=true&' +
-             'LiteralOptions.ResultEnabled=true&' +
+             'IndexField.LiteralOptions.SearchEnabled=true&' +
+             'IndexField.LiteralOptions.FacetEnabled=true&' +
+             'IndexField.LiteralOptions.ResultEnabled=true&' +
              'Action=DefineIndexField&Version=2011-02-01')
         .next(function(response) {
           var domain = new Domain('companies', context);
