@@ -30,7 +30,7 @@ client.assertDomainExists(function() {
     client.raiseFatalError('No such file');
 
   var format = sourceFile.match(/\.(xml|json)$/i);
-  if (!format) {
+  if (!format)
     client.raiseFatalError('Unknown format');
 
   format = format[1].toLowerCase();
@@ -41,34 +41,33 @@ client.assertDomainExists(function() {
 
   try {
     var batches = fs.readFileSync(sourceFile, 'UTF-8');
-    batches = JSON.parse(batches);
 
-    client.documentsAPI.DocumentsBatch(
-      {
-        args: {
-          Docs: batches
-        }
-      },
-      function(error, response) {
-        if (error)
-          client.raiseFatalError(error);
+    client.setupDocumentsAPI(function(documentsAPI) {
+      documentsAPI.DocumentsBatch(
+        {
+          Docs: JSON.parse(batches)
+        },
+        function(error, response) {
+          if (error)
+            client.raiseFatalError(error);
 
-        try {
-          var errors = response.Body.errors.map(function(error) { return error.message; });
-          if (errors.length) {
-            console.log('Validation failed.');
-            console.log(errors.join('\n'));
-            return process.exit(1);
+          try {
+            var errors = response.Body.errors.map(function(error) { return error.message; });
+            if (errors.length) {
+              console.log('Validation failed.');
+              console.log(errors.join('\n'));
+              return process.exit(1);
+            }
+            console.log('Status: %s', response.Body.status);
+            console.log('Added: %s', response.Body.adds);
+            console.log('Deleted: %s', response.Body.deletes);
+            process.exit(0);
+          } catch(error) {
+            client.raiseFatalError(error);
           }
-          console.log('Status: %s', response.Body.status);
-          console.log('Added: %s', response.Body.adds);
-          console.log('Deleted: %s', response.Body.deletes);
-          process.exit(0);
-        } catch(error) {
-          client.raiseFatalError(error);
         }
-      }
-    );
+      );
+    });
   } catch(error) {
     client.raiseFatalError('Fatal error!\n' +
                            error.message + '\n' + error.stack);
