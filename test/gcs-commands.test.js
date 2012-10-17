@@ -291,7 +291,7 @@ suite('gcs-configure-fields', function() {
                      { code:    0,
                        message: 'Updated 1 Index Field:\n' +
                                 name + ' Active ' + type + ' (' + options + ')\n' },
-                     result.output.stderr);
+                     result.output.stderr + [result, name, type, options]);
   }
 
   function testCreateField(done, name, type, options) {
@@ -487,7 +487,7 @@ suite('gcs-configure-fields', function() {
     assertSuccess(result, name, type, options);
     context.reopen();
     var field = new Domain('companies', context).getIndexField(name);
-    assert.equal(field.options, options);
+    assert.equal(field.options, options, [result, name, type, options]);
   }
 
   function testConfigureFieldOptions(type, results, done) {
@@ -578,10 +578,10 @@ suite('gcs-configure-fields', function() {
     testConfigureFieldOptions('text', {
       search:   'Search',
       nosearch: 'error',
-      facet:    'Search Facet',
-      nofacet:  'Search',
       result:   'Search Result',
-      noresult: 'Search'
+      noresult: 'Search',
+      facet:    'Search Facet',
+      nofacet:  'Search'
     }, done);
   });
 
@@ -589,10 +589,10 @@ suite('gcs-configure-fields', function() {
     testConfigureFieldOptions('uint', {
       search:   'Search Result',
       nosearch: 'error',
-      facet:    'error',
-      nofacet:  'Search Result',
       result:   'Search Result',
-      noresult: 'error'
+      noresult: 'error',
+      facet:    'error',
+      nofacet:  'Search Result'
     }, done);
   });
 
@@ -600,10 +600,10 @@ suite('gcs-configure-fields', function() {
     testConfigureFieldOptions('literal', {
       search:   'Search',
       nosearch: '',
-      facet:    'Facet',
-      nofacet:  '',
       result:   'Result',
-      noresult: ''
+      noresult: '',
+      facet:    'Facet',
+      nofacet:  ''
     }, done);
   });
 });

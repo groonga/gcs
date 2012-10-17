@@ -47,7 +47,7 @@ function doDelete(field) {
     client.configurationAPI.DeleteIndexField(
       {
         DomainName: client.domainName,
-        'IndexField.IndexFieldName': fieldName
+        IndexFieldName: fieldName
       },
       function(error, response) {
         if (error)
@@ -79,12 +79,12 @@ client.getIndexFieldStatus(fieldName, function(error, field) {
     return doDelete(field);
 
   var type = commandLine.options.type;
-  if (type && field)
+  if (!type && field)
     type = field.Options.IndexFieldType;
 
   if (!field) {
     if (!type)
-      client.raiseFatalErrlr('You must specify the field type.');
+      client.raiseFatalError('You must specify the field type.');
   } else if (!option) {
     client.raiseFatalError('You must specify the configuring option.');
   }
@@ -99,7 +99,7 @@ client.getIndexFieldStatus(fieldName, function(error, field) {
   }
 
   var params = {
-        domainName: client.domainName,
+        DomainName: client.domainName,
         IndexField: {
           IndexFieldName: fieldName,
           IndexFieldType: type
@@ -118,6 +118,7 @@ client.getIndexFieldStatus(fieldName, function(error, field) {
       default:
         client.raiseFatalError('invalid field option ' + option);
     }
+
     switch (type) {
       case 'text':
         if (option == 'nosearch')
@@ -140,6 +141,7 @@ client.getIndexFieldStatus(fieldName, function(error, field) {
         break;
     }
   }
+
 
   client.configurationAPI.DefineIndexField(params, function(error, response) {
     if (error)
