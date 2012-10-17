@@ -71,6 +71,6 @@ client.assertDomainExists(function() {
     );
   } catch(error) {
     client.raiseFatalError('Fatal error!\n' +
-                           console.log(error.message + '\n' + error.stack);
+                           error.message + '\n' + error.stack);
   }
 });
