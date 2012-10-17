@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
 var CLI = require(__dirname + '/../lib/command-line').CommandLineInterface;
-var commandLine = new CLI();
+var Client = require(__dirname + '/../lib/client').Client;
 var fs = require('fs');
 
+var commandLine = new CLI();
 commandLine
   .option('-d, --domain-name <domain name>',
           'The name of the domain that you are querying or configuring. Required.',
@@ -40,63 +41,89 @@ commandLine
           'List the domain\'s synonyms.')
   .parse();
 
-commandLine.assertHaveDomainName();
-commandLine.assertDomainExists();
-
 function strip(string) {
   return string.replace(/^\s+|\s+$/g, '');
 }
 
-var printOptions = ['printStems', 'printStopwords', 'printSynonyms'];
-var loadOptions = ['stems', 'stopwords', 'synonyms'];
+var client = new Client(commandLine);
 
-if (commandLine.hasTooManyExclusiveOptions(printOptions)) {
-  console.log('Too many options. ' +
-              'You must specify just one option from ' +
-              '--print-stems, --print-stopwords, or --print-synonyms.');
-  process.exit(1);
-  return;
-}
+client.assertHaveDomainName();
+client.getDomainStatus(function(error, domain) {
+  if (error)
+    client.raiseFatalError(error);
 
-if (printOptions.some(function(option) {
-      return commandLine.options[option];
-    }) &&
-    loadOptions.some(function(option) {
-      return commandLine.options[option];
-    })) {
-  console.log('Too many options. ' +
-              'You cannot do print and load on the same time.');
-  process.exit(1);
-  return;
-}
+  var printOptions = ['printStems', 'printStopwords', 'printSynonyms'];
+  var loadOptions = ['stems', 'stopwords', 'synonyms'];
 
-if (commandLine.options.printStems) {
-} else if (commandLine.options.printStopwords) {
-} else if (commandLine.options.printSynonyms) {
-  var synonyms = commandLine.domain.getSynonymsSync();
-  Object.keys(synonyms).forEach(function(term) {
-    console.log([term].concat(synonyms[term]).join(','));
-  });
-} else {
-  if (commandLine.options.stems) {
-  }
-  if (commandLine.options.stopwords) {
-  }
-  if (commandLine.options.synonyms) {
-    var synonymsFile = CLI.resolve(commandLine.options.synonyms);
-    var synonymsCSV = fs.readFileSync(synonymsFile, 'UTF-8');
-    var synonyms = {};
-    synonymsCSV.split('\n').forEach(function(synonym) {
-      synonym = strip(synonym);
-      if (!synonym) return;
-      var terms = synonym.split(',');
-      var key = strip(terms.shift());
-      var previousTerms = synonyms[key] || [];
-      synonyms[key] = previousTerms.concat(terms.map(strip));
+  if (commandLine.hasTooManyExclusiveOptions(printOptions))
+    client.raiseFatalError('Too many options. ' +
+                           'You must specify just one option from ' +
+                           '--print-stems, --print-stopwords, or --print-synonyms.');
+
+  if (printOptions.some(function(option) {
+        return commandLine.options[option];
+      }) &&
+      loadOptions.some(function(option) {
+        return commandLine.options[option];
+      }))
+    client.raiseFatalError('Too many options. ' +
+                           'You cannot do print and load on the same time.');
+
+  if (commandLine.options.printStems) {
+  } else if (commandLine.options.printStopwords) {
+  } else if (commandLine.options.printSynonyms) {
+    client.configurationAPI.DescribeSynonymOptions(
+      { DomainName: client.domainName },
+      function(error, response) {
+        if (error)
+          client.raiseFatalError(error);
+        try {
+          var synonyms = response.Body.DescribeSynonymOptionsResponse
+                                      .DescribeSynonymOptionsResult
+                                      .Synonyms
+                                      .Options;
+          synonyms = JSON.parse(synonyms);
+          Object.keys(synonyms).forEach(function(term) {
+            console.log([term].concat(synonyms[term]).join(','));
+          });
+          process.exit(0);
+        } catch(error) {
+          client.raiseFatalError(error);
+        }
+      }
     });
-    commandLine.domain.updateSynonymsSync(synonyms);
-    console.log('%s synonyms are loaded.', Object.keys(synonyms).length);
+  } else {
+    if (commandLine.options.stems) {
+    }
+    if (commandLine.options.stopwords) {
+    }
+    if (commandLine.options.synonyms) {
+      var synonymsFile = CLI.resolve(commandLine.options.synonyms);
+      var synonymsCSV = fs.readFileSync(synonymsFile, 'UTF-8');
+      var synonyms = {};
+      synonymsCSV.split('\n').forEach(function(synonym) {
+        synonym = strip(synonym);
+        if (!synonym) return;
+        var terms = synonym.split(',');
+        var key = strip(terms.shift());
+        var previousTerms = synonyms[key] || [];
+        synonyms[key] = previousTerms.concat(terms.map(strip));
+      });
+      client.configurationAPI.UpdateSynonymOptions(
+        {
+          DomainName: client.domainName,
+          Synonyms: JSON.stringify({ synonyms: synonyms })
+        },
+        function(error, response) {
+          if (error)
+            client.raiseFatalError(error);
+          try {
+            console.log('%s synonyms are loaded.', Object.keys(synonyms).length);
+          } catch(error) {
+            client.raiseFatalError(error);
+          }
+        }
+      });
+    }
   }
-}
-
-
+});

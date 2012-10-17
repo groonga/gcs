@@ -618,7 +618,8 @@ suite('gcs-configure-text-options', function() {
       .run('gcs-configure-text-options',
            '--domain-name', 'companies',
            '--synonyms', path.join(__dirname, 'fixtures', 'synonyms.txt'),
-           '--database-path', temporaryDatabase.path)
+           '--port', utils.testPort,
+           '--base-host', 'localhost:' + utils.testPort)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
@@ -637,7 +638,8 @@ suite('gcs-configure-text-options', function() {
       .run('gcs-configure-text-options',
            '--domain-name', 'companies',
            '--synonyms', path.join(__dirname, 'fixtures', 'synonyms.txt'),
-           '--database-path', temporaryDatabase.path)
+           '--port', utils.testPort,
+           '--base-host', 'localhost:' + utils.testPort)
       .next(function(result) {
         assertDomainNotExist(result, 'companies');
         done();
@@ -651,7 +653,8 @@ suite('gcs-configure-text-options', function() {
     utils
       .run('gcs-configure-text-options',
            '--synonyms', path.join(__dirname, 'fixtures', 'synonyms.txt'),
-           '--database-path', temporaryDatabase.path)
+           '--port', utils.testPort,
+           '--base-host', 'localhost:' + utils.testPort)
       .next(function(result) {
         assertDomainNotSpecified(result);
         done();
@@ -672,7 +675,8 @@ suite('gcs-configure-text-options', function() {
       .run('gcs-configure-text-options',
            '--domain-name', 'companies',
            '--print-synonyms',
-           '--database-path', temporaryDatabase.path)
+           '--port', utils.testPort,
+           '--base-host', 'localhost:' + utils.testPort)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
@@ -692,7 +696,8 @@ suite('gcs-configure-text-options', function() {
       .run('gcs-configure-text-options',
            '--domain-name', 'companies',
            '--print-synonyms',
-           '--database-path', temporaryDatabase.path)
+           '--port', utils.testPort,
+           '--base-host', 'localhost:' + utils.testPort)
       .next(function(result) {
         assertDomainNotExist(result, 'companies');
         done();
@@ -706,7 +711,8 @@ suite('gcs-configure-text-options', function() {
     utils
       .run('gcs-configure-text-options',
            '--print-synonyms',
-           '--database-path', temporaryDatabase.path)
+           '--port', utils.testPort,
+           '--base-host', 'localhost:' + utils.testPort)
       .next(function(result) {
         assertDomainNotSpecified(result);
         done();
