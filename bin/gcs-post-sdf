@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
 var CLI = require(__dirname + '/../lib/command-line').CommandLineInterface;
-var commandLine = new CLI();
+var Client = require(__dirname + '/../lib/client').Client;
 var fs = require('fs');
 var path = require('path');
-var BatchProcessor = require(__dirname + '/../lib/batch').Processor;
 
+var commandLine = new CLI();
 commandLine
   .usage('--source <path to SDF file> [options]')
   .option('-s, --source <path to SDF file>',
@@ -16,59 +16,61 @@ commandLine
           String)
   .parse();
 
-commandLine.assertHaveDomainName();
-commandLine.assertDomainExists();
+var client = new Client(commandLine);
 
-if (!commandLine.options.source) {
-  console.log('You must specify the source SDF.');
-  return process.exit(1);
-}
+client.assertHaveDomainName();
+client.assertDomainExists(function() {
+  if (!commandLine.options.source)
+    client.raiseFatalError('You must specify the source SDF.');
 
-var sourceFile = CLI.resolve(commandLine.options.source);
-console.log('Processing: %s', sourceFile);
+  var sourceFile = CLI.resolve(commandLine.options.source);
+  console.log('Processing: %s', sourceFile);
 
-if (!path.existsSync(sourceFile)) {
-  console.log('No such file');
-  return process.exit(1);
-}
+  if (!path.existsSync(sourceFile))
+    client.raiseFatalError('No such file');
 
-var format = sourceFile.match(/\.(xml|json)$/i);
-if (!format) {
-  console.log('Unknown format');
-  return process.exit(1);
-}
+  var format = sourceFile.match(/\.(xml|json)$/i);
+  if (!format) {
+    client.raiseFatalError('Unknown format');
 
-format = format[1].toLowerCase();
-console.log('Detected source format for %s as %s', path.basename(sourceFile), format)
+  format = format[1].toLowerCase();
+  console.log('Detected source format for %s as %s', path.basename(sourceFile), format)
 
-if (format != 'json') {
-  console.log('Unsupported format: %s');
-  return process.exit(1);
-}
-
-try {
-  var batches = fs.readFileSync(sourceFile, 'UTF-8');
-  batches = JSON.parse(batches);
-  var processor = new BatchProcessor({
-        context: commandLine.context,
-        domain: commandLine.domain
-      });
+  if (format != 'json')
+    client.raiseFatalError('Unsupported format: %s');
 
   try {
-    processor.validate(batches);
-  } catch (error) {
-    console.log('Validation failed.');
-    console.log(error.errors.join('\n'));
-    return process.exit(1);
+    var batches = fs.readFileSync(sourceFile, 'UTF-8');
+    batches = JSON.parse(batches);
+
+    client.documentsAPI.DocumentsBatch(
+      {
+        args: {
+          Docs: batches
+        }
+      },
+      function(error, response) {
+        if (error)
+          client.raiseFatalError(error);
+
+        try {
+          var errors = response.Body.errors.map(function(error) { return error.message; });
+          if (errors.length) {
+            console.log('Validation failed.');
+            console.log(errors.join('\n'));
+            return process.exit(1);
+          }
+          console.log('Status: %s', response.Body.status);
+          console.log('Added: %s', response.Body.adds);
+          console.log('Deleted: %s', response.Body.deletes);
+          process.exit(0);
+        } catch(error) {
+          client.raiseFatalError(error);
+        }
+      }
+    );
+  } catch(error) {
+    client.raiseFatalError('Fatal error!\n' +
+                           console.log(error.message + '\n' + error.stack);
   }
-
-  var result = processor.loadSync(batches);
-  console.log('Status: %s', result.status);
-  console.log('Added: %s', result.adds);
-  console.log('Deleted: %s', result.deletes);
-
-} catch(error) {
-  console.log('Fatal error!');
-  console.log(error.message + '\n' + error.stack);
-  return process.exit(1);
-}
+});
