@@ -940,8 +940,10 @@ suite('gcs-post-sdf', function() {
 
   var fixturesDirectory = path.join(__dirname, 'fixture', 'companies');
 
+  var domain;
+  var endpoint;
   function setupDomain() {
-    var domain = new Domain('companies', context);
+    domain = new Domain('companies', context);
     domain.createSync();
     domain.getIndexField('name').setType('text').createSync();
     domain.getIndexField('address').setType('text').createSync();
@@ -949,6 +951,7 @@ suite('gcs-post-sdf', function() {
     domain.getIndexField('description').setType('text').createSync();
     domain.getIndexField('age').setType('uint').createSync();
     domain.getIndexField('product').setType('literal').createSync();
+    endpoint = domain.getDocumentsEndpoint('localhost:' + utils.testPort);
   }
 
   test('post add sdf json', function(done) {
@@ -958,8 +961,7 @@ suite('gcs-post-sdf', function() {
       .run('gcs-post-sdf',
            '--domain-name', 'companies',
            '--source', batchFile,
-           '--port', utils.testPort,
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', endpoint)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
@@ -986,13 +988,11 @@ suite('gcs-post-sdf', function() {
       .run('gcs-post-sdf',
            '--domain-name', 'companies',
            '--source', path.join(fixturesDirectory, 'add.sdf.json'),
-           '--port', utils.testPort,
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', endpoint)
       .run('gcs-post-sdf',
            '--domain-name', 'companies',
            '--source', batchFile,
-           '--port', utils.testPort,
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', endpoint)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
@@ -1019,8 +1019,7 @@ suite('gcs-post-sdf', function() {
       .run('gcs-post-sdf',
            '--domain-name', 'companies',
            '--source', batchFile,
-           '--port', utils.testPort,
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', endpoint)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
@@ -1053,8 +1052,7 @@ suite('gcs-post-sdf', function() {
     utils
       .run('gcs-post-sdf',
            '--domain-name', 'companies',
-           '--port', utils.testPort,
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', endpoint)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
@@ -1075,8 +1073,7 @@ suite('gcs-post-sdf', function() {
       .run('gcs-post-sdf',
            '--domain-name', 'companies',
            '--source', batchFile,
-           '--port', utils.testPort,
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', endpoint)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
@@ -1098,8 +1095,7 @@ suite('gcs-post-sdf', function() {
       .run('gcs-post-sdf',
            '--domain-name', 'companies',
            '--source', batchFile,
-           '--port', utils.testPort,
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', endpoint)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
@@ -1118,8 +1114,7 @@ suite('gcs-post-sdf', function() {
     utils
       .run('gcs-post-sdf',
            '--domain-name', 'test',
-           '--port', utils.testPort,
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', endpoint)
       .next(function(result) {
         assertDomainNotExist(result, 'test');
         done();
@@ -1132,8 +1127,7 @@ suite('gcs-post-sdf', function() {
   test('post without domain', function(done) {
     utils
       .run('gcs-post-sdf',
-           '--port', utils.testPort,
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', endpoint)
       .next(function(result) {
         assertDomainNotSpecified(result);
         done();
