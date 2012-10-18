@@ -7,16 +7,22 @@ var path = require('path');
 
 var commandLine = new CLI();
 commandLine
-  .usage('--source <path to SDF file> [options]')
+  .usage('--source <path to SDF file> ' +
+         '--endpoint <host:port> ' +
+         '[options]')
   .option('-s, --source <path to SDF file>',
           'The path to a file which contains the SDF data you want to upload.',
           String)
   .option('-d, --domain-name <domain name>',
           'The name of the domain that you are updating. Required.',
           String)
+  .option('--endpoint <host:port>',
+          'The host and port number of the documents/batch API. Required.',
+          String)
   .parse();
 
 var client = new Client(commandLine);
+var client.docEndpoint = commandLine.option.endpoint;
 
 client.assertHaveDomainName();
 client.assertDomainExists(function() {
