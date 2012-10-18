@@ -618,7 +618,7 @@ suite('Configuration API', function() {
   suite('Action=DescribeIndexFields', function() {
     setup(function() {
       commonSetup();
-      domain = new Domain('companies', context);
+      var domain = new Domain('companies', context);
       domain.createSync();
       domain.getIndexField('name').setType('text').createSync();
       domain.getIndexField('age').setType('uint').createSync();
@@ -640,7 +640,6 @@ suite('Configuration API', function() {
     }
 
     test('all', function(done) {
-      var domain, field;
       utils
         .get('/?DomainName=companies&' +
              'Action=DescribeIndexFields&Version=2011-02-01')
@@ -666,7 +665,6 @@ suite('Configuration API', function() {
     });
 
     test('specified', function(done) {
-      var domain, field;
       utils
         .get('/?DomainName=companies&FieldNames.member.1=name&FieldNames.member.2=age&' +
              'Action=DescribeIndexFields&Version=2011-02-01')
@@ -691,7 +689,6 @@ suite('Configuration API', function() {
     });
 
     test('specified (not exists)', function(done) {
-      var domain, field;
       utils
         .get('/?DomainName=companies&FieldNames.member.1=unknown&' +
              'Action=DescribeIndexFields&Version=2011-02-01')
