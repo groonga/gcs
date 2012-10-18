@@ -80,7 +80,7 @@ var IndexField_Text =
       IndexFieldType: '',
       TextOptions: TextOptions
     };
-var sus_Text =
+var IndexFieldStatus_Text =
     exports.IndexFieldStatus_Text = {
       Options: IndexField_Text,
       Status: OptionStatus
