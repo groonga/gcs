@@ -49,7 +49,7 @@ suite('gcs-create-domain', function() {
            '--port', utils.testPort,
            '--base-host', 'localhost:' + utils.testPort)
       .next(function(result) {
-        assert.equal(result.code, 0, result.output.stderr);
+        assert.equal(result.code, 0, result.output.stdout + '\n' + result.output.stderr);
         assert.include(result.output.stdout,
                        'Domain endpoints are currently being created.');
 
@@ -940,10 +940,9 @@ suite('gcs-post-sdf', function() {
 
   var fixturesDirectory = path.join(__dirname, 'fixture', 'companies');
 
-  var domain;
   var endpoint;
   function setupDomain() {
-    domain = new Domain('companies', context);
+    var domain = new Domain('companies', context);
     domain.createSync();
     domain.getIndexField('name').setType('text').createSync();
     domain.getIndexField('address').setType('text').createSync();
@@ -1125,9 +1124,11 @@ suite('gcs-post-sdf', function() {
   });
 
   test('post not-existing domain', function(done) {
+    var batchFile = path.join(fixturesDirectory, 'invalid.sdf.json');
     utils
       .run('gcs-post-sdf',
            '--domain-name', 'test',
+           '--source', batchFile,
            '--endpoint', endpoint,
            '--port', utils.testPort,
            '--base-host', 'localhost:' + utils.testPort)
