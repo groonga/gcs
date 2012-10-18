@@ -1,6 +1,7 @@
 var utils = require('./test-utils');
 var assert = require('chai').assert;
 var path = require('path');
+var fs = require('fs');
 
 var Domain = require('../lib/database/domain').Domain;
 
@@ -984,17 +985,36 @@ suite('gcs-post-sdf', function() {
 
   test('post delete sdf json', function(done) {
     setupDomain();
-    var batchFile = path.join(fixturesDirectory, 'delete.sdf.json');
+    var addBatch = fs.readFileSync(path.join(fixturesDirectory, 'add.sdf.json'), 'UTF-8');
+    var deleteBatchFile = path.join(fixturesDirectory, 'delete.sdf.json');
     utils
+/* Don't use gcs-post-sdf to setup database, because it is too slow and this test becomes time-out.
       .run('gcs-post-sdf',
            '--domain-name', 'companies',
            '--source', path.join(fixturesDirectory, 'add.sdf.json'),
            '--endpoint', endpoint,
            '--port', utils.testPort,
            '--base-host', 'localhost:' + utils.testPort)
+*/
+      .post('/2011-02-01/documents/batch', addBatch, {
+        'Content-Type': 'application/json',
+        'Content-Length': addBatch.length,
+        'Host': endpoint.split(':')[0]
+      })
+      .next(function(response) {
+        var expected = {
+              statusCode: 200,
+              body: JSON.stringify({
+                status: 'success',
+                adds: 10,
+                deletes: 0
+              })
+            };
+        assert.deepEqual(response, expected);
+      })
       .run('gcs-post-sdf',
            '--domain-name', 'companies',
-           '--source', batchFile,
+           '--source', deleteBatchFile,
            '--endpoint', endpoint,
            '--port', utils.testPort,
            '--base-host', 'localhost:' + utils.testPort)
@@ -1003,7 +1023,7 @@ suite('gcs-post-sdf', function() {
                            message: result.output.stdout },
                          { code:    0,
                            message:
-                             'Processing: ' + batchFile + '\n' +
+                             'Processing: ' + deleteBatchFile + '\n' +
                              'Detected source format for ' +
                                'delete.sdf.json as json\n' +
                              'Status: success\n' +
