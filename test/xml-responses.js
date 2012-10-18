@@ -56,7 +56,7 @@ exports.DescribeDomainsResponse = function(members) {
       members.forEach(function(member, index) {
         pattern[index] = DomainStatus;
       });
-      return { member: pattern };
+      return members.length ? { member: pattern } : {} ;
     })()
   });
 };
@@ -80,7 +80,7 @@ var IndexField_Text =
       IndexFieldType: '',
       TextOptions: TextOptions
     };
-var IndexFieldStatus_Text =
+var sus_Text =
     exports.IndexFieldStatus_Text = {
       Options: IndexField_Text,
       Status: OptionStatus
@@ -139,7 +139,7 @@ exports.DescribeIndexFieldsResponse = function(members) {
           members.forEach(function(member, index) {
             pattern[index] = member;
           });
-          return { member: pattern };
+          return members.length ? { member: pattern } : {} ;
         })()
   });
 };

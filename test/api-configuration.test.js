@@ -631,12 +631,12 @@ suite('Configuration API', function() {
                                  .DescribeIndexFieldsResult
                                  .IndexFields
                                  .member;
-      var domains = [];
+      var fields = [];
       for (var i in members) {
         if (members.hasOwnProperty(i))
-          domains.push(members[i].DomainName);
+          fields.push(members[i].Options.IndexFieldName);
       }
-      return domains;
+      return fields;
     }
 
     test('all', function(done) {
@@ -646,9 +646,14 @@ suite('Configuration API', function() {
              'Action=DescribeIndexFields&Version=2011-02-01')
         .next(function(response) {
           var expectedFields = ['age', 'name', 'product'];
+          response = xmlResponses.toParsedResponse(response);
           assert.deepEqual(response.pattern,
                            { statusCode: 200,
-                             body: xmlResponses.DescribeIndexFieldsResponse(expectedFields) });
+                             body: xmlResponses.DescribeIndexFieldsResponse([
+                               xmlResponses.IndexFieldStatus_UInt,
+                               xmlResponses.IndexFieldStatus_Text,
+                               xmlResponses.IndexFieldStatus_Literal
+                             ]) });
 
           var actualFields = getActualDescribedFields(response);
           assert.deepEqual(actualFields, expectedFields);
@@ -663,13 +668,17 @@ suite('Configuration API', function() {
     test('specified', function(done) {
       var domain, field;
       utils
-        .get('/?DomainName=companies&FieldNames.member.1=name&' +
+        .get('/?DomainName=companies&FieldNames.member.1=name&FieldNames.member.2=age&' +
              'Action=DescribeIndexFields&Version=2011-02-01')
         .next(function(response) {
-          var expectedFields = ['name'];
+          var expectedFields = ['name', 'age'];
+          response = xmlResponses.toParsedResponse(response);
           assert.deepEqual(response.pattern,
                            { statusCode: 200,
-                             body: xmlResponses.DescribeIndexFieldsResponse(expectedFields) });
+                             body: xmlResponses.DescribeIndexFieldsResponse([
+                               xmlResponses.IndexFieldStatus_Text,
+                               xmlResponses.IndexFieldStatus_UInt
+                             ]) });
 
           var actualFields = getActualDescribedFields(response);
           assert.deepEqual(actualFields, expectedFields);
@@ -688,9 +697,10 @@ suite('Configuration API', function() {
              'Action=DescribeIndexFields&Version=2011-02-01')
         .next(function(response) {
           var expectedFields = [];
+          response = xmlResponses.toParsedResponse(response);
           assert.deepEqual(response.pattern,
                            { statusCode: 200,
-                             body: xmlResponses.DescribeIndexFieldsResponse(expectedFields) });
+                             body: xmlResponses.DescribeIndexFieldsResponse([]) });
 
           var actualFields = getActualDescribedFields(response);
           assert.deepEqual(actualFields, expectedFields);
