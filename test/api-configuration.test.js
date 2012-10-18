@@ -204,6 +204,30 @@ suite('Configuration API', function() {
           done(error);
         });
     });
+
+    test('Action=DescribeDomains (not existing domain)', function(done) {
+      utils
+        .get('/?DomainName=domain3&Action=CreateDomain&Version=2011-02-01')
+        .get('/?DomainName=domain1&Action=CreateDomain&Version=2011-02-01')
+        .get('/?DomainName=domain2&Action=CreateDomain&Version=2011-02-01')
+        .get('/?Action=DescribeDomains&Version=2011-02-01' +
+               '&DomainNames.member.1=unknown')
+        .next(function(response) {
+          response = xmlResponses.toParsedResponse(response);
+          var expectedDomains = [];
+          assert.deepEqual(response.pattern,
+                           { statusCode: 200,
+                             body: xmlResponses.DescribeDomainsResponse(expectedDomains) });
+
+          var actualDomains = getActualDescribedDomains(response);
+          assert.deepEqual(actualDomains, expectedDomains);
+
+          done();
+        })
+        .error(function(error) {
+          done(error);
+        });
+    });
   });
 
   suite('auto detection of the base hostname and port', function() {
@@ -582,6 +606,94 @@ suite('Configuration API', function() {
           assert.deepEqual(response.pattern,
                            { statusCode: 200,
                              body: xmlResponses.DeleteIndexFieldResponse });
+
+          done();
+        })
+        .error(function(error) {
+          done(error);
+        });
+    });
+  });
+
+  suite('Action=DescribeIndexFields', function() {
+    setup(function() {
+      commonSetup();
+      domain = new Domain('companies', context);
+      domain.createSync();
+      domain.getIndexField('name').setType('text').createSync();
+      domain.getIndexField('age').setType('uint').createSync();
+      domain.getIndexField('product').setType('literal').createSync();
+    });
+    teardown(commonTeardown);
+
+    function getActualDescribedFields(response) {
+      var members = response.body.DescribeIndexFieldsResponse
+                                 .DescribeIndexFieldsResult
+                                 .IndexFields
+                                 .member;
+      var domains = [];
+      for (var i in members) {
+        if (members.hasOwnProperty(i))
+          domains.push(members[i].DomainName);
+      }
+      return domains;
+    }
+
+    test('all', function(done) {
+      var domain, field;
+      utils
+        .get('/?DomainName=companies&' +
+             'Action=DescribeIndexFields&Version=2011-02-01')
+        .next(function(response) {
+          var expectedFields = ['age', 'name', 'product'];
+          assert.deepEqual(response.pattern,
+                           { statusCode: 200,
+                             body: xmlResponses.DescribeIndexFieldsResponse(expectedFields) });
+
+          var actualFields = getActualDescribedFields(response);
+          assert.deepEqual(actualFields, expectedFields);
+
+          done();
+        })
+        .error(function(error) {
+          done(error);
+        });
+    });
+
+    test('specified', function(done) {
+      var domain, field;
+      utils
+        .get('/?DomainName=companies&FieldNames.member.1=name&' +
+             'Action=DescribeIndexFields&Version=2011-02-01')
+        .next(function(response) {
+          var expectedFields = ['name'];
+          assert.deepEqual(response.pattern,
+                           { statusCode: 200,
+                             body: xmlResponses.DescribeIndexFieldsResponse(expectedFields) });
+
+          var actualFields = getActualDescribedFields(response);
+          assert.deepEqual(actualFields, expectedFields);
+
+          done();
+        })
+        .error(function(error) {
+          done(error);
+        });
+    });
+
+    test('specified (not exists)', function(done) {
+      var domain, field;
+      utils
+        .get('/?DomainName=companies&FieldNames.member.1=unknown&' +
+             'Action=DescribeIndexFields&Version=2011-02-01')
+        .next(function(response) {
+          var expectedFields = [];
+          assert.deepEqual(response.pattern,
+                           { statusCode: 200,
+                             body: xmlResponses.DescribeIndexFieldsResponse(expectedFields) });
+
+          var actualFields = getActualDescribedFields(response);
+          assert.deepEqual(actualFields, expectedFields);
 
           done();
         })
