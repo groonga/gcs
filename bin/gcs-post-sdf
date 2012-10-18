@@ -22,7 +22,7 @@ commandLine
   .parse();
 
 var client = new Client(commandLine);
-client.docEndpoint = commandLine.option.endpoint;
+client.docEndpoint = commandLine.options.endpoint;
 
 client.assertHaveDomainName();
 client.assertDomainExists(function() {
