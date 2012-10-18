@@ -52,8 +52,9 @@ client.assertDomainExists(function() {
             client.raiseFatalError(error);
 
           try {
-            var errors = response.Body.errors.map(function(error) { return error.message; });
-            if (errors.length) {
+            var errors = response.Body.errors;
+            if (errors && errors.length) {
+              errors = errors.map(function(error) { return error.message; });
               console.log('Validation failed.');
               console.log(errors.join('\n'));
               return process.exit(1);
@@ -63,7 +64,7 @@ client.assertDomainExists(function() {
             console.log('Deleted: %s', response.Body.deletes);
             process.exit(0);
           } catch(error) {
-            client.raiseFatalError(error);
+            client.raiseFatalError(error.message + '\n' + error.stack);
           }
         }
       );
