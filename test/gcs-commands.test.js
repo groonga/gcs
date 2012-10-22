@@ -943,6 +943,34 @@ suite('gcs-post-sdf', function() {
       });
   });
 
+  test('post add sdf json (non-ascii)', function(done) {
+    setupDomain();
+    var batchFile = path.join(fixturesDirectory, 'non-ascii.add.sdf.json');
+    utils
+      .run('gcs-post-sdf',
+           '--domain-name', 'companies',
+           '--source', batchFile,
+           '--endpoint', endpoint,
+           '--base-host', 'localhost:' + utils.testPort)
+      .next(function(result) {
+        assert.deepEqual({ code:    result.code,
+                           message: result.output.stdout },
+                         { code:    0,
+                           message:
+                             'Processing: ' + batchFile + '\n' +
+                             'Detected source format for ' +
+                               'add.sdf.json as json\n' +
+                             'Status: success\n' +
+                             'Added: 10\n' +
+                             'Deleted: 0\n' },
+                         result.output.stderr);
+        done();
+      })
+      .error(function(e) {
+        done(e);
+      });
+  });
+
   test('post delete sdf json', function(done) {
     setupDomain();
     var addBatch = fs.readFileSync(path.join(fixturesDirectory, 'add.sdf.json'), 'UTF-8');
