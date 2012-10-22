@@ -959,7 +959,7 @@ suite('gcs-post-sdf', function() {
                            message:
                              'Processing: ' + batchFile + '\n' +
                              'Detected source format for ' +
-                               'add.sdf.json as json\n' +
+                               'non-ascii.add.sdf.json as json\n' +
                              'Status: success\n' +
                              'Added: 10\n' +
                              'Deleted: 0\n' },
