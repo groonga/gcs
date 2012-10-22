@@ -11,6 +11,7 @@ debug_flags = ["CFLAGS=-ggdb3 -O0", "CXXFLAGS=-ggdb3 -O0"]
 
 base_dir = Pathname.new(__FILE__).dirname.expand_path
 top_dir = base_dir.parent.parent
+gcs_console_dir = top_dir.parent + "gcs-console"
 tmp_dir = base_dir + "tmp"
 @download_dir = tmp_dir + "download"
 @build_dir = tmp_dir + "build"
@@ -203,6 +204,24 @@ namespace(:gcs) do
   end
 end
 
+gcs_console_path = @dist_dir + "bin/gcs-console"
+namespace(:gcs_console) do
+  file(gcs_console_path.to_s) do
+    Rake::Task["gcs_console:install"].invoke
+  end
+
+  desc("Install Groonga CloudSearch Console")
+  task(:install => [node_path.to_s]) do
+    Dir.chdir(@dist_dir.to_s) do
+      bin_dir = @dist_dir + "bin"
+      path = ENV["PATH"]
+      sh("env",
+         "PATH=#{bin_dir}:#{path}",
+         "bin/npm", "install", "-g", gcs_console_dir.to_s) or exit(false)
+    end
+  end
+end
+
 def create_wrapper_script(executable_name, destination_path)
   wrapper_script_path = destination_path + executable_name
   wrapper_script_path.open("w") do |wrapper_script|
@@ -240,9 +259,17 @@ EOS
   chmod(0755, wrapper_script_path.to_s)
 end
 
-gcs_package_json = top_dir + "package.json"
-package_json = JSON.parse(gcs_package_json.read)
-gcs_version = package_json["version"]
+def read_package_json(base_dir)
+  package_json = base_dir + "package.json"
+  JSON.parse(package_json.read)
+end
+
+executables_to_wrap = []
+
+gcs_package_json = read_package_json(top_dir)
+executables_to_wrap += gcs_package_json['bin'].keys
+
+gcs_version = gcs_package_json["version"]
 gcs_package_basename = "gcs-#{gcs_version}"
 gcs_package_tar_gz = "#{gcs_package_basename}.tar.gz"
 gcs_package_path = tmp_dir + gcs_package_basename
@@ -250,9 +277,13 @@ gcs_package_tar_gz_path = base_dir + gcs_package_tar_gz
 file(gcs_package_tar_gz_path.to_s) do
   Rake::Task["package"]
 end
-executables_to_wrap = package_json['bin'].keys
 
-task(:package => gcs_path.to_s) do
+
+gcs_console_package_json = read_package_json(gcs_console_dir)
+executables_to_wrap += gcs_console_package_json["bin"].keys
+
+
+task(:package => [gcs_path.to_s, gcs_console_path.to_s]) do
   rm_rf(gcs_package_path.to_s)
   cp_r(@dist_dir.to_s, gcs_package_path.to_s)
   executables_to_wrap.each do |executable_name|
