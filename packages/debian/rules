@@ -30,7 +30,7 @@ DESTDIR = debian/tmp
 override_dh_install:
 	npm install --production node-gyp
 	if [ -x /usr/bin/nodejs ]; then			\
-	  sed -i'' -e '1 s/node$/nodejs/'		\
+	  sed -i'' -e '1 s/node$$/nodejs/'		\
 	    node_modules/node-gyp/bin/node-gyp.js;	\
 	fi
 
