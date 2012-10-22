@@ -1,0 +1,125 @@
+[
+  {
+    "type": "add",
+    "id": "id1",
+    "version": 1,
+    "lang": "en",
+    "fields": {
+      "name": "未来検索ブラジル",
+      "address": "渋谷, 東京, 日本",
+      "email_address": "info@razil.jp",
+      "age": 1,
+      "product": "groonga"
+    }
+  },
+  {
+    "type": "add",
+    "id": "id2",
+    "version": 1,
+    "lang": "en",
+    "fields": {
+      "name": "えにしテック",
+      "address": "札幌, 北海道, 日本",
+      "email_address": "info@enishi-tech.com",
+      "age": 2,
+      "product": "groonga"
+    }
+  },
+  {
+    "type": "add",
+    "id": "id3",
+    "version": 1,
+    "lang": "en",
+    "fields": {
+      "name": "クリアコード",
+      "address": "本郷, 東京, 日本",
+      "email_address": "info@clear-code.com",
+      "age": 3,
+      "product": "groonga"
+    }
+  },
+  {
+    "type": "add",
+    "id": "id4",
+    "version": 1,
+    "lang": "en",
+    "fields": {
+      "name": "アナハイム・エレクトロニクス",
+      "address": "グラナダ, 月面",
+      "age": 4,
+      "product": "gundam"
+    }
+  },
+  {
+    "type": "add",
+    "id": "id5",
+    "version": 1,
+    "lang": "en",
+    "fields": {
+      "name": "新星インダストリー",
+      "address": "地球",
+      "age": 5,
+      "product": "valkyrie"
+    }
+  },
+  {
+    "type": "add",
+    "id": "id6",
+    "version": 1,
+    "lang": "en",
+    "fields": {
+      "name": "オム二社",
+      "address": "デトロイト・デルタシティ, ミシガン, アメリカ合衆国",
+      "age": 6,
+      "product": "robocop"
+    }
+  },
+  {
+    "type": "add",
+    "id": "id7",
+    "version": 1,
+    "lang": "en",
+    "fields": {
+      "name": "カプセルコーポレーション",
+      "address": "西の都",
+      "age": 7,
+      "product": "time machine"
+    }
+  },
+  {
+    "type": "add",
+    "id": "id8",
+    "version": 1,
+    "lang": "en",
+    "fields": {
+      "name": "スターク・インダストリー",
+      "address": "アメリカ合衆国",
+      "age": 8,
+      "product": "iron man"
+    }
+  },
+  {
+    "type": "add",
+    "id": "id9",
+    "version": 1,
+    "lang": "en",
+    "fields": {
+      "name": "アンブレラ社",
+      "address": "東京, 日本",
+      "age": 9,
+      "product": "tyrant"
+    }
+  },
+  {
+    "type": "add",
+    "id": "id10",
+    "version": 1,
+    "lang": "en",
+    "fields": {
+      "name": "U.S. Robots and Mechanical Men",
+      "address": "ニューヨーク, アメリカ合衆国",
+      "age": 10,
+      "product": "ndr114"
+    }
+  }
+]
