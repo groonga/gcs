@@ -3,6 +3,7 @@
 GREEN="\033[0;32;1m"
 RED="\033[0;31;1m"
 YELLOW="\033[1;33;1m"
+CYAN="\033[0;36;1m"
 RESET="\033[m"
 
 cat <<EOT
@@ -12,6 +13,27 @@ Groonga CloudSearch example data importer
 This script setup an example domain and import data into the domain.
 
 EOT
+
+echo "Checking prerequisites..."
+echo
+
+printf "* gcs running..."
+curl --silent "http://localhost:7575" > /dev/null
+if [ $? -eq 0 ]
+then
+  echo " "$GREEN"OK"$RESET
+else
+  echo " "$RED"not running"$RESET
+  printf $YELLOW
+cat <<"EOT"
+
+You need to run gcs on port 7575. Just run gcs command without any options on another terminal.
+
+  $ gcs
+
+EOT
+  printf $RESET
+fi
 
 cat <<EOT
 
@@ -24,6 +46,19 @@ Hit enter to continue. Ctrl-C to break.
 EOT
 read enter
 
+
+run() {
+  "$@"
+  result=$?
+
+  if [ $result -ne 0 ]
+  then
+    echo " "$RED"Failed:"$RESET $CYAN"$@"$RESET $YELLOW"[$PWD]"$RESET
+    exit $result
+  fi
+
+  return 0
+}
 
 path_prefixes="`dirname $0`/.."
 if [ -L "$0" ]; then
@@ -55,12 +90,12 @@ done
 
 
 echo "==== Deleting 'example' domain (if exists)"
-$bin_path/gcs-delete-domain --domain-name example --force
+run $bin_path/gcs-delete-domain --domain-name example --force
 echo
 
 echo "==== Creating 'example' domain"
 
-$bin_path/gcs-create-domain --domain-name example
+run $bin_path/gcs-create-domain --domain-name example
 echo
 echo
 
@@ -69,26 +104,26 @@ search_endpoint=`$bin_path/gcs-describe-domain --domain-name example | grep "Sea
 
 echo "==== Adding index fields"
 echo "== Creating 'name' field"
-$bin_path/gcs-configure-fields --domain-name example --name name --type text --option result
-$bin_path/gcs-configure-fields --domain-name example --name name --type text --option facet
+run $bin_path/gcs-configure-fields --domain-name example --name name --type text --option result
+run $bin_path/gcs-configure-fields --domain-name example --name name --type text --option facet
 echo
 echo "== Creating 'address' field"
-$bin_path/gcs-configure-fields --domain-name example --name address --type text --option result
-$bin_path/gcs-configure-fields --domain-name example --name address --type text --option facet
+run $bin_path/gcs-configure-fields --domain-name example --name address --type text --option result
+run $bin_path/gcs-configure-fields --domain-name example --name address --type text --option facet
 echo
 echo "== Creating 'email_address' field"
-$bin_path/gcs-configure-fields --domain-name example --name email_address --type text --option result
-$bin_path/gcs-configure-fields --domain-name example --name email_address --type text --option facet
+run $bin_path/gcs-configure-fields --domain-name example --name email_address --type text --option result
+run $bin_path/gcs-configure-fields --domain-name example --name email_address --type text --option facet
 echo
 echo "== Creating 'products' field"
-$bin_path/gcs-configure-fields --domain-name example --name products --type literal --option search
-$bin_path/gcs-configure-fields --domain-name example --name products --type literal --option result
-$bin_path/gcs-configure-fields --domain-name example --name products --type literal --option facet
+run $bin_path/gcs-configure-fields --domain-name example --name products --type literal --option search
+run $bin_path/gcs-configure-fields --domain-name example --name products --type literal --option result
+run $bin_path/gcs-configure-fields --domain-name example --name products --type literal --option facet
 echo
 
 echo
 echo "==== Indexing data"
-$bin_path/gcs-post-sdf --domain-name example --source $examples_path/example.sdf.json
+run $bin_path/gcs-post-sdf --domain-name example --source $examples_path/example.sdf.json
 echo
 
 echo
