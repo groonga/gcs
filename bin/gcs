@@ -26,7 +26,7 @@ var server = gcsServer.createServer({
       configurationHost: commandLine.options.configurationHost
     });
 
-server.listen(commandLine.options.port, function() {
+server.listen(commandLine.port, function() {
   console.log('gcs listening at %d', commandLine.port);
   console.log('database is at %s', commandLine.options.databasePath);
   console.log('privileged IP ranges are %s', commandLine.options.privilege);
