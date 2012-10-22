@@ -34,7 +34,7 @@ ENABLE="no"
 
 export NODE_ENV
 
-DEFAULT_FILE=/etc/default/gcs
+DEFAULT_FILE=/etc/default/$NAME
 
 # Exit if the package is not installed
 [ -x "$DAEMON" ] || exit 0
