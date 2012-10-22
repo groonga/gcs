@@ -269,21 +269,16 @@ executables_to_wrap = []
 gcs_package_json = read_package_json(top_dir)
 executables_to_wrap += gcs_package_json['bin'].keys
 
+gcs_console_package_json = read_package_json(gcs_console_dir)
+executables_to_wrap += gcs_console_package_json["bin"].keys
+
+
 gcs_version = gcs_package_json["version"]
 gcs_package_basename = "gcs-#{gcs_version}"
 gcs_package_tar_gz = "#{gcs_package_basename}.tar.gz"
 gcs_package_path = tmp_dir + gcs_package_basename
 gcs_package_tar_gz_path = base_dir + gcs_package_tar_gz
-file(gcs_package_tar_gz_path.to_s) do
-  Rake::Task["package"]
-end
-
-
-gcs_console_package_json = read_package_json(gcs_console_dir)
-executables_to_wrap += gcs_console_package_json["bin"].keys
-
-
-task(:package => [gcs_path.to_s, gcs_console_path.to_s]) do
+file(gcs_package_tar_gz => [gcs_path.to_s, gcs_console_path.to_s]) do
   rm_rf(gcs_package_path.to_s)
   cp_r(@dist_dir.to_s, gcs_package_path.to_s)
   executables_to_wrap.each do |executable_name|
@@ -293,6 +288,9 @@ task(:package => [gcs_path.to_s, gcs_console_path.to_s]) do
     sh("tar", "czf", gcs_package_tar_gz_path.to_s, gcs_package_basename)
   end
 end
+
+desc("Create #{gcs_package_tar_gz}")
+task(:package => gcs_package_tar_gz)
 
 task(:default => :package)
 
