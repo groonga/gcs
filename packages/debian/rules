@@ -55,9 +55,12 @@ override_dh_install:
 	  bindir=/usr/bin;					\
 	  dest_bindir=$(DESTDIR)$${bindir};			\
 	  mkdir -p $${dest_bindir};				\
-	  for script in bin/*; do				\
+	  for script in $${dest_gcsdir}/bin/*; do		\
 	    ln -s $${gcsdir}/bin/$$(basename $${script})	\
 	      $${dest_bindir};					\
+	    if [ -x /usr/bin/nodejs ]; then			\
+	      sed -i'' -e '1 s/ node$$/ nodejs/' $${script};	\
+	    fi;							\
 	  done;							\
 	  sbindir=/usr/sbin;					\
 	  dest_sbindir=$(DESTDIR)$${sbindir};			\
