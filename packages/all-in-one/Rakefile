@@ -193,7 +193,11 @@ namespace(:gcs) do
     Dir.chdir(@dist_dir.to_s) do
       bin_dir = @dist_dir + "bin"
       path = ENV["PATH"]
-      sh("env", "PATH=#{bin_dir}:#{path}",
+      pkg_config_path = ENV["PKG_CONFIG_PATH"]
+      built_pkg_config_path = @dist_dir + "lib/pkgconfig"
+      sh("env",
+         "PATH=#{bin_dir}:#{path}",
+         "PKG_CONFIG_PATH=#{built_pkg_config_path}:#{pkg_config_path}",
          "bin/npm", "install", "-g", top_dir.to_s) or exit(false)
     end
   end
