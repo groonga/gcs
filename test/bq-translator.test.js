@@ -49,7 +49,7 @@ function testQueryError(label, query, context, detail) {
 }
 
 function testGroup(label, group, expectedOffset, expectedScriptGrnExpr) {
-  test('gorup: ' + label + ': ' +
+  test('group: ' + label + ': ' +
        '<' + group + '> -> <' + expectedScriptGrnExpr + '>', function() {
     var translator = createTranslator(group);
     var actualScriptGrnExpr = translator.translateGroup();
