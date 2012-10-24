@@ -90,7 +90,7 @@ done
 
 
 echo "==== Deleting 'example' domain (if exists)"
-run $bin_path/gcs-delete-domain --domain-name example --force
+$bin_path/gcs-delete-domain --domain-name example --force
 echo
 
 echo "==== Creating 'example' domain"
