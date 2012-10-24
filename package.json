@@ -32,7 +32,6 @@
   },
   "scripts": {
     "test": "NODE_ENV=test ./node_modules/.bin/mocha --reporter list --ui tdd --timeout 5s",
-    "test:casper": "./test_casper/casper-runner.js",
     "start": "./bin/gcs"
   },
   "bin": {
