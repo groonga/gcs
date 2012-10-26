@@ -29,11 +29,6 @@ function setupServer(context, extraOptions) {
   var server = gcsServer.createServer(options);
   server.listen(testPort);
 
-  server.dashboardUrl = url.format({
-    protocol: 'http',
-    hostname: 'localhost',
-    port: options.port
-  });
   return server;
 }
 exports.setupServer = setupServer;
