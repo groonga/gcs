@@ -62,7 +62,6 @@ source: ../$(PACKAGE)-$(VERSION).tar.gz
 	cp -a ../../package.json $(PACKAGE)-$(VERSION)
 	cp -a ../../public/ $(PACKAGE)-$(VERSION)
 	cp -a ../../test/ $(PACKAGE)-$(VERSION)
-	cp -a ../../test_casper/ $(PACKAGE)-$(VERSION)
 	cp -a ../../tools/ $(PACKAGE)-$(VERSION)
 	cp -a ../../views/ $(PACKAGE)-$(VERSION)
 	tar cvzf ../$(PACKAGE)-$(VERSION).tar.gz $(PACKAGE)-$(VERSION)
