@@ -56,7 +56,6 @@ source: ../$(PACKAGE)-$(VERSION).tar.gz
 	cp -a ../../MIT-LICENSE $(PACKAGE)-$(VERSION)
 	cp -a ../../README.md $(PACKAGE)-$(VERSION)
 	cp -a ../../bin/ $(PACKAGE)-$(VERSION)
-	cp -a ../../client_templates/ $(PACKAGE)-$(VERSION)
 	cp -a ../../examples/ $(PACKAGE)-$(VERSION)
 	cp -a ../../lib/ $(PACKAGE)-$(VERSION)
 	cp -a ../../npm-shrinkwrap.json $(PACKAGE)-$(VERSION)
