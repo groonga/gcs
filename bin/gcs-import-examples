@@ -134,8 +134,4 @@ cat <<EOT
 Now you can try searching by
 
 $ curl "http://$search_endpoint/2011-02-01/search?q=Tokyo"
-
-or, open
-http://localhost:7575
-for web dashboard.
 EOT
