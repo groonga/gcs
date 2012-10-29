@@ -6,8 +6,8 @@ language: node_js
 node_js:
  - 0.6
  - 0.8
-env:
- - GROONGA_MASTER=yes
+# env:
+#  - GROONGA_MASTER=yes
 install:
  - curl https://raw.github.com/groonga/groonga/master/data/travis/setup.sh | sh
  - npm install
