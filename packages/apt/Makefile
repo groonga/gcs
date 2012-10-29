@@ -2,7 +2,7 @@ REPOSITORIES_PATH = repositories
 DISTRIBUTIONS = debian ubuntu
 CHROOT_BASE = /var/lib/chroot
 ARCHITECTURES = i386 amd64
-CODES = unstable precise
+CODES = unstable precise quantal
 
 PACKAGE = gcs
 PACKAGE_NAME = Groonga CloudSearch
