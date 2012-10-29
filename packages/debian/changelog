@@ -1,6 +1,7 @@
 gcs (1.3.0-1) unstable; urgency=low
 
   * New upstream release.
+  * Require groonga 2.0.8 or later.
 
  -- Kouhei Sutou <kou@clear-code.com>  Mon, 22 Oct 2012 09:55:39 +0900
 
