@@ -11,10 +11,31 @@ commandLine
             '[' + CLI.defaultPrivilegedRanges + ']',
           String,
           CLI.defaultPrivilegedRanges)
+  .option('--access-log-path <path>',
+          'path to the access log' +
+            '(GCS_ACCESS_LOG_PATH) ' +
+            '[' + CLI.defaultAccessLogPath + ']',
+          String,
+          CLI.defaultAccessLogPath)
+  .option('--query-log-path <path>',
+          'path to the query log' +
+            '(GCS_QUERY_LOG_PATH) ' +
+            '[' + CLI.defaultQueryLogPath + ']',
+          String,
+          CLI.defaultQueryLogPath)
+  .option('--error-log-path <path>',
+          'path to the error log' +
+            '(GCS_ERROR_LOG_PATH) ' +
+            '[' + CLI.defaultErrorLogPath + ']',
+          String,
+          CLI.defaultErrorLogPath)
   .parse();
 
 var server = gcsServer.createServer({
       databasePath:      commandLine.options.databasePath,
+      accessLogPath:     commandLine.options.accessLogPath,
+      queryLogPath:      commandLine.options.queryLogPath,
+      errorLogPath:      commandLine.options.errorLogPath,
       privilegedRanges:  commandLine.options.privilege,
       port:              commandLine.port,
       baseHost:          commandLine.baseHost,

@@ -42,6 +42,9 @@ DEFAULT_FILE=/etc/default/$NAME
 # Read configuration variable file if it is present
 [ -r $DEFAULT_FILE ] && . $DEFAULT_FILE
 export GCS_DATABASE_PATH
+export GCS_ACCESS_LOG_PATH
+export GCS_QUERY_LOG_PATH
+export GCS_ERROR_LOG_PATH
 export GCS_PORT
 export GCS_BASE_HOST
 export GCS_PRIVILEGED_RANGES

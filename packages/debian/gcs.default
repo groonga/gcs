@@ -7,6 +7,15 @@
 # The location of the database
 GCS_DATABASE_PATH=$(echo ~gcs)/.gcs/database/gcs
 
+# The location of the access log
+GCS_ACCESS_LOG_PATH=/var/log/gcs/access.log
+
+# The location of the query log
+GCS_QUERY_LOG_PATH=/var/log/gcs/query.log
+
+# The location of the error log
+GCS_ERROR_LOG_PATH=/var/log/gcs/error.log
+
 # The port number to listen
 GCS_PORT=7575
 
