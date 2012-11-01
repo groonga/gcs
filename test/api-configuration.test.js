@@ -242,9 +242,9 @@ suite('Configuration API', function() {
           var recordsCount = response.body.DescribeDomainsResponse
                                           .DescribeDomainsResult
                                           .DomainStatusList
-                                          .member[0]
+                                          .member
                                           .NumSearchableDocs;
-          assert.equal(recordsCount, 10);
+          assert.equal(recordsCount, '10');
 
           done();
         })
