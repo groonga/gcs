@@ -364,17 +364,21 @@ suite('Search API', function() {
         .createSync();
       domain.getIndexField('age').setType('uint')
         .createSync();
+      domain.getIndexField('followers').setType('uint')
+        .createSync();
       domain.loadSync([
         { id: 'id1', realname: 'Jack Sparrow',
                      nickname: 'Captain',
                      type:     'human',
                      job:      'pirate',
-                     age:      40 },
+                     age:      40,
+                     followers: 100 },
         { id: 'id2', realname: 'Pumpkin Man',
                      nickname: 'Jack-o\'-Lantern',
                      type:     'ghost',
                      job:      'nothing',
-                     age:      9999 }
+                     age:      9999,
+                     followers: 0 }
       ]);
     });
 
@@ -617,19 +621,19 @@ suite('Search API', function() {
       }
     );
 
-    testSearch('/2011-02-01/search?q=Jack&rank=age',
+    testSearch('/2011-02-01/search?q=Jack&rank=followers',
                'should return results sorted by uint field (aschending)',
                'search-people-00000000000000000000000000.localhost',
       function(response) {
         var expected = {
-          rank: 'age',
+          rank: 'followers',
           'match-expr': "(label 'Jack')",
           hits: {
             found: 2,
             start: 0,
             hit: [
-              { id: 'id1' },
-              { id: 'id2' }
+              { id: 'id2' },
+              { id: 'id1' }
             ]
           },
           info: {
@@ -642,19 +646,19 @@ suite('Search API', function() {
       }
     );
 
-    testSearch('/2011-02-01/search?q=Jack&rank=-age',
+    testSearch('/2011-02-01/search?q=Jack&rank=-followers',
                'should return results sorted by uint field (descending)',
                'search-people-00000000000000000000000000.localhost',
       function(response) {
         var expected = {
-          rank: '-age',
+          rank: '-followers',
           'match-expr': "(label 'Jack')",
           hits: {
             found: 2,
             start: 0,
             hit: [
-              { id: 'id2' },
-              { id: 'id1' }
+              { id: 'id1' },
+              { id: 'id2' }
             ]
           },
           info: {
