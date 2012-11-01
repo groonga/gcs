@@ -40,7 +40,13 @@ DEFAULT_FILE=/etc/default/$NAME
 [ -x "$FOREVER" ] || exit 0
 
 # Read configuration variable file if it is present
-[ -r $DEFAEULT_FILE ] && . $DEFAULT_FILE
+if [ -r $DEFAULT_FILE ]; then
+  . $DEFAULT_FILE
+  [ "$GCS_DATABASE_PATH" != "" ]     && export GCS_DATABASE_PATH
+  [ "$GCS_PORT" != "" ]              && export GCS_PORT
+  [ "$GCS_BASE_HOST" != "" ]         && export GCS_BASE_HOST
+  [ "$GCS_PRIVILEGED_RANGES" != "" ] && export GCS_PRIVILEGED_RANGES
+fi
 
 [ "$ENABLE" = "yes" ] || exit 0
 
