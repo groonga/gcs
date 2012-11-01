@@ -96,6 +96,13 @@ suite('batch/processor/Processor (instance methods)', function() {
             age: 1,
             email_address: 'info@razil.jp',
             product: ['moritapo','groonga'] },
+          { id: 'id10',
+            name: 'U.S. Robots and Mechanical Men',
+            description: '',
+            address: 'New York, United States',
+            age: 10,
+            email_address: '',
+            product: ['ndr114','spd13'] },
           { id: 'id6',
             name: 'Omni Consumer Products',
             description: '',
@@ -103,14 +110,7 @@ suite('batch/processor/Processor (instance methods)', function() {
             address: 'Detroit and Delta City, Michigan, United States',
             age: 6,
             email_address: '',
-            product: ['robocop'] },
-          { id: 'id10',
-            name: 'U.S. Robots and Mechanical Men',
-            description: '',
-            address: 'New York, United States',
-            age: 10,
-            email_address: '',
-            product: ['ndr114','spd13'] }
+            product: ['robocop'] }
         ];
     assertSuccess(result, 3, 0, dump);
   });

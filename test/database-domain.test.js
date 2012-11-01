@@ -702,19 +702,19 @@ suite('database', function() {
                 email_address: 'info@razil.jp',
                 name: 'Brazil',
                 product: 'groonga' },
+              { id: 'id10',
+                address: 'New York, United States',
+                age: 10,
+                description: '',
+                email_address: '',
+                name: 'U.S. Robots and Mechanical Men',
+                product: 'ndr114' },
               { id: 'id2',
                 address: 'Sapporo, Hokkaido, Japan',
                 age: 2,
                 description: '',
                 email_address: 'info@enishi-tech.com',
                 name: 'Enishi Tech Inc.',
-                product: 'groonga' },
-              { id: 'id3',
-                address: 'Hongo, Tokyo, Japan',
-                age: 3,
-                description: '',
-                email_address: 'info@clear-code.com',
-                name: 'ClearCode Inc.',
                 product: 'groonga' }
             ];
         assert.deepEqual(actualDump.slice(0, 3), expectedDump);
@@ -751,7 +751,10 @@ suite('database', function() {
                 name: 'Nergal Heavy Industries',
                 product: 'nadesico' }
             ];
-        assert.deepEqual(actualDump.slice(-2), expectedDump);
+        assert.deepEqual(actualDump.filter(function(record) {
+                           return record.id == 'id10' || record.id == 'id11';
+                         }),
+                         expectedDump);
       });
 
       test('searchableDocumentsCount', function() {
