@@ -359,13 +359,22 @@ suite('Search API', function() {
       domain.getIndexField('type').setType('literal')
         .setFacetEnabled(true).setSearchEnabled(true).setResultEnabled(true)
         .createSync();
+      domain.getIndexField('job').setType('literal')
+        .setSearchEnabled(true).setResultEnabled(true)
+        .createSync();
+      domain.getIndexField('age').setType('uint')
+        .createSync();
       domain.loadSync([
         { id: 'id1', realname: 'Jack Sparrow',
                      nickname: 'Captain',
-                     type:     'human' },
+                     type:     'human',
+                     job:      'pirate',
+                     age:      40 },
         { id: 'id2', realname: 'Pumpkin Man',
                      nickname: 'Jack-o\'-Lantern',
-                     type:     'ghost' }
+                     type:     'ghost',
+                     job:      'nothing',
+                     age:      9999 }
       ]);
     });
 
@@ -547,6 +556,156 @@ suite('Search API', function() {
             realname: {},
             nickname: {}
             // and, unknown field is simply ignored.
+          },
+          info: {
+            rid: '000000000000000000000000000000000000000000000000000000000000000',
+            'time-ms': 0, // always 0
+            'cpu-time-ms': 0
+          }
+        };
+        assert.deepEqual(response.normalizedBody, expected);
+      }
+    );
+
+    testSearch('/2011-02-01/search?q=Jack&rank=realname',
+               'should return results sorted by text field (aschending)',
+               'search-people-00000000000000000000000000.localhost',
+      function(response) {
+        var expected = {
+          rank: 'realname',
+          'match-expr': "(label 'Jack')",
+          hits: {
+            found: 2,
+            start: 0,
+            hit: [
+              { id: 'id1' },
+              { id: 'id2' }
+            ]
+          },
+          info: {
+            rid: '000000000000000000000000000000000000000000000000000000000000000',
+            'time-ms': 0, // always 0
+            'cpu-time-ms': 0
+          }
+        };
+        assert.deepEqual(response.normalizedBody, expected);
+      }
+    );
+
+    testSearch('/2011-02-01/search?q=Jack&rank=-realname',
+               'should return results sorted by text field (descending)',
+               'search-people-00000000000000000000000000.localhost',
+      function(response) {
+        var expected = {
+          rank: 'realname',
+          'match-expr': "(label 'Jack')",
+          hits: {
+            found: 2,
+            start: 0,
+            hit: [
+              { id: 'id2' },
+              { id: 'id1' }
+            ]
+          },
+          info: {
+            rid: '000000000000000000000000000000000000000000000000000000000000000',
+            'time-ms': 0, // always 0
+            'cpu-time-ms': 0
+          }
+        };
+        assert.deepEqual(response.normalizedBody, expected);
+      }
+    );
+
+    testSearch('/2011-02-01/search?q=Jack&rank=age',
+               'should return results sorted by uint field (aschending)',
+               'search-people-00000000000000000000000000.localhost',
+      function(response) {
+        var expected = {
+          rank: 'age',
+          'match-expr': "(label 'Jack')",
+          hits: {
+            found: 2,
+            start: 0,
+            hit: [
+              { id: 'id1' },
+              { id: 'id2' }
+            ]
+          },
+          info: {
+            rid: '000000000000000000000000000000000000000000000000000000000000000',
+            'time-ms': 0, // always 0
+            'cpu-time-ms': 0
+          }
+        };
+        assert.deepEqual(response.normalizedBody, expected);
+      }
+    );
+
+    testSearch('/2011-02-01/search?q=Jack&rank=-age',
+               'should return results sorted by uint field (descending)',
+               'search-people-00000000000000000000000000.localhost',
+      function(response) {
+        var expected = {
+          rank: '-age',
+          'match-expr': "(label 'Jack')",
+          hits: {
+            found: 2,
+            start: 0,
+            hit: [
+              { id: 'id2' },
+              { id: 'id1' }
+            ]
+          },
+          info: {
+            rid: '000000000000000000000000000000000000000000000000000000000000000',
+            'time-ms': 0, // always 0
+            'cpu-time-ms': 0
+          }
+        };
+        assert.deepEqual(response.normalizedBody, expected);
+      }
+    );
+
+    testSearch('/2011-02-01/search?q=Jack&rank=job',
+               'should return results sorted by literal field (aschending)',
+               'search-people-00000000000000000000000000.localhost',
+      function(response) {
+        var expected = {
+          rank: 'job',
+          'match-expr': "(label 'Jack')",
+          hits: {
+            found: 2,
+            start: 0,
+            hit: [
+              { id: 'id2' },
+              { id: 'id1' }
+            ]
+          },
+          info: {
+            rid: '000000000000000000000000000000000000000000000000000000000000000',
+            'time-ms': 0, // always 0
+            'cpu-time-ms': 0
+          }
+        };
+        assert.deepEqual(response.normalizedBody, expected);
+      }
+    );
+
+    testSearch('/2011-02-01/search?q=Jack&rank=-job',
+               'should return results sorted by literal field (descending)',
+               'search-people-00000000000000000000000000.localhost',
+      function(response) {
+        var expected = {
+          rank: '-job',
+          'match-expr': "(label 'Jack')",
+          hits: {
+            found: 2,
+            start: 0,
+            hit: [
+              { id: 'id1' },
+              { id: 'id2' }
+            ]
           },
           info: {
             rid: '000000000000000000000000000000000000000000000000000000000000000',
