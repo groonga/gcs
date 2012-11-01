@@ -483,7 +483,7 @@ suite('database', function() {
               tables: domain.tableName
             });
         var expectedDump = 'table_create ' + domain.tableName +  ' ' +
-                             'TABLE_HASH_KEY ShortText\n' +
+                             'TABLE_PAT_KEY ShortText\n' +
                            'table_create ' + domain.configurationsTableName +  ' ' +
                              'TABLE_HASH_KEY ShortText\n' +
                            'column_create ' + domain.configurationsTableName +  ' ' +
@@ -796,7 +796,7 @@ suite('database', function() {
 
         var dumpExpected =
              'table_create ' + domain.tableName +  ' ' +
-               'TABLE_HASH_KEY ShortText\n' +
+               'TABLE_PAT_KEY ShortText\n' +
              'table_create ' + domain.configurationsTableName +  ' ' +
                'TABLE_HASH_KEY ShortText\n' +
              'column_create ' + domain.configurationsTableName + ' ' +
@@ -846,7 +846,7 @@ suite('database', function() {
 
         var dumpExpected =
              'table_create ' + domain.tableName +  ' ' +
-               'TABLE_HASH_KEY ShortText\n' +
+               'TABLE_PAT_KEY ShortText\n' +
              'table_create ' + domain.configurationsTableName +  ' ' +
                'TABLE_HASH_KEY ShortText\n' +
              'column_create ' + domain.configurationsTableName + ' ' +
