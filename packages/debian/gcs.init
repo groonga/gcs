@@ -24,7 +24,6 @@ FOREVER=$LIB_DIR/gcs/node_modules/.bin/forever
 LOG_DIR=/var/log/$NAME
 USER=gcs
 GROUP=gcs
-PORT=7575
 PIDFILE=/var/run/gcs/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 NODE_ENV=production
@@ -50,9 +49,6 @@ FOREVER_ARGS="$FOREVER_ARGS -l $LOG_DIR/forever.log"
 FOREVER_ARGS="$FOREVER_ARGS -o $LOG_DIR/output.log"
 FOREVER_ARGS="$FOREVER_ARGS -e $LOG_DIR/error.log"
 DAEMON_ARGS=""
-if [ -n "${PORT}" ]; then
-    DAEMON_ARGS="${DAEMON_ARGS} --port ${PORT}"
-fi
 
 mkdir -p $(dirname ${PIDFILE})
 if [ -n "${USER}" ]; then
