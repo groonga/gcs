@@ -230,6 +230,31 @@ suite('Configuration API', function() {
     });
   });
 
+    test('Action=DescribeDomains: NumSearchableDocs', function(done) {
+      utils.loadDumpFile(context, __dirname + '/fixture/companies/ddl.grn');
+      utils.loadDumpFile(context, __dirname + '/fixture/companies/configurations.grn');
+      utils.loadDumpFile(context, __dirname + '/fixture/companies/data.grn');
+
+      utils
+        .get('/?Action=DescribeDomains&Version=2011-02-01' +
+               '&DomainNames.member.1=companies')
+        .next(function(response) {
+          response = xmlResponses.toParsedResponse(response);
+          var recordsCount = response.body.DescribeDomainsResponse
+                                          .DescribeDomainsResult
+                                          .DomainStatusList
+                                          .member[0]
+                                          .NumSearchableDocs;
+          assert.equal(recordsCount, 10);
+
+          done();
+        })
+        .error(function(error) {
+          done(error);
+        });
+    });
+  });
+
   suite('auto detection of the base hostname and port', function() {
     setup(function() {
       temporaryDatabase = utils.createTemporaryDatabase();
