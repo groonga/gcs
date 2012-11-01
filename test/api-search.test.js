@@ -597,7 +597,7 @@ suite('Search API', function() {
                'search-people-00000000000000000000000000.localhost',
       function(response) {
         var expected = {
-          rank: 'realname',
+          rank: '-realname',
           'match-expr': "(label 'Jack')",
           hits: {
             found: 2,
