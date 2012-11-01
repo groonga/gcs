@@ -5,10 +5,10 @@
 #GROUP=gcs
 
 # The location of the database
-#GCS_DATABASE_PATH=$(echo ~gcs)/.gcs/database/gcs
+GCS_DATABASE_PATH=$(echo ~gcs)/.gcs/database/gcs
 
 # The port number to listen
-#GCS_PORT=7575
+GCS_PORT=7575
 
 # The base host and port of endpoints returned as a part of DomainStatus.
 # For example, if you set as "GCS_BASE_HOST=example.com:7575", then the
@@ -20,7 +20,7 @@
 # the range is denied.
 # You can specify multiple ranges as comma-separated list like:
 #   "GCS_PRIVILEGED_RANGES=127.0.0.0/8,192.168.0.0/24"
-#GCS_PRIVILEGED_RANGES=127.0.0.0/8
+GCS_PRIVILEGED_RANGES=127.0.0.0/8
 
 # Comment out this to disable Groonga CloudSearch daemon.
 ENABLE=yes
