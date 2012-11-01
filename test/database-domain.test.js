@@ -753,6 +753,22 @@ suite('database', function() {
             ];
         assert.deepEqual(actualDump.slice(-2), expectedDump);
       });
+
+      test('searchableDocumentsCount', function() {
+        assert.equal(domain.searchableDocumentsCount, 0);
+
+        utils.loadDumpFile(context, __dirname + '/fixture/companies/data.grn');
+        assert.equal(domain.searchableDocumentsCount, 10);
+
+        var values = [
+              { id: 'id11',
+                description: 'new',
+                name: 'Nergal Heavy Industries',
+                product: 'nadesico' }
+            ];
+        domain.loadSync(values);
+        assert.equal(domain.searchableDocumentsCount, 11);
+      });
     });
 
     suite('configuration operations', function() {
