@@ -228,7 +228,6 @@ suite('Configuration API', function() {
           done(error);
         });
     });
-  });
 
     test('Action=DescribeDomains: NumSearchableDocs', function(done) {
       utils.loadDumpFile(context, __dirname + '/fixture/companies/ddl.grn');
