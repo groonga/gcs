@@ -15,10 +15,10 @@ script
   DEFAULT_FILE=/etc/default/gcs
   if [ -r $DEFAULT_FILE ]; then
     . $DEFAULT_FILE
-    [ "$GCS_DATABASE_PATH" != "" ]     && export GCS_DATABASE_PATH
-    [ "$GCS_PORT" != "" ]              && export GCS_PORT
-    [ "$GCS_BASE_HOST" != "" ]         && export GCS_BASE_HOST
-    [ "$GCS_PRIVILEGED_RANGES" != "" ] && export GCS_PRIVILEGED_RANGES
+    export GCS_DATABASE_PATH
+    export GCS_PORT
+    export GCS_BASE_HOST
+    export GCS_PRIVILEGED_RANGES
   fi
   exec /usr/sbin/gcs
 end script
