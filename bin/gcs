@@ -11,11 +11,6 @@ commandLine
             '[' + CLI.defaultPrivilegedRanges + ']',
           String,
           CLI.defaultPrivilegedRanges)
-  .option('--configuration-host <hostname>',
-          'The host name for configuration API of the service ' +
-            '(GCS_CONFIGURATION_HOST) ' +
-            '[' + CLI.defaultConfigurationHost + ']',
-          String)
   .parse();
 
 var server = gcsServer.createServer({
