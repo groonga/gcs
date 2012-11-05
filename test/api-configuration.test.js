@@ -52,6 +52,24 @@ suite('Configuration API', function() {
     assert.deepEqual(status, expectedStatus);
   }
 
+  function assertValidationErrorResponse(expectedMessage, response) {
+    assert.deepEqual(response.pattern,
+                     { statusCode: 400,
+                       body: xmlResponses.TYPED_ERROR_RESPONSE });
+    var expectedResponse = {
+          type: 'Sender',
+          code: 'ValidationError',
+          message: expectedMessage
+        };
+    var error = response.body.Response.Errors.Error;
+    var actualResponse = {
+          type: error.Type,
+          code: error.Code,
+          message: error.Message
+        };
+    assert.deepEqual(actualResponse, expectedResponse);
+  }
+
   suite('domain operations', function() {
     setup(commonSetup);
     teardown(commonTeardown);
@@ -77,6 +95,66 @@ suite('Configuration API', function() {
           done();
         }).error(function(error) {
           done(error)
+        });
+    });
+
+    test('Action=CreateDomain with too short (one character) domain name', function(done) {
+      utils
+        .get('/?DomainName=a&Action=CreateDomain&Version=2011-02-01')
+        .next(function(response) {
+          assertValidationErrorResponse(
+            '2 validation errors detected: ' +
+              'Value \'a\' at \'domainName\' failed to satisfy constraint: ' +
+                'Member must satisfy regular expression pattern: ' +
+                  Domain.VALID_NAME_PATTERN + '; ' +
+              'Value \'a\' at \'domainName\' failed to satisfy constraint: ' +
+                'Member must have length greater than or equal to ' +
+                  Domain.MINIMUM_NAME_LENGTH,
+            response
+          );
+          done();
+        })
+        .error(function(error) {
+          done(error);
+        });
+    });
+
+    test('Action=CreateDomain with too short (two characters) domain name', function(done) {
+      utils
+        .get('/?DomainName=va&Action=CreateDomain&Version=2011-02-01')
+        .next(function(response) {
+          assertValidationErrorResponse(
+            '1 validation error detected: ' +
+              'Value \'va\' at \'domainName\' failed to satisfy constraint: ' +
+                'Member must have length greater than or equal to ' +
+                  Domain.MINIMUM_NAME_LENGTH,
+            response
+          );
+          done();
+        })
+        .error(function(error) {
+          done(error);
+        });
+    });
+
+    test('Action=CreateDomain without domain name', function(done) {
+      utils
+        .get('/?DomainName=&Action=CreateDomain&Version=2011-02-01')
+        .next(function(response) {
+          assertValidationErrorResponse(
+            '2 validation errors detected: ' +
+              'Value \'\' at \'domainName\' failed to satisfy constraint: ' +
+                'Member must satisfy regular expression pattern: ' +
+                  Domain.VALID_NAME_PATTERN + '; ' +
+              'Value \'\' at \'domainName\' failed to satisfy constraint: ' +
+                'Member must have length greater than or equal to ' +
+                  Domain.MINIMUM_NAME_LENGTH,
+            response
+          );
+          done();
+        })
+        .error(function(error) {
+          done(error);
         });
     });
 

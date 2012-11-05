@@ -181,6 +181,20 @@ var COMMON_ERROR_RESPONSE =
       }
     };
 
+var TYPED_ERROR_RESPONSE =
+    exports.TYPED_ERROR_RESPONSE = {
+      Response: {
+        Errors: {
+          Error: {
+            Type: '',
+            Code: '',
+            Message: ''
+          }
+        },
+        RequestID: ''
+      }
+    };
+
 var DefaultSearchFieldStatus =
     exports.DefaultSearchFieldStatus = {
       Options: '',
