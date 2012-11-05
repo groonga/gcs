@@ -1069,7 +1069,7 @@ suite('Configuration API', function() {
           response = xmlResponses.toParsedResponse(response);
           assert.deepEqual(response.pattern,
                            { statusCode: 400,
-                             body: xmlResponses.COMMON_ERROR_RESPONSE });
+                             body: xmlResponses.TYPED_ERROR_RESPONSE });
 
           var expectedError = {
                 Type: 'Sender',
