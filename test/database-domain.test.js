@@ -35,10 +35,32 @@ suite('database', function() {
                    'valid123_' + Domain.DEFAULT_ID);
     });
 
-    test('too short', function() {
+    test('without name', function() {
+      assert.throw(function() {
+        var domain = new Domain('');
+      }, '2 validation errors detected: ' +
+           'Value \'\' at \'domainName\' failed to satisfy constraint: ' +
+             'Member must satisfy regular expression pattern: [a-z][a-z0-9\\-]+; ' +
+           'Value \'\' at \'domainName\' failed to satisfy constraint: ' +
+             'Member must have length greater than or equal to 3');
+    });
+
+    test('too short (1 character)', function() {
+      assert.throw(function() {
+        var domain = new Domain('v');
+      }, '2 validation errors detected: ' +
+           'Value \'v\' at \'domainName\' failed to satisfy constraint: ' +
+             'Member must satisfy regular expression pattern: [a-z][a-z0-9\\-]+; ' +
+           'Value \'v\' at \'domainName\' failed to satisfy constraint: ' +
+             'Member must have length greater than or equal to 3');
+    });
+
+    test('too short (2 characters)', function() {
       assert.throw(function() {
         var domain = new Domain('va');
-      }, /too short domain name/);
+      }, '1 validation errors detected: ' +
+           'Value \'va\' at \'domainName\' failed to satisfy constraint: ' +
+             'Member must have length greater than or equal to 3');
     });
 
     test('too long', function() {
@@ -51,19 +73,25 @@ suite('database', function() {
     test('hyphen', function() {
       assert.throw(function() {
         var domain = new Domain('domain-name');
-      }, /"-" cannot appear in a domain name/);
+      }, '1 validation errors detected: ' +
+           'Value \'domain_name\' at \'domainName\' failed to satisfy constraint: ' +
+             'Member cannot include these characters: \'-\'');
     });
 
     test('underscore', function() {
       assert.throw(function() {
         var domain = new Domain('domain_name');
-      }, /"_" cannot appear in a domain name/);
+      }, '1 validation errors detected: ' +
+           'Value \'domain_name\' at \'domainName\' failed to satisfy constraint: ' +
+             'Member must satisfy regular expression pattern: [a-z][a-z0-9\\-]+');
     });
 
     test('upper case', function() {
       assert.throw(function() {
         var domain = new Domain('DomainName');
-      }, /"D", "N" cannot appear in a domain name/);
+      }, '1 validation errors detected: ' +
+           'Value \'DomainName\' at \'domainName\' failed to satisfy constraint: ' +
+             'Member must satisfy regular expression pattern: [a-z][a-z0-9\\-]+');
     });
 
     test('termsTableName', function() {
