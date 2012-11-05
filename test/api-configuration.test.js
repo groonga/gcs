@@ -231,6 +231,66 @@ suite('Configuration API', function() {
         });
     });
 
+    test('Action=DeleteDomain for too short (one character) domain name', function(done) {
+      utils
+        .get('/?DomainName=a&Action=DeleteDomain&Version=2011-02-01')
+        .next(function(response) {
+          assertValidationErrorResponse(
+            '2 validation errors detected: ' +
+              'Value \'a\' at \'domainName\' failed to satisfy constraint: ' +
+                'Member must satisfy regular expression pattern: ' +
+                  Domain.VALID_NAME_PATTERN + '; ' +
+              'Value \'a\' at \'domainName\' failed to satisfy constraint: ' +
+                'Member must have length greater than or equal to ' +
+                  Domain.MINIMUM_NAME_LENGTH,
+            response
+          );
+          done();
+        })
+        .error(function(error) {
+          done(error);
+        });
+    });
+
+    test('Action=DeleteDomain for too short (two characters) domain name', function(done) {
+      utils
+        .get('/?DomainName=va&Action=DeleteDomain&Version=2011-02-01')
+        .next(function(response) {
+          assertValidationErrorResponse(
+            '1 validation error detected: ' +
+              'Value \'va\' at \'domainName\' failed to satisfy constraint: ' +
+                'Member must have length greater than or equal to ' +
+                  Domain.MINIMUM_NAME_LENGTH,
+            response
+          );
+          done();
+        })
+        .error(function(error) {
+          done(error);
+        });
+    });
+
+    test('Action=DeleteDomain for without name', function(done) {
+      utils
+        .get('/?DomainName=&Action=DeleteDomain&Version=2011-02-01')
+        .next(function(response) {
+          assertValidationErrorResponse(
+            '2 validation errors detected: ' +
+              'Value \'\' at \'domainName\' failed to satisfy constraint: ' +
+                'Member must satisfy regular expression pattern: ' +
+                  Domain.VALID_NAME_PATTERN + '; ' +
+              'Value \'\' at \'domainName\' failed to satisfy constraint: ' +
+                'Member must have length greater than or equal to ' +
+                  Domain.MINIMUM_NAME_LENGTH,
+            response
+          );
+          done();
+        })
+        .error(function(error) {
+          done(error);
+        });
+    });
+
     function getActualDescribedDomains(response) {
       var members = response.body.DescribeDomainsResponse
                                  .DescribeDomainsResult
