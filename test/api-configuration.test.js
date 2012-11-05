@@ -57,18 +57,12 @@ suite('Configuration API', function() {
     assert.deepEqual(response.pattern,
                      { statusCode: 400,
                        body: xmlResponses.TYPED_ERROR_RESPONSE });
-    var expectedResponse = {
-          type: 'Sender',
-          code: 'ValidationError',
-          message: expectedMessage
+    var expectedError = {
+          Type: 'Sender',
+          Code: 'ValidationError',
+          Message: expectedMessage
         };
-    var error = response.body.Response.Errors.Error;
-    var actualResponse = {
-          type: error.Type,
-          code: error.Code,
-          message: error.Message
-        };
-    assert.deepEqual(actualResponse, expectedResponse);
+    assert.deepEqual(response.body.Response.Errors.Error, expectedError);
   }
 
   suite('domain operations', function() {
@@ -1078,6 +1072,7 @@ suite('Configuration API', function() {
                              body: xmlResponses.COMMON_ERROR_RESPONSE });
 
           var expectedError = {
+                Type: 'Sender',
                 Code: 'InvalidParameterValue',
                 Message: 'A bad or out-of-range value "2011-02-02" was supplied ' +
                          'for the "Version" input parameter.'
