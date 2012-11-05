@@ -58,7 +58,7 @@ suite('database', function() {
     test('too short (2 characters)', function() {
       assert.throw(function() {
         var domain = new Domain('va');
-      }, '1 validation errors detected: ' +
+      }, '1 validation error detected: ' +
            'Value \'va\' at \'domainName\' failed to satisfy constraint: ' +
              'Member must have length greater than or equal to 3');
     });
@@ -72,8 +72,10 @@ suite('database', function() {
 
     test('hyphen', function() {
       assert.throw(function() {
+        try {
         var domain = new Domain('domain-name');
-      }, '1 validation errors detected: ' +
+        } catch(e) { console.log(e); }
+      }, '1 validation error detected: ' +
            'Value \'domain_name\' at \'domainName\' failed to satisfy constraint: ' +
              'Member cannot include these characters: \'-\'');
     });
@@ -81,7 +83,7 @@ suite('database', function() {
     test('underscore', function() {
       assert.throw(function() {
         var domain = new Domain('domain_name');
-      }, '1 validation errors detected: ' +
+      }, '1 validation error detected: ' +
            'Value \'domain_name\' at \'domainName\' failed to satisfy constraint: ' +
              'Member must satisfy regular expression pattern: [a-z][a-z0-9\\-]+');
     });
@@ -89,7 +91,7 @@ suite('database', function() {
     test('upper case', function() {
       assert.throw(function() {
         var domain = new Domain('DomainName');
-      }, '1 validation errors detected: ' +
+      }, '1 validation error detected: ' +
            'Value \'DomainName\' at \'domainName\' failed to satisfy constraint: ' +
              'Member must satisfy regular expression pattern: [a-z][a-z0-9\\-]+');
     });
