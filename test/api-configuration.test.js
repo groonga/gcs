@@ -24,6 +24,34 @@ suite('Configuration API', function() {
 
   var defaultBaseHost = 'localhost:' + utils.testPort;
 
+  function assertDomainCreatedResponse(response, domainName) {
+    var domain = new Domain(domainName, context);
+    assert.isTrue(domain.exists());
+
+    response = xmlResponses.toParsedResponse(response);
+    assert.deepEqual(response.pattern,
+                     { statusCode: 200,
+                       body: xmlResponses.CreateDomainResponse });
+    var expectedStatus = {
+          Created: 'true',
+          Deleted: 'false',
+          DocService: {
+            Endpoint: domain.getDocumentsEndpoint(defaultBaseHost)
+          },
+          DomainId: domain.domainId,
+          DomainName: domain.name,
+          NumSearchableDocs: String(domain.searchableDocumentsCount),
+          RequiresIndexDocuments: String(domain.requiresIndexDocuments),
+          SearchInstanceCount: String(domain.searchInstanceCount),
+          SearchPartitionCount: String(domain.searchPartitionCount),
+          SearchService: {
+            Endpoint: domain.getSearchEndpoint(defaultBaseHost)
+          }
+        };
+    var status = response.body.CreateDomainResponse.CreateDomainResult.DomainStatus;
+    assert.deepEqual(status, expectedStatus);
+  }
+
   suite('domain operations', function() {
     setup(commonSetup);
     teardown(commonTeardown);
@@ -32,32 +60,7 @@ suite('Configuration API', function() {
       utils
         .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
         .next(function(response) {
-          var domain = new Domain('companies', context);
-          assert.isTrue(domain.exists());
-
-          response = xmlResponses.toParsedResponse(response);
-          assert.deepEqual(response.pattern,
-                           { statusCode: 200,
-                             body: xmlResponses.CreateDomainResponse });
-          var expectedStatus = {
-                Created: 'true',
-                Deleted: 'false',
-                DocService: {
-                  Endpoint: domain.getDocumentsEndpoint(defaultBaseHost)
-                },
-                DomainId: domain.domainId,
-                DomainName: domain.name,
-                NumSearchableDocs: String(domain.searchableDocumentsCount),
-                RequiresIndexDocuments: String(domain.requiresIndexDocuments),
-                SearchInstanceCount: String(domain.searchInstanceCount),
-                SearchPartitionCount: String(domain.searchPartitionCount),
-                SearchService: {
-                  Endpoint: domain.getSearchEndpoint(defaultBaseHost)
-                }
-              };
-          var status = response.body.CreateDomainResponse.CreateDomainResult.DomainStatus;
-          assert.deepEqual(status, expectedStatus);
-
+          assertDomainCreatedResponse(response, 'companies');
           done();
         })
         .error(function(error) {
@@ -70,7 +73,7 @@ suite('Configuration API', function() {
         .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
         .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
         .next(function(response) {
-          assert.notEqual(response.statusCode, 200);
+          assertDomainCreatedResponse(response, 'companies');
           done();
         }).error(function(error) {
           done(error)
