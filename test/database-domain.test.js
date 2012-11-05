@@ -74,7 +74,7 @@ suite('database', function() {
         var domain = new Domain(name);
       }, '1 validation error detected: ' +
            'Value \'' + name + '\' at \'domainName\' failed to satisfy constraint: ' +
-             'Member must have length smaller than or equal to ' +
+             'Member must have length less than or equal to ' +
                Domain.MAXIMUM_NAME_LENGTH);
     });
 
