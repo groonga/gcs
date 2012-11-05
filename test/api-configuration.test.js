@@ -53,6 +53,7 @@ suite('Configuration API', function() {
   }
 
   function assertValidationErrorResponse(expectedMessage, response) {
+    response = xmlResponses.toParsedResponse(response);
     assert.deepEqual(response.pattern,
                      { statusCode: 400,
                        body: xmlResponses.TYPED_ERROR_RESPONSE });
