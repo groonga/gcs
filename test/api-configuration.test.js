@@ -214,6 +214,23 @@ suite('Configuration API', function() {
         });
     });
 
+    test('Action=DeleteDomain for unexisting domain', function(done) {
+      var domain = new Domain('companies', context);
+      assert.isFalse(domain.exists());
+      utils
+        .get('/?DomainName=companies&Action=DeleteDomain&Version=2011-02-01')
+        .next(function(response) {
+          response = xmlResponses.toParsedResponse(response);
+          assert.deepEqual(response.pattern,
+                           { statusCode: 200,
+                             body: xmlResponses.DeleteDomainResponse_UnexistingDomain });
+          done();
+        })
+        .error(function(error) {
+          done(error);
+        });
+    });
+
     function getActualDescribedDomains(response) {
       var members = response.body.DescribeDomainsResponse
                                  .DescribeDomainsResult

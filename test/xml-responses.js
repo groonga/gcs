@@ -1,3 +1,4 @@
+
 var utils = require('./test-utils');
 
 var XMLNS =
@@ -48,6 +49,8 @@ defineGenericResponse('CreateDomain', {
 defineGenericResponse('DeleteDomain', {
   DomainStatus: DomainStatus
 });
+var DeleteDomainResponse_UnexistingDomain =
+    exports.DeleteDomainResponse_UnexistingDomain = createGenericResponse('DeleteDomain', {});
 
 exports.DescribeDomainsResponse = function(members) {
   return createGenericResponse('DescribeDomains', {
