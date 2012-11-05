@@ -64,10 +64,12 @@ suite('database', function() {
     });
 
     test('too long', function() {
+      var name = 'abcdefghijklmnopqrstuvwxyz0123456789';
       assert.throw(function() {
-        var domain = new Domain('abcdefghijklmnopqrstuvwxyz' +
-                                '0123456789');
-      }, /too long domain name/);
+        var domain = new Domain(name);
+      }, '1 validation error detected: ' +
+           'Value \'' + name + '\' at \'domainName\' failed to satisfy constraint: ' +
+             'Member must have length smaller than or equal to 28');
     });
 
     test('hyphen', function() {
