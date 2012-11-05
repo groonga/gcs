@@ -132,6 +132,25 @@ suite('Configuration API', function() {
         });
     });
 
+    test('Action=CreateDomain with too long domain name', function(done) {
+      var name = 'abcdefghijklmnopqrstuvwxyz0123456789';
+      utils
+        .get('/?DomainName=' + name + '&Action=CreateDomain&Version=2011-02-01')
+        .next(function(response) {
+          assertValidationErrorResponse(
+            '1 validation error detected: ' +
+              'Value \'' + name + '\' at \'domainName\' failed to satisfy constraint: ' +
+                'Member must have length less than or equal to ' +
+                  Domain.MAXIMUM_NAME_LENGTH,
+            response
+          );
+          done();
+        })
+        .error(function(error) {
+          done(error);
+        });
+    });
+
     test('Action=CreateDomain without domain name', function(done) {
       utils
         .get('/?DomainName=&Action=CreateDomain&Version=2011-02-01')
