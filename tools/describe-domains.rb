@@ -24,8 +24,6 @@ module AWS
   end
 end
 
-synonym_object = { "synonyms" => {"cat" => ["feline", "kitten"], "puppy" => "dog"} }
-
 request = AWS::CloudSearch::Request.new
 request.host = "cloudsearch.us-east-1.amazonaws.com"
 request.add_param 'Action', 'DescribeDomains'
