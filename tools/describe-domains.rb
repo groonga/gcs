@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
 
 require 'json'
-require 'aws-sdk'
+require 'bundler'
+Bundler.require
 
 # Set these environment variables:
 # * AWS_ACCESS_KEY_ID
