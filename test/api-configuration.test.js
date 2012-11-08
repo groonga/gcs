@@ -304,23 +304,24 @@ suite('Configuration API', function() {
       return domains;
     }
 
+    function assertDomainsReturned(response, expectedDomains) {
+      response = xmlResponses.toParsedResponse(response);
+      assert.deepEqual(response.pattern,
+                       { statusCode: 200,
+                         body: xmlResponses.DescribeDomainsResponse(expectedDomains) });
+
+      var actualDomains = getActualDescribedDomains(response);
+      assert.deepEqual(actualDomains, expectedDomains);
+    }
+
     test('Action=DescribeDomains (all domains)', function(done) {
-      var domain;
       utils
         .get('/?DomainName=domain3&Action=CreateDomain&Version=2011-02-01')
         .get('/?DomainName=domain1&Action=CreateDomain&Version=2011-02-01')
         .get('/?DomainName=domain2&Action=CreateDomain&Version=2011-02-01')
         .get('/?Action=DescribeDomains&Version=2011-02-01')
         .next(function(response) {
-          response = xmlResponses.toParsedResponse(response);
-          var expectedDomains = ['domain1', 'domain2', 'domain3'];
-          assert.deepEqual(response.pattern,
-                           { statusCode: 200,
-                             body: xmlResponses.DescribeDomainsResponse(expectedDomains) });
-
-          var actualDomains = getActualDescribedDomains(response);
-          assert.deepEqual(actualDomains, expectedDomains);
-
+          assertDomainsReturned(response, ['domain1', 'domain2', 'domain3']);
           done();
         })
         .error(function(error) {
@@ -329,22 +330,13 @@ suite('Configuration API', function() {
     });
 
     test('Action=DescribeDomains (all domains, via POST)', function(done) {
-      var domain;
       utils
         .post('/?DomainName=domain3&Action=CreateDomain&Version=2011-02-01')
         .post('/?DomainName=domain1&Action=CreateDomain&Version=2011-02-01')
         .post('/?DomainName=domain2&Action=CreateDomain&Version=2011-02-01')
         .post('/?Action=DescribeDomains&Version=2011-02-01')
         .next(function(response) {
-          response = xmlResponses.toParsedResponse(response);
-          var expectedDomains = ['domain1', 'domain2', 'domain3'];
-          assert.deepEqual(response.pattern,
-                           { statusCode: 200,
-                             body: xmlResponses.DescribeDomainsResponse(expectedDomains) });
-
-          var actualDomains = getActualDescribedDomains(response);
-          assert.deepEqual(actualDomains, expectedDomains);
-
+          assertDomainsReturned(response, ['domain1', 'domain2', 'domain3']);
           done();
         })
         .error(function(error) {
@@ -361,15 +353,7 @@ suite('Configuration API', function() {
                '&DomainNames.member.1=domain2' +
                '&DomainNames.member.2=domain1')
         .next(function(response) {
-          response = xmlResponses.toParsedResponse(response);
-          var expectedDomains = ['domain2', 'domain1'];
-          assert.deepEqual(response.pattern,
-                           { statusCode: 200,
-                             body: xmlResponses.DescribeDomainsResponse(expectedDomains) });
-
-          var actualDomains = getActualDescribedDomains(response);
-          assert.deepEqual(actualDomains, expectedDomains);
-
+          assertDomainsReturned(response, ['domain2', 'domain1']);
           done();
         })
         .error(function(error) {
@@ -385,15 +369,79 @@ suite('Configuration API', function() {
         .get('/?Action=DescribeDomains&Version=2011-02-01' +
                '&DomainNames.member.1=unknown')
         .next(function(response) {
-          response = xmlResponses.toParsedResponse(response);
-          var expectedDomains = [];
-          assert.deepEqual(response.pattern,
-                           { statusCode: 200,
-                             body: xmlResponses.DescribeDomainsResponse(expectedDomains) });
+          assertDomainsReturned(response, []);
+          done();
+        })
+        .error(function(error) {
+          done(error);
+        });
+    });
 
-          var actualDomains = getActualDescribedDomains(response);
-          assert.deepEqual(actualDomains, expectedDomains);
+    test('Action=DescribeDomains (too short name)', function(done) {
+      utils
+        .get('/?Action=DescribeDomains&Version=2011-02-01' +
+               '&DomainNames.member.1=a')
+        .next(function(response) {
+          assertDomainsReturned(response, []);
+        })
+        .get('/?Action=DescribeDomains&Version=2011-02-01' +
+               '&DomainNames.member.1=a' +
+               '&DomainNames.member.2=b')
+        .next(function(response) {
+          assertDomainsReturned(response, []);
+          done();
+        })
+        .error(function(error) {
+          done(error);
+        });
+    });
 
+    test('Action=DescribeDomains (too long name)', function(done) {
+      utils
+        .get('/?Action=DescribeDomains&Version=2011-02-01' +
+               '&DomainNames.member.1=abcdefghijklmnopqrstuvwxyz0123456789')
+        .next(function(response) {
+          assertDomainsReturned(response, []);
+        })
+        .get('/?Action=DescribeDomains&Version=2011-02-01' +
+               '&DomainNames.member.1=abcdefghijklmnopqrstuvwxyz0123456789' +
+               '&DomainNames.member.2=abcdefghijklmnopqrstuvwxyz01234567890')
+        .next(function(response) {
+          assertDomainsReturned(response, []);
+          done();
+        })
+        .error(function(error) {
+          done(error);
+        });
+    });
+
+    test('Action=DescribeDomains (invalid character)', function(done) {
+      utils
+        .get('/?Action=DescribeDomains&Version=2011-02-01' +
+               '&DomainNames.member.1=@_@')
+        .next(function(response) {
+          assertDomainsReturned(response, []);
+        })
+        .get('/?Action=DescribeDomains&Version=2011-02-01' +
+               '&DomainNames.member.1=@_@' +
+               '&DomainNames.member.2=@-@')
+        .next(function(response) {
+          assertDomainsReturned(response, []);
+          done();
+        })
+        .error(function(error) {
+          done(error);
+        });
+    });
+
+    test('Action=DescribeDomains (same domain)', function(done) {
+      utils
+        .get('/?DomainName=domain1&Action=CreateDomain&Version=2011-02-01')
+        .get('/?Action=DescribeDomains&Version=2011-02-01' +
+               '&DomainNames.member.1=domain1' +
+               '&DomainNames.member.2=domain1')
+        .next(function(response) {
+          assertDomainsReturned(response, ['domain1', 'domain1']);
           done();
         })
         .error(function(error) {
