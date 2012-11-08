@@ -65,6 +65,43 @@ suite('Configuration API', function() {
     assert.deepEqual(response.body.Response.Errors.Error, expectedError);
   }
 
+  var TOO_SHORT_1_LETTER_DOMAIN_NAME = 'a';
+  var TOO_SHORT_1_LETTER_DOMAIN_NAME_ERROR_MESSAGE =
+        '2 validation errors detected: ' +
+          'Value \'' + TOO_SHORT_1_LETTER_DOMAIN_NAME + '\' at \'domainName\' ' +
+            'failed to satisfy constraint: ' +
+            'Member must satisfy regular expression pattern: ' +
+              Domain.VALID_NAME_PATTERN + '; ' +
+          'Value \'' + TOO_SHORT_1_LETTER_DOMAIN_NAME + '\' at \'domainName\' ' +
+            'failed to satisfy constraint: ' +
+            'Member must have length greater than or equal to ' +
+              Domain.MINIMUM_NAME_LENGTH;
+
+  var TOO_SHORT_2_LETTERS_DOMAIN_NAME = 'ab';
+  var TOO_SHORT_2_LETTERS_DOMAIN_NAME_ERROR_MESSAGE =
+        '1 validation error detected: ' +
+          'Value \'' + TOO_SHORT_2_LETTERS_DOMAIN_NAME + '\' at \'domainName\' ' +
+            'failed to satisfy constraint: ' +
+            'Member must have length greater than or equal to ' +
+              Domain.MINIMUM_NAME_LENGTH;
+
+  var TOO_LONG_DOMAIN_NAME = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  var TOO_LONG_DOMAIN_NAME_ERROR_MESSAGE =
+        '1 validation error detected: ' +
+          'Value \'' + TOO_LONG_DOMAIN_NAME + '\' at \'domainName\' failed '
+            'to satisfy constraint: ' +
+            'Member must have length less than or equal to ' +
+              Domain.MAXIMUM_NAME_LENGTH;
+
+  var NO_DOMAIN_NAME_ERROR_MESSAGE =
+        '2 validation errors detected: ' +
+          'Value \'\' at \'domainName\' failed to satisfy constraint: ' +
+            'Member must satisfy regular expression pattern: ' +
+              Domain.VALID_NAME_PATTERN + '; ' +
+          'Value \'\' at \'domainName\' failed to satisfy constraint: ' +
+            'Member must have length greater than or equal to ' +
+              Domain.MINIMUM_NAME_LENGTH;
+
   suite('domain operations', function() {
     setup(commonSetup);
     teardown(commonTeardown);
@@ -95,16 +132,10 @@ suite('Configuration API', function() {
 
     test('Action=CreateDomain with too short (one character) domain name', function(done) {
       utils
-        .get('/?DomainName=a&Action=CreateDomain&Version=2011-02-01')
+        .get('/?DomainName=' + TOO_SHORT_1_LETTER_DOMAIN_NAME + '&Action=CreateDomain&Version=2011-02-01')
         .next(function(response) {
           assertValidationErrorResponse(
-            '2 validation errors detected: ' +
-              'Value \'a\' at \'domainName\' failed to satisfy constraint: ' +
-                'Member must satisfy regular expression pattern: ' +
-                  Domain.VALID_NAME_PATTERN + '; ' +
-              'Value \'a\' at \'domainName\' failed to satisfy constraint: ' +
-                'Member must have length greater than or equal to ' +
-                  Domain.MINIMUM_NAME_LENGTH,
+            TOO_SHORT_1_LETTER_DOMAIN_NAME_ERROR_MESSAGE,
             response
           );
           done();
@@ -116,13 +147,10 @@ suite('Configuration API', function() {
 
     test('Action=CreateDomain with too short (two characters) domain name', function(done) {
       utils
-        .get('/?DomainName=va&Action=CreateDomain&Version=2011-02-01')
+        .get('/?DomainName=' + TOO_SHORT_2_LETTERS_DOMAIN_NAME + '&Action=CreateDomain&Version=2011-02-01')
         .next(function(response) {
           assertValidationErrorResponse(
-            '1 validation error detected: ' +
-              'Value \'va\' at \'domainName\' failed to satisfy constraint: ' +
-                'Member must have length greater than or equal to ' +
-                  Domain.MINIMUM_NAME_LENGTH,
+            TOO_SHORT_2_LETTERS_DOMAIN_NAME_ERROR_MESSAGE,
             response
           );
           done();
@@ -133,15 +161,11 @@ suite('Configuration API', function() {
     });
 
     test('Action=CreateDomain with too long domain name', function(done) {
-      var name = 'abcdefghijklmnopqrstuvwxyz0123456789';
       utils
-        .get('/?DomainName=' + name + '&Action=CreateDomain&Version=2011-02-01')
+        .get('/?DomainName=' + TOO_LONG_DOMAIN_NAME + '&Action=CreateDomain&Version=2011-02-01')
         .next(function(response) {
           assertValidationErrorResponse(
-            '1 validation error detected: ' +
-              'Value \'' + name + '\' at \'domainName\' failed to satisfy constraint: ' +
-                'Member must have length less than or equal to ' +
-                  Domain.MAXIMUM_NAME_LENGTH,
+            TOO_LONG_DOMAIN_NAME_ERROR_MESSAGE,
             response
           );
           done();
@@ -156,13 +180,7 @@ suite('Configuration API', function() {
         .get('/?DomainName=&Action=CreateDomain&Version=2011-02-01')
         .next(function(response) {
           assertValidationErrorResponse(
-            '2 validation errors detected: ' +
-              'Value \'\' at \'domainName\' failed to satisfy constraint: ' +
-                'Member must satisfy regular expression pattern: ' +
-                  Domain.VALID_NAME_PATTERN + '; ' +
-              'Value \'\' at \'domainName\' failed to satisfy constraint: ' +
-                'Member must have length greater than or equal to ' +
-                  Domain.MINIMUM_NAME_LENGTH,
+            NO_DOMAIN_NAME_ERROR_MESSAGE,
             response
           );
           done();
@@ -233,16 +251,10 @@ suite('Configuration API', function() {
 
     test('Action=DeleteDomain for too short (one character) domain name', function(done) {
       utils
-        .get('/?DomainName=a&Action=DeleteDomain&Version=2011-02-01')
+        .get('/?DomainName=' + TOO_SHORT_1_LETTER_DOMAIN_NAME + '&Action=DeleteDomain&Version=2011-02-01')
         .next(function(response) {
           assertValidationErrorResponse(
-            '2 validation errors detected: ' +
-              'Value \'a\' at \'domainName\' failed to satisfy constraint: ' +
-                'Member must satisfy regular expression pattern: ' +
-                  Domain.VALID_NAME_PATTERN + '; ' +
-              'Value \'a\' at \'domainName\' failed to satisfy constraint: ' +
-                'Member must have length greater than or equal to ' +
-                  Domain.MINIMUM_NAME_LENGTH,
+            TOO_SHORT_1_LETTER_DOMAIN_NAME_ERROR_MESSAGE,
             response
           );
           done();
@@ -254,13 +266,25 @@ suite('Configuration API', function() {
 
     test('Action=DeleteDomain for too short (two characters) domain name', function(done) {
       utils
-        .get('/?DomainName=va&Action=DeleteDomain&Version=2011-02-01')
+        .get('/?DomainName=' + TOO_SHORT_2_LETTERS_DOMAIN_NAME + '&Action=DeleteDomain&Version=2011-02-01')
         .next(function(response) {
           assertValidationErrorResponse(
-            '1 validation error detected: ' +
-              'Value \'va\' at \'domainName\' failed to satisfy constraint: ' +
-                'Member must have length greater than or equal to ' +
-                  Domain.MINIMUM_NAME_LENGTH,
+            TOO_SHORT_2_LETTERS_DOMAIN_NAME_ERROR_MESSAGE,
+            response
+          );
+          done();
+        })
+        .error(function(error) {
+          done(error);
+        });
+    });
+
+    test('Action=DeleteDomain for too long domain name', function(done) {
+      utils
+        .get('/?DomainName=' + TOO_LONG_DOMAIN_NAME + '&Action=DeleteDomain&Version=2011-02-01')
+        .next(function(response) {
+          assertValidationErrorResponse(
+            TOO_LONG_DOMAIN_NAME_ERROR_MESSAGE,
             response
           );
           done();
@@ -275,13 +299,7 @@ suite('Configuration API', function() {
         .get('/?DomainName=&Action=DeleteDomain&Version=2011-02-01')
         .next(function(response) {
           assertValidationErrorResponse(
-            '2 validation errors detected: ' +
-              'Value \'\' at \'domainName\' failed to satisfy constraint: ' +
-                'Member must satisfy regular expression pattern: ' +
-                  Domain.VALID_NAME_PATTERN + '; ' +
-              'Value \'\' at \'domainName\' failed to satisfy constraint: ' +
-                'Member must have length greater than or equal to ' +
-                  Domain.MINIMUM_NAME_LENGTH,
+            NO_DOMAIN_NAME_ERROR_MESSAGE,
             response
           );
           done();
@@ -753,6 +771,74 @@ suite('Configuration API', function() {
           var options = response.body.DefineIndexFieldResponse.DefineIndexFieldResult.IndexField.Options;
           assert.deepEqual(options, expectedOptions);
 
+          done();
+        })
+        .error(function(error) {
+          done(error);
+        });
+    });
+
+    test('(with too short (one character) domain name)', function(done) {
+      utils
+        .get('/?DomainName=' + TOO_SHORT_1_LETTER_DOMAIN_NAME + '&IndexField.IndexFieldName=product&' +
+             'IndexField.IndexFieldType=literal&' +
+             'Action=DefineIndexField&Version=2011-02-01')
+        .next(function(response) {
+          assertValidationErrorResponse(
+            TOO_SHORT_1_LETTER_DOMAIN_NAME_ERROR_MESSAGE,
+            response
+          );
+          done();
+        })
+        .error(function(error) {
+          done(error);
+        });
+    });
+
+    test('Action=DeleteDomain for too short (two characters) domain name', function(done) {
+      utils
+        .get('/?DomainName=' + TOO_SHORT_2_LETTERS_DOMAIN_NAME + '&IndexField.IndexFieldName=product&' +
+             'IndexField.IndexFieldType=literal&' +
+             'Action=DefineIndexField&Version=2011-02-01')
+        .next(function(response) {
+          assertValidationErrorResponse(
+            TOO_SHORT_2_LETTERS_DOMAIN_NAME_ERROR_MESSAGE,
+            response
+          );
+          done();
+        })
+        .error(function(error) {
+          done(error);
+        });
+    });
+
+    test('Action=DeleteDomain for too long domain name', function(done) {
+      utils
+        .get('/?DomainName=' + TOO_LONG_DOMAIN_NAME + '&IndexField.IndexFieldName=product&' +
+             'IndexField.IndexFieldType=literal&' +
+             'Action=DefineIndexField&Version=2011-02-01')
+        .next(function(response) {
+          assertValidationErrorResponse(
+            TOO_LONG_DOMAIN_NAME_ERROR_MESSAGE,
+            response
+          );
+          done();
+        })
+        .error(function(error) {
+          done(error);
+        });
+    });
+
+    test('Action=DeleteDomain for without name', function(done) {
+      utils
+        .get('/?DomainName=&IndexField.IndexFieldName=product&' +
+             'IndexField.IndexFieldType=literal&' +
+             'Action=DefineIndexField&Version=2011-02-01')
+        .next(function(response) {
+          assertValidationErrorResponse(
+            NO_DOMAIN_NAME_ERROR_MESSAGE,
+            response
+          );
           done();
         })
         .error(function(error) {
