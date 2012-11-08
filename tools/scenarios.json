@@ -1,0 +1,10 @@
+[
+  {
+    "name": "DescribeDomains",
+    "params": {"Action": "DescribeDomains"}
+  },
+  {
+    "name": "CreateDomain with short domain name",
+    "params": {"Action": "CreateDomain", "DomainName": "aa"}
+  }
+]
