@@ -88,7 +88,7 @@ suite('Configuration API', function() {
   var TOO_LONG_DOMAIN_NAME = 'abcdefghijklmnopqrstuvwxyz0123456789';
   var TOO_LONG_DOMAIN_NAME_ERROR_MESSAGE =
         '1 validation error detected: ' +
-          'Value \'' + TOO_LONG_DOMAIN_NAME + '\' at \'domainName\' failed '
+          'Value \'' + TOO_LONG_DOMAIN_NAME + '\' at \'domainName\' failed ' +
             'to satisfy constraint: ' +
             'Member must have length less than or equal to ' +
               Domain.MAXIMUM_NAME_LENGTH;
