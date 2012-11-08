@@ -11,6 +11,18 @@ commandLine
             '[' + CLI.defaultDatabasePath + ']',
           String,
           CLI.defaultDatabasePath)
+  .option('--base-host <hostname>',
+          'The base host name assigned to the service ' +
+            '(GCS_BASE_HOST) ' +
+            '[' + CLI.defaultBaseHost + ']',
+          String,
+          CLI.defaultBaseHost)
+  .option('-p, --port <port>',
+          'The port number assigned to the service' +
+            '(GCS_PORT) ' +
+            '[' + CLI.defaultPort + ']',
+          Number,
+          0)
   .option('--privilege <ip range>',
           'list of IP ranges for privileged client ' +
             '(GCS_PRIVILEGED_RANGES) ' +

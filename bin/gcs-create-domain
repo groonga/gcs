@@ -9,7 +9,7 @@ commandLine
   .option('-d, --domain-name <domain name>',
           'The name of the domain that you are creating. Required.',
           String)
-  .parse();
+  .parseClient();
 
 var client = new Client(commandLine);
 

@@ -12,7 +12,7 @@ commandLine
           'The name of the field you want to set as the default search field. ' +
           'It becomes blank if you omit this option',
           String)
-  .parse();
+  .parseClient();
 
 var client = new Client(commandLine);
 

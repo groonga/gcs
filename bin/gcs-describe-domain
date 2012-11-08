@@ -12,7 +12,7 @@ commandLine
           'Display all available information for the domain, '
              + 'including configured fields.',
           String)
-  .parse();
+  .parseClient();
 
 var client = new Client(commandLine);
 

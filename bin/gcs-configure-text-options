@@ -39,7 +39,7 @@ commandLine
           'List the domain\'s stopwords.')
   .option('-psn, --print-synonyms',
           'List the domain\'s synonyms.')
-  .parse();
+  .parseClient();
 
 function strip(string) {
   return string.replace(/^\s+|\s+$/g, '');

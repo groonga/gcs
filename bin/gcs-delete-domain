@@ -11,7 +11,7 @@ commandLine
           String)
   .option('-f, --force',
           'Delete the domain without prompting for confirmation.')
-  .parse();
+  .parseClient();
 
 var client = new Client(commandLine);
 

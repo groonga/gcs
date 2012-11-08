@@ -47,7 +47,7 @@ suite('gcs-create-domain', function() {
     utils
       .run('gcs-create-domain',
            '--domain-name', 'test',
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         assert.equal(result.code, 0, result.output.stdout + '\n' + result.output.stderr);
         assert.include(result.output.stdout,
@@ -69,7 +69,7 @@ suite('gcs-create-domain', function() {
     utils
       .run('gcs-create-domain',
            '--domain-name', 'test',
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
@@ -93,7 +93,7 @@ suite('gcs-create-domain', function() {
   test('missing domain name', function(done) {
     utils
       .run('gcs-create-domain',
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         assertDomainNotSpecified(result);
 
@@ -118,7 +118,7 @@ suite('gcs-delete-domain', function() {
       .run('gcs-delete-domain',
            '--domain-name', 'test',
            '--force',
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
@@ -142,7 +142,7 @@ suite('gcs-delete-domain', function() {
       .run('gcs-delete-domain',
            '--domain-name', 'test',
            '--force',
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         assertDomainNotExist(result, 'test');
         done();
@@ -156,7 +156,7 @@ suite('gcs-delete-domain', function() {
     utils
       .run('gcs-delete-domain',
            '--force',
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         assertDomainNotSpecified(result);
         done();
@@ -181,7 +181,7 @@ suite('gcs-describe-domain', function() {
     utils
       .run('gcs-describe-domain',
            '--domain-name', 'domain1',
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         var domain = new Domain('domain1', context);
         assert.deepEqual({ code: result.code, message: result.output.stdout },
@@ -221,7 +221,7 @@ suite('gcs-describe-domain', function() {
     utils
       .run('gcs-describe-domain',
            '--show-all',
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         var domain1 = new Domain('domain1', context);
         var domain2 = new Domain('domain2', context);
@@ -292,12 +292,12 @@ suite('gcs-configure-fields', function() {
     utils
       .run('gcs-create-domain',
            '--domain-name', 'companies',
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', 'localhost:' + utils.testPort)
       .run('gcs-configure-fields',
            '--domain-name', 'companies',
            '--name', name,
            '--type', type,
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         assertSuccess(result, name, type, options);
 
@@ -335,7 +335,7 @@ suite('gcs-configure-fields', function() {
            '--name', name,
            '--delete',
            '--force',
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
@@ -375,7 +375,7 @@ suite('gcs-configure-fields', function() {
            '--domain-name', 'companies',
            '--name', name,
            '--type', type,
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
@@ -407,7 +407,7 @@ suite('gcs-configure-fields', function() {
            '--name', 'name',
            '--delete',
            '--force',
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
@@ -427,7 +427,7 @@ suite('gcs-configure-fields', function() {
       .run('gcs-configure-fields',
            '--domain-name', 'companies',
            '--name', 'name',
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
@@ -445,7 +445,7 @@ suite('gcs-configure-fields', function() {
     utils
       .run('gcs-configure-fields',
            '--name', 'name',
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         assertDomainNotSpecified(result);
         done();
@@ -486,7 +486,7 @@ suite('gcs-configure-fields', function() {
            '--domain-name', 'companies',
            '--name', name,
            '--option', 'search',
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         if (results.search == 'error')
           assertOptionNotConfigurable(result, 'search', type);
@@ -497,7 +497,7 @@ suite('gcs-configure-fields', function() {
            '--domain-name', 'companies',
            '--name', name,
            '--option', 'nosearch',
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         if (results.nosearch == 'error')
           assertOptionNotConfigurable(result, 'nosearch', type);
@@ -508,7 +508,7 @@ suite('gcs-configure-fields', function() {
            '--domain-name', 'companies',
            '--name', name,
            '--option', 'result',
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         if (results.result == 'error')
           assertOptionNotConfigurable(result, 'result', type);
@@ -519,7 +519,7 @@ suite('gcs-configure-fields', function() {
            '--domain-name', 'companies',
            '--name', name,
            '--option', 'noresult',
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         if (results.noresult == 'error')
           assertOptionNotConfigurable(result, 'noresult', type);
@@ -530,7 +530,7 @@ suite('gcs-configure-fields', function() {
            '--domain-name', 'companies',
            '--name', name,
            '--option', 'facet',
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         if (results.facet == 'error')
           assertOptionNotConfigurable(result, 'facet', type);
@@ -541,7 +541,7 @@ suite('gcs-configure-fields', function() {
            '--domain-name', 'companies',
            '--name', name,
            '--option', 'nofacet',
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         if (results.nofacet == 'error')
           assertOptionNotConfigurable(result, 'nofacet', type);
@@ -598,7 +598,7 @@ suite('gcs-configure-text-options', function() {
       .run('gcs-configure-text-options',
            '--domain-name', 'companies',
            '--synonyms', path.join(__dirname, 'fixtures', 'synonyms.txt'),
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
@@ -617,7 +617,7 @@ suite('gcs-configure-text-options', function() {
       .run('gcs-configure-text-options',
            '--domain-name', 'companies',
            '--synonyms', path.join(__dirname, 'fixtures', 'synonyms.txt'),
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         assertDomainNotExist(result, 'companies');
         done();
@@ -631,7 +631,7 @@ suite('gcs-configure-text-options', function() {
     utils
       .run('gcs-configure-text-options',
            '--synonyms', path.join(__dirname, 'fixtures', 'synonyms.txt'),
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         assertDomainNotSpecified(result);
         done();
@@ -652,7 +652,7 @@ suite('gcs-configure-text-options', function() {
       .run('gcs-configure-text-options',
            '--domain-name', 'companies',
            '--print-synonyms',
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
@@ -672,7 +672,7 @@ suite('gcs-configure-text-options', function() {
       .run('gcs-configure-text-options',
            '--domain-name', 'companies',
            '--print-synonyms',
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         assertDomainNotExist(result, 'companies');
         done();
@@ -686,7 +686,7 @@ suite('gcs-configure-text-options', function() {
     utils
       .run('gcs-configure-text-options',
            '--print-synonyms',
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         assertDomainNotSpecified(result);
         done();
@@ -708,7 +708,7 @@ suite('gcs-configure-default-search-field', function() {
       .run('gcs-configure-default-search-field',
            '--domain-name', 'companies',
            '--name', 'name',
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
@@ -732,11 +732,11 @@ suite('gcs-configure-default-search-field', function() {
       .run('gcs-configure-default-search-field',
            '--domain-name', 'companies',
            '--name', 'name',
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', 'localhost:' + utils.testPort)
       .run('gcs-configure-default-search-field',
            '--domain-name', 'companies',
            '--name', 'address',
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
@@ -758,11 +758,11 @@ suite('gcs-configure-default-search-field', function() {
       .run('gcs-configure-default-search-field',
            '--domain-name', 'companies',
            '--name', 'name',
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', 'localhost:' + utils.testPort)
       .run('gcs-configure-default-search-field',
            '--domain-name', 'companies',
            '--name', '',
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
@@ -787,10 +787,10 @@ suite('gcs-configure-default-search-field', function() {
       .run('gcs-configure-default-search-field',
            '--domain-name', 'companies',
            '--name', 'name',
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', 'localhost:' + utils.testPort)
       .run('gcs-configure-default-search-field',
            '--domain-name', 'companies',
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
@@ -815,10 +815,10 @@ suite('gcs-configure-default-search-field', function() {
       .run('gcs-configure-default-search-field',
            '--domain-name', 'companies',
            '--name', 'name',
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', 'localhost:' + utils.testPort)
       .run('gcs-describe-domain',
            '--domain-name', 'companies',
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         assert.equal(result.code, 0, result.output.stdout + result.output.stderr);
         console.log(result.output.stdout);
@@ -845,7 +845,7 @@ suite('gcs-index-documents', function() {
     utils
       .run('gcs-index-documents',
            '--domain-name', 'companies',
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
@@ -872,7 +872,7 @@ suite('gcs-index-documents', function() {
     utils
       .run('gcs-index-documents',
            '--domain-name', 'test',
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         assertDomainNotExist(result, 'test');
         done();
@@ -885,7 +885,7 @@ suite('gcs-index-documents', function() {
   test('reindex without domain', function(done) {
     utils
       .run('gcs-index-documents',
-           '--base-host', 'localhost:' + utils.testPort)
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         assertDomainNotSpecified(result);
         done();
@@ -922,8 +922,8 @@ suite('gcs-post-sdf', function() {
       .run('gcs-post-sdf',
            '--domain-name', 'companies',
            '--source', batchFile,
-           '--endpoint', endpoint,
-           '--base-host', 'localhost:' + utils.testPort)
+           '--document-endpoint', endpoint,
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
@@ -950,8 +950,8 @@ suite('gcs-post-sdf', function() {
       .run('gcs-post-sdf',
            '--domain-name', 'companies',
            '--source', batchFile,
-           '--endpoint', endpoint,
-           '--base-host', 'localhost:' + utils.testPort)
+           '--document-endpoint', endpoint,
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
@@ -980,8 +980,8 @@ suite('gcs-post-sdf', function() {
       .run('gcs-post-sdf',
            '--domain-name', 'companies',
            '--source', path.join(fixturesDirectory, 'add.sdf.json'),
-           '--endpoint', endpoint,
-           '--base-host', 'localhost:' + utils.testPort)
+           '--document-endpoint', endpoint,
+           '--endpoint', 'localhost:' + utils.testPort)
 */
       .post('/2011-02-01/documents/batch', addBatch, {
         'Content-Type': 'application/json',
@@ -1002,8 +1002,8 @@ suite('gcs-post-sdf', function() {
       .run('gcs-post-sdf',
            '--domain-name', 'companies',
            '--source', deleteBatchFile,
-           '--endpoint', endpoint,
-           '--base-host', 'localhost:' + utils.testPort)
+           '--document-endpoint', endpoint,
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
@@ -1030,8 +1030,8 @@ suite('gcs-post-sdf', function() {
       .run('gcs-post-sdf',
            '--domain-name', 'companies',
            '--source', batchFile,
-           '--endpoint', endpoint,
-           '--base-host', 'localhost:' + utils.testPort)
+           '--document-endpoint', endpoint,
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
@@ -1064,8 +1064,8 @@ suite('gcs-post-sdf', function() {
     utils
       .run('gcs-post-sdf',
            '--domain-name', 'companies',
-           '--endpoint', endpoint,
-           '--base-host', 'localhost:' + utils.testPort)
+           '--document-endpoint', endpoint,
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
@@ -1086,8 +1086,8 @@ suite('gcs-post-sdf', function() {
       .run('gcs-post-sdf',
            '--domain-name', 'companies',
            '--source', batchFile,
-           '--endpoint', endpoint,
-           '--base-host', 'localhost:' + utils.testPort)
+           '--document-endpoint', endpoint,
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
@@ -1109,8 +1109,8 @@ suite('gcs-post-sdf', function() {
       .run('gcs-post-sdf',
            '--domain-name', 'companies',
            '--source', batchFile,
-           '--endpoint', endpoint,
-           '--base-host', 'localhost:' + utils.testPort)
+           '--document-endpoint', endpoint,
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         assert.deepEqual({ code:    result.code,
                            message: result.output.stdout },
@@ -1131,8 +1131,8 @@ suite('gcs-post-sdf', function() {
       .run('gcs-post-sdf',
            '--domain-name', 'test',
            '--source', batchFile,
-           '--endpoint', endpoint,
-           '--base-host', 'localhost:' + utils.testPort)
+           '--document-endpoint', endpoint,
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         assertDomainNotExist(result, 'test');
         done();
@@ -1145,8 +1145,8 @@ suite('gcs-post-sdf', function() {
   test('post without domain', function(done) {
     utils
       .run('gcs-post-sdf',
-           '--endpoint', endpoint,
-           '--base-host', 'localhost:' + utils.testPort)
+           '--document-endpoint', endpoint,
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         assertDomainNotSpecified(result);
         done();
