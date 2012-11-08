@@ -5,6 +5,12 @@ var CLI = require(__dirname + '/../lib/command-line').CommandLineInterface;
 var commandLine = new CLI();
 
 commandLine
+  .option('--database-path <path>',
+          'database path' +
+            '(GCS_DATABASE_PATH) ' +
+            '[' + CLI.defaultDatabasePath + ']',
+          String,
+          CLI.defaultDatabasePath)
   .option('--privilege <ip range>',
           'list of IP ranges for privileged client ' +
             '(GCS_PRIVILEGED_RANGES) ' +
