@@ -16,7 +16,8 @@ var commandLine = new CLI();
 commandLine
   .usage('--scenarios <path to a directory> [options]')
   .option('--scenarios <path to a directory>',
-          'Path to the scenarios directory which includes "scenarios.json".',
+          'Path to the scenarios directory which includes one or more ' +
+            '".json" scenario files.',
           String)
   .option('--document-endpoint <host:port>',
           'The host and port number of the documents/batch API.',
@@ -31,16 +32,21 @@ if (commandLine.options.documentEndpoint)
   client.docEndpoint = commandLine.options.documentEndpoint;
 
 var scenariosDir = path.resolve(process.cwd(), commandLine.options.scenarios);
-var scenariosFile = path.resolve(scenariosDir, 'scenarios.json');
 if (!commandLine.options.scenarios ||
-    !path.existsSync(scenariosFile)) {
+    !path.existsSync(scenariosDir)) {
   client.raiseFatalError('You must specify the path to a scenarios directory ' +
                          'by "--scenarios" option.');
 }
 
-console.log('Scenarios file: ' + scenariosFile);
-var scenarios = fs.readFileSync(scenariosFile);
-scenarios = JSON.parse(scenarios);
+console.log('Processing scenario files in ' + scenariosDir + '...');
+
+var scenarios = path.readdirSync(scenariosDir);
+scenarios = scenarios.filter(function(file) {
+  return /\.json$/i.test(file)
+});
+if (!scenarios.length) {
+  client.raiseFatalError('No scenario file.');
+}
 
 var statusCodeTable = {
   404: 'Not Found',
@@ -48,16 +54,34 @@ var statusCodeTable = {
   200: 'OK'
 };
 
-var resultsDirName = commandLine.options.acs ? 'results-acs' : 'results';
-var resultsDir = path.resolve(scenariosDir, resultsDirName);
-mkdirp.sync(resultsDir);
+var resultsDirNameSuffix = commandLine.options.acs ? 'results-acs' : 'results';
 
-function processScenario(scenarios) {
-  var scenario = scenarios.shift();
+function processScenarios(scenarios) {
+  var scenarioFileName = scenarios.shift();
 
-  console.log('Processing ' + scenario.name);
-  var filename = scenario.name.replace(/[^a-zA-Z0-9]+/g, '-') + '.txt';
-  client.rawConfigurationRequest(scenario.params.Action, scenario.params, function(error, result) {
+  console.log('Scenario file: ' + scenarioFileName);
+  var scenario = fs.readFileSync(path.resolve(scenariosDir, scenarioFileName));
+  scenario = JSON.parse(scenario);
+
+  var resultsDirName = scenarioFileName.replace(/\.json$/i, '');
+  var resultsDir = path.resolve(scenariosDir, resultsDirName + '-' + resultsDirNameSuffix);
+  mkdirp.sync(resultsDir);
+
+  processScenario(scenario, function(error) {
+    if (scenarios.length)
+      processScenarios(scenarios);
+    else
+      process.exit(0);
+  });
+}
+
+function processScenario(scenario, callback) {
+  var request = scenario.shift();
+
+  console.log('Processing request: ' + request.name);
+
+  var filename = request.name.replace(/[^a-zA-Z0-9]+/g, '-') + '.txt';
+  client.rawConfigurationRequest(request.params.Action, request.params, function(error, result) {
     var response = error || result;
 
     var statusCode = response.StatusCode;
@@ -77,10 +101,13 @@ function processScenario(scenarios) {
     fs.writeFile(resultPath, output);
     console.log('Wrote ' + resultPath);
 
-    if (scenarios.length)
-      processScenario(scenarios);
+    if (scenario.length)
+      processScenario(scenario);
+    else if (callback)
+      callback(null, null);
     else
       process.exit(0);
   });
 }
-processScenario(scenarios);
+
+processScenarios(scenarios);
