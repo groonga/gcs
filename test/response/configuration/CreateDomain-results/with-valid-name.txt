@@ -1,8 +1,0 @@
-HTTP/1.1 200 OK
-x-powered-by: Express
-x-amzn-requestid: bbae7c86-874d-4904-bc29-4895ce0a066d
-content-type: application/xml
-content-length: 835
-connection: keep-alive
-
-<?xml version="1.0"?><CreateDomainResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01"><CreateDomainResult><DomainStatus><Created>true</Created><Deleted>false</Deleted><DocService><Endpoint>doc-companies-8ct2tihgrob8xuyvvdlqal5nx8.127.0.0.1.xip.io:3333</Endpoint></DocService><DomainId>8ct2tihgrob8xuyvvdlqal5nx8/companies</DomainId><DomainName>companies</DomainName><NumSearchableDocs>0</NumSearchableDocs><RequiresIndexDocuments>false</RequiresIndexDocuments><SearchInstanceCount>0</SearchInstanceCount><SearchPartitionCount>0</SearchPartitionCount><SearchService><Endpoint>search-companies-8ct2tihgrob8xuyvvdlqal5nx8.127.0.0.1.xip.io:3333</Endpoint></SearchService></DomainStatus></CreateDomainResult><ResponseMetadata><RequestId>bbae7c86-874d-4904-bc29-4895ce0a066d</RequestId></ResponseMetadata></CreateDomainResponse>

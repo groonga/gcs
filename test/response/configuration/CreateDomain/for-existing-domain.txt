@@ -1,0 +1,30 @@
+HTTP/1.1 200 OK
+x-amzn-requestid: 2bb9d970-2a4b-11e2-ad5f-f51cf7168cf9
+content-type: text/xml
+content-length: 918
+date: Fri, 09 Nov 2012 08:55:11 GMT
+
+<CreateDomainResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
+  <CreateDomainResult>
+    <DomainStatus>
+      <SearchPartitionCount>0</SearchPartitionCount>
+      <SearchService>
+        <Arn>arn:aws:cs:us-east-1:549934713630:search/companies</Arn>
+      </SearchService>
+      <NumSearchableDocs>0</NumSearchableDocs>
+      <Created>true</Created>
+      <DomainId>549934713630/companies</DomainId>
+      <Processing>false</Processing>
+      <SearchInstanceCount>0</SearchInstanceCount>
+      <DomainName>companies</DomainName>
+      <RequiresIndexDocuments>false</RequiresIndexDocuments>
+      <Deleted>false</Deleted>
+      <DocService>
+        <Arn>arn:aws:cs:us-east-1:549934713630:doc/companies</Arn>
+      </DocService>
+    </DomainStatus>
+  </CreateDomainResult>
+  <ResponseMetadata>
+    <RequestId>2bb9d970-2a4b-11e2-ad5f-f51cf7168cf9</RequestId>
+  </ResponseMetadata>
+</CreateDomainResponse>

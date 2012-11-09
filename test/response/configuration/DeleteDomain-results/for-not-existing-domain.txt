@@ -1,8 +1,0 @@
-HTTP/1.1 200 OK
-x-powered-by: Express
-x-amzn-requestid: 848dc6eb-143b-40de-8db4-78f30ca13953
-content-type: application/xml
-content-length: 239
-connection: keep-alive
-
-<?xml version="1.0"?><DeleteDomainResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01"><DeleteDomainResult/><ResponseMetadata><RequestId>848dc6eb-143b-40de-8db4-78f30ca13953</RequestId></ResponseMetadata></DeleteDomainResponse>

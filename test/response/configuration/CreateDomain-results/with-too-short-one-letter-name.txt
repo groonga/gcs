@@ -1,8 +1,0 @@
-HTTP/1.1 400 Bad Request
-x-powered-by: Express
-x-amzn-requestid: a44e92e1-de9e-40f1-b9c0-cbbb81ee3b08
-content-type: application/xml
-content-length: 497
-connection: keep-alive
-
-<?xml version="1.0"?><Response><Errors><Error><Type>Sender</Type><Code>ValidationError</Code><Message>2 validation errors detected: Value &apos;a&apos; at &apos;domainName&apos; failed to satisfy constraint: Member must satisfy regular expression pattern: [a-z][a-z0-9\-]+; Value &apos;a&apos; at &apos;domainName&apos; failed to satisfy constraint: Member must have length greater than or equal to 3</Message></Error></Errors><RequestID>a44e92e1-de9e-40f1-b9c0-cbbb81ee3b08</RequestID></Response>
