@@ -23,6 +23,14 @@
     "params": { "Action": "CreateDomain",
                 "DomainName": "abcdefghijklmnopqrstuvwxyz0123456789" } },
 
+  { "name"  : "with invalid character",
+    "params": { "Action": "CreateDomain",
+                "DomainName": "@_@" } },
+
+  { "name"  : "with invalid character and too long",
+    "params": { "Action": "CreateDomain",
+                "DomainName": "@abcdefghijklmnopqrstuvwxyz0123456789" } },
+
   { "name"  : "without domain name",
     "params": { "Action": "CreateDomain",
                 "DomainName": "" } }

@@ -83,6 +83,18 @@
                 "IndexField.IndexFieldName": "never_exist",
                 "IndexField.IndexFieldType": "text" } },
 
+  { "name"  : "with domain name including invalid character",
+    "params": { "Action": "DefineIndexField",
+                "DomainName": "@_@",
+                "IndexField.IndexFieldName": "never_exist",
+                "IndexField.IndexFieldType": "text" } },
+
+  { "name"  : "with too long domain name including invalid character",
+    "params": { "Action": "DefineIndexField",
+                "DomainName": "@abcdefghijklmnopqrstuvwxyz0123456789",
+                "IndexField.IndexFieldName": "never_exist",
+                "IndexField.IndexFieldType": "text" } },
+
   { "name"  : "without domain domain name",
     "params": { "Action": "DefineIndexField",
                 "DomainName": "",

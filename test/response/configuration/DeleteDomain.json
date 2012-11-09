@@ -26,6 +26,14 @@
     "params": { "Action": "DeleteDomain",
                 "DomainName": "abcdefghijklmnopqrstuvwxyz0123456789" } },
 
+  { "name"  : "with invalid character",
+    "params": { "Action": "DeleteDomain",
+                "DomainName": "@_@" } },
+
+  { "name"  : "with invalid character and too long",
+    "params": { "Action": "DeleteDomain",
+                "DomainName": "@abcdefghijklmnopqrstuvwxyz0123456789" } },
+
   { "name"  : "without domain name",
     "params": { "Action": "DeleteDomain",
                 "DomainName": "" } }
