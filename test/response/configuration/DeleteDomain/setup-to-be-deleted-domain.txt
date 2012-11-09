@@ -1,8 +1,8 @@
 HTTP/1.1 200 OK
-x-amzn-requestid: 4858f7eb-2a4b-11e2-a392-a97ede14f4ce
+x-amzn-requestid: c08f75ce-2a55-11e2-ae87-0fef0be54c9b
 content-type: text/xml
-content-length: 918
-date: Fri, 09 Nov 2012 08:56:00 GMT
+content-length: 917
+date: Fri, 09 Nov 2012 10:10:56 GMT
 
 <CreateDomainResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
   <CreateDomainResult>
@@ -18,13 +18,13 @@ date: Fri, 09 Nov 2012 08:56:00 GMT
       <SearchInstanceCount>0</SearchInstanceCount>
       <DomainName>companies</DomainName>
       <RequiresIndexDocuments>false</RequiresIndexDocuments>
-      <Deleted>false</Deleted>
+      <Deleted>true</Deleted>
       <DocService>
         <Arn>arn:aws:cs:us-east-1:549934713630:doc/companies</Arn>
       </DocService>
     </DomainStatus>
   </CreateDomainResult>
   <ResponseMetadata>
-    <RequestId>4858f7eb-2a4b-11e2-a392-a97ede14f4ce</RequestId>
+    <RequestId>c08f75ce-2a55-11e2-ae87-0fef0be54c9b</RequestId>
   </ResponseMetadata>
 </CreateDomainResponse>

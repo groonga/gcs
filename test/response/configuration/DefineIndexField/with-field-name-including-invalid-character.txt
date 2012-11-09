@@ -1,0 +1,14 @@
+HTTP/1.1 400 Bad Request
+x-amzn-requestid: bcbe2281-2a55-11e2-b953-79bc0394a021
+content-type: text/xml
+content-length: 418
+date: Fri, 09 Nov 2012 10:10:50 GMT
+
+<ErrorResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
+  <Error>
+    <Type>Sender</Type>
+    <Code>ValidationError</Code>
+    <Message>1 validation error detected: Value '@_@' at 'indexField.indexFieldName' failed to satisfy constraint: Member must satisfy regular expression pattern: [a-z][a-z0-9_]*</Message>
+  </Error>
+  <RequestId>bcbe2281-2a55-11e2-b953-79bc0394a021</RequestId>
+</ErrorResponse>

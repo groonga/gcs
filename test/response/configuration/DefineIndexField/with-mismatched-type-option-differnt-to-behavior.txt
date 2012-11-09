@@ -1,0 +1,14 @@
+HTTP/1.1 409 Conflict
+x-amzn-requestid: b8155a35-2a55-11e2-9d78-ad1d67862da7
+content-type: text/xml
+content-length: 295
+date: Fri, 09 Nov 2012 10:10:41 GMT
+
+<ErrorResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
+  <Error>
+    <Type>Sender</Type>
+    <Code>InvalidType</Code>
+    <Message>A text IndexField may only specify textOptions</Message>
+  </Error>
+  <RequestId>b8155a35-2a55-11e2-9d78-ad1d67862da7</RequestId>
+</ErrorResponse>

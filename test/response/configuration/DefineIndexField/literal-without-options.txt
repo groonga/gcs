@@ -1,18 +1,18 @@
 HTTP/1.1 200 OK
-x-amzn-requestid: 3d85f936-2a4b-11e2-8f0a-5d9365f34086
+x-amzn-requestid: 9c1f26c1-2a55-11e2-ae87-0fef0be54c9b
 content-type: text/xml
 content-length: 718
-date: Fri, 09 Nov 2012 08:55:42 GMT
+date: Fri, 09 Nov 2012 10:09:56 GMT
 
 <DefineIndexFieldResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
   <DefineIndexFieldResult>
     <IndexField>
       <Status>
-        <CreationDate>2012-11-09T08:55:41Z</CreationDate>
+        <CreationDate>2012-11-09T10:09:55Z</CreationDate>
         <PendingDeletion>false</PendingDeletion>
-        <UpdateVersion>7</UpdateVersion>
+        <UpdateVersion>8</UpdateVersion>
         <State>RequiresIndexDocuments</State>
-        <UpdateDate>2012-11-09T08:55:41Z</UpdateDate>
+        <UpdateDate>2012-11-09T10:09:55Z</UpdateDate>
       </Status>
       <Options>
         <IndexFieldType>literal</IndexFieldType>
@@ -21,6 +21,6 @@ date: Fri, 09 Nov 2012 08:55:42 GMT
     </IndexField>
   </DefineIndexFieldResult>
   <ResponseMetadata>
-    <RequestId>3d85f936-2a4b-11e2-8f0a-5d9365f34086</RequestId>
+    <RequestId>9c1f26c1-2a55-11e2-ae87-0fef0be54c9b</RequestId>
   </ResponseMetadata>
 </DefineIndexFieldResponse>

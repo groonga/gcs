@@ -1,8 +1,8 @@
 HTTP/1.1 409 Conflict
-x-amzn-requestid: 40bdf238-2a4b-11e2-ad5f-f51cf7168cf9
+x-amzn-requestid: 9de47d4b-2a55-11e2-808a-51d500680155
 content-type: text/xml
 content-length: 340
-date: Fri, 09 Nov 2012 08:55:46 GMT
+date: Fri, 09 Nov 2012 10:09:58 GMT
 
 <ErrorResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
   <Error>
@@ -10,5 +10,5 @@ date: Fri, 09 Nov 2012 08:55:46 GMT
     <Code>InvalidType</Code>
     <Message>Error defining field: product. An IndexField may not be both FacetEnabled and ResultEnabled</Message>
   </Error>
-  <RequestId>40bdf238-2a4b-11e2-ad5f-f51cf7168cf9</RequestId>
+  <RequestId>9de47d4b-2a55-11e2-808a-51d500680155</RequestId>
 </ErrorResponse>

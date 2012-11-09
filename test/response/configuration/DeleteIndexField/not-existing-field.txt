@@ -1,0 +1,12 @@
+HTTP/1.1 200 OK
+x-amzn-requestid: c9d51dfa-2a55-11e2-808a-51d500680155
+content-type: text/xml
+content-length: 246
+date: Fri, 09 Nov 2012 10:11:12 GMT
+
+<DeleteIndexFieldResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
+  <DeleteIndexFieldResult/>
+  <ResponseMetadata>
+    <RequestId>c9d51dfa-2a55-11e2-808a-51d500680155</RequestId>
+  </ResponseMetadata>
+</DeleteIndexFieldResponse>

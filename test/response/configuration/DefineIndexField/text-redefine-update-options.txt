@@ -1,8 +1,8 @@
 HTTP/1.1 409 Conflict
-x-amzn-requestid: 381acb7e-2a4b-11e2-ad5f-f51cf7168cf9
+x-amzn-requestid: 98cb67de-2a55-11e2-ae87-0fef0be54c9b
 content-type: text/xml
 content-length: 337
-date: Fri, 09 Nov 2012 08:55:32 GMT
+date: Fri, 09 Nov 2012 10:09:49 GMT
 
 <ErrorResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
   <Error>
@@ -10,5 +10,5 @@ date: Fri, 09 Nov 2012 08:55:32 GMT
     <Code>InvalidType</Code>
     <Message>Error defining field: name. An IndexField may not be both FacetEnabled and ResultEnabled</Message>
   </Error>
-  <RequestId>381acb7e-2a4b-11e2-ad5f-f51cf7168cf9</RequestId>
+  <RequestId>98cb67de-2a55-11e2-ae87-0fef0be54c9b</RequestId>
 </ErrorResponse>

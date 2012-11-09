@@ -1,8 +1,8 @@
 HTTP/1.1 400 Bad Request
-x-amzn-requestid: 4520b042-2a4b-11e2-a392-a97ede14f4ce
+x-amzn-requestid: ade8d457-2a55-11e2-9d78-ad1d67862da7
 content-type: text/xml
 content-length: 404
-date: Fri, 09 Nov 2012 08:55:54 GMT
+date: Fri, 09 Nov 2012 10:10:25 GMT
 
 <ErrorResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
   <Error>
@@ -10,5 +10,5 @@ date: Fri, 09 Nov 2012 08:55:54 GMT
     <Code>ValidationError</Code>
     <Message>1 validation error detected: Value '@_@' at 'domainName' failed to satisfy constraint: Member must satisfy regular expression pattern: [a-z][a-z0-9\-]+</Message>
   </Error>
-  <RequestId>4520b042-2a4b-11e2-a392-a97ede14f4ce</RequestId>
+  <RequestId>ade8d457-2a55-11e2-9d78-ad1d67862da7</RequestId>
 </ErrorResponse>
