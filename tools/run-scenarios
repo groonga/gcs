@@ -109,6 +109,10 @@ function processScenarios(params) {
   );
 }
 
+function scenarioNameToFileName(scenarioName) {
+  return scenarioName.replace(/[^a-zA-Z0-9]+/g, '-') + '.txt';
+}
+
 function processScenario(params, callback) {
   if (!params.start) params.start = Date.now();
   if (!params.processed) params.processed = {};
@@ -139,7 +143,7 @@ function processScenario(params, callback) {
 
   console.log('  Processing request: ' + name);
 
-  var filename = name.replace(/[^a-zA-Z0-9]+/g, '-') + '.txt';
+  var filename = scenarioNameToFileName(name);
   client.rawConfigurationRequest(request.params.Action, request.params, function(error, result) {
     var response = error || result;
 
