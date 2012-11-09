@@ -6,6 +6,7 @@
     "params": { "Action": "CreateDomain",
                 "DomainName": "companies" } },
 
+
   { "name"  : "text, without options",
     "params": { "Action": "DefineIndexField",
                 "DomainName": "companies",
