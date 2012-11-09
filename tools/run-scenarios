@@ -110,7 +110,9 @@ function processScenarios(params) {
 }
 
 function scenarioNameToFileName(scenarioName) {
-  return scenarioName.replace(/[^a-zA-Z0-9]+/g, '-') + '.txt';
+  return scenarioName
+           .replace(/[^a-zA-Z0-9]+/g, '-')
+           .replace(/-$/, '') + '.txt';
 }
 
 function processScenario(params, callback) {
