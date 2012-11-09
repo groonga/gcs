@@ -14,12 +14,17 @@ var mkdirp = require('mkdirp');
 
 var commandLine = new CLI();
 commandLine
+  .usage('--scenario <path> --output-directory <path> [options] or ' +
+         '--scenarios <path> --output-directory <path> [options]')
   .option('--scenario <path to a file>',
           'Path to a scenario file.',
           String)
   .option('--scenarios <path to a directory>',
           'Path to the scenarios directory which includes one or more ' +
             '".json" scenario files.',
+          String)
+  .option('--output-directory <path to a directory>',
+          'Path to the directory to save results.',
           String)
   .option('--document-endpoint <host:port>',
           'The host and port number of the documents/batch API.',
@@ -35,6 +40,10 @@ if (commandLine.options.documentEndpoint)
 
 var scenariosDir;
 var scenarios;
+
+if (!commandLine.options.outputDirectory)
+  client.raiseFatalError('You must specify the location of the results ' +
+                         'directory by "--output-directory" option.');
 
 if (commandLine.options.scenario) {
   var scenarioFile = path.resolve(process.cwd(), commandLine.options.scenario);
@@ -72,15 +81,16 @@ var resultsDirNameSuffix = commandLine.options.acs ? 'results-acs' : 'results';
 
 function processScenarios(params) {
   if (!params.start) params.start = Date.now();
-  var scenarioFileName = params.scenarios.shift();
+  var scenarioFile = params.scenarios.shift();
 
   console.log('');
-  console.log('Scenario file: ' + scenarioFileName);
-  var scenario = fs.readFileSync(path.resolve(scenariosDir, scenarioFileName));
+  console.log('Scenario file: ' + scenarioFile);
+  var scenario = fs.readFileSync(path.resolve(scenariosDir, scenarioFile));
   scenario = JSON.parse(scenario);
 
-  var scenarioName = scenarioFileName.replace(/\.json$/i, '');
-  var resultsDir = path.resolve(scenariosDir, scenarioName + '-' + resultsDirNameSuffix);
+  var scenarioName = path.basename(scenarioFile, '.json');
+  var resultsDir = path.resolve(commandLine.options.outputDirectory,
+                                scenarioName);
   mkdirp.sync(resultsDir);
 
   processScenario(
@@ -93,7 +103,8 @@ function processScenarios(params) {
       } else {
         var elapsedTime = Date.now() - params.start;
         console.log('');
-        console.log('All scenarios are finished. (total elapsed time: ' + elapsedTime + 'msec)');
+        console.log('All scenarios are finished. ' +
+                    '(total elapsed time: ' + elapsedTime + 'msec)');
         process.exit(0);
       }
     }
