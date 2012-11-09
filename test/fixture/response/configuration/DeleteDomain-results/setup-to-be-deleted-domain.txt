@@ -1,8 +1,8 @@
 HTTP/1.1 200 OK
 x-powered-by: Express
-x-amzn-requestid: 1b649832-dd14-4081-9075-d9a4108d913e
+x-amzn-requestid: 93c80e33-4baa-4467-a56c-0a433c9f1b42
 content-type: application/xml
 content-length: 835
 connection: keep-alive
 
-<?xml version="1.0"?><CreateDomainResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01"><CreateDomainResult><DomainStatus><Created>true</Created><Deleted>false</Deleted><DocService><Endpoint>doc-companies-pxc1edap2vp9g6r7qrfb81nkr3.127.0.0.1.xip.io:3333</Endpoint></DocService><DomainId>pxc1edap2vp9g6r7qrfb81nkr3/companies</DomainId><DomainName>companies</DomainName><NumSearchableDocs>0</NumSearchableDocs><RequiresIndexDocuments>false</RequiresIndexDocuments><SearchInstanceCount>0</SearchInstanceCount><SearchPartitionCount>0</SearchPartitionCount><SearchService><Endpoint>search-companies-pxc1edap2vp9g6r7qrfb81nkr3.127.0.0.1.xip.io:3333</Endpoint></SearchService></DomainStatus></CreateDomainResult><ResponseMetadata><RequestId>1b649832-dd14-4081-9075-d9a4108d913e</RequestId></ResponseMetadata></CreateDomainResponse>
+<?xml version="1.0"?><CreateDomainResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01"><CreateDomainResult><DomainStatus><Created>true</Created><Deleted>false</Deleted><DocService><Endpoint>doc-companies-m2pak4cvv4rsup5cdovd72m6w5.127.0.0.1.xip.io:3333</Endpoint></DocService><DomainId>m2pak4cvv4rsup5cdovd72m6w5/companies</DomainId><DomainName>companies</DomainName><NumSearchableDocs>0</NumSearchableDocs><RequiresIndexDocuments>false</RequiresIndexDocuments><SearchInstanceCount>0</SearchInstanceCount><SearchPartitionCount>0</SearchPartitionCount><SearchService><Endpoint>search-companies-m2pak4cvv4rsup5cdovd72m6w5.127.0.0.1.xip.io:3333</Endpoint></SearchService></DomainStatus></CreateDomainResult><ResponseMetadata><RequestId>93c80e33-4baa-4467-a56c-0a433c9f1b42</RequestId></ResponseMetadata></CreateDomainResponse>
