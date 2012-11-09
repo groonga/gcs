@@ -38,7 +38,7 @@ if (!commandLine.options.scenarios ||
                          'by "--scenarios" option.');
 }
 
-console.log('Processing scenario files in ' + scenariosDir + '...');
+console.log('Processing scenario files in [' + scenariosDir + ']...');
 
 var scenarios = fs.readdirSync(scenariosDir);
 scenarios = scenarios.filter(function(file) {
@@ -59,6 +59,7 @@ var resultsDirNameSuffix = commandLine.options.acs ? 'results-acs' : 'results';
 function processScenarios(scenarios) {
   var scenarioFileName = scenarios.shift();
 
+  console.log('');
   console.log('Scenario file: ' + scenarioFileName);
   var scenario = fs.readFileSync(path.resolve(scenariosDir, scenarioFileName));
   scenario = JSON.parse(scenario);
@@ -83,7 +84,7 @@ function processScenarios(scenarios) {
 function processScenario(params, callback) {
   var request = params.requests.shift();
 
-  console.log('Processing request: ' + request.name);
+  console.log('  Processing request: ' + request.name);
 
   var filename = request.name.replace(/[^a-zA-Z0-9]+/g, '-') + '.txt';
   client.rawConfigurationRequest(request.params.Action, request.params, function(error, result) {
@@ -104,7 +105,7 @@ function processScenario(params, callback) {
 
     var resultPath = path.resolve(params.resultsDir, filename);
     fs.writeFile(resultPath, output);
-    console.log('Wrote ' + resultPath);
+    console.log('  Wrote ' + resultPath);
 
     if (params.requests.length)
       processScenario(params, callback);
