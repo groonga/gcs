@@ -90,6 +90,22 @@ function processScenario(params, callback) {
   if (!params.start) params.start = Date.now();
   var request = params.requests.shift();
 
+  function processNext() {
+    if (params.requests.length) {
+      processScenario(params, callback);
+    } else {
+      var elapsedTime = Date.now() - params.start;
+      console.log('  Done. (elapsed time: ' + elapsedTime + 'msec)');
+      if (callback)
+        callback(null);
+      else 
+        process.exit(0);
+    }
+  }
+
+  if (request.onlyCGS && commandLine.options.acs)
+    return processNext();
+
   console.log('  Processing request: ' + request.name);
 
   var filename = request.name.replace(/[^a-zA-Z0-9]+/g, '-') + '.txt';
@@ -113,16 +129,7 @@ function processScenario(params, callback) {
     fs.writeFile(resultPath, output);
     console.log('  Wrote ' + resultPath);
 
-    if (params.requests.length) {
-      processScenario(params, callback);
-    } else {
-      var elapsedTime = Date.now() - params.start;
-      console.log('  Done. (elapsed time: ' + elapsedTime + 'msec)');
-      if (callback)
-        callback(null);
-      else 
-        process.exit(0);
-    }
+    processNext();
   });
 }
 
