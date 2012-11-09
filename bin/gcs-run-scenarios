@@ -40,7 +40,7 @@ if (!commandLine.options.scenarios ||
 
 console.log('Processing scenario files in ' + scenariosDir + '...');
 
-var scenarios = path.readdirSync(scenariosDir);
+var scenarios = fs.readdirSync(scenariosDir);
 scenarios = scenarios.filter(function(file) {
   return /\.json$/i.test(file)
 });
