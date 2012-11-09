@@ -56,8 +56,8 @@ var statusCodeTable = {
 
 var resultsDirNameSuffix = commandLine.options.acs ? 'results-acs' : 'results';
 
-function processScenarios(scenarios) {
-  var scenarioFileName = scenarios.shift();
+function processScenarios(params) {
+  var scenarioFileName = params.scenarios.shift();
 
   console.log('');
   console.log('Scenario file: ' + scenarioFileName);
@@ -73,16 +73,21 @@ function processScenarios(scenarios) {
       requests:   scenario,
       resultsDir: resultsDir },
     function(error) {
-      if (scenarios.length)
-        processScenarios(scenarios);
-      else
+      if (scenarios.length) {
+        processScenarios(params);
+      } else {
+        var elapsedTime = Date.now() - params.start;
+        console.log('');
+        console.log('All scenarios are finished. (total elapsed time: ' + elapsedTime + 'msec)');
         process.exit(0);
+      }
     }
   );
 }
 
 function processScenario(params, callback) {
   var request = params.requests.shift();
+  if (!params.start) params.start = Date.now();
 
   console.log('  Processing request: ' + request.name);
 
@@ -107,13 +112,17 @@ function processScenario(params, callback) {
     fs.writeFile(resultPath, output);
     console.log('  Wrote ' + resultPath);
 
-    if (params.requests.length)
+    if (params.requests.length) {
       processScenario(params, callback);
-    else if (callback)
-      callback(null, null);
-    else
-      process.exit(0);
+    } else {
+      var elapsedTime = Date.now() - params.start;
+      console.log('Done. (elapsed time: ' + elapsedTime + 'msec)');
+      if (callback)
+        callback(null);
+      else 
+        process.exit(0);
+    }
   });
 }
 
-processScenarios(scenarios);
+processScenarios({ scenarios: scenarios });
