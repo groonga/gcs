@@ -77,8 +77,6 @@ var statusCodeTable = {
   200: 'OK'
 };
 
-var resultsDirNameSuffix = commandLine.options.acs ? 'results-acs' : 'results';
-
 function processScenarios(params) {
   if (!params.start) params.start = Date.now();
   var scenarioFile = params.scenarios.shift();
