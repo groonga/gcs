@@ -57,6 +57,7 @@ var statusCodeTable = {
 var resultsDirNameSuffix = commandLine.options.acs ? 'results-acs' : 'results';
 
 function processScenarios(params) {
+  if (!params.start) params.start = Date.now();
   var scenarioFileName = params.scenarios.shift();
 
   console.log('');
@@ -86,8 +87,8 @@ function processScenarios(params) {
 }
 
 function processScenario(params, callback) {
-  var request = params.requests.shift();
   if (!params.start) params.start = Date.now();
+  var request = params.requests.shift();
 
   console.log('  Processing request: ' + request.name);
 
@@ -116,7 +117,7 @@ function processScenario(params, callback) {
       processScenario(params, callback);
     } else {
       var elapsedTime = Date.now() - params.start;
-      console.log('Done. (elapsed time: ' + elapsedTime + 'msec)');
+      console.log('  Done. (elapsed time: ' + elapsedTime + 'msec)');
       if (callback)
         callback(null);
       else 
