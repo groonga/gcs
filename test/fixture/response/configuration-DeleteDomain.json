@@ -1,28 +1,28 @@
 [
-  { "name"  : "setup to-be-deleted domain for valid name case",
+  { "name"  : "setup to-be-deleted domain",
     "params": { "Action": "CreateDomain",
                 "DomainName": "companies" } },
-  { "name"  : "DeleteDomain with valid name",
+  { "name"  : "with valid name",
     "params": { "Action": "DeleteDomain",
                 "DomainName": "companies" } },
 
-  { "name"  : "DeleteDomain for not-existing domain",
+  { "name"  : "for not-existing domain",
     "params": { "Action": "DeleteDomain",
                 "DomainName": "companies" } },
 
-  { "name"  : "DeleteDomain with too short (one letter) name",
+  { "name"  : "with too short (one letter) name",
     "params": { "Action": "DeleteDomain",
                 "DomainName": "a" } },
 
-  { "name"  : "DeleteDomain with too short (two letters) name",
+  { "name"  : "with too short (two letters) name",
     "params": { "Action": "DeleteDomain",
                 "DomainName": "ab" } },
 
-  { "name"  : "DeleteDomain with too long name",
+  { "name"  : "with too long name",
     "params": { "Action": "DeleteDomain",
                 "DomainName": "abcdefghijklmnopqrstuvwxyz0123456789" } },
 
-  { "name"  : "DeleteDomain without domain name",
+  { "name"  : "without domain name",
     "params": { "Action": "DeleteDomain",
                 "DomainName": "" } }
 ]
