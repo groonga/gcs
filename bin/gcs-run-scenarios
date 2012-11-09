@@ -98,7 +98,7 @@ function processScenario(params, callback) {
 
     var statusCode = response.StatusCode;
     if (!statusCodeTable[statusCode]) {
-      throw "Unknown status code " + statusCode;
+      client.raiseFatalError('Unknown status code ' + statusCode);
     }
 
     var output = '';
