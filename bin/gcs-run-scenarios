@@ -63,20 +63,25 @@ function processScenarios(scenarios) {
   var scenario = fs.readFileSync(path.resolve(scenariosDir, scenarioFileName));
   scenario = JSON.parse(scenario);
 
-  var resultsDirName = scenarioFileName.replace(/\.json$/i, '');
-  var resultsDir = path.resolve(scenariosDir, resultsDirName + '-' + resultsDirNameSuffix);
+  var scenarioName = scenarioFileName.replace(/\.json$/i, '');
+  var resultsDir = path.resolve(scenariosDir, scenarioName + '-' + resultsDirNameSuffix);
   mkdirp.sync(resultsDir);
 
-  processScenario(scenario, function(error) {
-    if (scenarios.length)
-      processScenarios(scenarios);
-    else
-      process.exit(0);
-  });
+  processScenario(
+    { name:       scenarioName,
+      requests:   scenario,
+      resultsDir: resultsDir },
+    function(error) {
+      if (scenarios.length)
+        processScenarios(scenarios);
+      else
+        process.exit(0);
+    }
+  );
 }
 
-function processScenario(scenario, callback) {
-  var request = scenario.shift();
+function processScenario(params, callback) {
+  var request = params.requests.shift();
 
   console.log('Processing request: ' + request.name);
 
@@ -97,12 +102,12 @@ function processScenario(scenario, callback) {
     output += '\r\n';
     output += response.Body.toString();
 
-    var resultPath = path.resolve(resultsDir, filename);
+    var resultPath = path.resolve(params.resultsDir, filename);
     fs.writeFile(resultPath, output);
     console.log('Wrote ' + resultPath);
 
-    if (scenario.length)
-      processScenario(scenario);
+    if (params.requests.length)
+      processScenario(params, callback);
     else if (callback)
       callback(null, null);
     else
