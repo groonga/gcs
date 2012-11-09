@@ -114,7 +114,7 @@ function processScenario(params, callback) {
       console.log('  Done. (elapsed time: ' + elapsedTime + 'msec)');
       if (callback)
         callback(null);
-      else 
+      else
         process.exit(0);
     }
   }
