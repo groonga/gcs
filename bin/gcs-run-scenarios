@@ -103,7 +103,7 @@ function processScenario(params, callback) {
     }
   }
 
-  if (request.onlyCGS && commandLine.options.acs)
+  if (request.onlyGCS && commandLine.options.acs)
     return processNext();
 
   console.log('  Processing request: ' + request.name);
