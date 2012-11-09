@@ -37,7 +37,9 @@ if (!commandLine.options.scenarios ||
                          'by "--scenarios" option.');
 }
 
-var scenarios = JSON.parse(fs.readFileSync(scenariosFile));
+console.log('Scenarios file: ' + scenariosFile);
+var scenarios = fs.readFileSync(scenariosFile);
+scenarios = JSON.parse(scenarios);
 
 var statusCodeTable = {
   404: 'Not Found',
