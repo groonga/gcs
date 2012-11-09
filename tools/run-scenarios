@@ -63,6 +63,7 @@ if (commandLine.options.scenario) {
 
 var statusCodeTable = {
   404: 'Not Found',
+  409: 'Conflict',
   400: 'Bad Request',
   200: 'OK'
 };
