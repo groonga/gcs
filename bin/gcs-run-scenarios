@@ -51,7 +51,10 @@ var statusCodeTable = {
 var resultsDirName = commandLine.options.acs ? 'results-acs' : 'results';
 var resultsDir = path.resolve(scenariosDir, resultsDirName);
 mkdirp.sync(resultsDir);
-scenarios.forEach(function(scenario) {
+
+function processScenario(scenarios) {
+  var scenario = scenarios.shift();
+
   console.log('Processing ' + scenario.name);
   var filename = scenario.name.replace(/[^a-zA-Z0-9]+/g, '-') + '.txt';
   client.rawConfigurationRequest(scenario.params.Action, scenario.params, function(error, result) {
@@ -73,5 +76,11 @@ scenarios.forEach(function(scenario) {
     var resultPath = path.resolve(resultsDir, filename);
     fs.writeFile(resultPath, output);
     console.log('Wrote ' + resultPath);
+
+    if (scenarios.length)
+      processScenario(scenarios);
+    else
+      process.exit(0);
   });
-});
+}
+processScenario(scenarios);
