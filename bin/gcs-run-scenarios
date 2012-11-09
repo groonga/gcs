@@ -10,6 +10,7 @@ var CLI = require(__dirname + '/../lib/command-line').CommandLineInterface;
 var Client = require(__dirname + '/../lib/client').Client;
 var fs = require('fs');
 var path = require('path');
+var mkdirp = require('mkdirp');
 
 var commandLine = new CLI();
 commandLine
@@ -49,6 +50,7 @@ var statusCodeTable = {
 
 var resultsDirName = commandLine.options.acs ? 'results-acs' : 'results';
 var resultsDir = path.resolve(scenariosDir, resultsDirName);
+mkdirp.sync(resultsDir);
 scenarios.forEach(function(scenario) {
   console.log('Processing ' + scenario.name);
   var filename = scenario.name.replace(/[^a-zA-Z0-9]+/g, '-') + '.txt';
