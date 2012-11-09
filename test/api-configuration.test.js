@@ -490,6 +490,22 @@ suite('Configuration API', function() {
           done(error);
         });
     });
+
+    test('Action=GCSDeleteAllDomains', function(done) {
+      utils
+        .get('/?DomainName=domain3&Action=CreateDomain&Version=2011-02-01')
+        .get('/?DomainName=domain1&Action=CreateDomain&Version=2011-02-01')
+        .get('/?DomainName=domain2&Action=CreateDomain&Version=2011-02-01')
+        .get('/?Action=GCSDeleteAllDomains&Version=2011-02-01')
+        .get('/?Action=DescribeDomains&Version=2011-02-01')
+        .next(function(response) {
+          assertDomainsReturned(response, []);
+          done();
+        })
+        .error(function(error) {
+          done(error);
+        });
+    });
   });
 
   suite('auto detection of the base hostname and port', function() {
