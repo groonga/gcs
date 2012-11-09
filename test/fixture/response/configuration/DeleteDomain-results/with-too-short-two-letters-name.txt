@@ -1,0 +1,8 @@
+HTTP/1.1 400 Bad Request
+x-powered-by: Express
+x-amzn-requestid: 0a6e01e3-71cb-405e-aeb0-72899bef0fad
+content-type: application/xml
+content-length: 355
+connection: keep-alive
+
+<?xml version="1.0"?><Response><Errors><Error><Type>Sender</Type><Code>ValidationError</Code><Message>1 validation error detected: Value &apos;ab&apos; at &apos;domainName&apos; failed to satisfy constraint: Member must have length greater than or equal to 3</Message></Error></Errors><RequestID>0a6e01e3-71cb-405e-aeb0-72899bef0fad</RequestID></Response>

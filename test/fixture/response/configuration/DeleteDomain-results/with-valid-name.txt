@@ -1,0 +1,8 @@
+HTTP/1.1 200 OK
+x-powered-by: Express
+x-amzn-requestid: 7cf5b7b4-0d81-4a54-81d5-4e4ceb54d517
+content-type: application/xml
+content-length: 835
+connection: keep-alive
+
+<?xml version="1.0"?><DeleteDomainResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01"><DeleteDomainResult><DomainStatus><Created>false</Created><Deleted>true</Deleted><DocService><Endpoint>doc-companies-pxc1edap2vp9g6r7qrfb81nkr3.127.0.0.1.xip.io:3333</Endpoint></DocService><DomainId>pxc1edap2vp9g6r7qrfb81nkr3/companies</DomainId><DomainName>companies</DomainName><NumSearchableDocs>0</NumSearchableDocs><RequiresIndexDocuments>false</RequiresIndexDocuments><SearchInstanceCount>0</SearchInstanceCount><SearchPartitionCount>0</SearchPartitionCount><SearchService><Endpoint>search-companies-pxc1edap2vp9g6r7qrfb81nkr3.127.0.0.1.xip.io:3333</Endpoint></SearchService></DomainStatus></DeleteDomainResult><ResponseMetadata><RequestId>7cf5b7b4-0d81-4a54-81d5-4e4ceb54d517</RequestId></ResponseMetadata></DeleteDomainResponse>
