@@ -102,6 +102,29 @@ suite('Configuration API', function() {
             'Member must have length greater than or equal to ' +
               Domain.MINIMUM_NAME_LENGTH;
 
+  function getActualDescribedDomains(response) {
+    var members = response.body.DescribeDomainsResponse
+                               .DescribeDomainsResult
+                               .DomainStatusList
+                               .member;
+    var domains = [];
+    for (var i in members) {
+      if (members.hasOwnProperty(i))
+        domains.push(members[i].DomainName);
+    }
+    return domains;
+  }
+
+  function assertDomainsReturned(response, expectedDomains) {
+    response = xmlResponses.toParsedResponse(response);
+    assert.deepEqual(response.pattern,
+                     { statusCode: 200,
+                       body: xmlResponses.DescribeDomainsResponse(expectedDomains) });
+
+    var actualDomains = getActualDescribedDomains(response);
+    assert.deepEqual(actualDomains, expectedDomains);
+  }
+
   suite('domain operations', function() {
     setup(commonSetup);
     teardown(commonTeardown);
@@ -308,29 +331,6 @@ suite('Configuration API', function() {
           done(error);
         });
     });
-
-    function getActualDescribedDomains(response) {
-      var members = response.body.DescribeDomainsResponse
-                                 .DescribeDomainsResult
-                                 .DomainStatusList
-                                 .member;
-      var domains = [];
-      for (var i in members) {
-        if (members.hasOwnProperty(i))
-          domains.push(members[i].DomainName);
-      }
-      return domains;
-    }
-
-    function assertDomainsReturned(response, expectedDomains) {
-      response = xmlResponses.toParsedResponse(response);
-      assert.deepEqual(response.pattern,
-                       { statusCode: 200,
-                         body: xmlResponses.DescribeDomainsResponse(expectedDomains) });
-
-      var actualDomains = getActualDescribedDomains(response);
-      assert.deepEqual(actualDomains, expectedDomains);
-    }
 
     test('Action=DescribeDomains (all domains)', function(done) {
       utils
