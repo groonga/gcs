@@ -14,7 +14,9 @@ var mkdirp = require('mkdirp');
 
 var commandLine = new CLI();
 commandLine
-  .usage('--scenarios <path to a directory> [options]')
+  .option('--scenario <path to a file>',
+          'Path to a scenario file.',
+          String)
   .option('--scenarios <path to a directory>',
           'Path to the scenarios directory which includes one or more ' +
             '".json" scenario files.',
@@ -31,21 +33,32 @@ var client = new Client(commandLine);
 if (commandLine.options.documentEndpoint)
   client.docEndpoint = commandLine.options.documentEndpoint;
 
-var scenariosDir = path.resolve(process.cwd(), commandLine.options.scenarios);
-if (!commandLine.options.scenarios ||
-    !path.existsSync(scenariosDir)) {
-  client.raiseFatalError('You must specify the path to a scenarios directory ' +
-                         'by "--scenarios" option.');
-}
+var scenariosDir;
+var scenarios;
 
-console.log('Processing scenario files in [' + scenariosDir + ']...');
+if (commandLine.options.scenario) {
+  var scenarioFile = path.resolve(process.cwd(), commandLine.options.scenario);
+  if (!path.existsSync(scenarioFile))
+    client.raiseFatalError(scenarioFile + ' does not exist.');
 
-var scenarios = fs.readdirSync(scenariosDir);
-scenarios = scenarios.filter(function(file) {
-  return /\.json$/i.test(file)
-});
-if (!scenarios.length) {
-  client.raiseFatalError('No scenario file.');
+  scenarios = [scenarioFile];
+  console.log('Processing one scenario file [' + scenarioFile + ']...');
+} else if (commandLine.options.scenarios) {
+  scenariosDir = path.resolve(process.cwd(), commandLine.options.scenarios);
+  if (!path.existsSync(scenariosDir))
+    client.raiseFatalError(scenariosDir + ' does not exist.');
+
+  console.log('Processing scenario files in [' + scenariosDir + ']...');
+
+  scenarios = fs.readdirSync(scenariosDir);
+  scenarios = scenarios.filter(function(file) {
+    return /\.json$/i.test(file)
+  });
+  if (!scenarios.length)
+    client.raiseFatalError('No scenario file.');
+} else {
+  client.raiseFatalError('You must specify scenarios by "--scenario" or ' +
+                         '"--scenarios" option.');
 }
 
 var statusCodeTable = {
