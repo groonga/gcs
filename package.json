@@ -45,8 +45,7 @@
     "gcs-index-documents": "./bin/gcs-index-documents",
     "gcs-import-examples": "./bin/gcs-import-examples",
     "gcs-configure-default-search-field": "./bin/gcs-configure-default-search-field",
-    "gcs-post-sdf": "./bin/gcs-post-sdf",
-    "gcs-run-scenarios": "./bin/gcs-run-scenarios"
+    "gcs-post-sdf": "./bin/gcs-post-sdf"
   },
   "main": "./lib/server",
   "engines": {
