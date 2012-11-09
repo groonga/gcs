@@ -68,7 +68,7 @@ scenarios.forEach(function(scenario) {
     output += '\r\n';
     output += response.Body.toString();
 
-    var resultPath = resultsDir.resolve(resultsDir, filename);
+    var resultPath = path.resolve(resultsDir, filename);
     fs.writeFile(resultPath, output);
     console.log('Wrote ' + resultPath);
   });
