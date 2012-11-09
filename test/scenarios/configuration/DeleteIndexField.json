@@ -1,0 +1,121 @@
+[
+  { "name"  : "setup: delete all domains",
+    "onlyGCS" : true,
+    "params": { "Action": "GCSDeleteAllDomains" } },
+  { "name"  : "setup: prepare the test domain",
+    "params": { "Action": "CreateDomain",
+                "DomainName": "companies" } },
+  { "name"  : "setup: surely setup not-existing domain",
+    "params": { "Action": "DeleteDomain",
+                "DomainName": "unknown" } },
+
+
+  { "name"  : "setup: define to-be-deleted field",
+    "params": { "Action": "DefineIndexField",
+                "DomainName": "companies",
+                "IndexField.IndexFieldName": "name",
+                "IndexField.IndexFieldType": "text" } },
+  { "name"  : "existing field",
+    "params": { "Action": "DeleteIndexField",
+                "DomainName": "companies",
+                "IndexFieldName": "name" } },
+
+  { "name"  : "not-existing field",
+    "params": { "Action": "DeleteIndexField",
+                "DomainName": "companies",
+                "IndexFieldName": "not_existing" } },
+
+  { "name"  : "setup: define to-be-deleted field",
+    "params": { "Action": "DefineIndexField",
+                "DomainName": "companies",
+                "IndexField.IndexFieldName": "name",
+                "IndexField.IndexFieldType": "text" } },
+  { "name"  : "with unknown option",
+    "params": { "Action": "DeleteIndexField",
+                "DomainName": "companies",
+                "IndexFieldName": "name",
+                "UnknownOption": "true" } },
+
+
+  { "name"  : "with too short (one letter) domain name",
+    "params": { "Action": "DeleteIndexField",
+                "DomainName": "a",
+                "IndexFieldName": "never_exist" } },
+
+  { "name"  : "with too short (two letters) domain name",
+    "params": { "Action": "DeleteIndexField",
+                "DomainName": "ab",
+                "IndexFieldName": "never_exist" } },
+
+  { "name"  : "with too long domain name",
+    "params": { "Action": "DeleteIndexField",
+                "DomainName": "abcdefghijklmnopqrstuvwxyz0123456789",
+                "IndexFieldName": "never_exist" } },
+
+  { "name"  : "with domain name including invalid character",
+    "params": { "Action": "DeleteIndexField",
+                "DomainName": "@_@",
+                "IndexFieldName": "never_exist" } },
+
+  { "name"  : "with too long domain name including invalid character",
+    "params": { "Action": "DeleteIndexField",
+                "DomainName": "@abcdefghijklmnopqrstuvwxyz0123456789",
+                "IndexFieldName": "never_exist" } },
+
+  { "name"  : "without domain name",
+    "params": { "Action": "DeleteIndexField",
+                "DomainName": "",
+                "IndexFieldName": "never_exist" } },
+
+  { "name"  : "for not-existing domain",
+    "params": { "Action": "DeleteIndexField",
+                "DomainName": "unknown",
+                "IndexFieldName": "never_exist" } },
+
+
+  { "name"  : "with too short (one letter) field name",
+    "params": { "Action": "DeleteIndexField",
+                "DomainName": "companies",
+                "IndexFieldName": "a" } },
+
+  { "name"  : "with too short (two letters) field name",
+    "params": { "Action": "DeleteIndexField",
+                "DomainName": "companies",
+                "IndexFieldName": "ab" } },
+
+  { "name"  : "with too long field name",
+    "params": { "Action": "DeleteIndexField",
+                "DomainName": "companies",
+                "IndexFieldName": "abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789" } },
+
+  { "name"  : "with field name including invalid character",
+    "params": { "Action": "DeleteIndexField",
+                "DomainName": "companies",
+                "IndexFieldName": "@_@" } },
+
+  { "name"  : "with too long field name including invalid character",
+    "params": { "Action": "DeleteIndexField",
+                "DomainName": "companies",
+                "IndexFieldName": "@abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789" } },
+
+  { "name"  : "without field name",
+    "params": { "Action": "DeleteIndexField",
+                "DomainName": "companies",
+                "IndexFieldName": "" } },
+
+
+  { "name"  : "with too short domain name and too short field name",
+    "params": { "Action": "DeleteIndexField",
+                "DomainName": "a",
+                "IndexFieldName": "a" } },
+
+  { "name"  : "with too short field name for not-existing domain",
+    "params": { "Action": "DeleteIndexField",
+                "DomainName": "unknown",
+                "IndexFieldName": "a" } },
+
+
+  { "name"  : "teardown: delete the test domain",
+    "params": { "Action": "DeleteDomain",
+                "DomainName": "companies" } }
+]
