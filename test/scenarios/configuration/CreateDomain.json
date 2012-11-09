@@ -3,6 +3,7 @@
     "onlyGCS" : true,
     "params": { "Action": "GCSDeleteAllDomains" } },
 
+
   { "name"  : "with valid name",
     "params": { "Action": "CreateDomain",
                 "DomainName": "companies" } },
@@ -33,5 +34,10 @@
 
   { "name"  : "without domain name",
     "params": { "Action": "CreateDomain",
-                "DomainName": "" } }
+                "DomainName": "" } },
+
+
+  { "name"  : "teardown: delete the test domain",
+    "params": { "Action": "DeleteDomain",
+                "DomainName": "companies" } }
 ]

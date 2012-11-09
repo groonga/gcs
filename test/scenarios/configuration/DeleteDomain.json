@@ -2,10 +2,11 @@
   { "name"  : "setup: delete all domains",
     "onlyGCS" : true,
     "params": { "Action": "GCSDeleteAllDomains" } },
+
+
   { "name"  : "setup: to-be-deleted domain",
     "params": { "Action": "CreateDomain",
                 "DomainName": "companies" } },
-
   { "name"  : "with valid name",
     "params": { "Action": "DeleteDomain",
                 "DomainName": "companies" } },
