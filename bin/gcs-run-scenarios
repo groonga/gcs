@@ -88,6 +88,8 @@ function processScenarios(params) {
 
 function processScenario(params, callback) {
   if (!params.start) params.start = Date.now();
+  if (!params.processed) params.processed = {};
+
   var request = params.requests.shift();
 
   function processNext() {
@@ -106,9 +108,15 @@ function processScenario(params, callback) {
   if (request.onlyGCS && commandLine.options.acs)
     return processNext();
 
-  console.log('  Processing request: ' + request.name);
+  var name = request.name;
+  var count = 1;
+  while (name in params.processed) {
+    name = request.name + count++;
+  }
 
-  var filename = request.name.replace(/[^a-zA-Z0-9]+/g, '-') + '.txt';
+  console.log('  Processing request: ' + name);
+
+  var filename = name.replace(/[^a-zA-Z0-9]+/g, '-') + '.txt';
   client.rawConfigurationRequest(request.params.Action, request.params, function(error, result) {
     var response = error || result;
 
