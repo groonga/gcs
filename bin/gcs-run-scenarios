@@ -48,7 +48,7 @@ var statusCodeTable = {
 };
 
 var resultsDirName = commandLine.options.acs ? 'results-acs' : 'results';
-var resultsDir = resultsDir.resolve(scenariosDir, resultsDirName);
+var resultsDir = path.resolve(scenariosDir, resultsDirName);
 scenarios.forEach(function(scenario) {
   console.log('Processing ' + scenario.name);
   var filename = scenario.name.replace(/[^a-zA-Z0-9]+/g, '-') + '.txt';
