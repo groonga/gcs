@@ -1,0 +1,25 @@
+[
+  { "name"  : "CreateDomain with valid name",
+    "params": { "Action": "CreateDomain",
+                "DomainName": "companies" } },
+
+  { "name"  : "CreateDomain for existing domain",
+    "params": { "Action": "CreateDomain",
+                "DomainName": "companies" } },
+
+  { "name"  : "CreateDomain with too short (one letter) name",
+    "params": { "Action": "CreateDomain",
+                "DomainName": "a" } },
+
+  { "name"  : "CreateDomain with too short (two letters) name",
+    "params": { "Action": "CreateDomain",
+                "DomainName": "ab" } },
+
+  { "name"  : "CreateDomain with too long name",
+    "params": { "Action": "CreateDomain",
+                "DomainName": "abcdefghijklmnopqrstuvwxyz0123456789" } },
+
+  { "name"  : "CreateDomain without domain name",
+    "params": { "Action": "CreateDomain",
+                "DomainName": "" } }
+]
