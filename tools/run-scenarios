@@ -69,7 +69,7 @@ if (commandLine.options.scenario) {
                          '"--scenarios" option.');
 }
 
-scenarios = scenarios.forEach(function(file) {
+scenarios = scenarios.map(function(file) {
   var scenarioName = path.basename(file, '.json');
   var scenario = { name: scenarioName,
                    path: file };
