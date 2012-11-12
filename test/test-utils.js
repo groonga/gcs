@@ -170,7 +170,7 @@ function run() {
 
   Deferred.next(function() {
     var commandName = options.shift();
-    var commandPath = __dirname + '/../bin/' + commandName;
+    var commandPath = path.resolve(resolve('./bin'), commandName);
     var command = spawn(commandPath, options);
     var output = {
           stdout: '',
@@ -217,9 +217,8 @@ function setupResponses(scenarios, date) {
     });
   }
 
-  var deferred = new Deferred();
-
-  return run(resolve('tools/run-scenarios'),
+  mkdirp.sync(outputDir);
+  return run(resolve('./tools/run-scenarios'),
                '--endpoint', '127.0.0.1.xip.io:' + testPort,
                '--scenarios', scenarios,
                '--output-directory', outputDir)
