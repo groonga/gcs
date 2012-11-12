@@ -19,12 +19,16 @@ exports.testBaseHost = testBaseHost;
 exports.testConfigurationHost = testConfigurationHost;
 exports.testPort = testPort;
 
+var logOutputInitialized = false;
 function setupServer(context, extraOptions) {
-  var options = { context:       context,
-                  port:          testPort,
-                  accessLogPath: resolve('test/tmp/access.log'),
-                  queryLogPath:  resolve('test/tmp/query.log'),
-                  errorLogPath:  resolve('test/tmp/error.log') };
+  var options = { context: context,
+                  port:    testPort };
+  if (!logOutputInitialized) {
+    options.accessLogPath = resolve('test/tmp/access.log');
+    options.queryLogPath  = resolve('test/tmp/query.log');
+    options.errorLogPath  = resolve('test/tmp/error.log');
+    logOutputInitialized = false;
+  }
   if (extraOptions)
     Object.keys(extraOptions).forEach(function(key) {
       options[key] = extraOptions[key];
