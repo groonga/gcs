@@ -22,7 +22,7 @@
                 "IndexField.IndexFieldType": "literal" } },
 
 
-  { "name"  : "all domains",
+  { "name"  : "all fields",
     "params": { "Action": "DescribeIndexFields",
                 "DomainName": "companies" } },
 
@@ -32,7 +32,7 @@
                 "FieldNames.member.1": "name",
                 "FieldNames.member.2": "age" } },
 
-  { "name"  : "only specified two domains in inverted order",
+  { "name"  : "only specified two fields in inverted order",
     "params": { "Action": "DescribeIndexFields",
                 "DomainName": "companies",
                 "FieldNames.member.1": "age",
