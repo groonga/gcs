@@ -45,7 +45,7 @@ Runner.prototype = {
         requests:   scenario,
         resultsDir: resultsDir },
       function(error) {
-        if (scenarios.length) {
+        if (params.scenarios.length) {
           self.processScenarios(params);
         } else {
           var elapsedTime = Date.now() - params.start;

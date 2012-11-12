@@ -8,7 +8,7 @@
 
 var CLI = require(__dirname + '/../lib/command-line').CommandLineInterface;
 var Client = require(__dirname + '/../lib/client').Client;
-var Runner = require(__dirname + 'scenario-runner').Runner;
+var Runner = require(__dirname + '/scenario-runner').Runner;
 var fs = require('fs');
 var path = require('path');
 
@@ -70,11 +70,13 @@ if (commandLine.options.scenario) {
 
 var options = {};
 Object.keys(commandLine.options).forEach(function(key) {
-  if (typeof commandLine.options[key] != 'function')
+  var type = typeof commandLine.options[key];
+  if (type != 'function' && type != 'object')
     options[key] = commandLine.options[key];
 });
-Object.keys(commandLine).forEach(function(key) {
-  if (typeof commandLine[key] != 'function')
+Object.keys(CLI.prototype).concat(Object.keys(commandLine)).forEach(function(key) {
+  var type = typeof commandLine[key];
+  if (type != 'function' && type != 'object')
     options[key] = commandLine[key];
 });
 
