@@ -192,10 +192,43 @@ function run() {
 exports.run = run;
 Deferred.register('run', function() { return run.apply(this, arguments); });
 
-
-exports.resolve = function(possibleRelativePath) {
+function resolve(possibleRelativePath) {
   return path.resolve(process.cwd(), possibleRelativePath);
+}
+exports.resolve = resolve;
+
+function toTimeStamp(date) {
+  return date.getFullYear() + 'y' +
+           ('0' + (date.getMonth() + 1)).slice(-2) + 'm' +
+           ('0' + (date.getDate())).slice(-2) + 'd' +
+           ('0' + (date.getHours())).slice(-2) + 'h' +
+           ('0' + (date.getMinutes())).slice(-2) + 'm' +
+           ('0' + (date.getSeconds())).slice(-2) + '.' +
+           date.getMilliseconds() + 's';
+}
+exports.toTimeStamp = toTimeStamp;
+
+function setupResponses(scenarios, date) {
+  if (!date) date = new Date();
+  var outputDir = path.join(temporaryDirectory, 'results.' + toTimeStamp(date));
+  if (path.existsSync(outputDir)) {
+    return Deferred.next(function() {
+      return outputDir;
+    });
+  }
+
+  var deferred = new Deferred();
+
+  return run(resolve('tools/run-scenarios'),
+               '--endpoint', '127.0.0.1.xip.io:' + testPort,
+               '--scenarios', scenarios,
+               '--output-directory', outputDir)
+           .next(function() {
+             return outputDir;
+           });
 };
+exports.setupResponses = setupResponses;
+
 
 // activate diff for chai.assert.deepEqual
 
