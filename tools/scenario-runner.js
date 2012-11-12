@@ -15,11 +15,11 @@ function Runner(options) {
     this.client.docEndpoint = options.documentEndpoint;
 }
 Runner.prototype = {
-  run: function(scenarios, callback) {
-    if (!Array.isArray(scenarios))
-      this._processScenario(scenarios, callback);
+  run: function(scenario, callback) {
+    if (!Array.isArray(scenario))
+      this._processScenario(scenario, callback);
     else
-      this._processScenarios({ scenarios: scenarios }, callback);
+      this._processScenarios({ scenarios: scenario }, callback);
   },
 
   _processScenarios: function(params, globalCallback) {
@@ -53,14 +53,11 @@ Runner.prototype = {
       scenario.processed = {};
 
     var request = scenario.requests.shift();
-    var results = {};
-
     var self = this;
     function processNext() {
       if (scenario.requests.length) {
         self._processScenario(scenario, callback);
       } else {
-        scenario.results = results;
         var elapsedTime = Date.now() - scenario.start;
         var event = { type: 'scenario:finish',
                       elapsedTime: elapsedTime,
@@ -105,7 +102,6 @@ Runner.prototype = {
       output += '\r\n';
       output += response.Body.toString();
 
-      results[name] = output;
       request.result = output;
       if (self.globalCallback)
         self.globalCallback(null, { type: 'request:finish',
