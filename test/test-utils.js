@@ -20,8 +20,11 @@ exports.testConfigurationHost = testConfigurationHost;
 exports.testPort = testPort;
 
 function setupServer(context, extraOptions) {
-  var options = { context: context,
-                  port:    testPort };
+  var options = { context:       context,
+                  port:          testPort,
+                  accessLogPath: resolve('test/access.log'),
+                  queryLogPath:  resolve('test/query.log'),
+                  errorLogPath:  resolve('test/error.log') };
   if (extraOptions)
     Object.keys(extraOptions).forEach(function(key) {
       options[key] = extraOptions[key];
