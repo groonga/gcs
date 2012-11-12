@@ -1,6 +1,4 @@
 var Client = require(__dirname + '/../lib/client').Client;
-var fs = require('fs');
-var path = require('path');
 
 var statusCodeTable = {
   500: 'Inetnal Server Error',
@@ -42,12 +40,6 @@ Runner.prototype = {
         }
       }
     );
-  },
-
-  toFileName: function(scenarioName) {
-    return scenarioName
-             .replace(/[^a-zA-Z0-9]+/g, '-')
-             .replace(/-$/, '') + '.txt';
   },
 
   _processScenario: function(scenario, callback) {
