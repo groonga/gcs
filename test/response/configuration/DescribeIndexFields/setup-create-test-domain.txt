@@ -1,0 +1,14 @@
+HTTP/1.1 400 Bad Request
+x-amzn-requestid: a05178c0-2c91-11e2-9701-577ab17c5738
+content-type: text/xml
+content-length: 261
+date: Mon, 12 Nov 2012 06:24:34 GMT
+
+<ErrorResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
+  <Error>
+    <Type>Sender</Type>
+    <Code>Throttling</Code>
+    <Message>Rate exceeded</Message>
+  </Error>
+  <RequestId>a05178c0-2c91-11e2-9701-577ab17c5738</RequestId>
+</ErrorResponse>

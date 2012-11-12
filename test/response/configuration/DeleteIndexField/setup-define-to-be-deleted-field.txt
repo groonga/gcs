@@ -1,14 +1,26 @@
-HTTP/1.1 400 Bad Request
-x-amzn-requestid: ca57467f-2a55-11e2-b953-79bc0394a021
+HTTP/1.1 200 OK
+x-amzn-requestid: 8550c7ec-2c91-11e2-8f15-e551e85874bd
 content-type: text/xml
-content-length: 261
-date: Fri, 09 Nov 2012 10:11:12 GMT
+content-length: 712
+date: Mon, 12 Nov 2012 06:23:49 GMT
 
-<ErrorResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
-  <Error>
-    <Type>Sender</Type>
-    <Code>Throttling</Code>
-    <Message>Rate exceeded</Message>
-  </Error>
-  <RequestId>ca57467f-2a55-11e2-b953-79bc0394a021</RequestId>
-</ErrorResponse>
+<DefineIndexFieldResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
+  <DefineIndexFieldResult>
+    <IndexField>
+      <Status>
+        <CreationDate>2012-11-12T06:23:44Z</CreationDate>
+        <PendingDeletion>false</PendingDeletion>
+        <UpdateVersion>8</UpdateVersion>
+        <State>RequiresIndexDocuments</State>
+        <UpdateDate>2012-11-12T06:23:49Z</UpdateDate>
+      </Status>
+      <Options>
+        <IndexFieldType>text</IndexFieldType>
+        <IndexFieldName>name</IndexFieldName>
+      </Options>
+    </IndexField>
+  </DefineIndexFieldResult>
+  <ResponseMetadata>
+    <RequestId>8550c7ec-2c91-11e2-8f15-e551e85874bd</RequestId>
+  </ResponseMetadata>
+</DefineIndexFieldResponse>

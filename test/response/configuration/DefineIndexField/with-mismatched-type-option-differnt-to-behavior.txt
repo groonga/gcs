@@ -1,14 +1,14 @@
 HTTP/1.1 409 Conflict
-x-amzn-requestid: b8155a35-2a55-11e2-9d78-ad1d67862da7
+x-amzn-requestid: 716264dc-2c91-11e2-a392-a97ede14f4ce
 content-type: text/xml
-content-length: 295
-date: Fri, 09 Nov 2012 10:10:41 GMT
+content-length: 281
+date: Mon, 12 Nov 2012 06:23:15 GMT
 
 <ErrorResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
   <Error>
     <Type>Sender</Type>
-    <Code>InvalidType</Code>
-    <Message>A text IndexField may only specify textOptions</Message>
+    <Code>ResourceNotFound</Code>
+    <Message>Domain not found: companies</Message>
   </Error>
-  <RequestId>b8155a35-2a55-11e2-9d78-ad1d67862da7</RequestId>
+  <RequestId>716264dc-2c91-11e2-a392-a97ede14f4ce</RequestId>
 </ErrorResponse>

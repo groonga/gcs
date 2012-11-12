@@ -1,8 +1,8 @@
 HTTP/1.1 200 OK
-x-amzn-requestid: 8ed18a91-2a55-11e2-808a-51d500680155
+x-amzn-requestid: 2132e6ae-2c91-11e2-8f0a-5d9365f34086
 content-type: text/xml
 content-length: 918
-date: Fri, 09 Nov 2012 10:09:36 GMT
+date: Mon, 12 Nov 2012 06:21:03 GMT
 
 <CreateDomainResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
   <CreateDomainResult>
@@ -25,6 +25,6 @@ date: Fri, 09 Nov 2012 10:09:36 GMT
     </DomainStatus>
   </CreateDomainResult>
   <ResponseMetadata>
-    <RequestId>8ed18a91-2a55-11e2-808a-51d500680155</RequestId>
+    <RequestId>2132e6ae-2c91-11e2-8f0a-5d9365f34086</RequestId>
   </ResponseMetadata>
 </CreateDomainResponse>

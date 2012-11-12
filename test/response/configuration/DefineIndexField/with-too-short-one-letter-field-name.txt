@@ -1,26 +1,14 @@
-HTTP/1.1 200 OK
-x-amzn-requestid: b91d7b69-2a55-11e2-9d78-ad1d67862da7
+HTTP/1.1 409 Conflict
+x-amzn-requestid: 72d1d3ec-2c91-11e2-ad5f-f51cf7168cf9
 content-type: text/xml
-content-length: 710
-date: Fri, 09 Nov 2012 10:10:45 GMT
+content-length: 281
+date: Mon, 12 Nov 2012 06:23:18 GMT
 
-<DefineIndexFieldResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
-  <DefineIndexFieldResult>
-    <IndexField>
-      <Status>
-        <CreationDate>2012-11-09T10:10:44Z</CreationDate>
-        <PendingDeletion>false</PendingDeletion>
-        <UpdateVersion>23</UpdateVersion>
-        <State>RequiresIndexDocuments</State>
-        <UpdateDate>2012-11-09T10:10:44Z</UpdateDate>
-      </Status>
-      <Options>
-        <IndexFieldType>text</IndexFieldType>
-        <IndexFieldName>a</IndexFieldName>
-      </Options>
-    </IndexField>
-  </DefineIndexFieldResult>
-  <ResponseMetadata>
-    <RequestId>b91d7b69-2a55-11e2-9d78-ad1d67862da7</RequestId>
-  </ResponseMetadata>
-</DefineIndexFieldResponse>
+<ErrorResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
+  <Error>
+    <Type>Sender</Type>
+    <Code>ResourceNotFound</Code>
+    <Message>Domain not found: companies</Message>
+  </Error>
+  <RequestId>72d1d3ec-2c91-11e2-ad5f-f51cf7168cf9</RequestId>
+</ErrorResponse>

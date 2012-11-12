@@ -1,8 +1,8 @@
 HTTP/1.1 200 OK
-x-amzn-requestid: 95127ed3-2a55-11e2-9d78-ad1d67862da7
+x-amzn-requestid: 283702b7-2c91-11e2-ad5f-f51cf7168cf9
 content-type: text/xml
 content-length: 917
-date: Fri, 09 Nov 2012 10:09:45 GMT
+date: Mon, 12 Nov 2012 06:21:14 GMT
 
 <DeleteDomainResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
   <DeleteDomainResult>
@@ -25,6 +25,6 @@ date: Fri, 09 Nov 2012 10:09:45 GMT
     </DomainStatus>
   </DeleteDomainResult>
   <ResponseMetadata>
-    <RequestId>95127ed3-2a55-11e2-9d78-ad1d67862da7</RequestId>
+    <RequestId>283702b7-2c91-11e2-ad5f-f51cf7168cf9</RequestId>
   </ResponseMetadata>
 </DeleteDomainResponse>

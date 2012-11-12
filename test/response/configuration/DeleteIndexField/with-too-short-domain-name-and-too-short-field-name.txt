@@ -1,14 +1,14 @@
 HTTP/1.1 400 Bad Request
-x-amzn-requestid: d17d6927-2a55-11e2-ae87-0fef0be54c9b
+x-amzn-requestid: 908017c3-2c91-11e2-a392-a97ede14f4ce
 content-type: text/xml
-content-length: 261
-date: Fri, 09 Nov 2012 10:11:24 GMT
+content-length: 511
+date: Mon, 12 Nov 2012 06:24:07 GMT
 
 <ErrorResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
   <Error>
     <Type>Sender</Type>
-    <Code>Throttling</Code>
-    <Message>Rate exceeded</Message>
+    <Code>ValidationError</Code>
+    <Message>2 validation errors detected: Value 'a' at 'domainName' failed to satisfy constraint: Member must satisfy regular expression pattern: [a-z][a-z0-9\-]+; Value 'a' at 'domainName' failed to satisfy constraint: Member must have length greater than or equal to 3</Message>
   </Error>
-  <RequestId>d17d6927-2a55-11e2-ae87-0fef0be54c9b</RequestId>
+  <RequestId>908017c3-2c91-11e2-a392-a97ede14f4ce</RequestId>
 </ErrorResponse>

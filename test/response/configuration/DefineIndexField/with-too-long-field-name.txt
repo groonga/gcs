@@ -1,8 +1,8 @@
 HTTP/1.1 400 Bad Request
-x-amzn-requestid: bbcff1ee-2a55-11e2-b953-79bc0394a021
+x-amzn-requestid: 73f6a47f-2c91-11e2-8f0a-5d9365f34086
 content-type: text/xml
 content-length: 472
-date: Fri, 09 Nov 2012 10:10:48 GMT
+date: Mon, 12 Nov 2012 06:23:19 GMT
 
 <ErrorResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
   <Error>
@@ -10,5 +10,5 @@ date: Fri, 09 Nov 2012 10:10:48 GMT
     <Code>ValidationError</Code>
     <Message>1 validation error detected: Value 'abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789' at 'indexField.indexFieldName' failed to satisfy constraint: Member must have length less than or equal to 64</Message>
   </Error>
-  <RequestId>bbcff1ee-2a55-11e2-b953-79bc0394a021</RequestId>
+  <RequestId>73f6a47f-2c91-11e2-8f0a-5d9365f34086</RequestId>
 </ErrorResponse>
