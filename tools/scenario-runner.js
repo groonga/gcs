@@ -64,7 +64,7 @@ Runner.prototype = {
     var self = this;
     function processNext() {
       if (scenario.requests.length) {
-        self.processScenario(scenario, callback);
+        self._processScenario(scenario, callback);
       } else {
         scenario.results = results;
         var elapsedTime = Date.now() - scenario.start;
