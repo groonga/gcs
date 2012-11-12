@@ -2,8 +2,10 @@ var utils = require('./test-utils');
 var xmlResponses = require('./xml-responses');
 var assert = require('chai').assert;
 var fs = require('fs');
+var path = require('path');
 
 var Domain = require('../lib/database').Domain;
+var Runner = require('../tools/scenario-runner').Runner;
 
 suite('Configuration API', function() {
   var temporaryDatabase;
@@ -1332,4 +1334,63 @@ suite('Configuration API', function() {
         });
     });
   });
+
+/*
+  suite('compare response with ACS\'s one', function() {
+    setup(commonSetup);
+    teardown(commonTeardown);
+
+    var scenariosDir = path.join(__dirname, 'scenarios/configuration');
+    var scenarioFiles = fs.readdirSync(scenariosDir);
+    scenarioFiles.filter(function(name) {
+      return /\.json$/i.test(name)
+    }).map(function(name) {
+      var file = path.resolve(scenariosDir, name);
+      var requests = fs.readFileSync(file);
+      requests = JSON.parse(requests);
+
+      var setupRequests = requests.filter(function(request) {
+            return request.name.indexOf('setup:') == 0;
+          });
+      var teardownRequests = requests.filter(function(request) {
+            return request.name.indexOf('teardown:') == 0;
+          });
+
+      requests.forEach(function(request, index) {
+        if (request.name.indexOf('setup:') == 0 ||
+            request.name.indexOf('teardown:') == 0)
+          return;
+
+        test(name + ': ' + request.name, function(done) {
+          var scenario = {
+                requests: setupRequests
+                            .concat([request])
+                            .concat(teardownRequests)
+                            .map(function(request) {
+                              return Object.create(request);
+                            })
+              };
+          var runner = new Runner({
+                accessKeyId: 'dummy-access-key-id',
+                secretAccessKey: 'dummy-access-key',
+                host: 'localhost',
+                port: utils.testPort
+              });
+          runner.run(scenario, function(error, result) {
+            try {
+              if (error)
+                throw new Error('unexpected error: ' + error);
+              scenario.requests.forEach(function(request) {
+                console.log(request.result);
+              });
+              done();
+            } catch(error) {
+              done(error);
+            }
+          });
+        });
+      });
+    });
+  });
+*/
 });
