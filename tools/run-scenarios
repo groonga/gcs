@@ -105,6 +105,10 @@ var runner = new Runner(options, function(error, event) {
                         '(total elapsed time: ' + event.elapsedTime + 'msec)');
           process.exit(0);
           break;
+
+        case 'error':
+          runner.client.raiseFatalError('Unknown status code ' + event.statusCode);
+          break;
       }
     });
 runner.run(scenarios);
