@@ -75,7 +75,7 @@ scenarios = scenarios.forEach(function(file) {
                    path: file };
 
   var requests = fs.readFileSync(file);
-  scenario.requests = JSON.parse(scenario);
+  scenario.requests = JSON.parse(requests);
 
   if (commandLine.options.outputDirectory) {
     scenario.resultsDir = path.resolve(commandLine.options.outputDirectory,
