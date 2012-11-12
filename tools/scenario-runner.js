@@ -44,19 +44,19 @@ Runner.prototype = {
   },
 
   _processScenario: function(scenario, callback) {
-    if (!scenario.start) {
+    if (!scenario.toBeProcessedRequests) {
+      scenario.toBeProcessedRequests = scenario.requests.slice(0);
       scenario.start = Date.now();
+      scenario.processed = {};
       if (this.globalCallback)
         this.globalCallback(null, { type: 'scenario:start',
                                     scenario: scenario });
     }
-    if (!scenario.processed)
-      scenario.processed = {};
 
-    var request = scenario.requests.shift();
+    var request = scenario.toBeProcessedRequests.shift();
     var self = this;
     function processNext() {
-      if (scenario.requests.length) {
+      if (scenario.toBeProcessedRequests.length) {
         self._processScenario(scenario, callback);
       } else {
         var elapsedTime = Date.now() - scenario.start;
@@ -92,6 +92,8 @@ Runner.prototype = {
         if (self.globalCallback)
           self.globalCallback(null, { type: 'error',
                                       statusCode: statusCode });
+        if (callback)
+          callback(statusCode, null);
         return;
       }
 
