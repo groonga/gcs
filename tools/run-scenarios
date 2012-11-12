@@ -116,7 +116,7 @@ var runner = new Runner(options, function(error, event) {
         case 'request:finish':
           var filename = Runner.toSafeName(event.request.name) + '.txt';
           var resultPath = path.resolve(event.scenario.resultsDir, filename);
-          fs.writeFile(resultPath, request.result);
+          fs.writeFile(resultPath, event.request.result);
           console.log('  Wrote ' + resultPath);
           break;
 
