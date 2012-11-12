@@ -1,0 +1,98 @@
+[
+  { "name"  : "setup: delete all domains",
+    "onlyGCS" : true,
+    "params": { "Action": "GCSDeleteAllDomains" } },
+  { "name"  : "setup: create test domain",
+    "params": { "Action": "CreateDomain",
+                "DomainName": "companies" } },
+  { "name"  : "setup: create text field",
+    "params": { "Action": "DefineIndexField",
+                "DomainName": "companies",
+                "IndexField.IndexFieldName": "name",
+                "IndexField.IndexFieldType": "text" } },
+  { "name"  : "setup: create uint field",
+    "params": { "Action": "DefineIndexField",
+                "DomainName": "companies",
+                "IndexField.IndexFieldName": "age",
+                "IndexField.IndexFieldType": "uint" } },
+  { "name"  : "setup: create literal field",
+    "params": { "Action": "DefineIndexField",
+                "DomainName": "companies",
+                "IndexField.IndexFieldName": "product",
+                "IndexField.IndexFieldType": "literal" } },
+
+
+  { "name"  : "all domains",
+    "params": { "Action": "DescribeIndexFields",
+                "DomainName": "companies" } },
+
+  { "name"  : "only specified two fields in regular order",
+    "params": { "Action": "DescribeIndexFields",
+                "DomainName": "companies",
+                "FieldNames.member.1": "name",
+                "FieldNames.member.2": "age" } },
+
+  { "name"  : "only specified two domains in inverted order",
+    "params": { "Action": "DescribeIndexFields",
+                "DomainName": "companies",
+                "FieldNames.member.1": "age",
+                "FieldNames.member.2": "name" } },
+
+  { "name"  : "not-existing field",
+    "params": { "Action": "DescribeIndexFields",
+                "DomainName": "companies",
+                "FieldNames.member.1": "unknown" } },
+
+  { "name"  : "same field",
+    "params": { "Action": "DescribeIndexFields",
+                "DomainName": "companies",
+                "FieldNames.member.1": "age",
+                "FieldNames.member.2": "age" } },
+
+
+  { "name"  : "with too short (one letter) domain name",
+    "params": { "Action": "DescribeIndexFields",
+                "DomainName": "a" } },
+
+  { "name"  : "with too short (two letters) domain name",
+    "params": { "Action": "DescribeIndexFields",
+                "DomainName": "ab" } },
+
+  { "name"  : "with too long domain name",
+    "params": { "Action": "DescribeIndexFields",
+                "DomainName": "abcdefghijklmnopqrstuvwxyz0123456789" } },
+
+  { "name"  : "with invalid character in the domain name",
+    "params": { "Action": "DescribeIndexFields",
+                "DomainName": "@_@" } },
+
+  { "name"  : "with invalid character in the domain name and too long",
+    "params": { "Action": "DescribeIndexFields",
+                "DomainName": "@abcdefghijklmnopqrstuvwxyz0123456789" } },
+
+  { "name"  : "without domain name",
+    "params": { "Action": "DescribeIndexFields",
+                "DomainName": "" } },
+
+
+  { "name"  : "single index with gap",
+    "params": { "Action": "DescribeIndexFields",
+                "DomainName": "companies",
+                "FieldNames.member.10": "name" } },
+
+  { "name"  : "multiple indexes with gap",
+    "params": { "Action": "DescribeIndexFields",
+                "DomainName": "companies",
+                "FieldNames.member.10": "name",
+                "FieldNames.member.20": "age" } },
+
+  { "name"  : "negative index",
+    "params": { "Action": "DescribeIndexFields",
+                "DomainName": "companies",
+                "FieldNames.member.-1": "name" } },
+
+
+  { "name"  : "teardown: delete test domain",
+    "params": { "Action": "DeleteDomain",
+                "DomainName": "companies1" } }
+]
