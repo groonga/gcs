@@ -8,9 +8,9 @@
 
 var CLI = require(__dirname + '/../lib/command-line').CommandLineInterface;
 var Client = require(__dirname + '/../lib/client').Client;
+var Runner = require(__dirname + 'scenario-runner').Runner;
 var fs = require('fs');
 var path = require('path');
-var mkdirp = require('mkdirp');
 
 var commandLine = new CLI();
 commandLine
@@ -33,10 +33,6 @@ commandLine
           'Process requests for Amazon CloudSearch.',
           String)
   .parseClient();
-
-var client = new Client(commandLine);
-if (commandLine.options.documentEndpoint)
-  client.docEndpoint = commandLine.options.documentEndpoint;
 
 var scenariosDir;
 var scenarios;
@@ -62,6 +58,8 @@ if (commandLine.options.scenario) {
   scenarios = fs.readdirSync(scenariosDir);
   scenarios = scenarios.filter(function(file) {
     return /\.json$/i.test(file)
+  }).map(function(file) {
+    return path.resolve(scenariosDir, file);
   });
   if (!scenarios.length)
     client.raiseFatalError('No scenario file.');
@@ -70,104 +68,41 @@ if (commandLine.options.scenario) {
                          '"--scenarios" option.');
 }
 
-var statusCodeTable = {
-  404: 'Not Found',
-  409: 'Conflict',
-  400: 'Bad Request',
-  200: 'OK'
-};
+var options = {};
+Object.keys(commandLine.options).forEach(function(key) {
+  if (typeof commandLine.options[key] != 'function')
+    options[key] = commandLine.options[key];
+});
+Object.keys(commandLine).forEach(function(key) {
+  if (typeof commandLine[key] != 'function')
+    options[key] = commandLine[key];
+});
 
-function processScenarios(params) {
-  if (!params.start) params.start = Date.now();
-  var scenarioFile = params.scenarios.shift();
+var runner = new Runner(options, function(error, event) {
+      switch (event.type) {
+        case 'scenario:start':
+          console.log('');
+          console.log('Scenario file: ' + event.path);
+          break;
 
-  console.log('');
-  console.log('Scenario file: ' + scenarioFile);
-  var scenario = fs.readFileSync(path.resolve(scenariosDir, scenarioFile));
-  scenario = JSON.parse(scenario);
+        case 'scenario:finish':
+          console.log('  Done. (elapsed time: ' + event.elapsedTime + 'msec)');
+          break;
 
-  var scenarioName = path.basename(scenarioFile, '.json');
-  var resultsDir = path.resolve(commandLine.options.outputDirectory,
-                                scenarioName);
-  mkdirp.sync(resultsDir);
+        case 'request:start':
+          console.log('  Processing request: ' + event.name);
+          break;
 
-  processScenario(
-    { name:       scenarioName,
-      requests:   scenario,
-      resultsDir: resultsDir },
-    function(error) {
-      if (scenarios.length) {
-        processScenarios(params);
-      } else {
-        var elapsedTime = Date.now() - params.start;
-        console.log('');
-        console.log('All scenarios are finished. ' +
-                    '(total elapsed time: ' + elapsedTime + 'msec)');
-        process.exit(0);
+        case 'request:write':
+          console.log('  Wrote ' + event.path);
+          break;
+
+        case 'all:finish':
+          console.log('');
+          console.log('All scenarios are finished. ' +
+                        '(total elapsed time: ' + event.elapsedTime + 'msec)');
+          process.exit(0);
+          break;
       }
-    }
-  );
-}
-
-function scenarioNameToFileName(scenarioName) {
-  return scenarioName
-           .replace(/[^a-zA-Z0-9]+/g, '-')
-           .replace(/-$/, '') + '.txt';
-}
-
-function processScenario(params, callback) {
-  if (!params.start) params.start = Date.now();
-  if (!params.processed) params.processed = {};
-
-  var request = params.requests.shift();
-
-  function processNext() {
-    if (params.requests.length) {
-      processScenario(params, callback);
-    } else {
-      var elapsedTime = Date.now() - params.start;
-      console.log('  Done. (elapsed time: ' + elapsedTime + 'msec)');
-      if (callback)
-        callback(null);
-      else
-        process.exit(0);
-    }
-  }
-
-  if (request.onlyGCS && commandLine.options.acs)
-    return processNext();
-
-  var name = request.name;
-  var count = 1;
-  while (name in params.processed) {
-    name = request.name + count++;
-  }
-
-  console.log('  Processing request: ' + name);
-
-  var filename = scenarioNameToFileName(name);
-  client.rawConfigurationRequest(request.params.Action, request.params, function(error, result) {
-    var response = error || result;
-
-    var statusCode = response.StatusCode;
-    if (!statusCodeTable[statusCode]) {
-      client.raiseFatalError('Unknown status code ' + statusCode);
-    }
-
-    var output = '';
-    output += 'HTTP/1.1 ' + statusCode + ' ' + statusCodeTable[statusCode] + '\r\n';
-    for (var key in response.Headers) {
-      output += key + ': ' + response.Headers[key] + '\r\n';
-    };
-    output += '\r\n';
-    output += response.Body.toString();
-
-    var resultPath = path.resolve(params.resultsDir, filename);
-    fs.writeFile(resultPath, output);
-    console.log('  Wrote ' + resultPath);
-
-    processNext();
-  });
-}
-
-processScenarios({ scenarios: scenarios });
+    });
+runner.run(scenarios);
