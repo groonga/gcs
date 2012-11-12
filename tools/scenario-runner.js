@@ -4,6 +4,7 @@ var path = require('path');
 var mkdirp = require('mkdirp');
 
 var statusCodeTable = {
+  500: 'Inetnal Server Error',
   404: 'Not Found',
   409: 'Conflict',
   400: 'Bad Request',
