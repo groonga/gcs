@@ -33,7 +33,7 @@
   { "name"  : "same domain",
     "params": { "Action": "DescribeDomains",
                 "DomainNames.member.1": "domain1",
-                "DomainNames.member.2": "domain1" } }
+                "DomainNames.member.2": "domain1" } },
 
 
   { "name"  : "with too short (one letter) name",
