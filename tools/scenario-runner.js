@@ -21,10 +21,10 @@ Runner.prototype = {
   run: function(scenarios) {
     if (!Array.isArray(scenarios))
       scenarios = [scenarios];
-    this._processScenario({ scenarios: scenarios });
+    this._processScenarios({ scenarios: scenarios });
   },
 
-  _processScenario: function(params) {
+  _processScenarios: function(params) {
     if (!params.start) params.start = Date.now();
     var scenario = params.scenarios.shift();
 
@@ -37,7 +37,7 @@ Runner.prototype = {
       scenario,
       function(error) {
         if (params.scenarios.length) {
-          self._processScenario(params);
+          self._processScenarios(params);
         } else {
           var elapsedTime = Date.now() - params.start;
           if (self.callback)
