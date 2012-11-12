@@ -11,6 +11,7 @@ var Client = require(__dirname + '/../lib/client').Client;
 var Runner = require(__dirname + '/scenario-runner').Runner;
 var fs = require('fs');
 var path = require('path');
+var mkdirp = require('mkdirp');
 
 var commandLine = new CLI();
 commandLine
@@ -68,6 +69,22 @@ if (commandLine.options.scenario) {
                          '"--scenarios" option.');
 }
 
+scenarios = scenarios.forEach(function(file) {
+  var scenarioName = path.basename(file, '.json');
+  var scenario = { name: scenarioName,
+                   path: file };
+
+  var requests = fs.readFileSync(file);
+  scenario.requests = JSON.parse(scenario);
+
+  if (commandLine.options.outputDirectory) {
+    scenario.resultsDir = path.resolve(commandLine.options.outputDirectory,
+                                       scenarioName);
+  }
+
+  return scenario;
+});
+
 var options = {};
 Object.keys(commandLine.options).forEach(function(key) {
   var type = typeof commandLine.options[key];
@@ -84,7 +101,8 @@ var runner = new Runner(options, function(error, event) {
       switch (event.type) {
         case 'scenario:start':
           console.log('');
-          console.log('Scenario file: ' + event.path);
+          console.log('Scenario file: ' + event.scenario.path);
+          mkdirp.sync(event.scenario.resultsDir);
           break;
 
         case 'scenario:finish':
@@ -92,11 +110,14 @@ var runner = new Runner(options, function(error, event) {
           break;
 
         case 'request:start':
-          console.log('  Processing request: ' + event.name);
+          console.log('  Processing request: ' + event.request.name);
           break;
 
-        case 'request:write':
-          console.log('  Wrote ' + event.path);
+        case 'request:finish':
+          var filename = Runner.toSafeName(event.request.name) + '.txt';
+          var resultPath = path.resolve(event.scenario.resultsDir, filename);
+          fs.writeFile(resultPath, request.result);
+          console.log('  Wrote ' + resultPath);
           break;
 
         case 'all:finish':
@@ -111,4 +132,5 @@ var runner = new Runner(options, function(error, event) {
           break;
       }
     });
+
 runner.run(scenarios);

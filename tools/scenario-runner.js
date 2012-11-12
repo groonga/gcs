@@ -1,7 +1,6 @@
 var Client = require(__dirname + '/../lib/client').Client;
 var fs = require('fs');
 var path = require('path');
-var mkdirp = require('mkdirp');
 
 var statusCodeTable = {
   500: 'Inetnal Server Error',
@@ -20,65 +19,60 @@ function Runner(options, callback) {
 }
 Runner.prototype = {
   run: function(scenarios) {
-    this.processScenarios({ scenarios: scenarios });
+    if (!Array.isArray(scenarios))
+      scenarios = [scenarios];
+    this._processScenario({ scenarios: scenarios });
   },
 
-  processScenarios: function(params) {
+  _processScenario: function(params) {
     if (!params.start) params.start = Date.now();
-    var scenarioFile = params.scenarios.shift();
+    var scenario = params.scenarios.shift();
 
-    this.callback(null, { type: 'scenario:start', path: scenarioFile });
-
-    var scenario = fs.readFileSync(scenarioFile);
-    scenario = JSON.parse(scenario);
-
-    var scenarioName = path.basename(scenarioFile, '.json');
-    var resultsDir;
-    if (this.options.outputDirectory) {
-      resultsDir = path.resolve(this.options.outputDirectory,
-                                scenarioName);
-      mkdirp.sync(resultsDir);
-    }
+    if (this.callback)
+      this.callback(null, { type: 'scenario:start',
+                            scenario: scenario });
 
     var self = this;
-    this.processScenario(
-      { name:       scenarioName,
-        requests:   scenario,
-        resultsDir: resultsDir },
+    this._processScenario(
+      scenario,
       function(error) {
         if (params.scenarios.length) {
-          self.processScenarios(params);
+          self._processScenario(params);
         } else {
           var elapsedTime = Date.now() - params.start;
-          self.callback(null, { type: 'all:finish', elapsedTime: elapsedTime });
+          if (self.callback)
+            self.callback(null, { type: 'all:finish',
+                                  elapsedTime: elapsedTime });
         }
       }
     );
   },
 
-  scenarioNameToFileName: function(scenarioName) {
+  toFileName: function(scenarioName) {
     return scenarioName
              .replace(/[^a-zA-Z0-9]+/g, '-')
              .replace(/-$/, '') + '.txt';
   },
 
-  processScenario: function(params, callback) {
-    if (!params.start) params.start = Date.now();
-    if (!params.processed) params.processed = {};
+  _processScenario: function(scenario, callback) {
+    if (!scenario.start) scenario.start = Date.now();
+    if (!scenario.processed) scenario.processed = {};
 
-    var request = params.requests.shift();
+    var request = scenario.requests.shift();
     var results = {};
 
     var self = this;
     function processNext() {
-      if (params.requests.length) {
-        self.processScenario(params, callback);
+      if (scenario.requests.length) {
+        self.processScenario(scenario, callback);
       } else {
-        var elapsedTime = Date.now() - params.start;
-        self.callback(null, { type: 'scenario:finish',
-                              elapsedTime: elapsedTime,
-                              results: results });
-        callback(null);
+        scenario.results = results;
+        var elapsedTime = Date.now() - scenario.start;
+        if (self.callback)
+          self.callback(null, { type: 'scenario:finish',
+                                elapsedTime: elapsedTime,
+                                scenario: scenario });
+        callback(null, results);
       }
     }
 
@@ -87,19 +81,22 @@ Runner.prototype = {
 
     var name = request.name;
     var count = 1;
-    while (name in params.processed) {
+    while (name in scenario.processed) {
       name = request.name + count++;
     }
 
-    this.callback(null, { type: 'request:start', name: name });
+    if (this.callback)
+      this.callback(null, { type: 'request:start',
+                            scenario: scenario,
+                            request: request });
 
-    var filename = this.scenarioNameToFileName(name);
     this.client.rawConfigurationRequest(request.params.Action, request.params, function(error, result) {
       var response = error || result;
 
       var statusCode = response.StatusCode;
       if (!statusCodeTable[statusCode]) {
-        self.callback(null, { type: 'error', statusCode: statusCode });
+        if (self.callback)
+          self.callback(null, { type: 'error', statusCode: statusCode });
         return;
       }
 
@@ -112,14 +109,19 @@ Runner.prototype = {
       output += response.Body.toString();
 
       results[name] = output;
-      if (params.resultsDir) {
-        var resultPath = path.resolve(params.resultsDir, filename);
-        fs.writeFile(resultPath, output);
-        self.callback(null, { type: 'request:write', path: resultPath });
-      }
+      request.result = output;
+      if (self.callback)
+        self.callback(null, { type: 'request:finish',
+                              scenario: scenario,
+                              request: request });
 
       processNext();
     });
   }
+};
+Runner.toSafeName = function(name) {
+  return name
+           .replace(/[^a-zA-Z0-9]+/g, '-')
+           .replace(/-$/, '');
 };
 exports.Runner = Runner;
