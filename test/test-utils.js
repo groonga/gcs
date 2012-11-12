@@ -22,9 +22,9 @@ exports.testPort = testPort;
 function setupServer(context, extraOptions) {
   var options = { context:       context,
                   port:          testPort,
-                  accessLogPath: resolve('test/access.log'),
-                  queryLogPath:  resolve('test/query.log'),
-                  errorLogPath:  resolve('test/error.log') };
+                  accessLogPath: resolve('test/tmp/access.log'),
+                  queryLogPath:  resolve('test/tmp/query.log'),
+                  errorLogPath:  resolve('test/tmp/error.log') };
   if (extraOptions)
     Object.keys(extraOptions).forEach(function(key) {
       options[key] = extraOptions[key];
