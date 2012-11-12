@@ -1,0 +1,87 @@
+[
+  { "name"  : "setup: delete all domains",
+    "onlyGCS" : true,
+    "params": { "Action": "GCSDeleteAllDomains" } },
+  { "name"  : "setup: create 1st test domains named as 3",
+    "params": { "Action": "CreateDomain",
+                "DomainName": "domain3" } },
+  { "name"  : "setup: create 2ned test domains named as 1",
+    "params": { "Action": "CreateDomain",
+                "DomainName": "domain1" } },
+  { "name"  : "setup: create 3rd test domains name as 2",
+    "params": { "Action": "CreateDomain",
+                "DomainName": "domain2" } },
+
+
+  { "name"  : "all domains",
+    "params": { "Action": "DescribeDomains" } },
+
+  { "name"  : "only specified two domains in regular order",
+    "params": { "Action": "DescribeDomains",
+                "DomainName.member.1": "domain1",
+                "DomainName.member.2": "domain2" } },
+
+  { "name"  : "only specified two domains in inverted order",
+    "params": { "Action": "DescribeDomains",
+                "DomainName.member.1": "domain2",
+                "DomainName.member.2": "domain1" } },
+
+  { "name"  : "not-existing domain",
+    "params": { "Action": "DescribeDomains",
+                "DomainName.member.1": "unknown" } },
+
+  { "name"  : "same domain",
+    "params": { "Action": "DescribeDomains",
+                "DomainName.member.1": "domain1",
+                "DomainName.member.2": "domain1" } }
+
+
+  { "name"  : "with too short (one letter) name",
+    "params": { "Action": "DescribeDomains",
+                "DomainName.member.1": "a" } },
+
+  { "name"  : "with too short (two letters) name",
+    "params": { "Action": "DescribeDomains",
+                "DomainName.member.1": "ab" } },
+
+  { "name"  : "with too long name",
+    "params": { "Action": "DescribeDomains",
+                "DomainName.member.1": "abcdefghijklmnopqrstuvwxyz0123456789" } },
+
+  { "name"  : "with invalid character",
+    "params": { "Action": "DescribeDomains",
+                "DomainName.member.1": "@_@" } },
+
+  { "name"  : "with invalid character and too long",
+    "params": { "Action": "DescribeDomains",
+                "DomainName.member.1": "@abcdefghijklmnopqrstuvwxyz0123456789" } },
+
+  { "name"  : "without domain name",
+    "params": { "Action": "DescribeDomains",
+                "DomainName.member.1": "" } },
+
+
+  { "name"  : "single index with gap",
+    "params": { "Action": "DescribeDomains",
+                "DomainName.member.10": "domain1" } },
+
+  { "name"  : "multiple indexes with gap",
+    "params": { "Action": "DescribeDomains",
+                "DomainName.member.10": "domain1",
+                "DomainName.member.20": "domain2" } },
+
+  { "name"  : "negative index",
+    "params": { "Action": "DescribeDomains",
+                "DomainName.member.-1": "domain1" } },
+
+
+  { "name"  : "teardown: delete test domain 1",
+    "params": { "Action": "DeleteDomain",
+                "DomainName": "domain1" } },
+  { "name"  : "teardown: delete test domain 2",
+    "params": { "Action": "DeleteDomain",
+                "DomainName": "domain2" } },
+  { "name"  : "teardown: delete test domain 3",
+    "params": { "Action": "DeleteDomain",
+                "DomainName": "domain3" } }
+]
