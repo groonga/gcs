@@ -26,7 +26,8 @@ Runner.prototype = {
     if (!params.start) params.start = Date.now();
     var scenario = params.scenarios.shift();
     var self = this;
-    this.globalCallback = globalCallback;
+    if (globalCallback)
+      this.globalCallback = globalCallback;
     this._processScenario(
       scenario,
       function(error, event) {
