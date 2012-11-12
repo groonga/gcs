@@ -96,41 +96,40 @@ Object.keys(CLI.prototype).concat(Object.keys(commandLine)).forEach(function(key
   if (type != 'function' && type != 'object')
     options[key] = commandLine[key];
 });
+var runner = new Runner(options);
 
-var runner = new Runner(options, function(error, event) {
-      switch (event.type) {
-        case 'scenario:start':
-          console.log('');
-          console.log('Scenario file: ' + event.scenario.path);
-          mkdirp.sync(event.scenario.resultsDir);
-          break;
+runner.run(scenarios, function(error, event) {
+  switch (event.type) {
+    case 'scenario:start':
+      console.log('');
+      console.log('Scenario file: ' + event.scenario.path);
+      mkdirp.sync(event.scenario.resultsDir);
+      break;
 
-        case 'scenario:finish':
-          console.log('  Done. (elapsed time: ' + event.elapsedTime + 'msec)');
-          break;
+    case 'scenario:finish':
+      console.log('  Done. (elapsed time: ' + event.elapsedTime + 'msec)');
+      break;
 
-        case 'request:start':
-          console.log('  Processing request: ' + event.request.name);
-          break;
+    case 'request:start':
+      console.log('  Processing request: ' + event.request.name);
+      break;
 
-        case 'request:finish':
-          var filename = Runner.toSafeName(event.request.name) + '.txt';
-          var resultPath = path.resolve(event.scenario.resultsDir, filename);
-          fs.writeFile(resultPath, event.request.result);
-          console.log('  Wrote ' + resultPath);
-          break;
+    case 'request:finish':
+      var filename = Runner.toSafeName(event.request.name) + '.txt';
+      var resultPath = path.resolve(event.scenario.resultsDir, filename);
+      fs.writeFile(resultPath, event.request.result);
+      console.log('  Wrote ' + resultPath);
+      break;
 
-        case 'all:finish':
-          console.log('');
-          console.log('All scenarios are finished. ' +
-                        '(total elapsed time: ' + event.elapsedTime + 'msec)');
-          process.exit(0);
-          break;
+    case 'all:finish':
+      console.log('');
+      console.log('All scenarios are finished. ' +
+                    '(total elapsed time: ' + event.elapsedTime + 'msec)');
+      process.exit(0);
+      break;
 
-        case 'error':
-          runner.client.raiseFatalError('Unknown status code ' + event.statusCode);
-          break;
-      }
-    });
-
-runner.run(scenarios);
+    case 'error':
+      runner.client.raiseFatalError('Unknown status code ' + event.statusCode);
+      break;
+  }
+});

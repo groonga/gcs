@@ -10,39 +10,35 @@ var statusCodeTable = {
   200: 'OK'
 };
 
-function Runner(options, callback) {
+function Runner(options) {
   this.client = new Client(options);
   this.options = options;
   if (options.documentEndpoint)
     this.client.docEndpoint = options.documentEndpoint;
-  this.callback = callback;
 }
 Runner.prototype = {
-  run: function(scenarios) {
+  run: function(scenarios, callback) {
     if (!Array.isArray(scenarios))
-      scenarios = [scenarios];
-    this._processScenarios({ scenarios: scenarios });
+      this._processScenario(scenarios, callback);
+    else
+      this._processScenarios({ scenarios: scenarios }, callback);
   },
 
-  _processScenarios: function(params) {
+  _processScenarios: function(params, globalCallback) {
     if (!params.start) params.start = Date.now();
     var scenario = params.scenarios.shift();
-
-    if (this.callback)
-      this.callback(null, { type: 'scenario:start',
-                            scenario: scenario });
-
     var self = this;
+    this.globalCallback = globalCallback;
     this._processScenario(
       scenario,
-      function(error) {
+      function(error, event) {
         if (params.scenarios.length) {
           self._processScenarios(params);
         } else {
           var elapsedTime = Date.now() - params.start;
-          if (self.callback)
-            self.callback(null, { type: 'all:finish',
-                                  elapsedTime: elapsedTime });
+          if (self.globalCallback)
+            self.globalCallback(null, { type: 'all:finish',
+                                        elapsedTime: elapsedTime });
         }
       }
     );
@@ -55,8 +51,14 @@ Runner.prototype = {
   },
 
   _processScenario: function(scenario, callback) {
-    if (!scenario.start) scenario.start = Date.now();
-    if (!scenario.processed) scenario.processed = {};
+    if (!scenario.start) {
+      scenario.start = Date.now();
+      if (this.globalCallback)
+        this.globalCallback(null, { type: 'scenario:start',
+                                    scenario: scenario });
+    }
+    if (!scenario.processed)
+      scenario.processed = {};
 
     var request = scenario.requests.shift();
     var results = {};
@@ -68,11 +70,13 @@ Runner.prototype = {
       } else {
         scenario.results = results;
         var elapsedTime = Date.now() - scenario.start;
-        if (self.callback)
-          self.callback(null, { type: 'scenario:finish',
-                                elapsedTime: elapsedTime,
-                                scenario: scenario });
-        callback(null, results);
+        var event = { type: 'scenario:finish',
+                      elapsedTime: elapsedTime,
+                      scenario: scenario };
+        if (self.globalCallback)
+          self.globalCallback(null, event);
+        if (callback)
+          callback(null, event);
       }
     }
 
@@ -85,18 +89,19 @@ Runner.prototype = {
       name = request.name + count++;
     }
 
-    if (this.callback)
-      this.callback(null, { type: 'request:start',
-                            scenario: scenario,
-                            request: request });
+    if (this.globalCallback)
+      this.globalCallback(null, { type: 'request:start',
+                                  scenario: scenario,
+                                  request: request });
 
     this.client.rawConfigurationRequest(request.params.Action, request.params, function(error, result) {
       var response = error || result;
 
       var statusCode = response.StatusCode;
       if (!statusCodeTable[statusCode]) {
-        if (self.callback)
-          self.callback(null, { type: 'error', statusCode: statusCode });
+        if (self.globalCallback)
+          self.globalCallback(null, { type: 'error',
+                                      statusCode: statusCode });
         return;
       }
 
@@ -110,10 +115,10 @@ Runner.prototype = {
 
       results[name] = output;
       request.result = output;
-      if (self.callback)
-        self.callback(null, { type: 'request:finish',
-                              scenario: scenario,
-                              request: request });
+      if (self.globalCallback)
+        self.globalCallback(null, { type: 'request:finish',
+                                    scenario: scenario,
+                                    request: request });
 
       processNext();
     });
