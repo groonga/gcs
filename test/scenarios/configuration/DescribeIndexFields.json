@@ -137,5 +137,5 @@
 
   { "name"  : "teardown: delete test domain",
     "params": { "Action": "DeleteDomain",
-                "DomainName": "companies1" } }
+                "DomainName": "companies" } }
 ]
