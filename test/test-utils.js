@@ -27,7 +27,7 @@ function setupServer(context, extraOptions) {
     options.accessLogPath = resolve('test/tmp/access.log');
     options.queryLogPath  = resolve('test/tmp/query.log');
     options.errorLogPath  = resolve('test/tmp/error.log');
-    logOutputInitialized = true;
+    logOutputInitialized  = true;
   }
   if (extraOptions)
     Object.keys(extraOptions).forEach(function(key) {
