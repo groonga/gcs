@@ -88,7 +88,7 @@ Runner.prototype._processScenario = function(scenario, callback) {
 
     var statusCode = response.StatusCode;
     if (!statusCodeTable[statusCode]) {
-      this.emit('error', {statusCode: statusCode});
+      self.emit('error', {statusCode: statusCode});
       if (callback)
         callback(statusCode, null);
       return;
