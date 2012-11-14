@@ -29,14 +29,15 @@ ScenariosRunner.prototype._process = function(params) {
   runner.on('start', function(event) {
     self.emit('scenario', { runner: runner,
                             scenario: event.scenario });
-  });
-  runner.on('end', function(event) {
-    if (params.scenarios.length) {
-      self._process(params);
-    } else {
-      var elapsedTime = Date.now() - params.start;
-      self.emit('end', { elapsedTime: elapsedTime });
-    }
+
+    runner.on('end', function(event) {
+      if (params.scenarios.length) {
+        self._process(params);
+      } else {
+        var elapsedTime = Date.now() - params.start;
+        self.emit('end', { elapsedTime: elapsedTime });
+      }
+    });
   });
   runner.run(scenario);
 };

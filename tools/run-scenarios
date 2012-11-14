@@ -98,11 +98,9 @@ Object.keys(CLI.prototype).concat(Object.keys(commandLine)).forEach(function(key
 var runner = new ScenariosRunner(options);
 
 runner.on('scenario', function(event) {
-  event.runner.on('start', function(event) {
-    console.log('');
-    console.log('Scenario file: ' + event.scenario.path);
-    mkdirp.sync(event.scenario.resultsDir);
-  });
+  console.log('');
+  console.log('Scenario file: ' + event.scenario.path);
+  mkdirp.sync(event.scenario.resultsDir);
 
   event.runner.on('end', function(event) {
     console.log('  Done. (elapsed time: ' + event.elapsedTime + 'msec)');
