@@ -96,9 +96,6 @@ ScenarioRunner.prototype._process = function(scenario, callback) {
     }
   }
 
-  if (request.onlyGCS && this.options.acs)
-    return processNext();
-
   var name = request.name;
   var count = 1;
   while (name in scenario.processed) {
