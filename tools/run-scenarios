@@ -108,6 +108,10 @@ runner.on('scenario', function(event) {
     console.log('  Done. (elapsed time: ' + event.elapsedTime + 'msec)');
   });
 
+  event.runner.on('request:start', function(event) {
+    console.log('  Processing request: ' + event.request.name);
+  });
+
   event.runner.on('request:end', function(event) {
     var filename = ScenariosRunner.toSafeName(event.request.name) + '.txt';
     var resultPath = path.resolve(event.scenario.resultsDir, filename);
