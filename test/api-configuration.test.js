@@ -1320,18 +1320,21 @@ suite('Configuration API', function() {
   });
 
 /*
-  suite('compare response with ACS\'s one', function() {
+  suite('responses', function() {
     setup(commonSetup);
     teardown(commonTeardown);
 
     var scenariosDir = path.join(__dirname, 'scenarios/configuration');
+    var expectedResponsesBaseDir = path.join(__dirname, 'response/configuration');
     var scenarioFiles = fs.readdirSync(scenariosDir);
     scenarioFiles.filter(function(name) {
-      return /\.json$/i.test(name)
-    }).map(function(name) {
-      var file = path.resolve(scenariosDir, name);
+      return /\.json$/i.test(name);
+    }).map(function(scenarioFileName) {
+      var file = path.resolve(scenariosDir, scenarioFileName);
       var requests = fs.readFileSync(file);
       requests = JSON.parse(requests);
+
+      var scenarioName = scenarioFileName.replace(/\.json$/, '');
 
       var setupRequests = requests.filter(function(request) {
             return request.name.indexOf('setup:') == 0;
@@ -1340,12 +1343,20 @@ suite('Configuration API', function() {
             return request.name.indexOf('teardown:') == 0;
           });
 
+      var fileNames = {};
       requests.forEach(function(request, index) {
+        var fileName = ScenarioRunner.toSafeName(request.name);
+        var count = 1;
+        while (fileName in fileNames) {
+          fileName = request.name + count++;
+        }
+        request.fileName = fileName + '.txt';
+
         if (request.name.indexOf('setup:') == 0 ||
             request.name.indexOf('teardown:') == 0)
           return;
 
-        test(name + ': ' + request.name, function(done) {
+        test(scenarioName + ': ' + request.name, function(done) {
           var scenario = {
                 requests: setupRequests
                             .concat([request])
@@ -1360,17 +1371,24 @@ suite('Configuration API', function() {
                 host: 'localhost',
                 port: utils.testPort
               });
-          runner.on('end', function(error, result) {
+          var expectedResponsesDir = path.join(expectedResponsesBaseDir, scenarioName);
+          runner.on('end', function(event) {
             try {
-              if (error)
-                throw new Error('unexpected error: ' + error);
               scenario.requests.forEach(function(request) {
-                console.log(request.result);
+                var file = path.join(expectedResponsesDir, request.fileName);
+                var expected = fs.readFileSync(file).toString();
+                assert.equal(expected, request.response);
               });
               done();
             } catch(error) {
               done(error);
             }
+          });
+          runner.on('error:fatal', function(error) {
+            done(error);
+          });
+          runner.on('error:status_unknown', function(error) {
+            done(error);
           });
           runner.run(scenario);
         });
