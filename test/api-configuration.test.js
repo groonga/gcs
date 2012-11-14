@@ -39,7 +39,8 @@ suite('Configuration API', function() {
           Created: 'true',
           Deleted: 'false',
           DocService: {
-            Endpoint: domain.getDocumentsEndpoint(defaultBaseHost)
+            Endpoint: domain.getDocumentsEndpoint(defaultBaseHost),
+            Arn: domain.documentsArn
           },
           DomainId: domain.domainId,
           DomainName: domain.name,
@@ -48,7 +49,8 @@ suite('Configuration API', function() {
           SearchInstanceCount: String(domain.searchInstanceCount),
           SearchPartitionCount: String(domain.searchPartitionCount),
           SearchService: {
-            Endpoint: domain.getSearchEndpoint(defaultBaseHost)
+            Endpoint: domain.getSearchEndpoint(defaultBaseHost),
+            Arn: domain.searchArn
           }
         };
     var status = response.body.CreateDomainResponse.CreateDomainResult.DomainStatus;
@@ -236,7 +238,8 @@ suite('Configuration API', function() {
                 Created: 'false',
                 Deleted: 'true',
                 DocService: {
-                  Endpoint: domain.getDocumentsEndpoint(defaultBaseHost)
+                  Endpoint: domain.getDocumentsEndpoint(defaultBaseHost),
+                  Arn: domain.documentsArn
                 },
                 DomainId: domain.domainId,
                 DomainName: domain.name,
@@ -245,7 +248,8 @@ suite('Configuration API', function() {
                 SearchInstanceCount: String(domain.searchInstanceCount),
                 SearchPartitionCount: String(domain.searchPartitionCount),
                 SearchService: {
-                  Endpoint: domain.getSearchEndpoint(defaultBaseHost)
+                  Endpoint: domain.getSearchEndpoint(defaultBaseHost),
+                  Arn: domain.searchArn
                 }
               };
           var status = response.body.DeleteDomainResponse.DeleteDomainResult.DomainStatus;
