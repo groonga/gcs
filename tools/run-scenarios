@@ -109,7 +109,7 @@ runner.on('scenario', function(event) {
   });
 
   event.runner.on('request:end', function(event) {
-    var filename = toSafeName(event.request.name) + '.txt';
+    var filename = ScenariosRunner.toSafeName(event.request.name) + '.txt';
     var resultPath = path.resolve(event.scenario.resultsDir, filename);
     fs.writeFile(resultPath, event.request.result);
     console.log('  Wrote ' + resultPath);
