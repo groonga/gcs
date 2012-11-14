@@ -102,6 +102,10 @@ runner.on('scenario', function(event) {
   console.log('Scenario file: ' + event.scenario.path);
   mkdirp.sync(event.scenario.resultsDir);
 
+  event.runner.on('error:fatal', function(event) {
+    commandLine.raiseFatalError(event.error);
+  });
+
   event.runner.on('end', function(event) {
     console.log('  Done. (elapsed time: ' + event.elapsedTime + 'msec)');
   });

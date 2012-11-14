@@ -52,7 +52,19 @@ function ScenarioRunner(options) {
 ScenarioRunner.prototype = new EventEmitter();
 
 ScenarioRunner.prototype.run = function(scenario) {
-  this._process(scenario);
+  var self = this;
+  this.client.assertNoDomain(function(error) {
+    if (error)
+      self.emit('error:fatal', { error: error });
+    else
+      self._process(scenario);
+  });
+};
+
+ScenarioRunner.prototype.assertNoDomain = function(callback) {
+  this.client.assertNoDomain(function(error) {
+    callback();
+  });
 };
 
 ScenarioRunner.prototype._process = function(scenario, callback) {
