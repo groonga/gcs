@@ -57,9 +57,6 @@ Runner.prototype._processScenario = function(scenario, callback) {
       self._processScenario(scenario, callback);
     } else {
       var elapsedTime = Date.now() - scenario.start;
-      var event = { type: 'scenario:finish',
-                    elapsedTime: elapsedTime,
-                    scenario: scenario };
       self.emit('scenario:finish', {
         elapsedTime: elapsedTime,
         scenario: scenario
