@@ -1386,8 +1386,8 @@ suite('Configuration API', function() {
                 expected = fs.readFileSync(expected).toString();
                 expected = new ScenarioResponse(expected);
                 var actual = new ScenarioResponse(request.response);
-                assert.deepEqual(expected.bodyNormalizedJSON,
-                                 actual.bodyNormalizedJSON);
+                assert.deepEqual(actual.bodyNormalizedJSON,
+                                 expected.bodyNormalizedJSON);
               });
               done();
             } catch(error) {

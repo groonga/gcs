@@ -12,12 +12,14 @@ suite('database', function() {
         searchableDocumentsCount: domain.searchableDocumentsCount,
         requiresIndexDocuments:   domain.requiresIndexDocuments,
         searchInstanceCount:      domain.searchInstanceCount,
-        searchPartitionCount:     domain.searchPartitionCount
+        searchPartitionCount:     domain.searchPartitionCount,
+        processing:               domain.processing
       }, {
         searchableDocumentsCount: 0,
         requiresIndexDocuments:   false,
         searchInstanceCount:      0,
-        searchPartitionCount:     0
+        searchPartitionCount:     0,
+        processing:               false
       });
     });
 
@@ -238,7 +240,7 @@ suite('database', function() {
       });
     });
 
-    suite('getDocumentsEndpoint', function() {
+    suite('document endpoint', function() {
       var domain;
       setup(function() {
         domain = new Domain('valid').setId(Domain.DEFAULT_ID);
@@ -272,6 +274,11 @@ suite('database', function() {
       test('localhost, without port', function() {
         assert.equal(domain.getDocumentsEndpoint('localhost'),
                      'doc-valid-' + Domain.DEFAULT_ID + '.127.0.0.1.xip.io');
+      });
+
+      test('arn', function() {
+        assert.equal(domain.documentsArn,
+                     'arn:aws:cs:us-east-1:' + Domain.DEFAULT_ID + ':doc/valid');
       });
     });
 
@@ -309,6 +316,11 @@ suite('database', function() {
       test('localhost, without port', function() {
         assert.equal(domain.getSearchEndpoint('localhost'),
                      'search-valid-' + Domain.DEFAULT_ID + '.127.0.0.1.xip.io');
+      });
+
+      test('arn', function() {
+        assert.equal(domain.documentsArn,
+                     'arn:aws:cs:us-east-1:' + Domain.DEFAULT_ID + ':search/valid');
       });
     });
 
