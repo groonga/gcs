@@ -222,8 +222,8 @@ suite('Search API', function() {
           facets: {
             product: {
               constraints: [
-                {value: 'groonga', count: 2},
-                {value: 'tyrant', count: 1}
+                { value: 'groonga', count: 2 },
+                { value: 'tyrant', count: 1 }
               ]
             }
           },
@@ -552,8 +552,8 @@ suite('Search API', function() {
           facets: {
             type: {
               constraints: [
-                {value: 'ghost', count: 1},
-                {value: 'human', count: 1}
+                { value: 'ghost', count: 1 },
+                { value: 'human', count: 1 }
               ]
             },
             // "nofacet" field retuened as an empty hash

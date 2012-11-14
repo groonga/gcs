@@ -37,7 +37,7 @@ Runner.prototype._processScenarios = function(params) {
         self._processScenarios(params);
       } else {
         var elapsedTime = Date.now() - params.start;
-        self.emit('all:finish', {elapsedTime: elapsedTime});
+        self.emit('all:end', { elapsedTime: elapsedTime });
       }
     }
   );
@@ -48,7 +48,7 @@ Runner.prototype._processScenario = function(scenario, callback) {
     scenario.toBeProcessedRequests = scenario.requests.slice(0);
     scenario.start = Date.now();
     scenario.processed = {};
-    this.emit('scenario:start', {scenario: scenario});
+    this.emit('scenario:start', { scenario: scenario });
   }
 
   var request = scenario.toBeProcessedRequests.shift();
@@ -62,7 +62,7 @@ Runner.prototype._processScenario = function(scenario, callback) {
         elapsedTime: elapsedTime,
         scenario: scenario
       };
-      self.emit('scenario:finish', event);
+      self.emit('scenario:end', event);
       if (callback)
         callback(null, event);
     }
@@ -77,17 +77,14 @@ Runner.prototype._processScenario = function(scenario, callback) {
     name = request.name + count++;
   }
 
-  this.emit('request:start', {
-    scenario: scenario,
-    request: request
-  });
+  this.emit('request:start', { scenario: scenario, request: request });
 
   this.client.rawConfigurationRequest(request.params.Action, request.params, function(error, result) {
     var response = error || result;
 
     var statusCode = response.StatusCode;
     if (statusCode == 400) {
-      var parser = new xml2js.Parser({explicitRoot: true});
+      var parser = new xml2js.Parser({ explicitRoot: true });
       parser.parseString(response.Body, function(error, result) {
         var errorCode = result.ErrorResponse.Error.Code;
         if (errorCode === 'Throttling') {
@@ -96,7 +93,7 @@ Runner.prototype._processScenario = function(scenario, callback) {
       });
     }
     if (!statusCodeTable[statusCode]) {
-      self.emit('error:status_unknown', {statusCode: statusCode});
+      self.emit('error:status_unknown', { statusCode: statusCode });
       if (callback)
         callback(statusCode, null);
       return;
@@ -111,7 +108,7 @@ Runner.prototype._processScenario = function(scenario, callback) {
     output += response.Body.toString();
 
     request.result = output;
-    self.emit('request:finish', {scenario: scenario, request: request});
+    self.emit('request:end', { scenario: scenario, request: request });
     processNext();
   });
 };
