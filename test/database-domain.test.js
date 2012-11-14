@@ -319,7 +319,7 @@ suite('database', function() {
       });
 
       test('arn', function() {
-        assert.equal(domain.documentsArn,
+        assert.equal(domain.searchArn,
                      'arn:aws:cs:us-east-1:' + Domain.DEFAULT_ID + ':search/valid');
       });
     });
