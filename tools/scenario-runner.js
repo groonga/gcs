@@ -38,6 +38,7 @@ Runner.prototype._processScenarios = function(params, globalCallback) {
         self._processScenarios(params);
       } else {
         var elapsedTime = Date.now() - params.start;
+        self.emit('all:finish', {elapsedTime: elapsedTime});
         if (self.globalCallback)
           self.globalCallback(null, { type: 'all:finish',
                               elapsedTime: elapsedTime });
@@ -51,6 +52,7 @@ Runner.prototype._processScenario = function(scenario, callback) {
     scenario.toBeProcessedRequests = scenario.requests.slice(0);
     scenario.start = Date.now();
     scenario.processed = {};
+    this.emit('scenario:start', {scenario: scenario});
     if (this.globalCallback)
       this.globalCallback(null, { type: 'scenario:start',
                                   scenario: scenario });
@@ -66,6 +68,10 @@ Runner.prototype._processScenario = function(scenario, callback) {
       var event = { type: 'scenario:finish',
                     elapsedTime: elapsedTime,
                     scenario: scenario };
+      self.emit('scenario:finish', {
+        elapsedTime: elapsedTime,
+        scenario: scenario
+      });
       if (self.globalCallback)
         self.globalCallback(null, event);
       if (callback)
@@ -82,6 +88,10 @@ Runner.prototype._processScenario = function(scenario, callback) {
     name = request.name + count++;
   }
 
+  this.emit('request:start', {
+    scenario: scenario,
+    request: request
+  });
   if (this.globalCallback)
     this.globalCallback(null, { type: 'request:start',
                                 scenario: scenario,
@@ -92,6 +102,7 @@ Runner.prototype._processScenario = function(scenario, callback) {
 
     var statusCode = response.StatusCode;
     if (!statusCodeTable[statusCode]) {
+      this.emit('error', {statusCode: statusCode});
       if (self.globalCallback)
         self.globalCallback(null, { type: 'error',
                                     statusCode: statusCode });
@@ -109,6 +120,7 @@ Runner.prototype._processScenario = function(scenario, callback) {
     output += response.Body.toString();
 
     request.result = output;
+    self.emit('request:finish', {scenario: scenario, request: request});
     if (self.globalCallback)
       self.globalCallback(null, { type: 'request:finish',
                                   scenario: scenario,
