@@ -40,6 +40,7 @@ var DomainStatus =
       DomainId: '',
       DomainName: '',
       NumSearchableDocs: '',
+      Processing: '',
       RequiresIndexDocuments: '',
       SearchInstanceCount: '',
       SearchPartitionCount: '',
