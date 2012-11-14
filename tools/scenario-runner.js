@@ -1,5 +1,6 @@
 var Client = require(__dirname + '/../lib/client').Client;
 var EventEmitter = require('events').EventEmitter;
+var xml2js = require('xml2js');
 
 var statusCodeTable = {
   500: 'Inetnal Server Error',
@@ -85,6 +86,15 @@ Runner.prototype._processScenario = function(scenario, callback) {
     var response = error || result;
 
     var statusCode = response.StatusCode;
+    if (statusCode == 400) {
+      var parser = new xml2js.Parser({explicitRoot: true});
+      parser.parseString(response.Body, function(error, result) {
+        var errorCode = result.ErrorResponse.Error.Code;
+        if (errorCode === 'Throttling') {
+          self.emit('error:throttling');
+        }
+      });
+    }
     if (!statusCodeTable[statusCode]) {
       self.emit('error:status_unknown', {statusCode: statusCode});
       if (callback)
