@@ -111,7 +111,7 @@ ScenarioRunner.prototype._process = function(scenario, callback) {
     if (statusCode == 400) {
       var parser = new xml2js.Parser({ explicitRoot: true });
       parser.parseString(response.Body, function(error, result) {
-        var errorCode = result.Response.Errors.Error.Code;
+        var errorCode = result.ErrorResponse.Error.Code;
         if (errorCode === 'Throttling') {
           self.emit('error:throttling');
         }
