@@ -26,6 +26,11 @@ ScenariosRunner.prototype._process = function(params) {
   var self = this;
 
   var runner = new ScenarioRunner(this.options);
+
+  runner.on('error:fatal', function(event) {
+    self.emit('error:fatal', event);
+  });
+
   runner.on('start', function(event) {
     self.emit('scenario', { runner: runner,
                             scenario: event.scenario });
@@ -39,6 +44,7 @@ ScenariosRunner.prototype._process = function(params) {
       }
     });
   });
+
   runner.run(scenario);
 };
 
