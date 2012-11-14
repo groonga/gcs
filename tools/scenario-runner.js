@@ -18,19 +18,17 @@ function Runner(options) {
 
 Runner.prototype = new EventEmitter();
 
-Runner.prototype.run = function(scenario, callback) {
+Runner.prototype.run = function(scenario) {
   if (!Array.isArray(scenario))
-    this._processScenario(scenario, callback);
+    this._processScenario(scenario);
   else
-    this._processScenarios({ scenarios: scenario }, callback);
+    this._processScenarios({ scenarios: scenario });
 };
 
-Runner.prototype._processScenarios = function(params, globalCallback) {
+Runner.prototype._processScenarios = function(params) {
   if (!params.start) params.start = Date.now();
   var scenario = params.scenarios.shift();
   var self = this;
-  if (globalCallback)
-    this.globalCallback = globalCallback;
   this._processScenario(
     scenario,
     function(error, event) {
@@ -39,9 +37,6 @@ Runner.prototype._processScenarios = function(params, globalCallback) {
       } else {
         var elapsedTime = Date.now() - params.start;
         self.emit('all:finish', {elapsedTime: elapsedTime});
-        if (self.globalCallback)
-          self.globalCallback(null, { type: 'all:finish',
-                              elapsedTime: elapsedTime });
       }
     }
   );
@@ -53,9 +48,6 @@ Runner.prototype._processScenario = function(scenario, callback) {
     scenario.start = Date.now();
     scenario.processed = {};
     this.emit('scenario:start', {scenario: scenario});
-    if (this.globalCallback)
-      this.globalCallback(null, { type: 'scenario:start',
-                                  scenario: scenario });
   }
 
   var request = scenario.toBeProcessedRequests.shift();
@@ -72,8 +64,6 @@ Runner.prototype._processScenario = function(scenario, callback) {
         elapsedTime: elapsedTime,
         scenario: scenario
       });
-      if (self.globalCallback)
-        self.globalCallback(null, event);
       if (callback)
         callback(null, event);
     }
@@ -92,10 +82,6 @@ Runner.prototype._processScenario = function(scenario, callback) {
     scenario: scenario,
     request: request
   });
-  if (this.globalCallback)
-    this.globalCallback(null, { type: 'request:start',
-                                scenario: scenario,
-                                request: request });
 
   this.client.rawConfigurationRequest(request.params.Action, request.params, function(error, result) {
     var response = error || result;
@@ -103,9 +89,6 @@ Runner.prototype._processScenario = function(scenario, callback) {
     var statusCode = response.StatusCode;
     if (!statusCodeTable[statusCode]) {
       this.emit('error', {statusCode: statusCode});
-      if (self.globalCallback)
-        self.globalCallback(null, { type: 'error',
-                                    statusCode: statusCode });
       if (callback)
         callback(statusCode, null);
       return;
@@ -121,11 +104,6 @@ Runner.prototype._processScenario = function(scenario, callback) {
 
     request.result = output;
     self.emit('request:finish', {scenario: scenario, request: request});
-    if (self.globalCallback)
-      self.globalCallback(null, { type: 'request:finish',
-                                  scenario: scenario,
-                                  request: request });
-
     processNext();
   });
 };
