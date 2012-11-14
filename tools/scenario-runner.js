@@ -220,6 +220,13 @@ Response.prototype = {
               normalized = value.replace(/^.+\//, '%DOMAIN_ID%/');
               break;
 
+            case 'Endpoint':
+              return; // this doesn't appear in ACS's response!
+
+            case 'Arn':
+              normalized = value.replace(/^(arn:aws:cs:us-east-1:)[^:]+(:[^\/]+\/[^\/]+)$/, '$1%DOMAIN_ID%$2');
+              break;
+
             default:
               normalized = this._normalize(value);
               break;
