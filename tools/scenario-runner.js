@@ -10,61 +10,70 @@ var statusCodeTable = {
   200: 'OK'
 };
 
-function Runner(options) {
+function ScenariosRunner(options) {
+  this.options = options;
+}
+
+ScenariosRunner.prototype = new EventEmitter();
+
+ScenariosRunner.prototype.run = function(scenario) {
+  this._process({ scenarios: scenario });
+};
+
+ScenariosRunner.prototype._process = function(params) {
+  if (!params.start) params.start = Date.now();
+  var scenario = params.scenarios.shift();
+  var self = this;
+
+  var runner = new ScenarioRunner(this.options);
+  runner.on('start', function(event) {
+    self.emit('scenario', { runner: runner,
+                            scenario: event.scenario });
+  });
+  runner.on('end', function(event) {
+    if (params.scenarios.length) {
+      self._process(params);
+    } else {
+      var elapsedTime = Date.now() - params.start;
+      self.emit('end', { elapsedTime: elapsedTime });
+    }
+  });
+  runner.run(scenario);
+};
+
+function ScenarioRunner(options) {
   this.client = new Client(options);
   this.options = options;
   if (options.documentEndpoint)
     this.client.docEndpoint = options.documentEndpoint;
 }
 
-Runner.prototype = new EventEmitter();
+ScenarioRunner.prototype = new EventEmitter();
 
-Runner.prototype.run = function(scenario) {
-  if (!Array.isArray(scenario))
-    this._processScenario(scenario);
-  else
-    this._processScenarios({ scenarios: scenario });
+ScenarioRunner.prototype.run = function(scenario) {
+  this._process(scenario);
 };
 
-Runner.prototype._processScenarios = function(params) {
-  if (!params.start) params.start = Date.now();
-  var scenario = params.scenarios.shift();
-  var self = this;
-  this._processScenario(
-    scenario,
-    function(error, event) {
-      if (params.scenarios.length) {
-        self._processScenarios(params);
-      } else {
-        var elapsedTime = Date.now() - params.start;
-        self.emit('all:end', { elapsedTime: elapsedTime });
-      }
-    }
-  );
-};
-
-Runner.prototype._processScenario = function(scenario, callback) {
+ScenarioRunner.prototype._process = function(scenario, callback) {
   if (!scenario.toBeProcessedRequests) {
     scenario.toBeProcessedRequests = scenario.requests.slice(0);
     scenario.start = Date.now();
     scenario.processed = {};
-    this.emit('scenario:start', { scenario: scenario });
+    this.emit('start', { scenario: scenario });
   }
 
   var request = scenario.toBeProcessedRequests.shift();
   var self = this;
   function processNext() {
     if (scenario.toBeProcessedRequests.length) {
-      self._processScenario(scenario, callback);
+      self._process(scenario, callback);
     } else {
       var elapsedTime = Date.now() - scenario.start;
       var event = {
         elapsedTime: elapsedTime,
         scenario: scenario
       };
-      self.emit('scenario:end', event);
-      if (callback)
-        callback(null, event);
+      self.emit('end', event);
     }
   }
 
@@ -113,10 +122,12 @@ Runner.prototype._processScenario = function(scenario, callback) {
   });
 };
 
-Runner.toSafeName = function(name) {
+function toSafeName(name) {
   return name
            .replace(/[^a-zA-Z0-9]+/g, '-')
            .replace(/-$/, '');
 };
+ScenariosRunner.toSafeName = ScenarioRunner.toSafeName = toSafeName;
 
-exports.Runner = Runner;
+exports.ScenariosRunner = ScenariosRunner;
+exports.ScenarioRunner = ScenarioRunner;

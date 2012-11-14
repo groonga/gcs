@@ -5,7 +5,7 @@ var fs = require('fs');
 var path = require('path');
 
 var Domain = require('../lib/database').Domain;
-var Runner = require('../tools/scenario-runner').Runner;
+var ScenarioRunner = require('../tools/scenario-runner').ScenarioRunner;
 
 suite('Configuration API', function() {
   var temporaryDatabase;
@@ -1370,13 +1370,13 @@ suite('Configuration API', function() {
                               return Object.create(request);
                             })
               };
-          var runner = new Runner({
+          var runner = new ScenarioRunner({
                 accessKeyId: 'dummy-access-key-id',
                 secretAccessKey: 'dummy-access-key',
                 host: 'localhost',
                 port: utils.testPort
               });
-          runner.run(scenario, function(error, result) {
+          runner.on('end', function(error, result) {
             try {
               if (error)
                 throw new Error('unexpected error: ' + error);
@@ -1388,6 +1388,7 @@ suite('Configuration API', function() {
               done(error);
             }
           });
+          runner.run(scenario);
         });
       });
     });

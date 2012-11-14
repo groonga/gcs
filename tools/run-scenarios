@@ -7,7 +7,7 @@
 */
 
 var CLI = require(__dirname + '/../lib/command-line').CommandLineInterface;
-var Runner = require(__dirname + '/scenario-runner').Runner;
+var ScenariosRunner = require(__dirname + '/scenario-runner').ScenariosRunner;
 var fs = require('fs');
 var path = require('path');
 var mkdirp = require('mkdirp');
@@ -95,26 +95,28 @@ Object.keys(CLI.prototype).concat(Object.keys(commandLine)).forEach(function(key
   if (type != 'function' && type != 'object')
     options[key] = commandLine[key];
 });
-var runner = new Runner(options);
+var runner = new ScenariosRunner(options);
 
-runner.on('scenario:start', function(event) {
-  console.log('');
-  console.log('Scenario file: ' + event.scenario.path);
-  mkdirp.sync(event.scenario.resultsDir);
+runner.on('scenario', function(event) {
+  event.runner.on('start', function(event) {
+    console.log('');
+    console.log('Scenario file: ' + event.scenario.path);
+    mkdirp.sync(event.scenario.resultsDir);
+  });
+
+  event.runner.on('end', function(event) {
+    console.log('  Done. (elapsed time: ' + event.elapsedTime + 'msec)');
+  });
+
+  event.runner.on('request:end', function(event) {
+    var filename = toSafeName(event.request.name) + '.txt';
+    var resultPath = path.resolve(event.scenario.resultsDir, filename);
+    fs.writeFile(resultPath, event.request.result);
+    console.log('  Wrote ' + resultPath);
+  });
 });
 
-runner.on('scenario:end', function(event) {
-  console.log('  Done. (elapsed time: ' + event.elapsedTime + 'msec)');
-});
-
-runner.on('request:end', function(event) {
-  var filename = Runner.toSafeName(event.request.name) + '.txt';
-  var resultPath = path.resolve(event.scenario.resultsDir, filename);
-  fs.writeFile(resultPath, event.request.result);
-  console.log('  Wrote ' + resultPath);
-});
-
-runner.on('all:end', function(event) {
+runner.on('end', function(event) {
   console.log('');
   console.log('All scenarios are finished. ' +
                 '(total elapsed time: ' + event.elapsedTime + 'msec)');
