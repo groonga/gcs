@@ -1,7 +1,4 @@
 [
-  { "name"  : "setup: delete all domains",
-    "onlyGCS" : true,
-    "params": { "Action": "GCSDeleteAllDomains" } },
   { "name"  : "setup: create 1st test domains named as 3",
     "params": { "Action": "CreateDomain",
                 "DomainName": "domain3" } },

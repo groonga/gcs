@@ -1,9 +1,4 @@
 [
-  { "name"  : "setup: delete all domains",
-    "onlyGCS" : true,
-    "params": { "Action": "GCSDeleteAllDomains" } },
-
-
   { "name"  : "with valid name",
     "params": { "Action": "CreateDomain",
                 "DomainName": "companies" } },
