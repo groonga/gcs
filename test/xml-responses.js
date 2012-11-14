@@ -176,12 +176,11 @@ defineGenericResponse('DescribeSynonymOptions', {
 
 var COMMON_ERROR_RESPONSE =
     exports.COMMON_ERROR_RESPONSE = {
-      Response: {
-        Errors: {
-          Error: {
-            Code: '',
-            Message: ''
-          }
+      ErrorResponse: {
+        '@': { xmlns: '' },
+        Error: {
+          Code: '',
+          Message: ''
         },
         RequestId: ''
       }
@@ -189,13 +188,12 @@ var COMMON_ERROR_RESPONSE =
 
 var TYPED_ERROR_RESPONSE =
     exports.TYPED_ERROR_RESPONSE = {
-      Response: {
-        Errors: {
-          Error: {
-            Type: '',
-            Code: '',
-            Message: ''
-          }
+      ErrorResponse: {
+        '@': { xmlns: '' },
+        Error: {
+          Type: '',
+          Code: '',
+          Message: ''
         },
         RequestId: ''
       }
