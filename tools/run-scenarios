@@ -113,7 +113,7 @@ runner.on('scenario', function(event) {
   event.runner.on('request:end', function(event) {
     var filename = ScenariosRunner.toSafeName(event.request.name) + '.txt';
     var resultPath = path.resolve(event.scenario.resultsDir, filename);
-    fs.writeFile(resultPath, event.request.result);
+    fs.writeFile(resultPath, event.request.response);
     console.log('  Wrote ' + resultPath);
   });
 });

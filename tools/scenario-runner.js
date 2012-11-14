@@ -104,8 +104,8 @@ ScenarioRunner.prototype._process = function(scenario, callback) {
 
   this.emit('request:start', { scenario: scenario, request: request });
 
-  this.client.rawConfigurationRequest(request.params.Action, request.params, function(error, result) {
-    var response = error || result;
+  this.client.rawConfigurationRequest(request.params.Action, request.params, function(error, response) {
+    if (error) response = error;
 
     var statusCode = response.StatusCode;
     if (statusCode == 400) {
@@ -132,7 +132,7 @@ ScenarioRunner.prototype._process = function(scenario, callback) {
     output += '\r\n';
     output += response.Body.toString();
 
-    request.result = output;
+    request.response = output;
     self.emit('request:end', { scenario: scenario, request: request });
     processNext();
   });
