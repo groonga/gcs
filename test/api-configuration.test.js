@@ -68,7 +68,7 @@ suite('Configuration API', function() {
           Code: 'ValidationError',
           Message: expectedMessage
         };
-    assert.deepEqual(response.body.Response.Errors.Error, expectedError);
+    assert.deepEqual(response.body.ErrorResponse.Error, expectedError);
   }
 
   var TOO_SHORT_1_LETTER_DOMAIN_NAME = 'a';
@@ -1316,7 +1316,7 @@ suite('Configuration API', function() {
                 Message: 'A bad or out-of-range value "2011-02-02" was supplied ' +
                          'for the "Version" input parameter.'
               };
-          assert.deepEqual(response.body.Response.Errors.Error, expectedError);
+          assert.deepEqual(response.body.ErrorResponse.Error, expectedError);
 
           done();
         })
