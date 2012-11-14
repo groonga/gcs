@@ -6,6 +6,7 @@ var path = require('path');
 
 var Domain = require('../lib/database').Domain;
 var ScenarioRunner = require('../tools/scenario-runner').ScenarioRunner;
+var ScenarioResponse = require('../tools/scenario-runner').Response;
 
 suite('Configuration API', function() {
   var temporaryDatabase;
@@ -1375,9 +1376,12 @@ suite('Configuration API', function() {
           runner.on('end', function(event) {
             try {
               scenario.requests.forEach(function(request) {
-                var file = path.join(expectedResponsesDir, request.fileName);
-                var expected = fs.readFileSync(file).toString();
-                assert.equal(expected, request.response);
+                var expected = path.join(expectedResponsesDir, request.fileName);
+                expected = fs.readFileSync(expected).toString();
+                expected = new ScenarioResponse(expected);
+                var actual = new ScenarioResponse(request.response);
+                assert.deepEqual(expected.bodyNormalizedJSON,
+                                 actual.bodyNormalizedJSON);
               });
               done();
             } catch(error) {

@@ -143,7 +143,94 @@ function toSafeName(name) {
            .replace(/[^a-zA-Z0-9]+/g, '-')
            .replace(/-$/, '');
 };
-ScenariosRunner.toSafeName = ScenarioRunner.toSafeName = toSafeName;
+ScenariosRunner.toSafeName =
+  ScenarioRunner.toSafeName = toSafeName;
+
+function Response(source) {
+  source = source.split('\r\n\r\n');
+  this.headers = source[0];
+  this.body = source.slice(1).join('\r\n\r\n');
+}
+Response.prototype = {
+  get bodyRawJSON() {
+    if (!this._bodyRawJSON)
+      this._bodyRawJSON = this._XMLStringToJSON(this.body);
+    return this._bodyRawJSON;
+  },
+  _XMLStringToJSON: function(xml) {
+    var parser = new xml2js.Parser({
+                   explicitRoot: true
+                 });
+    var json;
+    parser.addListener('end', function(result) {
+      json = result;
+    });
+    try {
+      parser.parseString(xml);
+    } catch (e) {
+      console.log(xml);
+      throw e;
+    }
+    return json;
+  },
+
+  get bodySortedJSON() {
+    if (!this._bodySortedJSON)
+      this._bodySortedJSON = this._toSortedJSON(this.bodyRawJSON);
+    return this._bodySortedJSON;
+  },
+  _toSortedJSON: function(fragment) {
+    switch (typeof fragment) {
+      default:
+        return fragment;
+      case 'object':
+        var format = {};
+        Object.keys(fragment).sort().forEach(function(key) {
+          if (!fragment.hasOwnProperty(key))
+            return;
+          format[key] = this._toSortedJSON(fragment[key]);
+        }, this);
+        return format;
+    }
+  },
+
+  get bodyNormalizedJSON() {
+    if (!this._bodyNormalizedJSON)
+      this._bodyNormalizedJSON = this._normalize(this.bodySortedJSON);
+    return this._bodyNormalizedJSON;
+  },
+  _normalize: function(fragment) {
+    switch (typeof fragment) {
+      default:
+        return fragment;
+      case 'object':
+        var format = {};
+        Object.keys(fragment).sort().forEach(function(key) {
+          if (!fragment.hasOwnProperty(key))
+            return;
+
+          var value = fragment[key];
+          var normalized;
+          switch (key) {
+            case 'RequestId':
+              normalized = '%REQUEST_ID%';
+              break;
+
+            case 'DomainId':
+              normalized = value.replace(/^.+\//, '%DOMAIN_ID%/');
+              break;
+
+            default:
+              normalized = this._normalize(value);
+              break;
+          }
+          format[key] = normalized;
+        }, this);
+        return format;
+    }
+  }
+};
 
 exports.ScenariosRunner = ScenariosRunner;
 exports.ScenarioRunner = ScenarioRunner;
+exports.Response = Response;

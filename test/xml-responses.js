@@ -227,8 +227,7 @@ function toXMLPattern(fragment) {
     default:
       return '';
     case 'object':
-      var format =
-    exports.format = {};
+      var format = {};
       Object.keys(fragment).forEach(function(key) {
         if (!fragment.hasOwnProperty(key))
           return;
