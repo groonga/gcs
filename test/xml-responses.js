@@ -180,7 +180,7 @@ var COMMON_ERROR_RESPONSE =
             Message: ''
           }
         },
-        RequestID: ''
+        RequestId: ''
       }
     };
 
@@ -194,7 +194,7 @@ var TYPED_ERROR_RESPONSE =
             Message: ''
           }
         },
-        RequestID: ''
+        RequestId: ''
       }
     };
 
