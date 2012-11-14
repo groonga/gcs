@@ -23,7 +23,7 @@ Runner.prototype.run = function(scenario) {
   if (!Array.isArray(scenario))
     this._processScenario(scenario);
   else
-    this._processScenarios({scenarios: scenario});
+    this._processScenarios({ scenarios: scenario });
 };
 
 Runner.prototype._processScenarios = function(params) {
