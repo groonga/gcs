@@ -7,7 +7,6 @@
 */
 
 var CLI = require(__dirname + '/../lib/command-line').CommandLineInterface;
-var Client = require(__dirname + '/../lib/client').Client;
 var Runner = require(__dirname + '/scenario-runner').Runner;
 var fs = require('fs');
 var path = require('path');
@@ -39,20 +38,20 @@ var scenariosDir;
 var scenarios;
 
 if (!commandLine.options.outputDirectory)
-  client.raiseFatalError('You must specify the location of the results ' +
-                         'directory by "--output-directory" option.');
+  commandLine.raiseFatalError('You must specify the location of the results ' +
+                              'directory by "--output-directory" option.');
 
 if (commandLine.options.scenario) {
   var scenarioFile = path.resolve(process.cwd(), commandLine.options.scenario);
   if (!path.existsSync(scenarioFile))
-    client.raiseFatalError(scenarioFile + ' does not exist.');
+    commandLine.raiseFatalError(scenarioFile + ' does not exist.');
 
   scenarios = [scenarioFile];
   console.log('Processing one scenario file [' + scenarioFile + ']...');
 } else if (commandLine.options.scenarios) {
   scenariosDir = path.resolve(process.cwd(), commandLine.options.scenarios);
   if (!path.existsSync(scenariosDir))
-    client.raiseFatalError(scenariosDir + ' does not exist.');
+    commandLine.raiseFatalError(scenariosDir + ' does not exist.');
 
   console.log('Processing scenario files in [' + scenariosDir + ']...');
 
@@ -63,9 +62,9 @@ if (commandLine.options.scenario) {
     return path.resolve(scenariosDir, file);
   });
   if (!scenarios.length)
-    client.raiseFatalError('No scenario file.');
+    commandLine.raiseFatalError('No scenario file.');
 } else {
-  client.raiseFatalError('You must specify scenarios by "--scenario" or ' +
+  commandLine.raiseFatalError('You must specify scenarios by "--scenario" or ' +
                          '"--scenarios" option.');
 }
 
@@ -104,18 +103,18 @@ runner.on('scenario:start', function(event) {
   mkdirp.sync(event.scenario.resultsDir);
 });
 
-runner.on('scenario:finish', function(event) {
+runner.on('scenario:end', function(event) {
   console.log('  Done. (elapsed time: ' + event.elapsedTime + 'msec)');
 });
 
-runner.on('request:finish', function(event) {
+runner.on('request:end', function(event) {
   var filename = Runner.toSafeName(event.request.name) + '.txt';
   var resultPath = path.resolve(event.scenario.resultsDir, filename);
   fs.writeFile(resultPath, event.request.result);
   console.log('  Wrote ' + resultPath);
 });
 
-runner.on('all:finish', function(event) {
+runner.on('all:end', function(event) {
   console.log('');
   console.log('All scenarios are finished. ' +
                 '(total elapsed time: ' + event.elapsedTime + 'msec)');
@@ -123,11 +122,11 @@ runner.on('all:finish', function(event) {
 });
 
 runner.on('error:status_unknown', function(event) {
-  runner.client.raiseFatalError('Unknown status code ' + event.statusCode);
+  commandLine.raiseFatalError('Unknown status code ' + event.statusCode);
 });
 
 runner.on('error:throttling', function() {
-  runner.client.raiseFatalError('Hit rate limit. Further responses will be unreliable.');
+  commandLine.raiseFatalError('Hit rate limit. Further responses will be unreliable.');
 });
 
 runner.run(scenarios);
