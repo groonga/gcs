@@ -651,7 +651,6 @@ suite('Configuration API', function() {
         .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
         .get('/?DomainName=companies&IndexField.IndexFieldName=name&' +
              'IndexField.IndexFieldType=text&' +
-             'IndexField.TextOptions.FacetEnabled=true&' +
              'IndexField.TextOptions.ResultEnabled=true&' +
              'Action=DefineIndexField&Version=2011-02-01')
         .next(function(response) {
@@ -668,7 +667,7 @@ suite('Configuration API', function() {
                 IndexFieldType: 'text',
                 TextOptions: {
                   DefaultValue: {},
-                  FacetEnabled: 'true',
+                  FacetEnabled: 'false',
                   ResultEnabled: 'true'
                 }
               };
@@ -755,7 +754,6 @@ suite('Configuration API', function() {
         .get('/?DomainName=companies&IndexField.IndexFieldName=product&' +
              'IndexField.IndexFieldType=literal&' +
              'IndexField.LiteralOptions.SearchEnabled=true&' +
-             'IndexField.LiteralOptions.FacetEnabled=true&' +
              'IndexField.LiteralOptions.ResultEnabled=true&' +
              'Action=DefineIndexField&Version=2011-02-01')
         .next(function(response) {
@@ -772,7 +770,7 @@ suite('Configuration API', function() {
                 IndexFieldType: 'literal',
                 LiteralOptions: {
                   DefaultValue: {},
-                  FacetEnabled: 'true',
+                  FacetEnabled: 'false',
                   ResultEnabled: 'true',
                   SearchEnabled: 'true'
                 }

@@ -353,11 +353,11 @@ suite('Search API', function() {
       domain = new Domain('people', context)
                  .setId('00000000000000000000000000').createSync();
       domain.getIndexField('realname').setType('text')
-        .setFacetEnabled(true).setResultEnabled(true).createSync();
+        .setResultEnabled(true).createSync();
       domain.getIndexField('nickname').setType('text')
-        .setFacetEnabled(true).setResultEnabled(true).createSync();
+        .setResultEnabled(true).createSync();
       domain.getIndexField('type').setType('literal')
-        .setFacetEnabled(true).setSearchEnabled(true).setResultEnabled(true)
+        .setSearchEnabled(true).setResultEnabled(true)
         .createSync();
       domain.getIndexField('job').setType('literal')
         .setSearchEnabled(true).setResultEnabled(true)
@@ -536,6 +536,8 @@ suite('Search API', function() {
       function() {
         domain.getIndexField('realname').setFacetEnabled(false).saveOptionsSync();
         domain.getIndexField('nickname').setFacetEnabled(false).saveOptionsSync();
+        domain.getIndexField('type')
+          .setResultEnabled(false).setFacetEnabled(true).saveOptionsSync();
       },
       function(response) {
         var expected = {
