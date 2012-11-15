@@ -57,19 +57,36 @@ function expandScenario(scenario) {
     scenario.teardown = [];
   }
 
-  var expanded = [];
+  var scenarios = [];
   scenario.requests.forEach(function(requests) {
     if (!Array.isArray(requests))
       requests = [requests];
 
-    var subScenario = {
-          requests: cloneArray(scenario.setup)
-                      .concat(requests)
-                      .concat(cloneArray(scenario.setup))
-        };
-    expanded.push(subScenario);
+    scenarios.push({
+      name:     requests[0].name,
+      requests: cloneArray(scenario.setup)
+                  .concat(requests)
+                  .concat(cloneArray(scenario.setup))
+    });
   });
-  return expanded;
+
+  // make request names unique
+  var names = {};
+  scenarios.forEach(function(scenario) {
+    scenario.requests.forEach(function(request) {
+      request.name = scenario.name + ': ' + request.name;
+
+      var count = 1;
+      var name = request.name;
+      while (name in names) {
+        name = request.name + '-' + count++;
+      }
+      request.name = name;
+      names[name] = true;
+    });
+  });
+
+  return scenarios;
 };
 ScenariosRunner.expandScenario = expandScenario;
 
