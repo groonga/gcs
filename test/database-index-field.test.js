@@ -252,11 +252,19 @@ suite('database', function() {
         assert.equal('Search', field.options);
 
         field.facetEnabled = true;
-        field.resultEnabled = true;
         field.createSync();
 
         field = new IndexField('name', domain); // reset instance from database
-        assert.equal('Search Facet Result', field.options);
+        assert.equal('Search Facet', field.options);
+      });
+
+      test('create text field with conflicting options', function() {
+        var field = new IndexField('name', domain).setType('text');
+        field.facetEnabled = true;
+        assert.throw(function() {
+          field.resultEnabled = true;
+        }, ' Error defining field: name. '+
+             'An IndexField may not be both FacetEnabled and ResultEnabled');
       });
 
       test('update text field with options', function() {
@@ -264,12 +272,11 @@ suite('database', function() {
         field.createSync();
         assert.equal('Search', field.options);
 
-        field.facetEnabled = true;
         field.resultEnabled = true;
         field.saveOptionsSync();
 
         field = new IndexField('name', domain); // reset instance from database
-        assert.equal('Search Facet Result', field.options);
+        assert.equal('Search Result', field.options);
       });
 
       test('invalid modification of options for text field', function() {
@@ -304,11 +311,20 @@ suite('database', function() {
 
         field.searchEnabled = true;
         field.facetEnabled = true;
-        field.resultEnabled = true;
         field.createSync();
 
         field = new IndexField('product', domain); // reset instance from database
-        assert.equal('Search Facet Result', field.options);
+        assert.equal('Search Facet', field.options);
+      });
+
+      test('create literal field with conflicting options', function() {
+        var field = new IndexField('product', domain).setType('literal');
+        field.searchEnabled = true;
+        field.facetEnabled = true;
+        assert.throw(function() {
+          field.resultEnabled = true;
+        }, ' Error defining field: product. '+
+             'An IndexField may not be both FacetEnabled and ResultEnabled');
       });
 
       test('update literal field with options', function() {
@@ -317,12 +333,11 @@ suite('database', function() {
         assert.equal('', field.options);
 
         field.searchEnabled = true;
-        field.facetEnabled = true;
         field.resultEnabled = true;
         field.saveOptionsSync();
 
         field = new IndexField('product', domain); // reset instance from database
-        assert.equal('Search Facet Result', field.options);
+        assert.equal('Search Result', field.options);
       });
 
       test('setting default search field', function() {
