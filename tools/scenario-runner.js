@@ -161,7 +161,7 @@ function Response(source) {
 Response.prototype = {
   get body() {
     if (!this._body) {
-      if (this.rawBody.indexOf('<?xml') == 0) {
+      if (/^\s*</.test(this.rawBody)) {
         this._body = this._XMLStringToJSON(this.rawBody);
       } else {
         try {
