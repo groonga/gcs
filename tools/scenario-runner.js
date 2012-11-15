@@ -40,7 +40,8 @@ function expandScenarios(scenarios) {
   });
   return expanded;
 };
-ScenariosRunner.expandScenarios = expandScenarios;
+ScenariosRunner.expandScenarios =
+  ScenarioRunner.expandScenarios = expandScenarios;
 
 function expandScenario(scenario) {
   if (scenario.setup) {
@@ -88,7 +89,8 @@ function expandScenario(scenario) {
 
   return scenarios;
 };
-ScenariosRunner.expandScenario = expandScenario;
+ScenariosRunner.expandScenario =
+  ScenarioRunner.expandScenario = expandScenario;
 
 ScenariosRunner.prototype._process = function(params) {
   if (!params.start) params.start = Date.now();

@@ -1338,51 +1338,26 @@ suite('Configuration API', function() {
       return /\.json$/i.test(name);
     }).map(function(scenarioFileName) {
       var file = path.resolve(scenariosDir, scenarioFileName);
-      var requests = fs.readFileSync(file);
-      requests = JSON.parse(requests);
+      var scenario = fs.readFileSync(file);
+      scenario = JSON.parse(scenario);
 
-      var scenarioName = scenarioFileName.replace(/\.json$/, '');
+      var scenarioBaseName = scenarioFileName.replace(/\.json$/, '');
 
-      var setupRequests = requests.filter(function(request) {
-            return request.name.indexOf('setup:') == 0;
-          });
-      var teardownRequests = requests.filter(function(request) {
-            return request.name.indexOf('teardown:') == 0;
-          });
-
-      var fileNames = {};
-      requests.forEach(function(request, index) {
-        var fileName = ScenarioRunner.toSafeName(request.name);
-        var count = 1;
-        while (fileName in fileNames) {
-          fileName = request.name + count++;
-        }
-        request.fileName = fileName + '.txt';
-
-        if (request.name.indexOf('setup:') == 0 ||
-            request.name.indexOf('teardown:') == 0)
-          return;
-
-        test(scenarioName + ': ' + request.name, function(done) {
-          var scenario = {
-                requests: setupRequests
-                            .concat([request])
-                            .concat(teardownRequests)
-                            .map(function(request) {
-                              return Object.create(request);
-                            })
-              };
+      var scenarios = ScenarioRunner.expandScenario(scenario);
+      scenarios.forEach(function(scenario) {
+        test(scenarioBaseName + ': ' + scenario.name, function(done) {
           var runner = new ScenarioRunner({
                 accessKeyId: 'dummy-access-key-id',
                 secretAccessKey: 'dummy-access-key',
                 host: 'localhost',
                 port: utils.testPort
               });
-          var expectedResponsesDir = path.join(expectedResponsesBaseDir, scenarioName);
+          var expectedResponsesDir = path.join(expectedResponsesBaseDir, scenarioBaseName);
           runner.on('end', function(event) {
             try {
               scenario.requests.forEach(function(request) {
-                var expected = path.join(expectedResponsesDir, request.fileName);
+                var fileName = ScenarioRunner.toSafeName(request.name) + '.txt';
+                var expected = path.join(expectedResponsesDir, fileName);
                 expected = fs.readFileSync(expected).toString();
                 expected = new ScenarioResponse(expected);
                 var actual = new ScenarioResponse(request.response);
