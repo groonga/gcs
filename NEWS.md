@@ -9,6 +9,8 @@
  * Number of searchable documents is returned as a part of response from DescribeDomains action.
  * Error responses for CreateDomain, DeleteDomain, and other actions are now have better compatibility with Amazon CloudSearch.
  * "DocService/Arn", "SearchService/Arn" and "Processing" are returned as parts of domain statuses.
+ * Now you can re-define existing index field with different type.
+ * Now "facet enabled" and "result enabled" options of index fields are exclusive.
 
 ### Command line interface tools
 
