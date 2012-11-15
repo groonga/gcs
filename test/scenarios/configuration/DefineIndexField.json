@@ -134,7 +134,7 @@
                   "DomainName": "companies",
                   "IndexField.IndexFieldName": "age3",
                   "IndexField.IndexFieldType": "literal" } },
-  ]
+  ],
 
   { "name"  : "with too short (one letter) domain name",
     "params": { "Action": "DefineIndexField",
