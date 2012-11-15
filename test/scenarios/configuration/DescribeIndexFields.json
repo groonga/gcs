@@ -1,23 +1,29 @@
-[
-  { "name"  : "setup: create test domain",
-    "params": { "Action": "CreateDomain",
-                "DomainName": "companies" } },
-  { "name"  : "setup: create text field",
-    "params": { "Action": "DefineIndexField",
-                "DomainName": "companies",
-                "IndexField.IndexFieldName": "name",
-                "IndexField.IndexFieldType": "text" } },
-  { "name"  : "setup: create uint field",
-    "params": { "Action": "DefineIndexField",
-                "DomainName": "companies",
-                "IndexField.IndexFieldName": "age",
-                "IndexField.IndexFieldType": "uint" } },
-  { "name"  : "setup: create literal field",
-    "params": { "Action": "DefineIndexField",
-                "DomainName": "companies",
-                "IndexField.IndexFieldName": "product",
-                "IndexField.IndexFieldType": "literal" } },
-
+{ "setup": [
+    { "name"  : "create test domain",
+      "params": { "Action": "CreateDomain",
+                  "DomainName": "companies" } },
+    { "name"  : "create text field",
+      "params": { "Action": "DefineIndexField",
+                  "DomainName": "companies",
+                  "IndexField.IndexFieldName": "name",
+                  "IndexField.IndexFieldType": "text" } },
+    { "name"  : "create uint field",
+      "params": { "Action": "DefineIndexField",
+                  "DomainName": "companies",
+                  "IndexField.IndexFieldName": "age",
+                  "IndexField.IndexFieldType": "uint" } },
+    { "name"  : " create literal field",
+      "params": { "Action": "DefineIndexField",
+                  "DomainName": "companies",
+                  "IndexField.IndexFieldName": "product",
+                  "IndexField.IndexFieldType": "literal" } }
+  ],
+  "teardown": [
+    { "name"  : "teardown: delete test domain",
+      "params": { "Action": "DeleteDomain",
+                  "DomainName": "companies" } }
+  ],
+  "requests": [
 
   { "name"  : "all fields",
     "params": { "Action": "DescribeIndexFields",
@@ -129,10 +135,5 @@
   { "name"  : "negative index",
     "params": { "Action": "DescribeIndexFields",
                 "DomainName": "companies",
-                "FieldNames.member.-1": "name" } },
-
-
-  { "name"  : "teardown: delete test domain",
-    "params": { "Action": "DeleteDomain",
-                "DomainName": "companies" } }
-]
+                "FieldNames.member.-1": "name" } }
+] }

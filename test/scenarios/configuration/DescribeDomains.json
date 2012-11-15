@@ -1,14 +1,26 @@
-[
-  { "name"  : "setup: create 1st test domains named as 3",
-    "params": { "Action": "CreateDomain",
-                "DomainName": "domain3" } },
-  { "name"  : "setup: create 2ned test domains named as 1",
-    "params": { "Action": "CreateDomain",
-                "DomainName": "domain1" } },
-  { "name"  : "setup: create 3rd test domains name as 2",
-    "params": { "Action": "CreateDomain",
-                "DomainName": "domain2" } },
-
+{ "setup": [
+    { "name"  : "create 1st test domains named as 3",
+      "params": { "Action": "CreateDomain",
+                  "DomainName": "domain3" } },
+    { "name"  : "create 2ned test domains named as 1",
+      "params": { "Action": "CreateDomain",
+                  "DomainName": "domain1" } },
+    { "name"  : "create 3rd test domains name as 2",
+      "params": { "Action": "CreateDomain",
+                  "DomainName": "domain2" } }
+  ],
+  "teardown": [
+    { "name"  : "delete test domain 1",
+      "params": { "Action": "DeleteDomain",
+                  "DomainName": "domain1" } },
+    { "name"  : "delete test domain 2",
+      "params": { "Action": "DeleteDomain",
+                  "DomainName": "domain2" } },
+    { "name"  : "delete test domain 3",
+      "params": { "Action": "DeleteDomain",
+                  "DomainName": "domain3" } }
+  ],
+  "requests": [
 
   { "name"  : "all domains",
     "params": { "Action": "DescribeDomains" } },
@@ -69,16 +81,5 @@
 
   { "name"  : "negative index",
     "params": { "Action": "DescribeDomains",
-                "DomainNames.member.-1": "domain1" } },
-
-
-  { "name"  : "teardown: delete test domain 1",
-    "params": { "Action": "DeleteDomain",
-                "DomainName": "domain1" } },
-  { "name"  : "teardown: delete test domain 2",
-    "params": { "Action": "DeleteDomain",
-                "DomainName": "domain2" } },
-  { "name"  : "teardown: delete test domain 3",
-    "params": { "Action": "DeleteDomain",
-                "DomainName": "domain3" } }
-]
+                "DomainNames.member.-1": "domain1" } }
+] }
