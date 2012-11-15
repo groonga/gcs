@@ -81,7 +81,7 @@
       "params": { "Action": "DefineIndexField",
                   "DomainName": "companies",
                   "IndexField.IndexFieldName": "name2",
-                  "IndexField.IndexFieldType": "literal" } },
+                  "IndexField.IndexFieldType": "literal" } }
   ],
 
   [
@@ -94,7 +94,7 @@
       "params": { "Action": "DefineIndexField",
                   "DomainName": "companies",
                   "IndexField.IndexFieldName": "product2",
-                  "IndexField.IndexFieldType": "text" } },
+                  "IndexField.IndexFieldType": "text" } }
   ],
 
   [
@@ -107,7 +107,7 @@
       "params": { "Action": "DefineIndexField",
                   "DomainName": "companies",
                   "IndexField.IndexFieldName": "name3",
-                  "IndexField.IndexFieldType": "uint" } },
+                  "IndexField.IndexFieldType": "uint" } }
   ],
 
   [
@@ -120,7 +120,7 @@
       "params": { "Action": "DefineIndexField",
                   "DomainName": "companies",
                   "IndexField.IndexFieldName": "age2",
-                  "IndexField.IndexFieldType": "text" } },
+                  "IndexField.IndexFieldType": "text" } }
   ],
 
   [
