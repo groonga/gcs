@@ -3,14 +3,13 @@
     { "name"  : "with valid name",
       "params": { "Action": "CreateDomain",
                   "DomainName": "companies" } },
+    { "name"  : "for existing domain",
+      "params": { "Action": "CreateDomain",
+                  "DomainName": "companies" } },
     { "name"  : "delete the test domain",
       "params": { "Action": "DeleteDomain",
                   "DomainName": "companies" } }
   ],
-
-  { "name"  : "for existing domain",
-    "params": { "Action": "CreateDomain",
-                "DomainName": "companies" } },
 
   { "name"  : "with too short (one letter) name",
     "params": { "Action": "CreateDomain",
