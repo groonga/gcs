@@ -45,10 +45,10 @@ suite('database', function() {
       assert.throw(function() {
         var field = new IndexField('v', domain);
       }, '2 validation errors detected: ' +
-           'Value \'v\' at \'indexFieldName\' failed to satisfy constraint: ' +
+           'Value \'v\' at \'indexField.indexFieldName\' failed to satisfy constraint: ' +
              'Member must satisfy regular expression pattern: ' +
                IndexField.VALID_NAME_PATTERN + '; ' +
-           'Value \'v\' at \'indexFieldName\' failed to satisfy constraint: ' +
+           'Value \'v\' at \'indexField.indexFieldName\' failed to satisfy constraint: ' +
              'Member must have length greater than or equal to ' +
                IndexField.MINIMUM_NAME_LENGTH);
     });
@@ -57,7 +57,7 @@ suite('database', function() {
       assert.throw(function() {
         var field = new IndexField('va', domain);
       }, '1 validation error detected: ' +
-           'Value \'va\' at \'indexFieldName\' failed to satisfy constraint: ' +
+           'Value \'va\' at \'indexField.indexFieldName\' failed to satisfy constraint: ' +
              'Member must have length greater than or equal to ' +
                IndexField.MINIMUM_NAME_LENGTH);
     });
@@ -67,7 +67,7 @@ suite('database', function() {
       assert.throw(function() {
         var field = new IndexField(name, domain);
       }, '1 validation error detected: ' +
-           'Value \'' + name + '\' at \'indexFieldName\' failed to satisfy constraint: ' +
+           'Value \'' + name + '\' at \'indexField.indexFieldName\' failed to satisfy constraint: ' +
              'Member must have length less than or equal to ' +
                IndexField.MAXIMUM_NAME_LENGTH);
     });
@@ -76,7 +76,7 @@ suite('database', function() {
       assert.throw(function() {
         var field = new IndexField('field-name', domain);
       }, '1 validation error detected: ' +
-           'Value \'field-name\' at \'indexFieldName\' failed to satisfy constraint: ' +
+           'Value \'field-name\' at \'indexField.indexFieldName\' failed to satisfy constraint: ' +
              'Member cannot include these characters: \'-\'');
     });
 
@@ -89,7 +89,7 @@ suite('database', function() {
       assert.throw(function() {
         var field = new IndexField('FieldName');
       }, '1 validation error detected: ' +
-           'Value \'FieldName\' at \'indexFieldName\' failed to satisfy constraint: ' +
+           'Value \'FieldName\' at \'indexField.indexFieldName\' failed to satisfy constraint: ' +
              'Member must satisfy regular expression pattern: ' +
                IndexField.VALID_NAME_PATTERN);
     });
