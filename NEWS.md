@@ -2,12 +2,21 @@
 
 ## v1.4.0 (booked at 2012-11-29)
 
+### API compatibility
+
  * Now "x-amzn-requestid" header is returned by the configuration API.
  * Support "rank" parameter for the search API partially. (Only simple sort is supported. Custom rank expressions are not available yet.)
  * Number of searchable documents is returned as a part of response from DescribeDomains action.
  * Error responses for CreateDomain, DeleteDomain, and other actions are now have better compatibility with Amazon CloudSearch.
+ * "DocService/Arn", "SearchService/Arn" and "Processing" are returned as parts of domain statuses.
+
+### Command line interface tools
+
  * Command line interface tools accept "-e" (or "--endpoint") option to specify the endpoint of the configuration API. For the gcs-post-sdf command, "--endpoint" has been renamed to "--document-endpoint".
- * The daemon is now configurable about port number, host name, etc.
+
+### Daemon
+
+ * The daemon is now configurable about port number, host name, etc. See the file "/etc/default/gcs".
  * Log files (access.log, error.log and query.log) are available at /var/log/gcs for daemons.
 
 ## v1.3.0 (2012-10-29)
