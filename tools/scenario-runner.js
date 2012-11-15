@@ -349,10 +349,19 @@ Response.prototype = {
     }
   },
 
+  get normalized() {
+    if (!this._normalized)
+      this._normalized = {
+        status: this.rawHeaders.split('\r\n')[0],
+        body: this.normalizedBody
+      };
+    return this._normalized;
+  },
+
   equals: function(anotherResponse) {
     if (!anotherResponse) return false;
-    var normalizedSelf = JSON.stringify(this.normalizedBody);
-    var normalizedAnother = JSON.stringify(anotherResponse.normalizedBody);
+    var normalizedSelf = JSON.stringify(this.normalized);
+    var normalizedAnother = JSON.stringify(anotherResponse.normalized);
     return normalizedSelf == normalizedAnother;
   }
 };
