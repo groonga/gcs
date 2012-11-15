@@ -16,9 +16,62 @@ function ScenariosRunner(options) {
 
 ScenariosRunner.prototype = new EventEmitter();
 
-ScenariosRunner.prototype.run = function(scenario) {
-  this._process({ scenarios: scenario });
+ScenariosRunner.prototype.run = function(scenarios) {
+  var params = { scenarios: expandScenarios(scenarios) };
+  this._process(params);
 };
+
+function cloneArray(array) {
+  return array.map(function(aElement) {
+    if (Array.isArray(aElement))
+      return cloneArray(aElement);
+    else
+      return Object.create(aElement);
+  });
+};
+
+function expandScenarios(scenarios) {
+  if (!Array.isArray(scenarios)
+    scenarios = [scenarios];
+
+  var expanded = [];
+  scenarios.forEach(function(scenario) {
+    expanded = expanded.concat(expandScenario(scenario));
+  });
+  return expanded;
+};
+ScenariosRunner.expandScenarios = expandScenarios;
+
+function expandScenario(scenario) {
+  if (scenario.setup) {
+    if (!Array.isArray(scenario.setup))
+      scenario.setup = [scenario.setup];
+  } else {
+    scenario.setup = [];
+  }
+
+  if (scenario.teardown) {
+    if (!Array.isArray(scenario.teardown))
+      scenario.teardown = [scenario.teardown];
+  } else {
+    scenario.teardown = [];
+  }
+
+  var expanded = [];
+  scenario.requests.forEach(function(requests) {
+    if (!Array.isArray(requests))
+      requests = [requests];
+
+    var subScenario = {
+          requests: cloneArray(scenario.setup)
+                      .concat(requests)
+                      .concat(cloneArray(scenario.setup))
+        };
+    expanded.push(subScenario);
+  });
+  return expanded;
+};
+ScenariosRunner.expandScenario = expandScenario;
 
 ScenariosRunner.prototype._process = function(params) {
   if (!params.start) params.start = Date.now();
@@ -77,11 +130,20 @@ ScenarioRunner.prototype.assertNoDomain = function(callback) {
   });
 };
 
+ScenarioRunner.prototype.initializeScenario = function(scenario) {
+  if (!scenario.requests)
+    scenario = { requests: scenario };
+
+  scenario.toBeProcessedRequests = scenario.requests.slice(0);
+  scenario.start = Date.now();
+  scenario.processed = {};
+
+  return scenario;
+};
+
 ScenarioRunner.prototype._process = function(scenario, callback) {
   if (!scenario.toBeProcessedRequests) {
-    scenario.toBeProcessedRequests = scenario.requests.slice(0);
-    scenario.start = Date.now();
-    scenario.processed = {};
+    scenario = this.initializeScenario(scenario);
     this.emit('start', { scenario: scenario });
   }
 
