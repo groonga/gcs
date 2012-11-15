@@ -1355,15 +1355,18 @@ suite('Configuration API', function() {
           var expectedResponsesDir = path.join(expectedResponsesBaseDir, scenarioBaseName);
           runner.on('end', function(event) {
             try {
+              var expectedResponses = [];
+              var actualResponses = [];
               scenario.requests.forEach(function(request) {
                 var fileName = ScenarioRunner.toSafeName(request.name) + '.txt';
                 var expected = path.join(expectedResponsesDir, fileName);
                 expected = fs.readFileSync(expected).toString();
                 expected = new ScenarioResponse(expected);
+                expectedResponses.push(expected.normalized);
                 var actual = new ScenarioResponse(request.response);
-                assert.deepEqual(actual.normalized,
-                                 expected.normalized);
+                actualResponses.push(actual.normalized);
               });
+              assert.deepEqual(actualResponses, expectedResponses);
               done();
             } catch(error) {
               done(error);
