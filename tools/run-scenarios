@@ -75,11 +75,12 @@ if (commandLine.options.scenario) {
 
 scenarios = scenarios.map(function(file) {
   var scenarioName = path.basename(file, '.json');
-  var scenario = { name: scenarioName,
-                   path: file };
-
-  var requests = fs.readFileSync(file);
-  scenario.requests = JSON.parse(requests);
+  var scenario = fs.readFileSync(file).toString();
+  scenario = JSON.parse(scenario);
+  if (Array.isArray(scenario))
+    scenario = { requests: scenario };
+  scenario.name = scenarioName;
+  scenario.path = file;
 
   if (commandLine.options.outputDirectory) {
     scenario.responsesDir = path.resolve(commandLine.options.outputDirectory,
