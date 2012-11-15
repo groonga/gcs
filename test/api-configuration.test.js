@@ -1160,8 +1160,9 @@ suite('Configuration API', function() {
       var domain;
       utils
         .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
-        .get('/?DomainName=companies&IndexField.IndexFieldName=name&' +
-             'Action=DefineIndexField&Version=2011-02-01')
+        .get('/?DomainName=companies&' +
+               'IndexField.IndexFieldName=name&IndexField.IndexFieldType=text&' +
+               'Action=DefineIndexField&Version=2011-02-01')
         .next(function() {
           domain = new Domain('companies', context);
           assert.isTrue(domain.defaultSearchField === null,
@@ -1211,8 +1212,9 @@ suite('Configuration API', function() {
       var domain;
       utils
         .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
-        .get('/?DomainName=companies&IndexField.IndexFieldName=name&' +
-             'Action=DefineIndexField&Version=2011-02-01')
+        .get('/?DomainName=companies&' +
+               'IndexField.IndexFieldName=name&IndexField.IndexFieldType=text&' +
+               'Action=DefineIndexField&Version=2011-02-01')
         .get('/?Version=2011-02-01&Action=DescribeDefaultSearchField&' +
              'DomainName=companies')
         .next(function(response) {
@@ -1257,11 +1259,12 @@ suite('Configuration API', function() {
     test('Action=IndexDocuments', function(done) {
       utils
         .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
-        .get('/?DomainName=companies&IndexField.IndexFieldName=name&' +
-             'Action=DefineIndexField&Version=2011-02-01')
-        .get('/?DomainName=companies&IndexField.IndexFieldName=age&' +
-             'IndexField.IndexFieldType=uint&' +
-             'Action=DefineIndexField&Version=2011-02-01')
+        .get('/?DomainName=companies&' +
+               'IndexField.IndexFieldName=name&IndexField.IndexFieldType=text&' +
+               'Action=DefineIndexField&Version=2011-02-01')
+        .get('/?DomainName=companies&' +
+               'IndexField.IndexFieldName=age&IndexField.IndexFieldType=uint&' +
+               'Action=DefineIndexField&Version=2011-02-01')
         .get('/?DomainName=companies&' +
              'Action=IndexDocuments&Version=2011-02-01')
         .next(function(response) {
