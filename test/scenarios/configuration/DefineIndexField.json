@@ -190,6 +190,12 @@
                 "IndexField.IndexFieldName": "name_with_invalid_type",
                 "IndexField.IndexFieldType": "invalid" } },
 
+  { "name"  : "define with invalid name and invalid type",
+    "params": { "Action": "DefineIndexField",
+                "DomainName": "companies",
+                "IndexField.IndexFieldName": "@name_with_invalid_character",
+                "IndexField.IndexFieldType": "invalid" } },
+
   { "name"  : "update without type",
     "params": { "Action": "DefineIndexField",
                 "DomainName": "companies",
