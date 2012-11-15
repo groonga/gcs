@@ -44,6 +44,9 @@ ScenariosRunner.expandScenarios =
   ScenarioRunner.expandScenarios = expandScenarios;
 
 function expandScenario(scenario) {
+  if (!scenario.requests)
+    scenario = { requests: scenario };
+
   if (scenario.setup) {
     if (!Array.isArray(scenario.setup))
       scenario.setup = [scenario.setup];
@@ -63,12 +66,12 @@ function expandScenario(scenario) {
     if (!Array.isArray(requests))
       requests = [requests];
 
-    scenarios.push({
-      name:     requests[0].name,
-      requests: cloneArray(scenario.setup)
-                  .concat(requests)
-                  .concat(cloneArray(scenario.setup))
-    });
+    var expanded = Object.create(scenario);
+    expanded.name = requests[0].name;
+    expanded.requests = cloneArray(scenario.setup)
+                          .concat(requests)
+                          .concat(cloneArray(scenario.setup));
+    scenarios.push(expanded);
   });
 
   // make request names unique
