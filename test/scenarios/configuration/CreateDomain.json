@@ -1,7 +1,12 @@
 [
-  { "name"  : "with valid name",
-    "params": { "Action": "CreateDomain",
-                "DomainName": "companies" } },
+  [
+    { "name"  : "with valid name",
+      "params": { "Action": "CreateDomain",
+                  "DomainName": "companies" } },
+    { "name"  : "delete the test domain",
+      "params": { "Action": "DeleteDomain",
+                  "DomainName": "companies" } }
+  ],
 
   { "name"  : "for existing domain",
     "params": { "Action": "CreateDomain",
@@ -29,10 +34,5 @@
 
   { "name"  : "without domain name",
     "params": { "Action": "CreateDomain",
-                "DomainName": "" } },
-
-
-  { "name"  : "teardown: delete the test domain",
-    "params": { "Action": "DeleteDomain",
-                "DomainName": "companies" } }
+                "DomainName": "" } }
 ]

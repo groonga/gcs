@@ -1,37 +1,44 @@
-[
-  { "name"  : "setup: prepare the test domain",
-    "params": { "Action": "CreateDomain",
-                "DomainName": "companies" } },
-  { "name"  : "setup: surely setup not-existing domain",
-    "params": { "Action": "DeleteDomain",
-                "DomainName": "unknown" } },
+{ "setup": [
+    { "name"  : "prepare the test domain",
+      "params": { "Action": "CreateDomain",
+                  "DomainName": "companies" } }
+  ],
+  "teardown": [
+    { "name"  : "delete the test domain",
+      "params": { "Action": "DeleteDomain",
+                  "DomainName": "companies" } }
+  ],
+  "requests": [
 
-
-  { "name"  : "setup: define to-be-deleted field",
-    "params": { "Action": "DefineIndexField",
-                "DomainName": "companies",
-                "IndexField.IndexFieldName": "name",
-                "IndexField.IndexFieldType": "text" } },
-  { "name"  : "existing field",
-    "params": { "Action": "DeleteIndexField",
-                "DomainName": "companies",
-                "IndexFieldName": "name" } },
+  [
+    { "name"  : "setup: define to-be-deleted field",
+      "params": { "Action": "DefineIndexField",
+                  "DomainName": "companies",
+                  "IndexField.IndexFieldName": "name",
+                  "IndexField.IndexFieldType": "text" } },
+    { "name"  : "existing field",
+      "params": { "Action": "DeleteIndexField",
+                  "DomainName": "companies",
+                  "IndexFieldName": "name" } }
+  ],
 
   { "name"  : "not-existing field",
     "params": { "Action": "DeleteIndexField",
                 "DomainName": "companies",
                 "IndexFieldName": "not_existing" } },
 
-  { "name"  : "setup: define to-be-deleted field",
-    "params": { "Action": "DefineIndexField",
-                "DomainName": "companies",
-                "IndexField.IndexFieldName": "name",
-                "IndexField.IndexFieldType": "text" } },
-  { "name"  : "with unknown option",
-    "params": { "Action": "DeleteIndexField",
-                "DomainName": "companies",
-                "IndexFieldName": "name",
-                "UnknownOption": "true" } },
+  [
+    { "name"  : "setup: define to-be-deleted field",
+      "params": { "Action": "DefineIndexField",
+                  "DomainName": "companies",
+                  "IndexField.IndexFieldName": "name",
+                  "IndexField.IndexFieldType": "text" } },
+    { "name"  : "with unknown option",
+      "params": { "Action": "DeleteIndexField",
+                  "DomainName": "companies",
+                  "IndexFieldName": "name",
+                  "UnknownOption": "true" } }
+  ],
 
 
   { "name"  : "with too short (one letter) domain name",
@@ -109,10 +116,5 @@
   { "name"  : "with too short field name for not-existing domain",
     "params": { "Action": "DeleteIndexField",
                 "DomainName": "unknown",
-                "IndexFieldName": "a" } },
-
-
-  { "name"  : "teardown: delete the test domain",
-    "params": { "Action": "DeleteDomain",
-                "DomainName": "companies" } }
-]
+                "IndexFieldName": "a" } }
+] }

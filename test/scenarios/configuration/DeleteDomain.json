@@ -1,10 +1,12 @@
 [
-  { "name"  : "setup: to-be-deleted domain",
-    "params": { "Action": "CreateDomain",
-                "DomainName": "companies" } },
-  { "name"  : "with valid name",
-    "params": { "Action": "DeleteDomain",
-                "DomainName": "companies" } },
+  [
+    { "name"  : "setup: to-be-deleted domain",
+      "params": { "Action": "CreateDomain",
+                  "DomainName": "companies" } },
+    { "name"  : "with valid name",
+      "params": { "Action": "DeleteDomain",
+                  "DomainName": "companies" } }
+  ],
 
   { "name"  : "for not-existing domain",
     "params": { "Action": "DeleteDomain",
