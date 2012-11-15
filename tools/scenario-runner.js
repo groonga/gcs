@@ -193,7 +193,7 @@ Response.prototype = {
   get sortedBody() {
     if (!this._sortedBody) {
       if (this.body && typeof this.body == 'object')
-        this._sortedBody = this._toSortedJSON(this.body, false);
+        this._sortedBody = this._toSortedJSON(this.body, true);
       else
         this._sortedBody = this.body;
     }
@@ -206,7 +206,7 @@ Response.prototype = {
       case 'object':
         var format = {};
         var keys = Object.keys(fragment);
-        if (!doSort) keys.sort();
+        if (doSort) keys.sort();
         keys.forEach(function(key) {
           if (!fragment.hasOwnProperty(key))
             return;
