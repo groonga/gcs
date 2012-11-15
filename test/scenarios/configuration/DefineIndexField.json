@@ -16,11 +16,10 @@
                   "DomainName": "companies",
                   "IndexField.IndexFieldName": "name",
                   "IndexField.IndexFieldType": "text" } },
-    { "name"  : "text, redefine (update options)",
+    { "name"  : "text, redefine (update options) without type",
       "params": { "Action": "DefineIndexField",
                   "DomainName": "companies",
                   "IndexField.IndexFieldName": "name",
-                  "IndexField.IndexFieldType": "text",
                   "IndexField.TextOptions.ResultEnabled": "true" } }
   ],
 
@@ -52,11 +51,10 @@
                   "DomainName": "companies",
                   "IndexField.IndexFieldName": "age",
                   "IndexField.IndexFieldType": "uint" } },
-    { "name"  : "uint, redefine",
+    { "name"  : "uint, redefine without type",
       "params": { "Action": "DefineIndexField",
                   "DomainName": "companies",
-                  "IndexField.IndexFieldName": "age",
-                  "IndexField.IndexFieldType": "uint" } }
+                  "IndexField.IndexFieldName": "age" } }
   ],
 
   [
@@ -65,13 +63,11 @@
                   "DomainName": "companies",
                   "IndexField.IndexFieldName": "product",
                   "IndexField.IndexFieldType": "literal" } },
-    { "name"  : "literal, redefine (update options)",
+    { "name"  : "literal, redefine (update options, without type)",
       "params": { "Action": "DefineIndexField",
                   "DomainName": "companies",
                   "IndexField.IndexFieldName": "product",
-                  "IndexField.IndexFieldType": "literal",
-                  "IndexField.LiteralOptions.SearchEnabled": "true",
-                  "IndexField.LiteralOptions.ResultEnabled": "true" } }
+                  "IndexField.LiteralOptions.SearchEnabled": "true" } }
   ],
 
   { "name"  : "literal, with search enabled",
