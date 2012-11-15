@@ -41,10 +41,10 @@ suite('database', function() {
       assert.throw(function() {
         var domain = new Domain('');
       }, '2 validation errors detected: ' +
-           'Value \'\' at \'domainName\' failed to satisfy constraint: ' +
+           'Value \'\' at \'%VALIDATED_FIELD_NAME%\' failed to satisfy constraint: ' +
              'Member must satisfy regular expression pattern: ' +
                Domain.VALID_NAME_PATTERN + '; ' +
-           'Value \'\' at \'domainName\' failed to satisfy constraint: ' +
+           'Value \'\' at \'%VALIDATED_FIELD_NAME%\' failed to satisfy constraint: ' +
              'Member must have length greater than or equal to ' +
                Domain.MINIMUM_NAME_LENGTH);
     });
@@ -53,10 +53,10 @@ suite('database', function() {
       assert.throw(function() {
         var domain = new Domain('v');
       }, '2 validation errors detected: ' +
-           'Value \'v\' at \'domainName\' failed to satisfy constraint: ' +
+           'Value \'v\' at \'%VALIDATED_FIELD_NAME%\' failed to satisfy constraint: ' +
              'Member must satisfy regular expression pattern: ' +
                Domain.VALID_NAME_PATTERN + '; ' +
-           'Value \'v\' at \'domainName\' failed to satisfy constraint: ' +
+           'Value \'v\' at \'%VALIDATED_FIELD_NAME%\' failed to satisfy constraint: ' +
              'Member must have length greater than or equal to ' +
                Domain.MINIMUM_NAME_LENGTH);
     });
@@ -65,7 +65,7 @@ suite('database', function() {
       assert.throw(function() {
         var domain = new Domain('va');
       }, '1 validation error detected: ' +
-           'Value \'va\' at \'domainName\' failed to satisfy constraint: ' +
+           'Value \'va\' at \'%VALIDATED_FIELD_NAME%\' failed to satisfy constraint: ' +
              'Member must have length greater than or equal to ' +
                Domain.MINIMUM_NAME_LENGTH);
     });
@@ -75,7 +75,7 @@ suite('database', function() {
       assert.throw(function() {
         var domain = new Domain(name);
       }, '1 validation error detected: ' +
-           'Value \'' + name + '\' at \'domainName\' failed to satisfy constraint: ' +
+           'Value \'' + name + '\' at \'%VALIDATED_FIELD_NAME%\' failed to satisfy constraint: ' +
              'Member must have length less than or equal to ' +
                Domain.MAXIMUM_NAME_LENGTH);
     });
@@ -84,7 +84,7 @@ suite('database', function() {
       assert.throw(function() {
         var domain = new Domain('domain-name');
       }, '1 validation error detected: ' +
-           'Value \'domain_name\' at \'domainName\' failed to satisfy constraint: ' +
+           'Value \'domain_name\' at \'%VALIDATED_FIELD_NAME%\' failed to satisfy constraint: ' +
              'Member cannot include these characters: \'-\'');
     });
 
@@ -92,7 +92,7 @@ suite('database', function() {
       assert.throw(function() {
         var domain = new Domain('domain_name');
       }, '1 validation error detected: ' +
-           'Value \'domain_name\' at \'domainName\' failed to satisfy constraint: ' +
+           'Value \'domain_name\' at \'%VALIDATED_FIELD_NAME%\' failed to satisfy constraint: ' +
              'Member must satisfy regular expression pattern: ' +
                Domain.VALID_NAME_PATTERN);
     });
@@ -101,7 +101,7 @@ suite('database', function() {
       assert.throw(function() {
         var domain = new Domain('DomainName');
       }, '1 validation error detected: ' +
-           'Value \'DomainName\' at \'domainName\' failed to satisfy constraint: ' +
+           'Value \'%VALIDATED_FIELD_NAME%\' at \'%VALIDATED_FIELD_NAME%\' failed to satisfy constraint: ' +
              'Member must satisfy regular expression pattern: ' +
                Domain.VALID_NAME_PATTERN);
     });
@@ -195,7 +195,7 @@ suite('database', function() {
           var request = { headers: { host: host } };
           var domain = new Domain(request);
         }, '1 validation error detected: ' +
-             'Value \'domain_name\' at \'domainName\' failed to satisfy constraint: ' +
+             'Value \'domain_name\' at \'%VALIDATED_FIELD_NAME%\' failed to satisfy constraint: ' +
                'Member must satisfy regular expression pattern: ' +
                  Domain.VALID_NAME_PATTERN);
       });
@@ -216,7 +216,7 @@ suite('database', function() {
                         url: '/gcs/test_0123-id0123' };
           var domain = new Domain(request);
         }, '1 validation error detected: ' +
-             'Value \'domain_name\' at \'domainName\' failed to satisfy constraint: ' +
+             'Value \'domain_name\' at \'%VALIDATED_FIELD_NAME%\' failed to satisfy constraint: ' +
                'Member must satisfy regular expression pattern: ' +
                  Domain.VALID_NAME_PATTERN);
       });
