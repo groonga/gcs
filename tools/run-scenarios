@@ -25,7 +25,7 @@ commandLine
             '".json" scenario files.',
           String)
   .option('--output-directory <path to a directory>',
-          'Path to the directory to save results.',
+          'Path to the directory to save responses.',
           String)
   .option('--document-endpoint <host:port>',
           'The host and port number of the documents/batch API.',
@@ -43,7 +43,7 @@ var scenariosDir;
 var scenarios;
 
 if (!commandLine.options.outputDirectory)
-  commandLine.raiseFatalError('You must specify the location of the results ' +
+  commandLine.raiseFatalError('You must specify the location of the responses ' +
                               'directory by "--output-directory" option.');
 
 if (commandLine.options.scenario) {
@@ -82,8 +82,8 @@ scenarios = scenarios.map(function(file) {
   scenario.requests = JSON.parse(requests);
 
   if (commandLine.options.outputDirectory) {
-    scenario.resultsDir = path.resolve(commandLine.options.outputDirectory,
-                                       scenarioName);
+    scenario.responsesDir = path.resolve(commandLine.options.outputDirectory,
+                                         scenarioName);
   }
 
   return scenario;
@@ -105,7 +105,7 @@ var runner = new ScenariosRunner(options);
 runner.on('scenario', function(event) {
   console.log('');
   console.log('Scenario file: ' + event.scenario.path);
-  mkdirp.sync(event.scenario.resultsDir);
+  mkdirp.sync(event.scenario.responsesDir);
 
   event.runner.on('end', function(event) {
     console.log('  Done. (elapsed time: ' + event.elapsedTime + 'msec)');
@@ -117,9 +117,9 @@ runner.on('scenario', function(event) {
 
   event.runner.on('request:end', function(event) {
     var filename = ScenariosRunner.toSafeName(event.request.name) + '.txt';
-    var resultPath = path.resolve(event.scenario.resultsDir, filename);
-    fs.writeFile(resultPath, event.request.response);
-    console.log('  Wrote ' + resultPath);
+    var responsePath = path.resolve(event.scenario.responsesDir, filename);
+    fs.writeFile(responsePath, event.request.response);
+    console.log('  Wrote ' + responsePath);
   });
 });
 
