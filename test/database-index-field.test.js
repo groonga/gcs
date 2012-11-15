@@ -41,39 +41,57 @@ suite('database', function() {
       assert.equal(field.columnName, 'valid_123');
     });
 
-    test('too short', function() {
+    test('too short (1 character)', function() {
+      assert.throw(function() {
+        var field = new IndexField('v', domain);
+      }, '2 validation errors detected: ' +
+           'Value \'v\' at \'indexFieldName\' failed to satisfy constraint: ' +
+             'Member must satisfy regular expression pattern: ' +
+               IndexField.VALID_NAME_PATTERN + '; ' +
+           'Value \'v\' at \'indexFieldName\' failed to satisfy constraint: ' +
+             'Member must have length greater than or equal to ' +
+               IndexField.MINIMUM_NAME_LENGTH);
+    });
+
+    test('too short (2 characters)', function() {
       assert.throw(function() {
         var field = new IndexField('va', domain);
-      }, /too short field name/);
+      }, '1 validation error detected: ' +
+           'Value \'va\' at \'indexFieldName\' failed to satisfy constraint: ' +
+             'Member must have length greater than or equal to ' +
+               IndexField.MINIMUM_NAME_LENGTH);
     });
 
     test('too long', function() {
+      var name = 'abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789';
       assert.throw(function() {
-        var fieldName = 'abcdefghijklmnopqrstuvwxyz' +
-                        '0123456789' +
-                        'abcdefghijklmnopqrstuvwxyz' +
-                        '0123456789';
-        var field = new IndexField(fieldName, domain);
-      }, /too long field name/);
+        var field = new IndexField(name, domain);
+      }, '1 validation error detected: ' +
+           'Value \'' + name + '\' at \'indexFieldName\' failed to satisfy constraint: ' +
+             'Member must have length less than or equal to ' +
+               IndexField.MAXIMUM_NAME_LENGTH);
     });
 
     test('hyphen', function() {
       assert.throw(function() {
         var field = new IndexField('field-name', domain);
-      }, /"-" cannot appear in a field name/);
+      }, '1 validation error detected: ' +
+           'Value \'field-name\' at \'indexFieldName\' failed to satisfy constraint: ' +
+             'Member cannot include these characters: \'-\'');
+    });
+
+    test('underscore', function() {
+      var field = new IndexField('field_name', domain);
+      assert.equal(field.columnName, 'field_name');
     });
 
     test('upper case', function() {
       assert.throw(function() {
-        var field = new IndexField('FieldName', domain);
-      }, /"F", "N" cannot appear in a field name/);
-    });
-
-    test('indexColumnName', function() {
-      var field = new IndexField('valid_123', domain);
-      assert.equal(field.indexColumnName,
-                   'testdomain_' + Domain.DEFAULT_ID + '_' +
-                     Domain.INDEX_SUFFIX + '_valid_123');
+        var field = new IndexField('FieldName');
+      }, '1 validation error detected: ' +
+           'Value \'FieldName\' at \'indexFieldName\' failed to satisfy constraint: ' +
+             'Member must satisfy regular expression pattern: ' +
+               IndexField.VALID_NAME_PATTERN);
     });
 
     test('indexTableName', function() {
