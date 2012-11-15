@@ -31,7 +31,7 @@ function cloneArray(array) {
 };
 
 function expandScenarios(scenarios) {
-  if (!Array.isArray(scenarios)
+  if (!Array.isArray(scenarios))
     scenarios = [scenarios];
 
   var expanded = [];
