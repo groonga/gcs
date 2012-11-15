@@ -70,7 +70,7 @@ function expandScenario(scenario) {
     expanded.name = requests[0].name;
     expanded.requests = cloneArray(scenario.setup)
                           .concat(requests)
-                          .concat(cloneArray(scenario.setup));
+                          .concat(cloneArray(scenario.teardown));
     scenarios.push(expanded);
   });
 
