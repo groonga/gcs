@@ -37,7 +37,11 @@ ScenariosRunner.prototype._process = function(params) {
 
     runner.on('end', function(event) {
       if (params.scenarios.length) {
-        self._process(params);
+        if (self.options.interval)
+          setTimeout(function() { self._process(params); },
+                     self.options.interval);
+        else
+          self._process(params);
       } else {
         var elapsedTime = Date.now() - params.start;
         self.emit('end', { elapsedTime: elapsedTime });
@@ -134,7 +138,10 @@ ScenarioRunner.prototype._process = function(scenario, callback) {
 
     request.response = output;
     self.emit('request:end', { scenario: scenario, request: request });
-    processNext();
+    if (self.options.interval)
+      setTimeout(processNext, self.options.interval);
+    else
+      processNext();
   });
 };
 

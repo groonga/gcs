@@ -32,6 +32,10 @@ commandLine
   .option('--acs',
           'Process requests for Amazon CloudSearch.',
           String)
+  .option('--interval <interval>',
+          'Interval to send requests (in msec).',
+          Number,
+          0)
   .parseClient();
 
 var scenariosDir;
