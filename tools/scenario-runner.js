@@ -155,14 +155,23 @@ ScenariosRunner.toSafeName =
 
 function Response(source) {
   source = source.split('\r\n\r\n');
-  this.headers = source[0];
-  this.body = source.slice(1).join('\r\n\r\n');
+  this.rawHeaders = source[0];
+  this.rawBody = source.slice(1).join('\r\n\r\n');
 }
 Response.prototype = {
-  get bodyRawJSON() {
-    if (!this._bodyRawJSON)
-      this._bodyRawJSON = this._XMLStringToJSON(this.body);
-    return this._bodyRawJSON;
+  get body() {
+    if (!this._body) {
+      if (this.rawBody.indexOf('<?xml') == 0) {
+        this._body = this._XMLStringToJSON(this.rawBody);
+      } else {
+        try {
+          this._body = JSON.parse(this.rawBody);
+        } catch(error) {
+          this._body = this.rawBody;
+        }
+      }
+    }
+    return this._body;
   },
   _XMLStringToJSON: function(xml) {
     var parser = new xml2js.Parser({
@@ -181,30 +190,42 @@ Response.prototype = {
     return json;
   },
 
-  get bodySortedJSON() {
-    if (!this._bodySortedJSON)
-      this._bodySortedJSON = this._toSortedJSON(this.bodyRawJSON);
-    return this._bodySortedJSON;
+  get sortedBody() {
+    if (!this._sortedBody) {
+      if (this.body && typeof this.body == 'object')
+        this._sortedBody = this._toSortedJSON(this.body, false);
+      else
+        this._sortedBody = this.body;
+    }
+    return this._sortedBody;
   },
-  _toSortedJSON: function(fragment) {
+  _toSortedJSON: function(fragment, doSort) {
     switch (typeof fragment) {
       default:
         return fragment;
       case 'object':
         var format = {};
-        Object.keys(fragment).sort().forEach(function(key) {
+        var keys = Object.keys(fragment);
+        if (!doSort) keys.sort();
+        keys.forEach(function(key) {
           if (!fragment.hasOwnProperty(key))
             return;
-          format[key] = this._toSortedJSON(fragment[key]);
+          var doSort = this._orderedContainers.indexOf(key) < 0;
+          format[key] = this._toSortedJSON(fragment[key], doSort);
         }, this);
         return format;
     }
   },
+  _orderedContainers: [
+    'DomainStatusList',
+    'IndexFields',
+    'FieldNames'
+  ],
 
-  get bodyNormalizedJSON() {
-    if (!this._bodyNormalizedJSON)
-      this._bodyNormalizedJSON = this._normalize(this.bodySortedJSON);
-    return this._bodyNormalizedJSON;
+  get normalizedBody() {
+    if (!this._normalizedBody)
+      this._normalizedBody = this._normalize(this.sortedBody);
+    return this._normalizedBody;
   },
   _normalize: function(fragment) {
     switch (typeof fragment) {
@@ -212,7 +233,7 @@ Response.prototype = {
         return fragment;
       case 'object':
         var format = {};
-        Object.keys(fragment).sort().forEach(function(key) {
+        Object.keys(fragment).forEach(function(key) {
           if (!fragment.hasOwnProperty(key))
             return;
 

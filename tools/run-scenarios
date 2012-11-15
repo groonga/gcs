@@ -8,6 +8,7 @@
 
 var CLI = require(__dirname + '/../lib/command-line').CommandLineInterface;
 var ScenariosRunner = require(__dirname + '/scenario-runner').ScenariosRunner;
+var ScenarioResponse = require(__dirname + '/scenario-runner').Response;
 var fs = require('fs');
 var path = require('path');
 var mkdirp = require('mkdirp');
