@@ -118,6 +118,13 @@ runner.on('scenario', function(event) {
   event.runner.on('request:end', function(event) {
     var filename = ScenariosRunner.toSafeName(event.request.name) + '.txt';
     var responsePath = path.resolve(event.scenario.responsesDir, filename);
+    if (path.existsSync(responsePath)) {
+      var previousResponse = fs.readFileSync(responsePath).toString();
+      previousResponse = new ScenarioResponse(previousResponse);
+      var newResponse = new ScenarioResponse(event.request.response);
+      if (newResponse.equals(previousResponse))
+        return;
+    }
     fs.writeFile(responsePath, event.request.response);
     console.log('  Wrote ' + responsePath);
   });

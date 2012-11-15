@@ -263,6 +263,13 @@ Response.prototype = {
         }, this);
         return format;
     }
+  },
+
+  equals: function(anotherResponse) {
+    if (!anotherResponse) return false;
+    var normalizedSelf = JSON.stringify(this.normalizedBody);
+    var normalizedAnother = JSON.stringify(anotherResponse.normalizedBody);
+    return normalizedSelf == normalizedAnother;
   }
 };
 
