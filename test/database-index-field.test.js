@@ -621,5 +621,161 @@ suite('database', function() {
         assert.deepEqual(actualDump, expectedDump);
       });
     });
+
+    suite('dynamic change of field type', function() {
+      var temporaryDatabase;
+      var context;
+      var domain;
+
+      setup(function() {
+        temporaryDatabase = utils.createTemporaryDatabase();
+        context = temporaryDatabase.get();
+        domain = new Domain('companies', context);
+        domain.createSync();
+      });
+
+      teardown(function() {
+        temporaryDatabase.teardown();
+        temporaryDatabase = undefined;
+      });
+
+      test('for non-existing field', function() {
+        var product = new IndexField('product', domain);
+        product.type = 'text';
+        assert.equal(product.type, 'text');
+        product.type = 'literal';
+        assert.equal(product.type, 'literal');
+      });
+
+      test('for existing field (text to literal)', function() {
+        var field = new IndexField('product', domain).setType('text').createSync();
+        assert.equal(product.type, 'text');
+        assert.isTrue(field.exists());
+
+        field.domain.loadSync([
+          { id: 'id1', product: 'groonga' },
+          { id: 'id2', product: 'nroonga' }
+        ]);
+
+        product.type = 'literal';
+        assert.equal(product.type, 'literal');
+
+        var actualDump = field.domain.dumpSync();
+        var expectedDump = [
+              { id: 'id1', product: 'groonga' },
+              { id: 'id2', product: 'nroonga' }
+            ];
+        assert.deepEqual(actualDump, expectedDump);
+      });
+
+      test('for existing field (literal to text)', function() {
+        var field = new IndexField('product', domain).setType('literal').createSync();
+        assert.equal(product.type, 'literal');
+        assert.isTrue(field.exists());
+
+        field.domain.loadSync([
+          { id: 'id1', product: 'groonga' },
+          { id: 'id2', product: 'nroonga' }
+        ]);
+
+        product.type = 'text';
+        assert.equal(product.type, 'text');
+
+        var actualDump = field.domain.dumpSync();
+        var expectedDump = [
+              { id: 'id1', product: 'groonga' },
+              { id: 'id2', product: 'nroonga' }
+            ];
+        assert.deepEqual(actualDump, expectedDump);
+      });
+
+      test('for existing field (text to uint)', function() {
+        var field = new IndexField('age', domain).setType('text').createSync();
+        assert.equal(product.type, 'text');
+        assert.isTrue(field.exists());
+
+        field.domain.loadSync([
+          { id: 'id1', age: '1' },
+          { id: 'id2', age: '2' },
+          { id: 'id3', age: 'a' }
+        ]);
+
+        product.type = 'uint';
+        assert.equal(product.type, 'uint');
+
+        var actualDump = field.domain.dumpSync();
+        var expectedDump = [
+              { id: 'id1', age: 1 },
+              { id: 'id2', age: 2 },
+              { id: 'id3', age: 0 }
+            ];
+        assert.deepEqual(actualDump, expectedDump);
+      });
+
+      test('for existing field (uint to text)', function() {
+        var field = new IndexField('age', domain).setType('uint').createSync();
+        assert.equal(product.type, 'uint');
+        assert.isTrue(field.exists());
+
+        field.domain.loadSync([
+          { id: 'id1', age: 1 },
+          { id: 'id2', age: 2 }
+        ]);
+
+        product.type = 'text';
+        assert.equal(product.type, 'text');
+
+        var actualDump = field.domain.dumpSync();
+        var expectedDump = [
+              { id: 'id1', age: '1' },
+              { id: 'id2', age: '2' }
+            ];
+        assert.deepEqual(actualDump, expectedDump);
+      });
+
+      test('for existing field (literal to uint)', function() {
+        var field = new IndexField('age', domain).setType('literal').createSync();
+        assert.equal(product.type, 'literal');
+        assert.isTrue(field.exists());
+
+        field.domain.loadSync([
+          { id: 'id1', age: '1' },
+          { id: 'id2', age: '2' },
+          { id: 'id3', age: 'a' }
+        ]);
+
+        product.type = 'uint';
+        assert.equal(product.type, 'uint');
+
+        var actualDump = field.domain.dumpSync();
+        var expectedDump = [
+              { id: 'id1', age: 1 },
+              { id: 'id2', age: 2 },
+              { id: 'id3', age: 0 }
+            ];
+        assert.deepEqual(actualDump, expectedDump);
+      });
+
+      test('for existing field (uint to literal)', function() {
+        var field = new IndexField('age', domain).setType('uint').createSync();
+        assert.equal(product.type, 'uint');
+        assert.isTrue(field.exists());
+
+        field.domain.loadSync([
+          { id: 'id1', age: 1 },
+          { id: 'id2', age: 2 }
+        ]);
+
+        product.type = 'literal';
+        assert.equal(product.type, 'literal');
+
+        var actualDump = field.domain.dumpSync();
+        var expectedDump = [
+              { id: 'id1', age: '1' },
+              { id: 'id2', age: '2' }
+            ];
+        assert.deepEqual(actualDump, expectedDump);
+      });
+    });
   });
 });
