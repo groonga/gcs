@@ -87,7 +87,7 @@ suite('database', function() {
 
     test('upper case', function() {
       assert.throw(function() {
-        var field = new IndexField('FieldName');
+        var field = new IndexField('FieldName', domain);
       }, '1 validation error detected: ' +
            'Value \'FieldName\' at \'%NAME_FIELD%\' failed to satisfy constraint: ' +
              'Member must satisfy regular expression pattern: ' +
@@ -95,7 +95,7 @@ suite('database', function() {
     });
 
     test('unknown type', function() {
-      var field = new IndexField('foo');
+      var field = new IndexField('foo', domain);
       assert.throw(function() {
         field.type = 'unknown';
       }, '1 validation error detected: ' +
