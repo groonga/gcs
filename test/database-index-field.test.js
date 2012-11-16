@@ -94,6 +94,15 @@ suite('database', function() {
                IndexField.VALID_NAME_PATTERN);
     });
 
+    test('unknown type', function() {
+      var field = new IndexField('foo');
+      assert.throw(function() {
+        field.type = 'unknown';
+      }, '1 validation error detected: ' +
+           'Value \'unknown\' at \'%TYPE_FIELD%\' failed to satisfy constraint: ' +
+             'Member must satisfy enum value set: [text, literal, uint]');
+    });
+
     test('indexTableName', function() {
       var field = new IndexField('valid_123', domain);
       assert.equal(field.indexTableName,
