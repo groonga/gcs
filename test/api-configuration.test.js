@@ -880,7 +880,7 @@ suite('Configuration API', function() {
           response = xmlResponses.toParsedResponse(response);
           assert.deepEqual(response.pattern,
                            { statusCode: 200,
-                             body: xmlResponses.DeleteIndexFieldResponse });
+                             body: xmlResponses.DeleteIndexFieldResponse_Text });
 
           done();
         })
@@ -911,7 +911,7 @@ suite('Configuration API', function() {
           response = xmlResponses.toParsedResponse(response);
           assert.deepEqual(response.pattern,
                            { statusCode: 200,
-                             body: xmlResponses.DeleteIndexFieldResponse });
+                             body: xmlResponses.DeleteIndexFieldResponse_UInt });
 
           done();
         })
@@ -942,8 +942,26 @@ suite('Configuration API', function() {
           response = xmlResponses.toParsedResponse(response);
           assert.deepEqual(response.pattern,
                            { statusCode: 200,
-                             body: xmlResponses.DeleteIndexFieldResponse });
+                             body: xmlResponses.DeleteIndexFieldResponse_Literal });
 
+          done();
+        })
+        .error(function(error) {
+          done(error);
+        });
+    });
+
+    test('not existing', function(done) {
+      var domain, field;
+      utils
+        .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
+        .get('/?DomainName=companies&IndexFieldName=product&' +
+             'Action=DeleteIndexField&Version=2011-02-01')
+        .next(function(response) {
+          response = xmlResponses.toParsedResponse(response);
+          assert.deepEqual(response.pattern,
+                           { statusCode: 200,
+                             body: xmlResponses.DeleteIndexFieldResponse });
           done();
         })
         .error(function(error) {

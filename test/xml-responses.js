@@ -136,6 +136,15 @@ exports.DefineIndexFieldResponse_Literal = createGenericResponse('DefineIndexFie
   IndexField: IndexFieldStatus_Literal
 });
 
+exports.DeleteIndexFieldResponse_Text = createGenericResponse('DeleteIndexFieldResponse', {
+  IndexField: IndexFieldStatus_Text
+});
+exports.DeleteIndexFieldResponse_UInt = createGenericResponse('DeleteIndexFieldResponse', {
+  IndexField: IndexFieldStatus_UInt
+});
+exports.DeleteIndexFieldResponse_Literal = createGenericResponse('DeleteIndexFieldResponse', {
+  IndexField: IndexFieldStatus_Literal
+});
 defineGenericResponse('DeleteIndexField');
 
 exports.DescribeIndexFieldsResponse = function(members) {
