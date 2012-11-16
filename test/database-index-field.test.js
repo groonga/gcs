@@ -94,6 +94,15 @@ suite('database', function() {
                IndexField.VALID_NAME_PATTERN);
     });
 
+    test('null type', function() {
+      var field = new IndexField('foo', domain);
+      assert.throw(function() {
+        field.type = null;
+      }, '1 validation error detected: ' +
+           'Value null at \'%TYPE_FIELD%\' failed to satisfy constraint: ' +
+             'Member must not be null');
+    });
+
     test('unknown type', function() {
       var field = new IndexField('foo', domain);
       assert.throw(function() {
