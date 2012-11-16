@@ -120,6 +120,19 @@
                 "FieldNames.member.1": "a",
                 "FieldNames.member.2": "name" } },
 
+  { "name"  : "with reserved field name 'body'",
+    "params": { "Action": "DescribeIndexFields",
+                "DomainName": "companies",
+                "FieldNames.member.1": "body" } },
+  { "name"  : "with reserved field name 'docid'",
+    "params": { "Action": "DescribeIndexFields",
+                "DomainName": "companies",
+                "FieldNames.member.1": "docid" } },
+  { "name"  : "with reserved field name 'text_relevance'",
+    "params": { "Action": "DescribeIndexFields",
+                "DomainName": "companies",
+                "FieldNames.member.1": "text_relevance" } },
+
 
   { "name"  : "single index with gap",
     "params": { "Action": "DescribeIndexFields",

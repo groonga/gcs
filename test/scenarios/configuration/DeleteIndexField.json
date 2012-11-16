@@ -107,6 +107,19 @@
                 "DomainName": "companies",
                 "IndexFieldName": "" } },
 
+  { "name"  : "with reserved field name 'body'",
+    "params": { "Action": "DeleteIndexField",
+                "DomainName": "companies",
+                "IndexFieldName": "body" } },
+  { "name"  : "with reserved field name 'docid'",
+    "params": { "Action": "DeleteIndexField",
+                "DomainName": "companies",
+                "IndexFieldName": "docid" } },
+  { "name"  : "with reserved field name 'text_relevance'",
+    "params": { "Action": "DeleteIndexField",
+                "DomainName": "companies",
+                "IndexFieldName": "text_relevance" } },
+
 
   { "name"  : "with too short domain name and too short field name",
     "params": { "Action": "DeleteIndexField",
