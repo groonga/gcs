@@ -136,13 +136,13 @@ exports.DefineIndexFieldResponse_Literal = createGenericResponse('DefineIndexFie
   IndexField: IndexFieldStatus_Literal
 });
 
-exports.DeleteIndexFieldResponse_Text = createGenericResponse('DeleteIndexFieldResponse', {
+exports.DeleteIndexFieldResponse_Text = createGenericResponse('DeleteIndexField', {
   IndexField: IndexFieldStatus_Text
 });
-exports.DeleteIndexFieldResponse_UInt = createGenericResponse('DeleteIndexFieldResponse', {
+exports.DeleteIndexFieldResponse_UInt = createGenericResponse('DeleteIndexField', {
   IndexField: IndexFieldStatus_UInt
 });
-exports.DeleteIndexFieldResponse_Literal = createGenericResponse('DeleteIndexFieldResponse', {
+exports.DeleteIndexFieldResponse_Literal = createGenericResponse('DeleteIndexField', {
   IndexField: IndexFieldStatus_Literal
 });
 defineGenericResponse('DeleteIndexField');
