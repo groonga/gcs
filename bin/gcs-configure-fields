@@ -121,17 +121,17 @@ client.getIndexFieldStatus(fieldName, function(error, field) {
 
     switch (type) {
       case 'text':
-        if (option == 'nosearch')
+        if (option == 'search' || option == 'nosearch')
           client.raiseFatalError('searchable option cannot be configured for the type text.');
         params.IndexField.TextOptions = options;
         break;
 
       case 'uint':
-        if (option == 'facet')
+        if (option == 'facet' || option == 'nofacet')
           client.raiseFatalError('facet option cannot be configured for the type uint.');
-        if (option == 'noresult')
+        if (option == 'result' || option == 'noresult')
           client.raiseFatalError('returnable option cannot be configured for the type uint.');
-        if (option == 'nosearch')
+        if (option == 'search' || option == 'nosearch')
           client.raiseFatalError('searchable option cannot be configured for the type uint.');
         params.IndexField.UIntOptions = options;
         break;
