@@ -604,7 +604,7 @@ suite('database', function() {
         var dumpActual = context.commandSync('dump', {
               tables: domain.synonymsTableName
             });
-        assert.equal(dumpExpected, dumpActual);
+        assert.equal(dumpActual, dumpExpected);
       });
 
       test('updateSynonymsSync, replace', function() {
@@ -630,7 +630,7 @@ suite('database', function() {
         var dumpActual = context.commandSync('dump', {
               tables: domain.synonymsTableName
             });
-        assert.equal(dumpExpected, dumpActual);
+        assert.equal(dumpActual, dumpExpected);
       });
 
       test('getSynonymSync, existent', function() {
