@@ -679,6 +679,7 @@ suite('database', function() {
         ]);
 
         field.type = 'text';
+        assert.isFalse(field.multipleValues);
         assert.equal(field.type, 'text');
 
         var actualDump = field.domain.dumpSync();
@@ -701,6 +702,7 @@ suite('database', function() {
         ]);
 
         field.type = 'uint';
+        assert.isFalse(field.multipleValues);
         assert.equal(field.type, 'uint');
 
         var actualDump = field.domain.dumpSync();
@@ -723,6 +725,7 @@ suite('database', function() {
         ]);
 
         field.type = 'text';
+        assert.isFalse(field.multipleValues);
         assert.equal(field.type, 'text');
 
         var actualDump = field.domain.dumpSync();
@@ -745,6 +748,7 @@ suite('database', function() {
         ]);
 
         field.type = 'uint';
+        assert.isFalse(field.multipleValues);
         assert.equal(field.type, 'uint');
 
         var actualDump = field.domain.dumpSync();
@@ -759,6 +763,7 @@ suite('database', function() {
       test('for existing field (uint to literal)', function() {
         var field = new IndexField('age', domain).setType('uint').createSync();
         assert.equal(field.type, 'uint');
+        assert.isFalse(field.multipleValues);
         assert.isTrue(field.exists());
 
         field.domain.loadSync([
@@ -767,6 +772,7 @@ suite('database', function() {
         ]);
 
         field.type = 'literal';
+        assert.isFalse(field.multipleValues);
         assert.equal(field.type, 'literal');
 
         var actualDump = field.domain.dumpSync();
