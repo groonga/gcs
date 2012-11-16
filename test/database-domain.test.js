@@ -591,6 +591,15 @@ suite('database', function() {
         assert.isTrue(domain.hasSynonymsTableSync());
 
         var dumpExpected =
+             'table_create ' + domain.tableName +  ' ' +
+               'TABLE_PAT_KEY ShortText\n' +
+             'table_create ' + domain.configurationsTableName +  ' ' +
+               'TABLE_HASH_KEY ShortText\n' +
+             'column_create ' + domain.configurationsTableName + ' ' +
+               'value COLUMN_SCALAR ShortText\n' +
+             'table_create ' + domain.termsTableName +  ' ' +
+               'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
+               '--default_tokenizer TokenBigram\n' +
              'table_create ' + domain.synonymsTableName +  ' ' +
                'TABLE_HASH_KEY|KEY_NORMALIZE ShortText\n' +
              'column_create ' + domain.synonymsTableName + ' ' +
@@ -618,6 +627,15 @@ suite('database', function() {
         });
 
         var dumpExpected =
+             'table_create ' + domain.tableName +  ' ' +
+               'TABLE_PAT_KEY ShortText\n' +
+             'table_create ' + domain.configurationsTableName +  ' ' +
+               'TABLE_HASH_KEY ShortText\n' +
+             'column_create ' + domain.configurationsTableName + ' ' +
+               'value COLUMN_SCALAR ShortText\n' +
+             'table_create ' + domain.termsTableName +  ' ' +
+               'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
+               '--default_tokenizer TokenBigram\n' +
              'table_create ' + domain.synonymsTableName +  ' ' +
                'TABLE_HASH_KEY|KEY_NORMALIZE ShortText\n' +
              'column_create ' + domain.synonymsTableName + ' ' +
