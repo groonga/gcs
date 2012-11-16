@@ -657,7 +657,7 @@ suite('database', function() {
           { id: 'id2', product: 'nroonga' }
         ]);
 
-        product.type = 'literal';
+        field.type = 'literal';
         assert.equal(field.type, 'literal');
 
         var actualDump = field.domain.dumpSync();
@@ -678,7 +678,7 @@ suite('database', function() {
           { id: 'id2', product: 'nroonga' }
         ]);
 
-        product.type = 'text';
+        field.type = 'text';
         assert.equal(field.type, 'text');
 
         var actualDump = field.domain.dumpSync();
@@ -700,7 +700,7 @@ suite('database', function() {
           { id: 'id3', age: 'a' }
         ]);
 
-        product.type = 'uint';
+        field.type = 'uint';
         assert.equal(field.type, 'uint');
 
         var actualDump = field.domain.dumpSync();
@@ -722,7 +722,7 @@ suite('database', function() {
           { id: 'id2', age: 2 }
         ]);
 
-        product.type = 'text';
+        field.type = 'text';
         assert.equal(field.type, 'text');
 
         var actualDump = field.domain.dumpSync();
@@ -735,7 +735,7 @@ suite('database', function() {
 
       test('for existing field (literal to uint)', function() {
         var field = new IndexField('age', domain).setType('literal').createSync();
-        assert.equal(product.type, 'literal');
+        assert.equal(field.type, 'literal');
         assert.isTrue(field.exists());
 
         field.domain.loadSync([
@@ -744,8 +744,8 @@ suite('database', function() {
           { id: 'id3', age: 'a' }
         ]);
 
-        product.type = 'uint';
-        assert.equal(product.type, 'uint');
+        field.type = 'uint';
+        assert.equal(field.type, 'uint');
 
         var actualDump = field.domain.dumpSync();
         var expectedDump = [
@@ -758,7 +758,7 @@ suite('database', function() {
 
       test('for existing field (uint to literal)', function() {
         var field = new IndexField('age', domain).setType('uint').createSync();
-        assert.equal(product.type, 'uint');
+        assert.equal(field.type, 'uint');
         assert.isTrue(field.exists());
 
         field.domain.loadSync([
@@ -766,8 +766,8 @@ suite('database', function() {
           { id: 'id2', age: 2 }
         ]);
 
-        product.type = 'literal';
-        assert.equal(product.type, 'literal');
+        field.type = 'literal';
+        assert.equal(field.type, 'literal');
 
         var actualDump = field.domain.dumpSync();
         var expectedDump = [
