@@ -649,7 +649,7 @@ suite('database', function() {
 
       test('for existing field (text to literal)', function() {
         var field = new IndexField('product', domain).setType('text').createSync();
-        assert.equal(product.type, 'text');
+        assert.equal(field.type, 'text');
         assert.isTrue(field.exists());
 
         field.domain.loadSync([
@@ -658,7 +658,7 @@ suite('database', function() {
         ]);
 
         product.type = 'literal';
-        assert.equal(product.type, 'literal');
+        assert.equal(field.type, 'literal');
 
         var actualDump = field.domain.dumpSync();
         var expectedDump = [
@@ -670,7 +670,7 @@ suite('database', function() {
 
       test('for existing field (literal to text)', function() {
         var field = new IndexField('product', domain).setType('literal').createSync();
-        assert.equal(product.type, 'literal');
+        assert.equal(field.type, 'literal');
         assert.isTrue(field.exists());
 
         field.domain.loadSync([
@@ -679,7 +679,7 @@ suite('database', function() {
         ]);
 
         product.type = 'text';
-        assert.equal(product.type, 'text');
+        assert.equal(field.type, 'text');
 
         var actualDump = field.domain.dumpSync();
         var expectedDump = [
@@ -691,7 +691,7 @@ suite('database', function() {
 
       test('for existing field (text to uint)', function() {
         var field = new IndexField('age', domain).setType('text').createSync();
-        assert.equal(product.type, 'text');
+        assert.equal(field.type, 'text');
         assert.isTrue(field.exists());
 
         field.domain.loadSync([
@@ -701,7 +701,7 @@ suite('database', function() {
         ]);
 
         product.type = 'uint';
-        assert.equal(product.type, 'uint');
+        assert.equal(field.type, 'uint');
 
         var actualDump = field.domain.dumpSync();
         var expectedDump = [
@@ -714,7 +714,7 @@ suite('database', function() {
 
       test('for existing field (uint to text)', function() {
         var field = new IndexField('age', domain).setType('uint').createSync();
-        assert.equal(product.type, 'uint');
+        assert.equal(field.type, 'uint');
         assert.isTrue(field.exists());
 
         field.domain.loadSync([
@@ -723,7 +723,7 @@ suite('database', function() {
         ]);
 
         product.type = 'text';
-        assert.equal(product.type, 'text');
+        assert.equal(field.type, 'text');
 
         var actualDump = field.domain.dumpSync();
         var expectedDump = [
