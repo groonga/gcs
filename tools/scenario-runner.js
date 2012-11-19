@@ -139,13 +139,17 @@ function ScenarioRunner(options) {
 ScenarioRunner.prototype = new EventEmitter();
 
 ScenarioRunner.prototype.run = function(scenario) {
-  var self = this;
-  this.client.assertNoDomain(function(error) {
-    if (error)
-      self.emit('error:fatal', { error: error });
-    else
-      self._process(scenario);
-  });
+  if (this.options.requireCleanEnvironment) {
+    var self = this;
+    this.client.assertNoDomain(function(error) {
+      if (error)
+        self.emit('error:fatal', { error: error });
+      else
+        self._process(scenario);
+    });
+  } else {
+    this._process(scenario);
+  }
 };
 
 ScenarioRunner.prototype.assertNoDomain = function(callback) {
