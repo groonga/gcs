@@ -139,7 +139,9 @@ function ScenarioRunner(options) {
 ScenarioRunner.prototype = new EventEmitter();
 
 ScenarioRunner.prototype.run = function(scenario) {
-  if (this.options.requireCleanEnvironment) {
+  if (this.options.ignoreDirtyEnvironment) {
+    this._process(scenario);
+  } else {
     var self = this;
     this.client.assertNoDomain(function(error) {
       if (error)
@@ -147,8 +149,6 @@ ScenarioRunner.prototype.run = function(scenario) {
       else
         self._process(scenario);
     });
-  } else {
-    this._process(scenario);
   }
 };
 

@@ -41,10 +41,9 @@ commandLine
           'Interval to run each scenario (in msec). [600000]',
           Number,
           600000)
-  .option('--require-clean-environment',
-          'Stops if there is any domain when each scenario is started.',
-          Boolean,
-          true)
+  .option('--ignore-dirty-environment',
+          'Continue running scenarios if there is any existing domain.',
+          Boolean)
   .parseClient();
 
 var scenariosDir;
