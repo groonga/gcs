@@ -142,7 +142,7 @@ runner.on('scenario', function(event) {
   });
 
   event.runner.on('request:wait', function(event) {
-    console.log(event.message);
+    console.log('  ' + event.message);
   });
 });
 
