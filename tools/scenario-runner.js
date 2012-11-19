@@ -112,11 +112,13 @@ ScenariosRunner.prototype._process = function(params) {
 
     runner.on('end', function(event) {
       if (params.scenarios.length) {
-        if (self.options.scenarioInterval)
+        if (self.options.scenarioInterval) {
+          self.emit('wait', { message: 'waiting ' + self.options.scenarioInterval + 'msec for the next scenario...' });
           setTimeout(function() { self._process(params); },
                      self.options.scenarioInterval);
-        else
+        } else {
           self._process(params);
+        }
       } else {
         var elapsedTime = Date.now() - params.start;
         self.emit('end', { elapsedTime: elapsedTime });
@@ -222,10 +224,12 @@ ScenarioRunner.prototype._process = function(scenario, callback) {
 
     request.response = output;
     self.emit('request:end', { scenario: scenario, request: request });
-    if (self.options.interval)
+    if (self.options.interval) {
+      self.emit('request:wait', { message: 'waiting ' + self.options.interval + 'msec for the next request...' });
       setTimeout(processNext, self.options.interval);
-    else
+    } else {
       processNext();
+    }
   });
 };
 

@@ -116,6 +116,10 @@ runner.on('scenario', function(event) {
     console.log('  Done. (elapsed time: ' + event.elapsedTime + 'msec)');
   });
 
+  event.runner.on('wait', function(event) {
+    console.log(event.message);
+  });
+
   event.runner.on('request:start', function(event) {
     console.log('  Processing request: ' + event.request.name);
   });
@@ -132,6 +136,10 @@ runner.on('scenario', function(event) {
     }
     fs.writeFile(responsePath, event.request.response);
     console.log('  Wrote ' + responsePath);
+  });
+
+  event.runner.on('request:wait', function(event) {
+    console.log(event.message);
   });
 });
 
