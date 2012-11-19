@@ -339,6 +339,18 @@ Response.prototype = {
               normalized = value.replace(/^(arn:aws:cs:us-east-1:)[^:]+(:[^\/]+\/[^\/]+)$/, '$1%DOMAIN_ID%$2');
               break;
 
+            case 'CreationDate':
+              normalized = '%CREATION_DATE%';
+              break;
+
+            case 'UpdateDate':
+              normalized = '%UPDATE_DATE%';
+              break;
+
+            case 'UpdateVersion':
+              normalized = '%UPDATE_VERSION%';
+              break;
+
             default:
               normalized = this._normalize(value);
               break;
