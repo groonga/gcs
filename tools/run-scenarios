@@ -37,6 +37,10 @@ commandLine
           'Interval to send requests (in msec). [1000]',
           Number,
           1000)
+  .option('--scenario-interval <interval>',
+          'Interval to run each scenario (in msec). [600000]',
+          Number,
+          600000)
   .parseClient();
 
 var scenariosDir;

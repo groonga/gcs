@@ -112,9 +112,9 @@ ScenariosRunner.prototype._process = function(params) {
 
     runner.on('end', function(event) {
       if (params.scenarios.length) {
-        if (self.options.interval)
+        if (self.options.scenarioInterval)
           setTimeout(function() { self._process(params); },
-                     self.options.interval);
+                     self.options.scenarioInterval);
         else
           self._process(params);
       } else {
