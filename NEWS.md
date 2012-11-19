@@ -11,6 +11,8 @@
  * "DocService/Arn", "SearchService/Arn" and "Processing" are returned as parts of domain statuses.
  * Now you can re-define existing index field with different type.
  * Now "facet enabled" and "result enabled" options of index fields are exclusive.
+ * Creation and updated dates of index fields and domain options are stored correctly.
+ * Update version of index fields are stored correctly.
 
 ### Command line interface tools
 
