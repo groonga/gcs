@@ -1,13 +1,30 @@
-HTTP/1.1 500 Inetnal Server Error
+HTTP/1.1 200 OK
 x-amzn-requestid: dfa58891-3231-11e2-b4dd-2b320be70108
 content-type: text/xml
 content-length: 231
 date: Mon, 19 Nov 2012 10:14:16 GMT
 
-<ErrorResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
-  <Error>
-    <Type>Receiver</Type>
-    <Code>InternalFailure</Code>
-  </Error>
-  <RequestId>dfa58891-3231-11e2-b4dd-2b320be70108</RequestId>
-</ErrorResponse>
+<DeleteDomainResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
+  <DeleteDomainResult>
+    <DomainStatus>
+      <SearchPartitionCount>0</SearchPartitionCount>
+      <SearchService>
+        <Arn>arn:aws:cs:us-east-1:788574296432:search/companies</Arn>
+      </SearchService>
+      <NumSearchableDocs>0</NumSearchableDocs>
+      <Created>true</Created>
+      <DomainId>788574296432/companies</DomainId>
+      <Processing>false</Processing>
+      <SearchInstanceCount>0</SearchInstanceCount>
+      <DomainName>companies</DomainName>
+      <RequiresIndexDocuments>false</RequiresIndexDocuments>
+      <Deleted>true</Deleted>
+      <DocService>
+        <Arn>arn:aws:cs:us-east-1:788574296432:doc/companies</Arn>
+      </DocService>
+    </DomainStatus>
+  </DeleteDomainResult>
+  <ResponseMetadata>
+    <RequestId>0977bd56-322f-11e2-be9a-afe093ea636b</RequestId>
+  </ResponseMetadata>
+</DeleteDomainResponse>
