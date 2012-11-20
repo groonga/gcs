@@ -1,0 +1,13 @@
+HTTP/1.1 500 Inetnal Server Error
+x-amzn-requestid: ab96456b-322f-11e2-8947-9b2d66384501
+content-type: text/xml
+content-length: 231
+date: Mon, 19 Nov 2012 09:58:30 GMT
+
+<ErrorResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
+  <Error>
+    <Type>Receiver</Type>
+    <Code>InternalFailure</Code>
+  </Error>
+  <RequestId>ab96456b-322f-11e2-8947-9b2d66384501</RequestId>
+</ErrorResponse>

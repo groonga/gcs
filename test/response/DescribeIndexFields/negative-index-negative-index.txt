@@ -1,0 +1,14 @@
+HTTP/1.1 400 Bad Request
+x-amzn-requestid: 072b30dc-3236-11e2-be9a-afe093ea636b
+content-type: text/xml
+content-length: 285
+date: Mon, 19 Nov 2012 10:43:59 GMT
+
+<ErrorResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
+  <Error>
+    <Type>Sender</Type>
+    <Code>MalformedInput</Code>
+    <Message>Key -1 may not have a leading '-'</Message>
+  </Error>
+  <RequestId>072b30dc-3236-11e2-be9a-afe093ea636b</RequestId>
+</ErrorResponse>

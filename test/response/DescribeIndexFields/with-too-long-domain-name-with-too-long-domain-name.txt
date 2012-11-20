@@ -1,0 +1,14 @@
+HTTP/1.1 400 Bad Request
+x-amzn-requestid: 14fc3538-3233-11e2-87e4-61e29ea4a150
+content-type: text/xml
+content-length: 421
+date: Mon, 19 Nov 2012 10:22:55 GMT
+
+<ErrorResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
+  <Error>
+    <Type>Sender</Type>
+    <Code>ValidationError</Code>
+    <Message>1 validation error detected: Value 'abcdefghijklmnopqrstuvwxyz0123456789' at 'domainName' failed to satisfy constraint: Member must have length less than or equal to 28</Message>
+  </Error>
+  <RequestId>14fc3538-3233-11e2-87e4-61e29ea4a150</RequestId>
+</ErrorResponse>

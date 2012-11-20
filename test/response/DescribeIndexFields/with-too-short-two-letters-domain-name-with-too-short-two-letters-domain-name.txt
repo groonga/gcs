@@ -1,0 +1,14 @@
+HTTP/1.1 400 Bad Request
+x-amzn-requestid: e88ca099-3232-11e2-b4dd-2b320be70108
+content-type: text/xml
+content-length: 389
+date: Mon, 19 Nov 2012 10:21:40 GMT
+
+<ErrorResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
+  <Error>
+    <Type>Sender</Type>
+    <Code>ValidationError</Code>
+    <Message>1 validation error detected: Value 'ab' at 'domainName' failed to satisfy constraint: Member must have length greater than or equal to 3</Message>
+  </Error>
+  <RequestId>e88ca099-3232-11e2-b4dd-2b320be70108</RequestId>
+</ErrorResponse>

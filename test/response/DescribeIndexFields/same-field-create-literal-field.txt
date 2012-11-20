@@ -1,0 +1,26 @@
+HTTP/1.1 200 OK
+x-amzn-requestid: 8e65dcef-3232-11e2-a9f9-b9c04fe63567
+content-type: text/xml
+content-length: 719
+date: Mon, 19 Nov 2012 10:19:10 GMT
+
+<DefineIndexFieldResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
+  <DefineIndexFieldResult>
+    <IndexField>
+      <Status>
+        <CreationDate>2012-11-19T10:14:11Z</CreationDate>
+        <PendingDeletion>false</PendingDeletion>
+        <UpdateVersion>44</UpdateVersion>
+        <State>RequiresIndexDocuments</State>
+        <UpdateDate>2012-11-19T10:19:09Z</UpdateDate>
+      </Status>
+      <Options>
+        <IndexFieldType>literal</IndexFieldType>
+        <IndexFieldName>product</IndexFieldName>
+      </Options>
+    </IndexField>
+  </DefineIndexFieldResult>
+  <ResponseMetadata>
+    <RequestId>8e65dcef-3232-11e2-a9f9-b9c04fe63567</RequestId>
+  </ResponseMetadata>
+</DefineIndexFieldResponse>

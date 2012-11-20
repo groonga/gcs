@@ -1,0 +1,49 @@
+HTTP/1.1 200 OK
+x-amzn-requestid: b9d02022-323b-11e2-b1db-0b78855e0435
+content-type: text/xml
+content-length: 1663
+date: Mon, 19 Nov 2012 11:24:48 GMT
+
+<DescribeDomainsResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
+  <DescribeDomainsResult>
+    <DomainStatusList>
+      <member>
+        <SearchPartitionCount>0</SearchPartitionCount>
+        <SearchService>
+          <Arn>arn:aws:cs:us-east-1:788574296432:search/domain1</Arn>
+        </SearchService>
+        <NumSearchableDocs>0</NumSearchableDocs>
+        <Created>true</Created>
+        <DomainId>788574296432/domain1</DomainId>
+        <Processing>true</Processing>
+        <SearchInstanceCount>0</SearchInstanceCount>
+        <DomainName>domain1</DomainName>
+        <RequiresIndexDocuments>false</RequiresIndexDocuments>
+        <Deleted>false</Deleted>
+        <DocService>
+          <Arn>arn:aws:cs:us-east-1:788574296432:doc/domain1</Arn>
+        </DocService>
+      </member>
+      <member>
+        <SearchPartitionCount>0</SearchPartitionCount>
+        <SearchService>
+          <Arn>arn:aws:cs:us-east-1:788574296432:search/domain2</Arn>
+        </SearchService>
+        <NumSearchableDocs>0</NumSearchableDocs>
+        <Created>true</Created>
+        <DomainId>788574296432/domain2</DomainId>
+        <Processing>true</Processing>
+        <SearchInstanceCount>0</SearchInstanceCount>
+        <DomainName>domain2</DomainName>
+        <RequiresIndexDocuments>false</RequiresIndexDocuments>
+        <Deleted>true</Deleted>
+        <DocService>
+          <Arn>arn:aws:cs:us-east-1:788574296432:doc/domain2</Arn>
+        </DocService>
+      </member>
+    </DomainStatusList>
+  </DescribeDomainsResult>
+  <ResponseMetadata>
+    <RequestId>b9d02022-323b-11e2-b1db-0b78855e0435</RequestId>
+  </ResponseMetadata>
+</DescribeDomainsResponse>

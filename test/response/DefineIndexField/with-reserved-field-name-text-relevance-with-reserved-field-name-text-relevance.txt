@@ -1,0 +1,14 @@
+HTTP/1.1 409 Conflict
+x-amzn-requestid: 626c5813-3231-11e2-8947-9b2d66384501
+content-type: text/xml
+content-length: 282
+date: Mon, 19 Nov 2012 10:10:46 GMT
+
+<ErrorResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
+  <Error>
+    <Type>Sender</Type>
+    <Code>InvalidType</Code>
+    <Message>text_relevance is a reserved name</Message>
+  </Error>
+  <RequestId>626c5813-3231-11e2-8947-9b2d66384501</RequestId>
+</ErrorResponse>

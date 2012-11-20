@@ -1,0 +1,12 @@
+HTTP/1.1 200 OK
+x-amzn-requestid: 7158249b-323a-11e2-b4dd-2b320be70108
+content-type: text/xml
+content-length: 234
+date: Mon, 19 Nov 2012 11:15:36 GMT
+
+<DeleteDomainResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
+  <DeleteDomainResult/>
+  <ResponseMetadata>
+    <RequestId>7158249b-323a-11e2-b4dd-2b320be70108</RequestId>
+  </ResponseMetadata>
+</DeleteDomainResponse>

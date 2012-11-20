@@ -1,0 +1,14 @@
+HTTP/1.1 409 Conflict
+x-amzn-requestid: 9a7783b4-3237-11e2-b458-9949c02a6feb
+content-type: text/xml
+content-length: 279
+date: Mon, 19 Nov 2012 10:55:16 GMT
+
+<ErrorResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
+  <Error>
+    <Type>Sender</Type>
+    <Code>ResourceNotFound</Code>
+    <Message>Domain not found: unknown</Message>
+  </Error>
+  <RequestId>9a7783b4-3237-11e2-b458-9949c02a6feb</RequestId>
+</ErrorResponse>

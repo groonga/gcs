@@ -1,0 +1,14 @@
+HTTP/1.1 409 Conflict
+x-amzn-requestid: 12270758-3231-11e2-b458-9949c02a6feb
+content-type: text/xml
+content-length: 298
+date: Mon, 19 Nov 2012 10:08:31 GMT
+
+<ErrorResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
+  <Error>
+    <Type>Sender</Type>
+    <Code>InvalidType</Code>
+    <Message>Invalid configuration: Base metadata is not valid</Message>
+  </Error>
+  <RequestId>12270758-3231-11e2-b458-9949c02a6feb</RequestId>
+</ErrorResponse>

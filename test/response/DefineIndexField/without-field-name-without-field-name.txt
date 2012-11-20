@@ -1,0 +1,14 @@
+HTTP/1.1 400 Bad Request
+x-amzn-requestid: ea5b0a32-3230-11e2-b458-9949c02a6feb
+content-type: text/xml
+content-length: 538
+date: Mon, 19 Nov 2012 10:07:24 GMT
+
+<ErrorResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
+  <Error>
+    <Type>Sender</Type>
+    <Code>ValidationError</Code>
+    <Message>2 validation errors detected: Value '' at 'indexField.indexFieldName' failed to satisfy constraint: Member must satisfy regular expression pattern: [a-z][a-z0-9_]*; Value '' at 'indexField.indexFieldName' failed to satisfy constraint: Member must have length greater than or equal to 1</Message>
+  </Error>
+  <RequestId>ea5b0a32-3230-11e2-b458-9949c02a6feb</RequestId>
+</ErrorResponse>

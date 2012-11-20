@@ -1,0 +1,14 @@
+HTTP/1.1 200 OK
+x-amzn-requestid: 81e610e9-3235-11e2-bd4d-c94b7172ea9e
+content-type: text/xml
+content-length: 304
+date: Mon, 19 Nov 2012 10:40:16 GMT
+
+<DescribeIndexFieldsResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
+  <DescribeIndexFieldsResult>
+    <IndexFields/>
+  </DescribeIndexFieldsResult>
+  <ResponseMetadata>
+    <RequestId>81e610e9-3235-11e2-bd4d-c94b7172ea9e</RequestId>
+  </ResponseMetadata>
+</DescribeIndexFieldsResponse>

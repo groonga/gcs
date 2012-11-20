@@ -1,0 +1,14 @@
+HTTP/1.1 400 Bad Request
+x-amzn-requestid: df27adfb-322e-11e2-bd4d-c94b7172ea9e
+content-type: text/xml
+content-length: 416
+date: Mon, 19 Nov 2012 09:52:46 GMT
+
+<ErrorResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
+  <Error>
+    <Type>Sender</Type>
+    <Code>ValidationError</Code>
+    <Message>1 validation error detected: Value 'invalid' at 'indexField.indexFieldType' failed to satisfy constraint: Member must satisfy enum value set: [text, literal, uint]</Message>
+  </Error>
+  <RequestId>df27adfb-322e-11e2-bd4d-c94b7172ea9e</RequestId>
+</ErrorResponse>

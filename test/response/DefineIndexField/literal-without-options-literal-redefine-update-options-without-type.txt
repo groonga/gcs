@@ -1,0 +1,14 @@
+HTTP/1.1 400 Bad Request
+x-amzn-requestid: 34438a00-322b-11e2-be9a-afe093ea636b
+content-type: text/xml
+content-length: 377
+date: Mon, 19 Nov 2012 09:26:31 GMT
+
+<ErrorResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
+  <Error>
+    <Type>Sender</Type>
+    <Code>ValidationError</Code>
+    <Message>1 validation error detected: Value null at 'indexField.indexFieldType' failed to satisfy constraint: Member must not be null</Message>
+  </Error>
+  <RequestId>34438a00-322b-11e2-be9a-afe093ea636b</RequestId>
+</ErrorResponse>

@@ -1,0 +1,14 @@
+HTTP/1.1 400 Bad Request
+x-amzn-requestid: 8f1f8c53-322e-11e2-9bd4-136bd92c7ffd
+content-type: text/xml
+content-length: 580
+date: Mon, 19 Nov 2012 09:50:32 GMT
+
+<ErrorResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
+  <Error>
+    <Type>Sender</Type>
+    <Code>ValidationError</Code>
+    <Message>2 validation errors detected: Value 'invalid' at 'indexField.indexFieldType' failed to satisfy constraint: Member must satisfy enum value set: [text, literal, uint]; Value '@name_with_invalid_character' at 'indexField.indexFieldName' failed to satisfy constraint: Member must satisfy regular expression pattern: [a-z][a-z0-9_]*</Message>
+  </Error>
+  <RequestId>8f1f8c53-322e-11e2-9bd4-136bd92c7ffd</RequestId>
+</ErrorResponse>

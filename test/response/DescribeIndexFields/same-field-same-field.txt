@@ -1,0 +1,28 @@
+HTTP/1.1 200 OK
+x-amzn-requestid: 8fe921d6-3232-11e2-becf-bba7b605fc65
+content-type: text/xml
+content-length: 779
+date: Mon, 19 Nov 2012 10:19:11 GMT
+
+<DescribeIndexFieldsResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
+  <DescribeIndexFieldsResult>
+    <IndexFields>
+      <member>
+        <Status>
+          <CreationDate>2012-11-19T09:56:13Z</CreationDate>
+          <PendingDeletion>false</PendingDeletion>
+          <UpdateVersion>43</UpdateVersion>
+          <State>RequiresIndexDocuments</State>
+          <UpdateDate>2012-11-19T10:19:06Z</UpdateDate>
+        </Status>
+        <Options>
+          <IndexFieldType>uint</IndexFieldType>
+          <IndexFieldName>age</IndexFieldName>
+        </Options>
+      </member>
+    </IndexFields>
+  </DescribeIndexFieldsResult>
+  <ResponseMetadata>
+    <RequestId>8fe921d6-3232-11e2-becf-bba7b605fc65</RequestId>
+  </ResponseMetadata>
+</DescribeIndexFieldsResponse>
