@@ -18,7 +18,7 @@ date: Mon, 19 Nov 2012 11:23:24 GMT
       <SearchInstanceCount>0</SearchInstanceCount>
       <DomainName>domain2</DomainName>
       <RequiresIndexDocuments>false</RequiresIndexDocuments>
-      <Deleted>true</Deleted>
+      <Deleted>false</Deleted>
       <DocService>
         <Arn>arn:aws:cs:us-east-1:788574296432:doc/domain2</Arn>
       </DocService>

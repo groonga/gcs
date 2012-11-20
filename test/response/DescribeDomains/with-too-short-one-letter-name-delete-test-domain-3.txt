@@ -5,7 +5,25 @@ content-length: 234
 date: Mon, 19 Nov 2012 11:15:36 GMT
 
 <DeleteDomainResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
-  <DeleteDomainResult/>
+  <DeleteDomainResult>
+    <DomainStatus>
+      <SearchPartitionCount>0</SearchPartitionCount>
+      <SearchService>
+        <Arn>arn:aws:cs:us-east-1:788574296432:search/domain3</Arn>
+      </SearchService>
+      <NumSearchableDocs>0</NumSearchableDocs>
+      <Created>true</Created>
+      <DomainId>788574296432/domain3</DomainId>
+      <Processing>false</Processing>
+      <SearchInstanceCount>0</SearchInstanceCount>
+      <DomainName>domain3</DomainName>
+      <RequiresIndexDocuments>false</RequiresIndexDocuments>
+      <Deleted>false</Deleted>
+      <DocService>
+        <Arn>arn:aws:cs:us-east-1:788574296432:doc/domain3</Arn>
+      </DocService>
+    </DomainStatus>
+  </DeleteDomainResult>
   <ResponseMetadata>
     <RequestId>7158249b-323a-11e2-b4dd-2b320be70108</RequestId>
   </ResponseMetadata>
