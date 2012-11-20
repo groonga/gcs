@@ -2,7 +2,7 @@
     { "name"  : "create 1st test domains named as 3",
       "params": { "Action": "CreateDomain",
                   "DomainName": "domain3" } },
-    { "name"  : "create 2ned test domains named as 1",
+    { "name"  : "create 2nd test domains named as 1",
       "params": { "Action": "CreateDomain",
                   "DomainName": "domain1" } },
     { "name"  : "create 3rd test domains name as 2",
