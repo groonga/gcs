@@ -27,23 +27,23 @@ suite('database', function() {
     });
 
     test('lower case', function() {
-      var field = new IndexField('valid', domain);
+      var field = new IndexField('valid', domain).createSync();
       assert.equal(field.columnName, 'valid');
     });
 
     test('lower case and number', function() {
-      var field = new IndexField('valid123', domain);
+      var field = new IndexField('valid123', domain).createSync();
       assert.equal(field.columnName, 'valid123');
     });
 
     test('lower case, number amd underscore', function() {
-      var field = new IndexField('valid_123', domain);
+      var field = new IndexField('valid_123', domain).createSync();
       assert.equal(field.columnName, 'valid_123');
     });
 
     test('too short (1 character)', function() {
       assert.throw(function() {
-        var field = new IndexField('v', domain);
+        var field = new IndexField('v', domain).createSync();
       }, '2 validation errors detected: ' +
            'Value \'v\' at \'%NAME_FIELD%\' failed to satisfy constraint: ' +
              'Member must satisfy regular expression pattern: ' +
@@ -55,7 +55,7 @@ suite('database', function() {
 
     test('too short (2 characters)', function() {
       assert.throw(function() {
-        var field = new IndexField('va', domain);
+        var field = new IndexField('va', domain).createSync();
       }, '1 validation error detected: ' +
            'Value \'va\' at \'%NAME_FIELD%\' failed to satisfy constraint: ' +
              'Member must have length greater than or equal to ' +
@@ -65,7 +65,7 @@ suite('database', function() {
     test('too long', function() {
       var name = 'abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789';
       assert.throw(function() {
-        var field = new IndexField(name, domain);
+        var field = new IndexField(name, domain).createSync();
       }, '1 validation error detected: ' +
            'Value \'' + name + '\' at \'%NAME_FIELD%\' failed to satisfy constraint: ' +
              'Member must have length less than or equal to ' +
@@ -74,20 +74,20 @@ suite('database', function() {
 
     test('hyphen', function() {
       assert.throw(function() {
-        var field = new IndexField('field-name', domain);
+        var field = new IndexField('field-name', domain).createSync();
       }, '1 validation error detected: ' +
            'Value \'field-name\' at \'%NAME_FIELD%\' failed to satisfy constraint: ' +
              'Member cannot include these characters: \'-\'');
     });
 
     test('underscore', function() {
-      var field = new IndexField('field_name', domain);
+      var field = new IndexField('field_name', domain).createSync();
       assert.equal(field.columnName, 'field_name');
     });
 
     test('upper case', function() {
       assert.throw(function() {
-        var field = new IndexField('FieldName', domain);
+        var field = new IndexField('FieldName', domain).createSync();
       }, '1 validation error detected: ' +
            'Value \'FieldName\' at \'%NAME_FIELD%\' failed to satisfy constraint: ' +
              'Member must satisfy regular expression pattern: ' +
@@ -98,6 +98,7 @@ suite('database', function() {
       var field = new IndexField('foo', domain);
       assert.throw(function() {
         field.type = null;
+        field.createSync();
       }, '1 validation error detected: ' +
            'Value null at \'%TYPE_FIELD%\' failed to satisfy constraint: ' +
              'Member must not be null');
@@ -107,32 +108,33 @@ suite('database', function() {
       var field = new IndexField('foo', domain);
       assert.throw(function() {
         field.type = 'unknown';
+        field.createSync();
       }, '1 validation error detected: ' +
            'Value \'unknown\' at \'%TYPE_FIELD%\' failed to satisfy constraint: ' +
              'Member must satisfy enum value set: [text, literal, uint]');
     });
 
     test('indexTableName', function() {
-      var field = new IndexField('valid_123', domain);
+      var field = new IndexField('valid_123', domain).createSync();
       assert.equal(field.indexTableName,
                    'testdomain_' + Domain.DEFAULT_ID + '_' +
                      Domain.INDEX_SUFFIX + '_valid_123');
     });
 
     test('fieldTypeToColumnType (text)', function() {
-      var field = new IndexField('valid_123', domain);
+      var field = new IndexField('valid_123', domain).createSync();
       assert.equal(field.fieldTypeToColumnType('text'),
                    'ShortText');
     });
 
     test('fieldTypeToColumnType (uint)', function() {
-      var field = new IndexField('valid_123', domain);
+      var field = new IndexField('valid_123', domain).createSync();
       assert.equal(field.fieldTypeToColumnType('uint'),
                    'UInt32');
     });
 
     test('fieldTypeToColumnType (literal)', function() {
-      var field = new IndexField('valid_123', domain);
+      var field = new IndexField('valid_123', domain).createSync();
       assert.equal(field.fieldTypeToColumnType('literal'),
                    'testdomain_' + Domain.DEFAULT_ID + '_' +
                      Domain.INDEX_SUFFIX + '_valid_123');
@@ -141,6 +143,7 @@ suite('database', function() {
     test('initial status (text)', function() {
       var field = new IndexField('text', domain);
       field.type = 'text';
+      field.createSync();
       assert.deepEqual({
         facetEnabled:  field.facetEnabled,
         resultEnabled: field.resultEnabled,
@@ -159,6 +162,7 @@ suite('database', function() {
     test('initial status (uint)', function() {
       var field = new IndexField('uint', domain);
       field.type = 'uint';
+      field.createSync();
       assert.deepEqual({
         facetEnabled:  field.facetEnabled,
         resultEnabled: field.resultEnabled,
@@ -177,6 +181,7 @@ suite('database', function() {
     test('initial status (literal)', function() {
       var field = new IndexField('literal', domain);
       field.type = 'literal';
+      field.createSync();
       assert.deepEqual({
         facetEnabled:  field.facetEnabled,
         resultEnabled: field.resultEnabled,
@@ -193,9 +198,9 @@ suite('database', function() {
     });
 
     test('summary', function() {
-      var textField =    new IndexField('name', domain).setType('text');
-      var uintField =    new IndexField('age', domain).setType('uint');
-      var literalField = new IndexField('product', domain).setType('literal');
+      var textField =    new IndexField('name', domain).setType('text').createSync();
+      var uintField =    new IndexField('age', domain).setType('uint').createSync();
+      var literalField = new IndexField('product', domain).setType('literal').createSync();
       assert.deepEqual({ text:    textField.summary,
                          uint:    uintField.summary,
                          literal: literalField.summary },
@@ -223,27 +228,27 @@ suite('database', function() {
       });
 
       test('exists, for existing field', function() {
-        var field = new IndexField('name', domain);
+        var field = new IndexField('name', domain).createSync();
         assert.isTrue(field.exists());
       });
 
       test('exists, for non-existing field', function() {
-        var field = new IndexField('unknown', domain);
+        var field = new IndexField('unknown', domain).createSync();
         assert.isFalse(field.exists());
       });
 
       test('type detection (text)', function() {
-        var field = new IndexField('name', domain);
+        var field = new IndexField('name', domain).createSync();
         assert.equal(field.type, 'text');
       });
 
       test('type detection (uint)', function() {
-        var field = new IndexField('age', domain);
+        var field = new IndexField('age', domain).createSync();
         assert.equal(field.type, 'uint');
       });
 
       test('type detection (literal)', function() {
-        var field = new IndexField('product', domain);
+        var field = new IndexField('product', domain).createSync();
         assert.equal(field.type, 'literal');
       });
     });
@@ -277,10 +282,11 @@ suite('database', function() {
       });
 
       test('create text field with conflicting options', function() {
-        var field = new IndexField('name', domain).setType('text');
+        var field = new IndexField('name', domain).setType('text').createSync;
         field.facetEnabled = true;
         assert.throw(function() {
           field.resultEnabled = true;
+          field.saveOptionsSync();
         }, ' Error defining field: name. '+
              'An IndexField may not be both FacetEnabled and ResultEnabled');
       });
@@ -303,6 +309,7 @@ suite('database', function() {
         field.searchEnabled = true;
         assert.throw(function() {
           field.searchEnabled = false;
+          field.saveOptionsSync();
         }, 'searchable option cannot be configured for the type text');
       });
 
@@ -312,14 +319,17 @@ suite('database', function() {
         field.searchEnabled = true;
         assert.throw(function() {
           field.searchEnabled = false;
+          field.saveOptionsSync();
         }, 'searchable option cannot be configured for the type uint');
         field.facetEnabled = false;
         assert.throw(function() {
           field.facetEnabled = true;
+          field.saveOptionsSync();
         }, 'facet option cannot be configured for the type uint');
         field.resultEnabled = true;
         assert.throw(function() {
           field.resultEnabled = false;
+          field.saveOptionsSync();
         }, 'returnable option cannot be configured for the type uint');
       });
 
@@ -341,6 +351,7 @@ suite('database', function() {
         field.facetEnabled = true;
         assert.throw(function() {
           field.resultEnabled = true;
+          field.saveOptionsSync();
         }, ' Error defining field: product. '+
              'An IndexField may not be both FacetEnabled and ResultEnabled');
       });
@@ -654,6 +665,7 @@ suite('database', function() {
         assert.equal(product.type, 'text');
         product.type = 'literal';
         assert.equal(product.type, 'literal');
+        product.createSync();
       });
 
       test('for existing field (text to literal)', function() {

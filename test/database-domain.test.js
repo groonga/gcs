@@ -7,7 +7,7 @@ var Domain = require('../lib/database/domain').Domain;
 suite('database', function() {
   suite('Domain', function() {
     test('initial status', function() {
-      var domain = new Domain('newdomain');
+      var domain = new Domain('newdomain').createSync();
       assert.deepEqual({
         searchableDocumentsCount: domain.searchableDocumentsCount,
         requiresIndexDocuments:   domain.requiresIndexDocuments,
@@ -26,6 +26,7 @@ suite('database', function() {
     test('lower case', function() {
       var domain = new Domain('valid');
       domain.id = Domain.DEFAULT_ID;
+      domain.createSync();
       assert.equal(domain.tableName,
                    'valid_' + Domain.DEFAULT_ID);
     });
@@ -33,13 +34,14 @@ suite('database', function() {
     test('lower case and number', function() {
       var domain = new Domain('valid123');
       domain.id = Domain.DEFAULT_ID;
+      domain.createSync();
       assert.equal(domain.tableName,
                    'valid123_' + Domain.DEFAULT_ID);
     });
 
     test('without name', function() {
       assert.throw(function() {
-        var domain = new Domain('');
+        var domain = new Domain('').createSync();
       }, '2 validation errors detected: ' +
            'Value \'\' at \'%NAME_FIELD%\' failed to satisfy constraint: ' +
              'Member must satisfy regular expression pattern: ' +
@@ -51,7 +53,7 @@ suite('database', function() {
 
     test('too short (1 character)', function() {
       assert.throw(function() {
-        var domain = new Domain('v');
+        var domain = new Domain('v').createSync();
       }, '2 validation errors detected: ' +
            'Value \'v\' at \'%NAME_FIELD%\' failed to satisfy constraint: ' +
              'Member must satisfy regular expression pattern: ' +
@@ -63,7 +65,7 @@ suite('database', function() {
 
     test('too short (2 characters)', function() {
       assert.throw(function() {
-        var domain = new Domain('va');
+        var domain = new Domain('va').createSync();
       }, '1 validation error detected: ' +
            'Value \'va\' at \'%NAME_FIELD%\' failed to satisfy constraint: ' +
              'Member must have length greater than or equal to ' +
@@ -73,7 +75,7 @@ suite('database', function() {
     test('too long', function() {
       var name = 'abcdefghijklmnopqrstuvwxyz0123456789';
       assert.throw(function() {
-        var domain = new Domain(name);
+        var domain = new Domain(name).createSync();
       }, '1 validation error detected: ' +
            'Value \'' + name + '\' at \'%NAME_FIELD%\' failed to satisfy constraint: ' +
              'Member must have length less than or equal to ' +
@@ -82,7 +84,7 @@ suite('database', function() {
 
     test('hyphen', function() {
       assert.throw(function() {
-        var domain = new Domain('domain-name');
+        var domain = new Domain('domain-name').createSync();
       }, '1 validation error detected: ' +
            'Value \'domain_name\' at \'%NAME_FIELD%\' failed to satisfy constraint: ' +
              'Member cannot include these characters: \'-\'');
@@ -90,7 +92,7 @@ suite('database', function() {
 
     test('underscore', function() {
       assert.throw(function() {
-        var domain = new Domain('domain_name');
+        var domain = new Domain('domain_name').createSync();
       }, '1 validation error detected: ' +
            'Value \'domain_name\' at \'%NAME_FIELD%\' failed to satisfy constraint: ' +
              'Member must satisfy regular expression pattern: ' +
@@ -99,7 +101,7 @@ suite('database', function() {
 
     test('upper case', function() {
       assert.throw(function() {
-        var domain = new Domain('DomainName');
+        var domain = new Domain('DomainName').createSync();
       }, '1 validation error detected: ' +
            'Value \'%NAME_FIELD%\' at \'%NAME_FIELD%\' failed to satisfy constraint: ' +
              'Member must satisfy regular expression pattern: ' +
@@ -109,6 +111,7 @@ suite('database', function() {
     test('termsTableName', function() {
       var domain = new Domain('valid123');
       domain.id = Domain.DEFAULT_ID;
+      domain.createSync();
       assert.equal(domain.termsTableName,
                    'valid123_' + Domain.DEFAULT_ID + '_index_BigramTerms');
     });
@@ -117,7 +120,7 @@ suite('database', function() {
       test('not supported', function() {
         assert.throw(function() {
           var request = { query: { DomainName: 'test0123' } };
-          var domain = new Domain(request);
+          var domain = new Domain(request).createSync();
         }, /no domain name/);
       });
     });
@@ -184,7 +187,7 @@ suite('database', function() {
       test('from host, valid', function() {
         var host = 'doc-test0123-id0123.example.com';
         var request = { headers: { host: host } };
-        var domain = new Domain(request);
+        var domain = new Domain(request).createSync();
         assert.deepEqual({ name: domain.name, id: domain.id },
                          { name: 'test0123', id: 'id0123' });
       });
@@ -193,7 +196,7 @@ suite('database', function() {
         assert.throw(function() {
           var host = 'doc-domain_name-id0123.example.com';
           var request = { headers: { host: host } };
-          var domain = new Domain(request);
+          var domain = new Domain(request).createSync();
         }, '1 validation error detected: ' +
              'Value \'domain_name\' at \'%NAME_FIELD%\' failed to satisfy constraint: ' +
                'Member must satisfy regular expression pattern: ' +
@@ -204,7 +207,7 @@ suite('database', function() {
         var host = 'example.com';
         var request = { headers: { host: host },
                         url: '/gcs/test0123-id0123' };
-        var domain = new Domain(request);
+        var domain = new Domain(request).createSync();
         assert.deepEqual({ name: domain.name, id: domain.id },
                          { name: 'test0123', id: 'id0123' });
       });
@@ -214,7 +217,7 @@ suite('database', function() {
           var host = 'example.com';
         var request = { headers: { host: host },
                         url: '/gcs/test_0123-id0123' };
-          var domain = new Domain(request);
+          var domain = new Domain(request).createSync();
         }, '1 validation error detected: ' +
              'Value \'domain_name\' at \'%NAME_FIELD%\' failed to satisfy constraint: ' +
                'Member must satisfy regular expression pattern: ' +
@@ -225,7 +228,7 @@ suite('database', function() {
         var host = 'doc-test0123-id0123.example.com';
         var request = { headers: { host: host },
                         url: '/gcs/test4567-id4567' };
-        var domain = new Domain(request);
+        var domain = new Domain(request).createSync();
         assert.deepEqual({ name: domain.name, id: domain.id },
                          { name: 'test0123', id: 'id0123' });
       });
@@ -235,7 +238,7 @@ suite('database', function() {
         var request = { headers: { host: host },
                         url: '/gcs/test4567-id4567',
                         query: { DomainName: 'test890' } };
-        var domain = new Domain(request);
+        var domain = new Domain(request).createSync();
         assert.equal(domain.name, 'test0123');
       });
     });
@@ -243,7 +246,7 @@ suite('database', function() {
     suite('document endpoint', function() {
       var domain;
       setup(function() {
-        domain = new Domain('valid').setId(Domain.DEFAULT_ID);
+        domain = new Domain('valid').setId(Domain.DEFAULT_ID).createSync();
       });
 
       test('regular domain, with port', function() {
@@ -285,7 +288,7 @@ suite('database', function() {
     suite('getSearchEndpoint', function() {
       var domain;
       setup(function() {
-        domain = new Domain('valid').setId(Domain.DEFAULT_ID);
+        domain = new Domain('valid').setId(Domain.DEFAULT_ID).createSync();
       });
 
       test('regular domain, with port', function() {
