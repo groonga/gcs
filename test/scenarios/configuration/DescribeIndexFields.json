@@ -78,16 +78,6 @@
                 "DomainName": "" } },
 
 
-  { "name"  : "with too short (one letter) field name",
-    "params": { "Action": "DescribeIndexFields",
-                "DomainName": "companies",
-                "FieldNames.member.1": "a" } },
-
-  { "name"  : "with too short (two letters) field name",
-    "params": { "Action": "DescribeIndexFields",
-                "DomainName": "companies",
-                "FieldNames.member.1": "ab" } },
-
   { "name"  : "with too long field name",
     "params": { "Action": "DescribeIndexFields",
                 "DomainName": "companies",
@@ -107,18 +97,6 @@
     "params": { "Action": "DescribeIndexFields",
                 "DomainName": "companies",
                 "FieldNames.member.1": "" } },
-
-  { "name"  : "with too short field names",
-    "params": { "Action": "DescribeIndexFields",
-                "DomainName": "companies",
-                "FieldNames.member.1": "a",
-                "FieldNames.member.2": "b" } },
-
-  { "name"  : "with too short field name and valid field name",
-    "params": { "Action": "DescribeIndexFields",
-                "DomainName": "companies",
-                "FieldNames.member.1": "a",
-                "FieldNames.member.2": "name" } },
 
   { "name"  : "with reserved field name 'body'",
     "params": { "Action": "DescribeIndexFields",

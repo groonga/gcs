@@ -77,16 +77,6 @@
                 "IndexFieldName": "never_exist" } },
 
 
-  { "name"  : "with too short (one letter) field name",
-    "params": { "Action": "DeleteIndexField",
-                "DomainName": "companies",
-                "IndexFieldName": "a" } },
-
-  { "name"  : "with too short (two letters) field name",
-    "params": { "Action": "DeleteIndexField",
-                "DomainName": "companies",
-                "IndexFieldName": "ab" } },
-
   { "name"  : "with too long field name",
     "params": { "Action": "DeleteIndexField",
                 "DomainName": "companies",
@@ -121,13 +111,13 @@
                 "IndexFieldName": "text_relevance" } },
 
 
-  { "name"  : "with too short domain name and too short field name",
+  { "name"  : "with too short domain name and too long field name",
     "params": { "Action": "DeleteIndexField",
                 "DomainName": "a",
-                "IndexFieldName": "a" } },
+                "IndexFieldName": "abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789" } },
 
-  { "name"  : "with too short field name for not-existing domain",
+  { "name"  : "with too long field name for not-existing domain",
     "params": { "Action": "DeleteIndexField",
                 "DomainName": "unknown",
-                "IndexFieldName": "a" } }
+                "IndexFieldName": "abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789" } }
 ] }

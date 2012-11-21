@@ -303,18 +303,6 @@
                 "IndexField.LiteralOptions.UnknownOption": "true" } },
 
 
-  { "name"  : "with too short (one letter) field name",
-    "params": { "Action": "DefineIndexField",
-                "DomainName": "companies",
-                "IndexField.IndexFieldName": "a",
-                "IndexField.IndexFieldType": "text" } },
-
-  { "name"  : "with too short (two letters) field name",
-    "params": { "Action": "DefineIndexField",
-                "DomainName": "companies",
-                "IndexField.IndexFieldName": "ab",
-                "IndexField.IndexFieldType": "text" } },
-
   { "name"  : "with too long field name",
     "params": { "Action": "DefineIndexField",
                 "DomainName": "companies",
@@ -355,15 +343,15 @@
                 "IndexField.IndexFieldName": "text_relevance",
                 "IndexField.IndexFieldType": "text" } },
 
-  { "name"  : "with too short domain name and too short field name",
+  { "name"  : "with too short domain name and too long field name",
     "params": { "Action": "DefineIndexField",
                 "DomainName": "a",
-                "IndexField.IndexFieldName": "a",
+                "IndexField.IndexFieldName": "abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789",
                 "IndexField.IndexFieldType": "text" } },
 
-  { "name"  : "with too short field name for not-existing domain",
+  { "name"  : "with too long field name for not-existing domain",
     "params": { "Action": "DefineIndexField",
                 "DomainName": "unknown",
-                "IndexField.IndexFieldName": "a",
+                "IndexField.IndexFieldName": "abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789",
                 "IndexField.IndexFieldType": "text" } }
 ] }
