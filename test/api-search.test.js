@@ -351,21 +351,21 @@ suite('Search API', function() {
 
     setup(function() {
       domain = new Domain('people', context)
-                 .setId('00000000000000000000000000').createSync();
+                 .setId('00000000000000000000000000').saveSync();
       domain.getIndexField('realname').setType('text')
-        .setResultEnabled(true).createSync();
+        .setResultEnabled(true).saveSync();
       domain.getIndexField('nickname').setType('text')
-        .setResultEnabled(true).createSync();
+        .setResultEnabled(true).saveSync();
       domain.getIndexField('type').setType('literal')
         .setSearchEnabled(true).setResultEnabled(true)
-        .createSync();
+        .saveSync();
       domain.getIndexField('job').setType('literal')
         .setSearchEnabled(true).setResultEnabled(true)
-        .createSync();
+        .saveSync();
       domain.getIndexField('age').setType('uint')
-        .createSync();
+        .saveSync();
       domain.getIndexField('followers').setType('uint')
-        .createSync();
+        .saveSync();
       domain.loadSync([
         { id: 'id1', realname: 'Jack Sparrow',
                      nickname: 'Captain',
