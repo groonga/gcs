@@ -1,9 +1,9 @@
 [
   [
-    { "name"  : "setup: to-be-deleted domain",
+    { "name"  : "with valid name: setup",
       "params": { "Action": "CreateDomain",
                   "DomainName": "companies" } },
-    { "name"  : "with valid name",
+    { "name"  : "with valid name: delete",
       "params": { "Action": "DeleteDomain",
                   "DomainName": "companies" } }
   ],
