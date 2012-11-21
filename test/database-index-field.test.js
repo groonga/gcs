@@ -662,10 +662,11 @@ suite('database', function() {
       test('for non-existing field', function() {
         var product = new IndexField('product', domain);
         product.type = 'text';
+        product.saveSync();
         assert.equal(product.type, 'text');
         product.type = 'literal';
-        assert.equal(product.type, 'literal');
         product.saveSync();
+        assert.equal(product.type, 'literal');
       });
 
       test('for existing field (text to literal)', function() {
@@ -679,6 +680,7 @@ suite('database', function() {
         ]);
 
         field.type = 'literal';
+        field.saveSync();
         assert.equal(field.type, 'literal');
 
         var actualDump = field.domain.dumpSync();
@@ -700,6 +702,7 @@ suite('database', function() {
         ]);
 
         field.type = 'text';
+        field.saveSync();
         assert.isFalse(field.multipleValues);
         assert.equal(field.type, 'text');
 
@@ -723,6 +726,7 @@ suite('database', function() {
         ]);
 
         field.type = 'uint';
+        field.saveSync();
         assert.isFalse(field.multipleValues);
         assert.equal(field.type, 'uint');
 
@@ -746,6 +750,7 @@ suite('database', function() {
         ]);
 
         field.type = 'text';
+        field.saveSync();
         assert.isFalse(field.multipleValues);
         assert.equal(field.type, 'text');
 
@@ -769,6 +774,7 @@ suite('database', function() {
         ]);
 
         field.type = 'uint';
+        field.saveSync();
         assert.isFalse(field.multipleValues);
         assert.equal(field.type, 'uint');
 
@@ -793,6 +799,7 @@ suite('database', function() {
         ]);
 
         field.type = 'literal';
+        field.saveSync();
         assert.isFalse(field.multipleValues);
         assert.equal(field.type, 'literal');
 
