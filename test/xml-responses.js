@@ -70,6 +70,7 @@ exports.DescribeDomainsResponse = function(members) {
 var OptionStatus =
     exports.OptionStatus = {
       CreationDate: '',
+      PendingDeletion: '',
       State: '',
       UpdateDate: '',
       UpdateVersion: ''
