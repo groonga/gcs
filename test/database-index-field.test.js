@@ -662,10 +662,8 @@ suite('database', function() {
       test('for non-existing field', function() {
         var product = new IndexField('product', domain);
         product.type = 'text';
-        product.saveSync();
         assert.equal(product.type, 'text');
         product.type = 'literal';
-        product.saveSync();
         assert.equal(product.type, 'literal');
       });
 
@@ -680,8 +678,12 @@ suite('database', function() {
         ]);
 
         field.type = 'literal';
+        assert.equal({ type: field.type, actual: field.actualType },
+                     { type: 'literal', actual: 'text' });
+
         field.saveSync();
-        assert.equal(field.type, 'literal');
+        assert.equal({ type: field.type, actual: field.actualType },
+                     { type: 'literal', actual: 'literal' });
 
         var actualDump = field.domain.dumpSync();
         var expectedDump = [
@@ -702,9 +704,13 @@ suite('database', function() {
         ]);
 
         field.type = 'text';
+        assert.equal({ type: field.type, actual: field.actualType },
+                     { type: 'text', actual: 'literal' });
+
         field.saveSync();
+        assert.equal({ type: field.type, actual: field.actualType },
+                     { type: 'text', actual: 'text' });
         assert.isFalse(field.multipleValues);
-        assert.equal(field.type, 'text');
 
         var actualDump = field.domain.dumpSync();
         var expectedDump = [
@@ -726,9 +732,13 @@ suite('database', function() {
         ]);
 
         field.type = 'uint';
+        assert.equal({ type: field.type, actual: field.actualType },
+                     { type: 'uint', actual: 'text' });
+
         field.saveSync();
+        assert.equal({ type: field.type, actual: field.actualType },
+                     { type: 'uint', actual: 'uint' });
         assert.isFalse(field.multipleValues);
-        assert.equal(field.type, 'uint');
 
         var actualDump = field.domain.dumpSync();
         var expectedDump = [
@@ -750,9 +760,13 @@ suite('database', function() {
         ]);
 
         field.type = 'text';
+        assert.equal({ type: field.type, actual: field.actualType },
+                     { type: 'text', actual: 'uint' });
+
         field.saveSync();
+        assert.equal({ type: field.type, actual: field.actualType },
+                     { type: 'text', actual: 'text' });
         assert.isFalse(field.multipleValues);
-        assert.equal(field.type, 'text');
 
         var actualDump = field.domain.dumpSync();
         var expectedDump = [
@@ -774,9 +788,13 @@ suite('database', function() {
         ]);
 
         field.type = 'uint';
+        assert.equal({ type: field.type, actual: field.actualType },
+                     { type: 'uint', actual: 'literal' });
+
         field.saveSync();
+        assert.equal({ type: field.type, actual: field.actualType },
+                     { type: 'uint', actual: 'uint' });
         assert.isFalse(field.multipleValues);
-        assert.equal(field.type, 'uint');
 
         var actualDump = field.domain.dumpSync();
         var expectedDump = [
@@ -799,9 +817,13 @@ suite('database', function() {
         ]);
 
         field.type = 'literal';
+        assert.equal({ type: field.type, actual: field.actualType },
+                     { type: 'literal', actual: 'uint' });
+
         field.saveSync();
+        assert.equal({ type: field.type, actual: field.actualType },
+                     { type: 'literal', actual: 'literal' });
         assert.isFalse(field.multipleValues);
-        assert.equal(field.type, 'literal');
 
         var actualDump = field.domain.dumpSync();
         var expectedDump = [
