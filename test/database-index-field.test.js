@@ -228,27 +228,27 @@ suite('database', function() {
       });
 
       test('exists, for existing field', function() {
-        var field = new IndexField('name', domain).setType('text').validate();
+        var field = new IndexField('name', domain);
         assert.isTrue(field.exists());
       });
 
       test('exists, for non-existing field', function() {
-        var field = new IndexField('unknown', domain).setType('text').validate();
+        var field = new IndexField('unknown', domain);
         assert.isFalse(field.exists());
       });
 
       test('type detection (text)', function() {
-        var field = new IndexField('name', domain).setType('text').validate();
+        var field = new IndexField('name', domain);
         assert.equal(field.type, 'text');
       });
 
       test('type detection (uint)', function() {
-        var field = new IndexField('age', domain).setType('text').validate();
+        var field = new IndexField('age', domain);
         assert.equal(field.type, 'uint');
       });
 
       test('type detection (literal)', function() {
-        var field = new IndexField('product', domain).setType('text').validate();
+        var field = new IndexField('product', domain);
         assert.equal(field.type, 'literal');
       });
     });
