@@ -491,7 +491,7 @@ suite('gcs-configure-fields', function() {
         if (results.search == 'error')
           assertOptionNotConfigurable(result, 'search', type);
         else
-          assertOptionConfigured(result, name, 'Active', type, results.search);
+          assertOptionConfigured(result, name, 'RequiresIndexDocuments', type, results.search);
       })
       .run('gcs-configure-fields',
            '--domain-name', 'companies',
@@ -502,7 +502,7 @@ suite('gcs-configure-fields', function() {
         if (results.nosearch == 'error')
           assertOptionNotConfigurable(result, 'nosearch', type);
         else
-          assertOptionConfigured(result, name, 'Active', type, results.nosearch);
+          assertOptionConfigured(result, name, 'RequiresIndexDocuments', type, results.nosearch);
       })
       .run('gcs-configure-fields',
            '--domain-name', 'companies',
@@ -513,7 +513,7 @@ suite('gcs-configure-fields', function() {
         if (results.result == 'error')
           assertOptionNotConfigurable(result, 'result', type);
         else
-          assertOptionConfigured(result, name, 'Active', type, results.result);
+          assertOptionConfigured(result, name, 'RequiresIndexDocuments', type, results.result);
       })
       .run('gcs-configure-fields',
            '--domain-name', 'companies',
@@ -524,7 +524,7 @@ suite('gcs-configure-fields', function() {
         if (results.noresult == 'error')
           assertOptionNotConfigurable(result, 'noresult', type);
         else
-          assertOptionConfigured(result, name, 'Active', type, results.noresult);
+          assertOptionConfigured(result, name, 'RequiresIndexDocuments', type, results.noresult);
       })
       .run('gcs-configure-fields',
            '--domain-name', 'companies',
@@ -535,7 +535,7 @@ suite('gcs-configure-fields', function() {
         if (results.facet == 'error')
           assertOptionNotConfigurable(result, 'facet', type);
         else
-          assertOptionConfigured(result, name, 'Active', type, results.facet);
+          assertOptionConfigured(result, name, 'RequiresIndexDocuments', type, results.facet);
       })
       .run('gcs-configure-fields',
            '--domain-name', 'companies',
@@ -546,7 +546,7 @@ suite('gcs-configure-fields', function() {
         if (results.nofacet == 'error')
           assertOptionNotConfigurable(result, 'nofacet', type);
         else
-          assertOptionConfigured(result, name, 'Active', type, results.nofacet);
+          assertOptionConfigured(result, name, 'RequiresIndexDocuments', type, results.nofacet);
         done();
       })
       .error(function(e) {
