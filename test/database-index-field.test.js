@@ -678,12 +678,12 @@ suite('database', function() {
         ]);
 
         field.type = 'literal';
-        assert.equal({ type: field.type, actual: field.actualType },
-                     { type: 'literal', actual: 'text' });
+        assert.deepEqual({ type: field.type, actual: field.actualType },
+                         { type: 'literal', actual: 'text' });
 
         field.saveSync();
-        assert.equal({ type: field.type, actual: field.actualType },
-                     { type: 'literal', actual: 'literal' });
+        assert.deepEqual({ type: field.type, actual: field.actualType },
+                         { type: 'literal', actual: 'literal' });
 
         var actualDump = field.domain.dumpSync();
         var expectedDump = [
@@ -704,12 +704,12 @@ suite('database', function() {
         ]);
 
         field.type = 'text';
-        assert.equal({ type: field.type, actual: field.actualType },
-                     { type: 'text', actual: 'literal' });
+        assert.deepEqual({ type: field.type, actual: field.actualType },
+                         { type: 'text', actual: 'literal' });
 
         field.saveSync();
-        assert.equal({ type: field.type, actual: field.actualType },
-                     { type: 'text', actual: 'text' });
+        assert.deepEqual({ type: field.type, actual: field.actualType },
+                         { type: 'text', actual: 'text' });
         assert.isFalse(field.multipleValues);
 
         var actualDump = field.domain.dumpSync();
@@ -732,12 +732,12 @@ suite('database', function() {
         ]);
 
         field.type = 'uint';
-        assert.equal({ type: field.type, actual: field.actualType },
-                     { type: 'uint', actual: 'text' });
+        assert.deepEqual({ type: field.type, actual: field.actualType },
+                         { type: 'uint', actual: 'text' });
 
         field.saveSync();
-        assert.equal({ type: field.type, actual: field.actualType },
-                     { type: 'uint', actual: 'uint' });
+        assert.deepEqual({ type: field.type, actual: field.actualType },
+                         { type: 'uint', actual: 'uint' });
         assert.isFalse(field.multipleValues);
 
         var actualDump = field.domain.dumpSync();
@@ -760,12 +760,12 @@ suite('database', function() {
         ]);
 
         field.type = 'text';
-        assert.equal({ type: field.type, actual: field.actualType },
-                     { type: 'text', actual: 'uint' });
+        assert.deepEqual({ type: field.type, actual: field.actualType },
+                         { type: 'text', actual: 'uint' });
 
         field.saveSync();
-        assert.equal({ type: field.type, actual: field.actualType },
-                     { type: 'text', actual: 'text' });
+        assert.deepEqual({ type: field.type, actual: field.actualType },
+                         { type: 'text', actual: 'text' });
         assert.isFalse(field.multipleValues);
 
         var actualDump = field.domain.dumpSync();
@@ -788,12 +788,12 @@ suite('database', function() {
         ]);
 
         field.type = 'uint';
-        assert.equal({ type: field.type, actual: field.actualType },
-                     { type: 'uint', actual: 'literal' });
+        assert.deepEqual({ type: field.type, actual: field.actualType },
+                         { type: 'uint', actual: 'literal' });
 
         field.saveSync();
-        assert.equal({ type: field.type, actual: field.actualType },
-                     { type: 'uint', actual: 'uint' });
+        assert.deepEqual({ type: field.type, actual: field.actualType },
+                         { type: 'uint', actual: 'uint' });
         assert.isFalse(field.multipleValues);
 
         var actualDump = field.domain.dumpSync();
@@ -817,12 +817,12 @@ suite('database', function() {
         ]);
 
         field.type = 'literal';
-        assert.equal({ type: field.type, actual: field.actualType },
-                     { type: 'literal', actual: 'uint' });
+        assert.deepEqual({ type: field.type, actual: field.actualType },
+                         { type: 'literal', actual: 'uint' });
 
         field.saveSync();
-        assert.equal({ type: field.type, actual: field.actualType },
-                     { type: 'literal', actual: 'literal' });
+        assert.deepEqual({ type: field.type, actual: field.actualType },
+                         { type: 'literal', actual: 'literal' });
         assert.isFalse(field.multipleValues);
 
         var actualDump = field.domain.dumpSync();
