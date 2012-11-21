@@ -357,6 +357,9 @@ Response.prototype = {
 
             case 'UpdateVersion':
               normalized = '%UPDATE_VERSION%';
+
+            case 'Processing':
+              normalized = '%PROCESSING_STATE%';
               break;
 
             default:
