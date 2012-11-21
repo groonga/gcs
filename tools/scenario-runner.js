@@ -362,6 +362,11 @@ Response.prototype = {
               normalized = '%PROCESSING_STATE%';
               break;
 
+            case 'State':
+              if (value == 'Active' || value == 'RequiresIndexDocuments')
+                normalized = '%ACTIVE_OR_REQUIRES_INDEX_DOCUMENTS%';
+              break;
+
             default:
               normalized = this._normalize(value);
               break;
