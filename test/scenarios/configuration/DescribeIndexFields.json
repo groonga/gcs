@@ -126,5 +126,10 @@
   { "name"  : "negative index",
     "params": { "Action": "DescribeIndexFields",
                 "DomainName": "companies",
-                "FieldNames.member.-1": "name" } }
+                "FieldNames.member.-1": "name" } },
+
+  { "name"  : "not a number index",
+    "params": { "Action": "DescribeIndexFields",
+                "DomainName": "companies",
+                "FieldNames.member.foo": "name" } }
 ] }
