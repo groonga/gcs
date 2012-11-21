@@ -563,7 +563,7 @@ suite('database', function() {
 
       test('deleteSync', function() {
         var domain = new Domain('companies', context);
-        domain.createSync();
+        domain.saveSync();
         assert.isTrue(domain.exists());
 
         domain.deleteSync();
@@ -576,7 +576,7 @@ suite('database', function() {
 
       test('deleteSync again', function() {
         var domain = new Domain('companies', context);
-        domain.createSync();
+        domain.saveSync();
         domain.deleteSync();
         assert.throw(function() {
           domain.deleteSync();
@@ -696,13 +696,13 @@ suite('database', function() {
 
       test('getAll', function() {
         var domain3 = new Domain('domain3', context);
-        domain3.createSync();
+        domain3.saveSync();
 
         var domain1 = new Domain('domain1', context);
-        domain1.createSync();
+        domain1.saveSync();
 
         var domain2 = new Domain('domain2', context);
-        domain2.createSync();
+        domain2.saveSync();
 
         var allDomains = Domain.getAll(context);
         assert.deepEqual(allDomains.map(function(domain) {
@@ -860,7 +860,7 @@ suite('database', function() {
         temporaryDatabase = utils.createTemporaryDatabase();
         context = temporaryDatabase.get();
         domain = new Domain('companies', context);
-        domain.createSync();
+        domain.saveSync();
       });
 
       teardown(function() {

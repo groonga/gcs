@@ -16,7 +16,7 @@ suite('database', function() {
       context = temporaryDatabase.get();
       domain = new Domain('testdomain', context);
       domain.id = Domain.DEFAULT_ID;
-      domain.createSync();
+      domain.saveSync();
     });
 
     teardown(function() {
@@ -98,7 +98,7 @@ suite('database', function() {
       var field = new IndexField('foo', domain);
       assert.throw(function() {
         field.type = null;
-        field.createSync();
+        field.validate();
       }, '1 validation error detected: ' +
            'Value null at \'%TYPE_FIELD%\' failed to satisfy constraint: ' +
              'Member must not be null');
@@ -108,7 +108,7 @@ suite('database', function() {
       var field = new IndexField('foo', domain);
       assert.throw(function() {
         field.type = 'unknown';
-        field.createSync();
+        field.validate();
       }, '1 validation error detected: ' +
            'Value \'unknown\' at \'%TYPE_FIELD%\' failed to satisfy constraint: ' +
              'Member must satisfy enum value set: [text, literal, uint]');
@@ -143,7 +143,7 @@ suite('database', function() {
     test('initial status (text)', function() {
       var field = new IndexField('text', domain);
       field.type = 'text';
-      field.createSync();
+      field.validate();
       assert.deepEqual({
         facetEnabled:  field.facetEnabled,
         resultEnabled: field.resultEnabled,
@@ -162,7 +162,7 @@ suite('database', function() {
     test('initial status (uint)', function() {
       var field = new IndexField('uint', domain);
       field.type = 'uint';
-      field.createSync();
+      field.validate();
       assert.deepEqual({
         facetEnabled:  field.facetEnabled,
         resultEnabled: field.resultEnabled,
@@ -181,7 +181,7 @@ suite('database', function() {
     test('initial status (literal)', function() {
       var field = new IndexField('literal', domain);
       field.type = 'literal';
-      field.createSync();
+      field.validate();
       assert.deepEqual({
         facetEnabled:  field.facetEnabled,
         resultEnabled: field.resultEnabled,
@@ -198,9 +198,9 @@ suite('database', function() {
     });
 
     test('summary', function() {
-      var textField =    new IndexField('name', domain).setType('text').createSync();
-      var uintField =    new IndexField('age', domain).setType('uint').createSync();
-      var literalField = new IndexField('product', domain).setType('literal').createSync();
+      var textField =    new IndexField('name', domain).setType('text').saveSync();
+      var uintField =    new IndexField('age', domain).setType('uint').saveSync();
+      var literalField = new IndexField('product', domain).setType('literal').saveSync();
       assert.deepEqual({ text:    textField.summary,
                          uint:    uintField.summary,
                          literal: literalField.summary },
@@ -262,7 +262,7 @@ suite('database', function() {
         temporaryDatabase = utils.createTemporaryDatabase();
         context = temporaryDatabase.get();
         domain = new Domain('companies', context);
-        domain.createSync();
+        domain.saveSync();
       });
 
       teardown(function() {
@@ -275,29 +275,29 @@ suite('database', function() {
         assert.equal('Search', field.options);
 
         field.facetEnabled = true;
-        field.createSync();
+        field.saveSync();
 
         field = new IndexField('name', domain); // reset instance from database
         assert.equal('Search Facet', field.options);
       });
 
       test('create text field with conflicting options', function() {
-        var field = new IndexField('name', domain).setType('text').createSync();
+        var field = new IndexField('name', domain).setType('text').saveSync();
         field.facetEnabled = true;
         assert.throw(function() {
           field.resultEnabled = true;
-          field.saveOptionsSync();
+          field.saveSync();
         }, ' Error defining field: name. '+
              'An IndexField may not be both FacetEnabled and ResultEnabled');
       });
 
       test('update text field with options', function() {
         var field = new IndexField('name', domain).setType('text');
-        field.createSync();
+        field.saveSync();
         assert.equal('Search', field.options);
 
         field.resultEnabled = true;
-        field.saveOptionsSync();
+        field.saveSync();
 
         field = new IndexField('name', domain); // reset instance from database
         assert.equal('Search Result', field.options);
@@ -305,31 +305,31 @@ suite('database', function() {
 
       test('invalid modification of options for text field', function() {
         var field = new IndexField('name', domain).setType('text');
-        field.createSync();
+        field.saveSync();
         field.searchEnabled = true;
         assert.throw(function() {
           field.searchEnabled = false;
-          field.saveOptionsSync();
+          field.saveSync();
         }, 'searchable option cannot be configured for the type text');
       });
 
       test('invalid modification of options for uint field', function() {
         var field = new IndexField('age', domain).setType('uint');
-        field.createSync();
+        field.saveSync();
         field.searchEnabled = true;
         assert.throw(function() {
           field.searchEnabled = false;
-          field.saveOptionsSync();
+          field.saveSync();
         }, 'searchable option cannot be configured for the type uint');
         field.facetEnabled = false;
         assert.throw(function() {
           field.facetEnabled = true;
-          field.saveOptionsSync();
+          field.saveSync();
         }, 'facet option cannot be configured for the type uint');
         field.resultEnabled = true;
         assert.throw(function() {
           field.resultEnabled = false;
-          field.saveOptionsSync();
+          field.saveSync();
         }, 'returnable option cannot be configured for the type uint');
       });
 
@@ -339,7 +339,7 @@ suite('database', function() {
 
         field.searchEnabled = true;
         field.facetEnabled = true;
-        field.createSync();
+        field.saveSync();
 
         field = new IndexField('product', domain); // reset instance from database
         assert.equal('Search Facet', field.options);
@@ -351,19 +351,19 @@ suite('database', function() {
         field.facetEnabled = true;
         assert.throw(function() {
           field.resultEnabled = true;
-          field.saveOptionsSync();
+          field.saveSync();
         }, ' Error defining field: product. '+
              'An IndexField may not be both FacetEnabled and ResultEnabled');
       });
 
       test('update literal field with options', function() {
         var field = new IndexField('product', domain).setType('literal');
-        field.createSync();
+        field.saveSync();
         assert.equal('', field.options);
 
         field.searchEnabled = true;
         field.resultEnabled = true;
-        field.saveOptionsSync();
+        field.saveSync();
 
         field = new IndexField('product', domain); // reset instance from database
         assert.equal('Search Result', field.options);
@@ -371,24 +371,24 @@ suite('database', function() {
 
       test('setting default search field', function() {
         var field = new IndexField('product', domain).setType('literal');
-        field.createSync();
+        field.saveSync();
 
         field.defaultSearchField = true;
-        field.saveOptionsSync();
+        field.saveSync();
         assert.equal(domain.defaultSearchField,
                      domain.getIndexField('product'));
 
         field.defaultSearchField = false;
-        field.saveOptionsSync();
+        field.saveSync();
         assert.isTrue(domain.defaultSearchField === null,
                       domain.defaultSearchField);
       });
 
       test('auto-remove default search field', function() {
         var field = new IndexField('product', domain).setType('literal');
-        field.createSync();
+        field.saveSync();
         field.defaultSearchField = true;
-        field.saveOptionsSync();
+        field.saveSync();
         assert.equal(domain.defaultSearchField,
                      domain.getIndexField('product'));
 
@@ -407,7 +407,7 @@ suite('database', function() {
         temporaryDatabase = utils.createTemporaryDatabase();
         context = temporaryDatabase.get();
         domain = new Domain('companies', context);
-        domain.createSync();
+        domain.saveSync();
       });
 
       teardown(function() {
@@ -434,7 +434,7 @@ suite('database', function() {
         field.type = 'text';
         assert.isFalse(field.exists());
 
-        field.createSync();
+        field.saveSync();
         assert.isTrue(field.exists());
         assert.isFalse(field.multipleValues);
 
@@ -461,7 +461,7 @@ suite('database', function() {
 
       test('deleteSync for text field', function() {
         var field = new IndexField('name', domain).setType('text');
-        field.createSync();
+        field.saveSync();
         assert.isTrue(field.exists());
 
         field.deleteSync();
@@ -510,7 +510,7 @@ suite('database', function() {
 
       test('deleteSync for uint field', function() {
         var field = new IndexField('age', domain).setType('uint');
-        field.createSync();
+        field.saveSync();
         assert.isTrue(field.exists());
 
         field.deleteSync();
@@ -560,7 +560,7 @@ suite('database', function() {
 
       test('deleteSync for literal field', function() {
         var field = new IndexField('product', domain).setType('literal');
-        field.createSync();
+        field.saveSync();
         assert.isTrue(field.exists());
 
         field.deleteSync();
@@ -583,7 +583,7 @@ suite('database', function() {
         temporaryDatabase = utils.createTemporaryDatabase();
         context = temporaryDatabase.get();
         domain = new Domain('companies', context);
-        domain.createSync();
+        domain.saveSync();
       });
 
       teardown(function() {
@@ -621,7 +621,7 @@ suite('database', function() {
 
       test('upgradeToMultipleValuesSync', function() {
         var field = new IndexField('product', domain).setType('literal');
-        field.createSync();
+        field.saveSync();
         assert.isFalse(field.multipleValues);
 
         field.domain.loadSync([
@@ -651,7 +651,7 @@ suite('database', function() {
         temporaryDatabase = utils.createTemporaryDatabase();
         context = temporaryDatabase.get();
         domain = new Domain('companies', context);
-        domain.createSync();
+        domain.saveSync();
       });
 
       teardown(function() {
@@ -665,11 +665,11 @@ suite('database', function() {
         assert.equal(product.type, 'text');
         product.type = 'literal';
         assert.equal(product.type, 'literal');
-        product.createSync();
+        product.saveSync();
       });
 
       test('for existing field (text to literal)', function() {
-        var field = new IndexField('product', domain).setType('text').createSync();
+        var field = new IndexField('product', domain).setType('text').saveSync();
         assert.equal(field.type, 'text');
         assert.isTrue(field.exists());
 
@@ -690,7 +690,7 @@ suite('database', function() {
       });
 
       test('for existing field (literal to text)', function() {
-        var field = new IndexField('product', domain).setType('literal').createSync();
+        var field = new IndexField('product', domain).setType('literal').saveSync();
         assert.equal(field.type, 'literal');
         assert.isTrue(field.exists());
 
@@ -712,7 +712,7 @@ suite('database', function() {
       });
 
       test('for existing field (text to uint)', function() {
-        var field = new IndexField('age', domain).setType('text').createSync();
+        var field = new IndexField('age', domain).setType('text').saveSync();
         assert.equal(field.type, 'text');
         assert.isTrue(field.exists());
 
@@ -736,7 +736,7 @@ suite('database', function() {
       });
 
       test('for existing field (uint to text)', function() {
-        var field = new IndexField('age', domain).setType('uint').createSync();
+        var field = new IndexField('age', domain).setType('uint').saveSync();
         assert.equal(field.type, 'uint');
         assert.isTrue(field.exists());
 
@@ -758,7 +758,7 @@ suite('database', function() {
       });
 
       test('for existing field (literal to uint)', function() {
-        var field = new IndexField('age', domain).setType('literal').createSync();
+        var field = new IndexField('age', domain).setType('literal').saveSync();
         assert.equal(field.type, 'literal');
         assert.isTrue(field.exists());
 
@@ -782,7 +782,7 @@ suite('database', function() {
       });
 
       test('for existing field (uint to literal)', function() {
-        var field = new IndexField('age', domain).setType('uint').createSync();
+        var field = new IndexField('age', domain).setType('uint').saveSync();
         assert.equal(field.type, 'uint');
         assert.isFalse(field.multipleValues);
         assert.isTrue(field.exists());
