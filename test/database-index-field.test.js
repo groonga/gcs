@@ -27,23 +27,23 @@ suite('database', function() {
     });
 
     test('lower case', function() {
-      var field = new IndexField('valid', domain).createSync();
+      var field = new IndexField('valid', domain).setType('text').validate();
       assert.equal(field.columnName, 'valid');
     });
 
     test('lower case and number', function() {
-      var field = new IndexField('valid123', domain).createSync();
+      var field = new IndexField('valid123', domain).setType('text').validate();
       assert.equal(field.columnName, 'valid123');
     });
 
     test('lower case, number amd underscore', function() {
-      var field = new IndexField('valid_123', domain).createSync();
+      var field = new IndexField('valid_123', domain).setType('text').validate();
       assert.equal(field.columnName, 'valid_123');
     });
 
     test('too short (1 character)', function() {
       assert.throw(function() {
-        var field = new IndexField('v', domain).createSync();
+        var field = new IndexField('v', domain).setType('text').validate();
       }, '2 validation errors detected: ' +
            'Value \'v\' at \'%NAME_FIELD%\' failed to satisfy constraint: ' +
              'Member must satisfy regular expression pattern: ' +
@@ -55,7 +55,7 @@ suite('database', function() {
 
     test('too short (2 characters)', function() {
       assert.throw(function() {
-        var field = new IndexField('va', domain).createSync();
+        var field = new IndexField('va', domain).setType('text').validate();
       }, '1 validation error detected: ' +
            'Value \'va\' at \'%NAME_FIELD%\' failed to satisfy constraint: ' +
              'Member must have length greater than or equal to ' +
@@ -65,7 +65,7 @@ suite('database', function() {
     test('too long', function() {
       var name = 'abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789';
       assert.throw(function() {
-        var field = new IndexField(name, domain).createSync();
+        var field = new IndexField(name, domain).setType('text').validate();
       }, '1 validation error detected: ' +
            'Value \'' + name + '\' at \'%NAME_FIELD%\' failed to satisfy constraint: ' +
              'Member must have length less than or equal to ' +
@@ -74,20 +74,20 @@ suite('database', function() {
 
     test('hyphen', function() {
       assert.throw(function() {
-        var field = new IndexField('field-name', domain).createSync();
+        var field = new IndexField('field-name', domain).setType('text').validate();
       }, '1 validation error detected: ' +
            'Value \'field-name\' at \'%NAME_FIELD%\' failed to satisfy constraint: ' +
              'Member cannot include these characters: \'-\'');
     });
 
     test('underscore', function() {
-      var field = new IndexField('field_name', domain).createSync();
+      var field = new IndexField('field_name', domain).setType('text').validate();
       assert.equal(field.columnName, 'field_name');
     });
 
     test('upper case', function() {
       assert.throw(function() {
-        var field = new IndexField('FieldName', domain).createSync();
+        var field = new IndexField('FieldName', domain).setType('text').validate();
       }, '1 validation error detected: ' +
            'Value \'FieldName\' at \'%NAME_FIELD%\' failed to satisfy constraint: ' +
              'Member must satisfy regular expression pattern: ' +
@@ -115,26 +115,26 @@ suite('database', function() {
     });
 
     test('indexTableName', function() {
-      var field = new IndexField('valid_123', domain).createSync();
+      var field = new IndexField('valid_123', domain).setType('text').validate();
       assert.equal(field.indexTableName,
                    'testdomain_' + Domain.DEFAULT_ID + '_' +
                      Domain.INDEX_SUFFIX + '_valid_123');
     });
 
     test('fieldTypeToColumnType (text)', function() {
-      var field = new IndexField('valid_123', domain).createSync();
+      var field = new IndexField('valid_123', domain).setType('text').validate();
       assert.equal(field.fieldTypeToColumnType('text'),
                    'ShortText');
     });
 
     test('fieldTypeToColumnType (uint)', function() {
-      var field = new IndexField('valid_123', domain).createSync();
+      var field = new IndexField('valid_123', domain).setType('text').validate();
       assert.equal(field.fieldTypeToColumnType('uint'),
                    'UInt32');
     });
 
     test('fieldTypeToColumnType (literal)', function() {
-      var field = new IndexField('valid_123', domain).createSync();
+      var field = new IndexField('valid_123', domain).setType('text').validate();
       assert.equal(field.fieldTypeToColumnType('literal'),
                    'testdomain_' + Domain.DEFAULT_ID + '_' +
                      Domain.INDEX_SUFFIX + '_valid_123');
@@ -228,27 +228,27 @@ suite('database', function() {
       });
 
       test('exists, for existing field', function() {
-        var field = new IndexField('name', domain).createSync();
+        var field = new IndexField('name', domain).setType('text').validate();
         assert.isTrue(field.exists());
       });
 
       test('exists, for non-existing field', function() {
-        var field = new IndexField('unknown', domain).createSync();
+        var field = new IndexField('unknown', domain).setType('text').validate();
         assert.isFalse(field.exists());
       });
 
       test('type detection (text)', function() {
-        var field = new IndexField('name', domain).createSync();
+        var field = new IndexField('name', domain).setType('text').validate();
         assert.equal(field.type, 'text');
       });
 
       test('type detection (uint)', function() {
-        var field = new IndexField('age', domain).createSync();
+        var field = new IndexField('age', domain).setType('text').validate();
         assert.equal(field.type, 'uint');
       });
 
       test('type detection (literal)', function() {
-        var field = new IndexField('product', domain).createSync();
+        var field = new IndexField('product', domain).setType('text').validate();
         assert.equal(field.type, 'literal');
       });
     });
@@ -282,7 +282,7 @@ suite('database', function() {
       });
 
       test('create text field with conflicting options', function() {
-        var field = new IndexField('name', domain).setType('text').createSync;
+        var field = new IndexField('name', domain).setType('text').createSync();
         field.facetEnabled = true;
         assert.throw(function() {
           field.resultEnabled = true;
