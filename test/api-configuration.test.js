@@ -236,7 +236,7 @@ suite('Configuration API', function() {
                            { statusCode: 200,
                              body: xmlResponses.DeleteDomainResponse });
           var expectedStatus = {
-                Created: 'false',
+                Created: 'true',
                 Deleted: 'true',
                 DocService: {
                   Endpoint: domain.getDocumentsEndpoint(defaultBaseHost),

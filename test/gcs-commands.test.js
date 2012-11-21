@@ -278,13 +278,13 @@ suite('gcs-configure-fields', function() {
   setup(commonSetup);
   teardown(commonTeardown);
 
-  function assertSuccess(result, name, type, options) {
+  function assertSuccess(result, name, state, type, options) {
     assert.deepEqual({ code:    result.code,
                        message: result.output.stdout },
                      { code:    0,
                        message: 'Updated 1 Index Field:\n' +
-                                name + ' Active ' + type + ' (' + options + ')\n' },
-                     result.output.stderr + [result, name, type, options]);
+                                name + ' ' + state + ' ' + type + ' (' + options + ')\n' },
+                     result.output.stderr + [result, name, state, type, options]);
   }
 
   function testCreateField(done, name, type, options) {
@@ -299,7 +299,7 @@ suite('gcs-configure-fields', function() {
            '--type', type,
            '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
-        assertSuccess(result, name, type, options);
+        assertSuccess(result, name, 'RequiresIndexDocuments', type, options);
 
         context.reopen();
         var domain = new Domain('companies', context);
@@ -469,11 +469,11 @@ suite('gcs-configure-fields', function() {
                      result.output.stderr);
   }
 
-  function assertOptionConfigured(result, name, type, options) {
-    assertSuccess(result, name, type, options);
+  function assertOptionConfigured(result, name, state, type, options) {
+    assertSuccess(result, name, state, type, options);
     context.reopen();
     var field = new Domain('companies', context).getIndexField(name);
-    assert.equal(field.options, options, [result, name, type, options]);
+    assert.equal(field.options, options, [result, name, state, type, options]);
   }
 
   function testConfigureFieldOptions(type, results, done) {
@@ -491,7 +491,7 @@ suite('gcs-configure-fields', function() {
         if (results.search == 'error')
           assertOptionNotConfigurable(result, 'search', type);
         else
-          assertOptionConfigured(result, name, type, results.search);
+          assertOptionConfigured(result, name, 'Active', type, results.search);
       })
       .run('gcs-configure-fields',
            '--domain-name', 'companies',
@@ -502,7 +502,7 @@ suite('gcs-configure-fields', function() {
         if (results.nosearch == 'error')
           assertOptionNotConfigurable(result, 'nosearch', type);
         else
-          assertOptionConfigured(result, name, type, results.nosearch);
+          assertOptionConfigured(result, name, 'Active', type, results.nosearch);
       })
       .run('gcs-configure-fields',
            '--domain-name', 'companies',
@@ -513,7 +513,7 @@ suite('gcs-configure-fields', function() {
         if (results.result == 'error')
           assertOptionNotConfigurable(result, 'result', type);
         else
-          assertOptionConfigured(result, name, type, results.result);
+          assertOptionConfigured(result, name, 'Active', type, results.result);
       })
       .run('gcs-configure-fields',
            '--domain-name', 'companies',
@@ -524,7 +524,7 @@ suite('gcs-configure-fields', function() {
         if (results.noresult == 'error')
           assertOptionNotConfigurable(result, 'noresult', type);
         else
-          assertOptionConfigured(result, name, type, results.noresult);
+          assertOptionConfigured(result, name, 'Active', type, results.noresult);
       })
       .run('gcs-configure-fields',
            '--domain-name', 'companies',
@@ -535,7 +535,7 @@ suite('gcs-configure-fields', function() {
         if (results.facet == 'error')
           assertOptionNotConfigurable(result, 'facet', type);
         else
-          assertOptionConfigured(result, name, type, results.facet);
+          assertOptionConfigured(result, name, 'Active', type, results.facet);
       })
       .run('gcs-configure-fields',
            '--domain-name', 'companies',
@@ -546,7 +546,7 @@ suite('gcs-configure-fields', function() {
         if (results.nofacet == 'error')
           assertOptionNotConfigurable(result, 'nofacet', type);
         else
-          assertOptionConfigured(result, name, type, results.nofacet);
+          assertOptionConfigured(result, name, 'Active', type, results.nofacet);
         done();
       })
       .error(function(e) {
