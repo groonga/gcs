@@ -462,7 +462,7 @@ suite('Search API', function() {
                'should return empty result, for search query about "nosearch" field',
                'search-people-00000000000000000000000000.localhost',
       function() {
-        domain.getIndexField('type').setSearchEnabled(false).saveOptionsSync();
+        domain.getIndexField('type').setSearchEnabled(false).saveSync();
       },
       function(response) {
         var expected = {
@@ -488,8 +488,8 @@ suite('Search API', function() {
                  'and return empty value for "noresult" fields',
                'search-people-00000000000000000000000000.localhost',
       function() {
-        domain.getIndexField('nickname').setResultEnabled(false).saveOptionsSync();
-        domain.getIndexField('type').setResultEnabled(false).saveOptionsSync();
+        domain.getIndexField('nickname').setResultEnabled(false).saveSync();
+        domain.getIndexField('type').setResultEnabled(false).saveSync();
       },
       function(response) {
         var expected = {
@@ -534,10 +534,10 @@ suite('Search API', function() {
                  'and return blank results for "nofacet" fields',
                'search-people-00000000000000000000000000.localhost',
       function() {
-        domain.getIndexField('realname').setFacetEnabled(false).saveOptionsSync();
-        domain.getIndexField('nickname').setFacetEnabled(false).saveOptionsSync();
+        domain.getIndexField('realname').setFacetEnabled(false).saveSync();
+        domain.getIndexField('nickname').setFacetEnabled(false).saveSync();
         domain.getIndexField('type')
-          .setResultEnabled(false).setFacetEnabled(true).saveOptionsSync();
+          .setResultEnabled(false).setFacetEnabled(true).saveSync();
       },
       function(response) {
         var expected = {
