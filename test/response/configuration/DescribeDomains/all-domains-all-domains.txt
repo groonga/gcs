@@ -58,23 +58,6 @@ date: Mon, 19 Nov 2012 11:08:58 GMT
           <Arn>arn:aws:cs:us-east-1:788574296432:doc/domain1</Arn>
         </DocService>
       </member>
-      <member>
-        <SearchPartitionCount>0</SearchPartitionCount>
-        <SearchService>
-          <Arn>arn:aws:cs:us-east-1:788574296432:search/companies</Arn>
-        </SearchService>
-        <NumSearchableDocs>0</NumSearchableDocs>
-        <Created>true</Created>
-        <DomainId>788574296432/companies</DomainId>
-        <Processing>true</Processing>
-        <SearchInstanceCount>0</SearchInstanceCount>
-        <DomainName>companies</DomainName>
-        <RequiresIndexDocuments>true</RequiresIndexDocuments>
-        <Deleted>true</Deleted>
-        <DocService>
-          <Arn>arn:aws:cs:us-east-1:788574296432:doc/companies</Arn>
-        </DocService>
-      </member>
     </DomainStatusList>
   </DescribeDomainsResult>
   <ResponseMetadata>
