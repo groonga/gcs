@@ -244,7 +244,7 @@ suite('database', function() {
       });
     });
 
-    suite('options', function() {
+    suite('major options', function() {
       var temporaryDatabase;
       var context;
       var domain;
@@ -386,6 +386,111 @@ suite('database', function() {
         field.deleteSync();
         assert.isTrue(domain.defaultSearchField === null,
                       domain.defaultSearchField);
+      });
+    });
+
+    suite('full options', function() {
+      var temporaryDatabase;
+      var context;
+      var domain;
+      var field;
+
+      setup(function() {
+        temporaryDatabase = utils.createTemporaryDatabase();
+        context = temporaryDatabase.get();
+        domain = new Domain('companies', context);
+        domain.saveSync();
+        field = domain.getIndexField('field').setType('text');
+      });
+
+      teardown(function() {
+        temporaryDatabase.teardown();
+        temporaryDatabase = undefined;
+        field = undefined;
+      });
+
+      test('initial state', function() {
+        var actual = {
+              hasAnyOption:     field.hasAnyOption(),
+              getAllOptions:    {},
+              getAllRawOptions: {}
+            };
+        var expected = {
+              hasAnyOption:     false,
+              getAllOptions:    {},
+              getAllRawOptions: {}
+            };
+        assert.deepEqual(actual, expected);
+      });
+
+      test('get and set', function() {
+        var anotherInstance = new IndexField('field', domain);
+
+        field.setOption('FooBar', 'true');
+        assert.deepEqual({ source:  field.getOption('FooBar'),
+                           another: anotherInstance.getOption('FooBar') },
+                         { source:  'true',
+                           another: undefined });
+
+        field.saveOptions();
+        assert.deepEqual({ source:  field.getOption('FooBar'),
+                           another: anotherInstance.getOption('FooBar') },
+                         { source:  'true',
+                           another: 'true' });
+      });
+
+      test('hasAnyOption', function() {
+        var anotherInstance = new IndexField('field', domain);
+
+        field.setOption('FooBar', 'true');
+        assert.deepEqual({ source:  field.hasAnyOption(),
+                           another: anotherInstance.hasAnyOption() },
+                         { source:  true,
+                           another: false });
+
+        field.saveOptions();
+        assert.deepEqual({ source:  field.hasAnyOption(),
+                           another: anotherInstance.hasAnyOption() },
+                         { source:  true,
+                           another: true });
+      });
+
+      test('setOptions', function() {
+        field.setOptions({
+          Option1: 'true',
+          Option2: '0'
+        });
+        var actual = {
+              Option1: field.getOption('Option1'),
+              Option2: field.getOption('Option2')
+            };
+        var expected = {
+              Option1: 'true',
+              Option2: '0'
+            };
+        assert.deepEqual(actual, expected);
+
+        field.saveOptions();
+        actual = {
+          Option1: field.getOption('Option1'),
+          Option2: field.getOption('Option2')
+        };
+        assert.deepEqual(actual, expected);
+      });
+
+      test('getAllOptions', function() {
+        field.setOption('Option1', 'false');
+        field.setOption('Option2', '1');
+        var actual = field.getAllOptions();
+        var expected = {
+              Option1: 'false',
+              Option2: '1'
+            };
+        assert.deepEqual(actual, expected);
+
+        field.saveOptions();
+        actual = field.getAllOptions();
+        assert.deepEqual(actual, expected);
       });
     });
 
