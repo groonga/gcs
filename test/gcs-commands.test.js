@@ -229,11 +229,11 @@ suite('gcs-describe-domain', function() {
                          { code: 0,
                            message:
                              '=== Domain Summary ===\n' +
-                             'Domain Name: domain1\n' +
+                             'Domain Name: domain2\n' +
                              'Document Service endpoint: ' +
-                               domain1.getDocumentsEndpoint(hostPort) + '\n' +
+                               domain2.getDocumentsEndpoint(hostPort) + '\n' +
                              'Search Service endpoint: ' +
-                               domain1.getSearchEndpoint(hostPort) + '\n' +
+                               domain2.getSearchEndpoint(hostPort) + '\n' +
                              'SearchInstanceType: null\n' +
                              'SearchPartitionCount: 0\n' +
                              'SearchInstanceCount: 0\n' +
@@ -248,11 +248,11 @@ suite('gcs-describe-domain', function() {
                              '======================\n' +
                              '\n' +
                              '=== Domain Summary ===\n' +
-                             'Domain Name: domain2\n' +
+                             'Domain Name: domain1\n' +
                              'Document Service endpoint: ' +
-                               domain2.getDocumentsEndpoint(hostPort) + '\n' +
+                               domain1.getDocumentsEndpoint(hostPort) + '\n' +
                              'Search Service endpoint: ' +
-                               domain2.getSearchEndpoint(hostPort) + '\n' +
+                               domain1.getSearchEndpoint(hostPort) + '\n' +
                              'SearchInstanceType: null\n' +
                              'SearchPartitionCount: 0\n' +
                              'SearchInstanceCount: 0\n' +
