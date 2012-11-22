@@ -988,7 +988,7 @@ suite('Configuration API', function() {
         .get('/?DomainName=companies&FieldNames.member.1=name&FieldNames.member.2=age&' +
              'Action=DescribeIndexFields&Version=2011-02-01')
         .next(function(response) {
-          var expectedFields = ['name', 'age'];
+          var expectedFields = ['age', 'name'];
           response = xmlResponses.toParsedResponse(response);
           assert.deepEqual(response.pattern,
                            { statusCode: 200,
