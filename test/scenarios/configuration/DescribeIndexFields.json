@@ -131,5 +131,44 @@
   { "name"  : "not a number index",
     "params": { "Action": "DescribeIndexFields",
                 "DomainName": "companies",
-                "FieldNames.member.foo": "name" } }
+                "FieldNames.member.foo": "name" } },
+
+  [
+    { "name"  : "text index field with unknown option: setup",
+      "params": { "Action": "DefineIndexField",
+                  "DomainName": "companies",
+                  "IndexField.IndexFieldName": "name_with_unknown_option",
+                  "IndexField.IndexFieldType": "text",
+                  "IndexField.TextOptions.SearchEnabled": "true" } },
+    { "name"  : "text index field with unknown option: describe",
+      "params": { "Action": "DescribeIndexFields",
+                  "DomainName": "companies",
+                  "FieldNames.member.1": "name_with_unknown_option" } }
+  ],
+
+  [
+    { "name"  : "literal index field with unknown option: setup",
+      "params": { "Action": "DefineIndexField",
+                  "DomainName": "companies",
+                  "IndexField.IndexFieldName": "product_with_unknown_option",
+                  "IndexField.IndexFieldType": "literal",
+                  "IndexField.TextOptions.SearchEnabled": "true" } },
+    { "name"  : "literal index field with unknown option: describe",
+      "params": { "Action": "DescribeIndexFields",
+                  "DomainName": "companies",
+                  "FieldNames.member.1": "product_with_unknown_option" } }
+  ],
+
+  [
+    { "name"  : "uint index field with unknown option: setup",
+      "params": { "Action": "DefineIndexField",
+                  "DomainName": "companies",
+                  "IndexField.IndexFieldName": "age_with_unknown_option",
+                  "IndexField.IndexFieldType": "uint",
+                  "IndexField.TextOptions.SearchEnabled": "true" } },
+    { "name"  : "uint index field with unknown option: describe",
+      "params": { "Action": "DescribeIndexFields",
+                  "DomainName": "companies",
+                  "FieldNames.member.1": "age_with_unknown_option" } }
+  ]
 ] }
