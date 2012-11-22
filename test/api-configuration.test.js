@@ -348,7 +348,7 @@ suite('Configuration API', function() {
         .get('/?DomainName=domain2&Action=CreateDomain&Version=2011-02-01')
         .get('/?Action=DescribeDomains&Version=2011-02-01')
         .next(function(response) {
-          assertDomainsReturned(response, ['domain1', 'domain2', 'domain3']);
+          assertDomainsReturned(response, ['domain3', 'domain2', 'domain1']);
           done();
         })
         .error(function(error) {
@@ -363,7 +363,7 @@ suite('Configuration API', function() {
         .post('/?DomainName=domain2&Action=CreateDomain&Version=2011-02-01')
         .post('/?Action=DescribeDomains&Version=2011-02-01')
         .next(function(response) {
-          assertDomainsReturned(response, ['domain1', 'domain2', 'domain3']);
+          assertDomainsReturned(response, ['domain3', 'domain2', 'domain1']);
           done();
         })
         .error(function(error) {
@@ -624,17 +624,10 @@ suite('Configuration API', function() {
           assert.isTrue(field.exists(), response.body);
 
           response = xmlResponses.toParsedResponse(response);
-          assert.deepEqual(response.pattern,
-                           { statusCode: 200,
-                             body: xmlResponses.DefineIndexFieldResponse_Text });
+          assert.equal(response.statusCode, 200);
           var expectedOptions = {
                 IndexFieldName: 'name',
-                IndexFieldType: 'text',
-                TextOptions: {
-                  DefaultValue: {},
-                  FacetEnabled: 'false',
-                  ResultEnabled: 'false'
-                }
+                IndexFieldType: 'text'
               };
           var options = response.body.DefineIndexFieldResponse.DefineIndexFieldResult.IndexField.Options;
           assert.deepEqual(options, expectedOptions);
@@ -659,15 +652,11 @@ suite('Configuration API', function() {
           assert.isTrue(field.exists(), response.body);
 
           response = xmlResponses.toParsedResponse(response);
-          assert.deepEqual(response.pattern,
-                           { statusCode: 200,
-                             body: xmlResponses.DefineIndexFieldResponse_Text });
+          assert.equal(response.statusCode, 200);
           var expectedOptions = {
                 IndexFieldName: 'name',
                 IndexFieldType: 'text',
                 TextOptions: {
-                  DefaultValue: {},
-                  FacetEnabled: 'false',
                   ResultEnabled: 'true'
                 }
               };
@@ -693,15 +682,10 @@ suite('Configuration API', function() {
           assert.isTrue(field.exists(), response.body);
 
           response = xmlResponses.toParsedResponse(response);
-          assert.deepEqual(response.pattern,
-                           { statusCode: 200,
-                             body: xmlResponses.DefineIndexFieldResponse_UInt });
+          assert.equal(response.statusCode, 200);
           var expectedOptions = {
                 IndexFieldName: 'age',
-                IndexFieldType: 'uint',
-                UIntOptions: {
-                  DefaultValue: {}
-                }
+                IndexFieldType: 'uint'
               };
           var options = response.body.DefineIndexFieldResponse.DefineIndexFieldResult.IndexField.Options;
           assert.deepEqual(options, expectedOptions);
@@ -725,18 +709,10 @@ suite('Configuration API', function() {
           assert.isTrue(field.exists(), response.body);
 
           response = xmlResponses.toParsedResponse(response);
-          assert.deepEqual(response.pattern,
-                           { statusCode: 200,
-                             body: xmlResponses.DefineIndexFieldResponse_Literal });
+          assert.equal(response.statusCode, 200);
           var expectedOptions = {
                 IndexFieldName: 'product',
-                IndexFieldType: 'literal',
-                LiteralOptions: {
-                  DefaultValue: {},
-                  FacetEnabled: 'false',
-                  ResultEnabled: 'false',
-                  SearchEnabled: 'false'
-                }
+                IndexFieldType: 'literal'
               };
           var options = response.body.DefineIndexFieldResponse.DefineIndexFieldResult.IndexField.Options;
           assert.deepEqual(options, expectedOptions);
@@ -762,14 +738,11 @@ suite('Configuration API', function() {
           assert.isTrue(field.exists(), response.body);
 
           response = xmlResponses.toParsedResponse(response);
-          assert.deepEqual(response.pattern,
-                           { statusCode: 200,
-                             body: xmlResponses.DefineIndexFieldResponse_Literal });
+          assert.equal(response.statusCode, 200);
           var expectedOptions = {
                 IndexFieldName: 'product',
                 IndexFieldType: 'literal',
                 LiteralOptions: {
-                  DefaultValue: {},
                   FacetEnabled: 'false',
                   ResultEnabled: 'true',
                   SearchEnabled: 'true'
@@ -878,9 +851,7 @@ suite('Configuration API', function() {
                              field:  false });
 
           response = xmlResponses.toParsedResponse(response);
-          assert.deepEqual(response.pattern,
-                           { statusCode: 200,
-                             body: xmlResponses.DeleteIndexFieldResponse_Text });
+          assert.equal(response.statusCode, 200);
 
           done();
         })
@@ -909,9 +880,7 @@ suite('Configuration API', function() {
                              field:  false });
 
           response = xmlResponses.toParsedResponse(response);
-          assert.deepEqual(response.pattern,
-                           { statusCode: 200,
-                             body: xmlResponses.DeleteIndexFieldResponse_UInt });
+          assert.equal(response.statusCode, 200);
 
           done();
         })
@@ -940,9 +909,7 @@ suite('Configuration API', function() {
                              field:  false });
 
           response = xmlResponses.toParsedResponse(response);
-          assert.deepEqual(response.pattern,
-                           { statusCode: 200,
-                             body: xmlResponses.DeleteIndexFieldResponse_Literal });
+          assert.equal(response.statusCode, 200);
 
           done();
         })
@@ -959,9 +926,7 @@ suite('Configuration API', function() {
              'Action=DeleteIndexField&Version=2011-02-01')
         .next(function(response) {
           response = xmlResponses.toParsedResponse(response);
-          assert.deepEqual(response.pattern,
-                           { statusCode: 200,
-                             body: xmlResponses.DeleteIndexFieldResponse });
+          assert.equal(response.statusCode, 200);
           done();
         })
         .error(function(error) {
@@ -1004,9 +969,9 @@ suite('Configuration API', function() {
           assert.deepEqual(response.pattern,
                            { statusCode: 200,
                              body: xmlResponses.DescribeIndexFieldsResponse([
-                               xmlResponses.IndexFieldStatus_UInt,
-                               xmlResponses.IndexFieldStatus_Text,
-                               xmlResponses.IndexFieldStatus_Literal
+                               xmlResponses.IndexFieldStatus_NoOption,
+                               xmlResponses.IndexFieldStatus_NoOption,
+                               xmlResponses.IndexFieldStatus_NoOption
                              ]) });
 
           var actualFields = getActualDescribedFields(response);
@@ -1029,8 +994,8 @@ suite('Configuration API', function() {
           assert.deepEqual(response.pattern,
                            { statusCode: 200,
                              body: xmlResponses.DescribeIndexFieldsResponse([
-                               xmlResponses.IndexFieldStatus_Text,
-                               xmlResponses.IndexFieldStatus_UInt
+                               xmlResponses.IndexFieldStatus_NoOption,
+                               xmlResponses.IndexFieldStatus_NoOption
                              ]) });
 
           var actualFields = getActualDescribedFields(response);

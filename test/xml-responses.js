@@ -67,6 +67,17 @@ exports.DescribeDomainsResponse = function(members) {
   });
 };
 
+var IndexField_NoOption =
+    exports.IndexField_Text = {
+      IndexFieldName: '',
+      IndexFieldType: ''
+    };
+var IndexFieldStatus_NoOption =
+    exports.IndexFieldStatus_NoOption = {
+      Options: IndexField_NoOption,
+      Status: OptionStatus
+    };
+
 var OptionStatus =
     exports.OptionStatus = {
       CreationDate: '',
