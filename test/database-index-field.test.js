@@ -439,6 +439,29 @@ suite('database', function() {
                            another: 'true' });
       });
 
+      test('boolean option', function() {
+        field.setOption('TrueOption', 'true');
+        field.setOption('FalseOption', 'false');
+        field.setOption('NumberOption', '1');
+        field.setOption('TextOption', 'foobar');
+        assert.deepEqual({ rawTrue:       field.getOption('TrueOption'),
+                           booleanTrue:   field.getBooleanOption('TrueOption'),
+                           rawFalse:      field.getOption('FalseOption'),
+                           booleanFalse:  field.getBooleanOption('FalseOption'),
+                           rawNumber:     field.getOption('NumberOption'),
+                           booleanNumber: field.getBooleanOption('NumberOption'),
+                           rawText:       field.getOption('TextOption'),
+                           booleanText:   field.getBooleanOption('TextOption') },
+                         { rawTrue:       'true',
+                           booleanTrue:   true,
+                           rawFalse:      'false',
+                           booleanFalse:  false,
+                           rawNumber:     '1',
+                           booleanNumber: false,
+                           rawText:       'foobar',
+                           booleanText:   false });
+      });
+
       test('hasAnyOption', function() {
         var anotherInstance = new IndexField('field', domain);
 
