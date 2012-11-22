@@ -743,7 +743,6 @@ suite('Configuration API', function() {
                 IndexFieldName: 'product',
                 IndexFieldType: 'literal',
                 LiteralOptions: {
-                  FacetEnabled: 'false',
                   ResultEnabled: 'true',
                   SearchEnabled: 'true'
                 }

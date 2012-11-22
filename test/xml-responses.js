@@ -67,6 +67,14 @@ exports.DescribeDomainsResponse = function(members) {
   });
 };
 
+var OptionStatus =
+    exports.OptionStatus = {
+      CreationDate: '',
+      PendingDeletion: '',
+      State: '',
+      UpdateDate: '',
+      UpdateVersion: ''
+    };
 var IndexField_NoOption =
     exports.IndexField_Text = {
       IndexFieldName: '',
@@ -78,14 +86,6 @@ var IndexFieldStatus_NoOption =
       Status: OptionStatus
     };
 
-var OptionStatus =
-    exports.OptionStatus = {
-      CreationDate: '',
-      PendingDeletion: '',
-      State: '',
-      UpdateDate: '',
-      UpdateVersion: ''
-    };
 var TextOptions =
     exports.TextOptions = {
       DefaultValue: {},
