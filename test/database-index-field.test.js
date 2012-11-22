@@ -41,23 +41,14 @@ suite('database', function() {
       assert.equal(field.columnName, 'valid_123');
     });
 
-    test('too short (1 character)', function() {
+    test('without name', function() {
       assert.throw(function() {
-        var field = new IndexField('v', domain).setType('text').validate();
+        var field = new IndexField('', domain).setType('text').validate();
       }, '2 validation errors detected: ' +
-           'Value \'v\' at \'%NAME_FIELD%\' failed to satisfy constraint: ' +
+           'Value \'\' at \'%NAME_FIELD%\' failed to satisfy constraint: ' +
              'Member must satisfy regular expression pattern: ' +
                IndexField.VALID_NAME_PATTERN + '; ' +
-           'Value \'v\' at \'%NAME_FIELD%\' failed to satisfy constraint: ' +
-             'Member must have length greater than or equal to ' +
-               IndexField.MINIMUM_NAME_LENGTH);
-    });
-
-    test('too short (2 characters)', function() {
-      assert.throw(function() {
-        var field = new IndexField('va', domain).setType('text').validate();
-      }, '1 validation error detected: ' +
-           'Value \'va\' at \'%NAME_FIELD%\' failed to satisfy constraint: ' +
+           'Value \'\' at \'%NAME_FIELD%\' failed to satisfy constraint: ' +
              'Member must have length greater than or equal to ' +
                IndexField.MINIMUM_NAME_LENGTH);
     });
