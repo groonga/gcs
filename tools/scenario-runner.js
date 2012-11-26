@@ -176,7 +176,7 @@ ScenarioRunner.prototype.shouldAccept = function(name) {
   if (!this._acceptFilter) {
     this._acceptFilter = this.options.accept;
     if (typeof this._acceptFilter == 'string' &&
-        /^\/(.+\)/([gim]*)/.test(this._acceptFilter)) {
+        /^\/(.+)\/([gim]*)/.test(this._acceptFilter)) {
       this._acceptFilter = new RegExp(RegExp.$1, RegExp.$2 || '');
     }
   }
