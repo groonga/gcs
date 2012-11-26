@@ -1,0 +1,14 @@
+HTTP/1.1 409 Conflict
+x-amzn-requestid: 6e5234c4-37ac-11e2-9f88-b1a9b7dee69b
+content-type: text/xml
+content-length: 301
+date: Mon, 26 Nov 2012 09:34:10 GMT
+
+<ErrorResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
+  <Error>
+    <Type>Sender</Type>
+    <Code>InvalidType</Code>
+    <Message>A literal IndexField may only specify literalOptions</Message>
+  </Error>
+  <RequestId>6e5234c4-37ac-11e2-9f88-b1a9b7dee69b</RequestId>
+</ErrorResponse>

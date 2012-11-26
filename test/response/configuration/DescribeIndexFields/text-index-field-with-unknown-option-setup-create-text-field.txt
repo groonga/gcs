@@ -1,0 +1,26 @@
+HTTP/1.1 200 OK
+x-amzn-requestid: 5ae6e516-37ac-11e2-b9d2-65e69145006c
+content-type: text/xml
+content-length: 712
+date: Mon, 26 Nov 2012 09:33:38 GMT
+
+<DefineIndexFieldResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
+  <DefineIndexFieldResult>
+    <IndexField>
+      <Status>
+        <CreationDate>2012-11-26T09:33:37Z</CreationDate>
+        <PendingDeletion>false</PendingDeletion>
+        <UpdateVersion>4</UpdateVersion>
+        <State>RequiresIndexDocuments</State>
+        <UpdateDate>2012-11-26T09:33:37Z</UpdateDate>
+      </Status>
+      <Options>
+        <IndexFieldType>text</IndexFieldType>
+        <IndexFieldName>name</IndexFieldName>
+      </Options>
+    </IndexField>
+  </DefineIndexFieldResult>
+  <ResponseMetadata>
+    <RequestId>5ae6e516-37ac-11e2-b9d2-65e69145006c</RequestId>
+  </ResponseMetadata>
+</DefineIndexFieldResponse>

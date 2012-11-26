@@ -1,0 +1,14 @@
+HTTP/1.1 409 Conflict
+x-amzn-requestid: 7c4e395c-37ac-11e2-ab39-5b7e5f4f8ca9
+content-type: text/xml
+content-length: 295
+date: Mon, 26 Nov 2012 09:34:33 GMT
+
+<ErrorResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
+  <Error>
+    <Type>Sender</Type>
+    <Code>InvalidType</Code>
+    <Message>A uint IndexField may only specify uintOptions</Message>
+  </Error>
+  <RequestId>7c4e395c-37ac-11e2-ab39-5b7e5f4f8ca9</RequestId>
+</ErrorResponse>

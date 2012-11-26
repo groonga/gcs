@@ -1,0 +1,14 @@
+HTTP/1.1 400 Bad Request
+x-amzn-requestid: 4b7f4311-37ac-11e2-9f88-b1a9b7dee69b
+content-type: text/xml
+content-length: 290
+date: Mon, 26 Nov 2012 09:33:11 GMT
+
+<ErrorResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
+  <Error>
+    <Type>Sender</Type>
+    <Code>MalformedInput</Code>
+    <Message>Start of list found where not expected</Message>
+  </Error>
+  <RequestId>4b7f4311-37ac-11e2-9f88-b1a9b7dee69b</RequestId>
+</ErrorResponse>

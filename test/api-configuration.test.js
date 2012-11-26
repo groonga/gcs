@@ -1309,7 +1309,6 @@ suite('Configuration API', function() {
     });
   });
 
-/*
   suite('responses', function() {
     setup(commonSetup);
     teardown(commonTeardown);
@@ -1366,5 +1365,4 @@ suite('Configuration API', function() {
       });
     });
   });
-*/
 });
