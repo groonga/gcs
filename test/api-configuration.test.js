@@ -139,7 +139,7 @@ suite('Configuration API', function() {
       utils
         .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
         .next(function(response) {
-          assertDomainCreatedResponse(response, 'companies');
+          assert.isTrue(new Domain('companies', context).exists());
           done();
         })
         .error(function(error) {
@@ -152,51 +152,18 @@ suite('Configuration API', function() {
         .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
         .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
         .next(function(response) {
-          assertDomainCreatedResponse(response, 'companies');
+          assert.isTrue(new Domain('companies', context).exists());
           done();
         }).error(function(error) {
           done(error)
         });
     });
 
-    test('Action=CreateDomain with too short (one character) domain name', function(done) {
+    test('Action=CreateDomain with invalid domain name', function(done) {
       utils
-        .get('/?DomainName=' + TOO_SHORT_1_LETTER_DOMAIN_NAME + '&Action=CreateDomain&Version=2011-02-01')
+        .get('/?DomainName=a&Action=CreateDomain&Version=2011-02-01')
         .next(function(response) {
-          assertValidationErrorResponse(
-            TOO_SHORT_1_LETTER_DOMAIN_NAME_ERROR_MESSAGE,
-            response
-          );
-          done();
-        })
-        .error(function(error) {
-          done(error);
-        });
-    });
-
-    test('Action=CreateDomain with too short (two characters) domain name', function(done) {
-      utils
-        .get('/?DomainName=' + TOO_SHORT_2_LETTERS_DOMAIN_NAME + '&Action=CreateDomain&Version=2011-02-01')
-        .next(function(response) {
-          assertValidationErrorResponse(
-            TOO_SHORT_2_LETTERS_DOMAIN_NAME_ERROR_MESSAGE,
-            response
-          );
-          done();
-        })
-        .error(function(error) {
-          done(error);
-        });
-    });
-
-    test('Action=CreateDomain with too long domain name', function(done) {
-      utils
-        .get('/?DomainName=' + TOO_LONG_DOMAIN_NAME + '&Action=CreateDomain&Version=2011-02-01')
-        .next(function(response) {
-          assertValidationErrorResponse(
-            TOO_LONG_DOMAIN_NAME_ERROR_MESSAGE,
-            response
-          );
+          assert.isFalse(new Domain('companies', context).exists());
           done();
         })
         .error(function(error) {
@@ -208,10 +175,7 @@ suite('Configuration API', function() {
       utils
         .get('/?DomainName=&Action=CreateDomain&Version=2011-02-01')
         .next(function(response) {
-          assertValidationErrorResponse(
-            NO_DOMAIN_NAME_ERROR_MESSAGE,
-            response
-          );
+          assert.isFalse(new Domain('companies', context).exists());
           done();
         })
         .error(function(error) {
@@ -223,252 +187,9 @@ suite('Configuration API', function() {
       var domain;
       utils
         .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
-        .next(function() {
-          domain = new Domain('companies', context);
-          assert.isTrue(domain.exists());
-        })
         .get('/?DomainName=companies&Action=DeleteDomain&Version=2011-02-01')
         .next(function(response) {
           assert.isFalse(domain.exists());
-
-          response = xmlResponses.toParsedResponse(response);
-          assert.deepEqual(response.pattern,
-                           { statusCode: 200,
-                             body: xmlResponses.DeleteDomainResponse });
-          var expectedStatus = {
-                Created: 'true',
-                Deleted: 'true',
-                DocService: {
-                  Endpoint: domain.getDocumentsEndpoint(defaultBaseHost),
-                  Arn: domain.documentsArn
-                },
-                DomainId: domain.domainId,
-                DomainName: domain.name,
-                NumSearchableDocs: String(domain.searchableDocumentsCount),
-                Processing: String(domain.processing),
-                RequiresIndexDocuments: String(domain.requiresIndexDocuments),
-                SearchInstanceCount: String(domain.searchInstanceCount),
-                SearchPartitionCount: String(domain.searchPartitionCount),
-                SearchService: {
-                  Endpoint: domain.getSearchEndpoint(defaultBaseHost),
-                  Arn: domain.searchArn
-                }
-              };
-          var status = response.body.DeleteDomainResponse.DeleteDomainResult.DomainStatus;
-          assert.deepEqual(status, expectedStatus);
-
-          done();
-        })
-        .error(function(error) {
-          done(error);
-        });
-    });
-
-    test('Action=DeleteDomain for unexisting domain', function(done) {
-      var domain = new Domain('companies', context);
-      assert.isFalse(domain.exists());
-      utils
-        .get('/?DomainName=companies&Action=DeleteDomain&Version=2011-02-01')
-        .next(function(response) {
-          response = xmlResponses.toParsedResponse(response);
-          assert.deepEqual(response.pattern,
-                           { statusCode: 200,
-                             body: xmlResponses.DeleteDomainResponse_UnexistingDomain });
-          done();
-        })
-        .error(function(error) {
-          done(error);
-        });
-    });
-
-    test('Action=DeleteDomain for too short (one character) domain name', function(done) {
-      utils
-        .get('/?DomainName=' + TOO_SHORT_1_LETTER_DOMAIN_NAME + '&Action=DeleteDomain&Version=2011-02-01')
-        .next(function(response) {
-          assertValidationErrorResponse(
-            TOO_SHORT_1_LETTER_DOMAIN_NAME_ERROR_MESSAGE,
-            response
-          );
-          done();
-        })
-        .error(function(error) {
-          done(error);
-        });
-    });
-
-    test('Action=DeleteDomain for too short (two characters) domain name', function(done) {
-      utils
-        .get('/?DomainName=' + TOO_SHORT_2_LETTERS_DOMAIN_NAME + '&Action=DeleteDomain&Version=2011-02-01')
-        .next(function(response) {
-          assertValidationErrorResponse(
-            TOO_SHORT_2_LETTERS_DOMAIN_NAME_ERROR_MESSAGE,
-            response
-          );
-          done();
-        })
-        .error(function(error) {
-          done(error);
-        });
-    });
-
-    test('Action=DeleteDomain for too long domain name', function(done) {
-      utils
-        .get('/?DomainName=' + TOO_LONG_DOMAIN_NAME + '&Action=DeleteDomain&Version=2011-02-01')
-        .next(function(response) {
-          assertValidationErrorResponse(
-            TOO_LONG_DOMAIN_NAME_ERROR_MESSAGE,
-            response
-          );
-          done();
-        })
-        .error(function(error) {
-          done(error);
-        });
-    });
-
-    test('Action=DeleteDomain for without name', function(done) {
-      utils
-        .get('/?DomainName=&Action=DeleteDomain&Version=2011-02-01')
-        .next(function(response) {
-          assertValidationErrorResponse(
-            NO_DOMAIN_NAME_ERROR_MESSAGE,
-            response
-          );
-          done();
-        })
-        .error(function(error) {
-          done(error);
-        });
-    });
-
-    test('Action=DescribeDomains (all domains)', function(done) {
-      utils
-        .get('/?DomainName=domain3&Action=CreateDomain&Version=2011-02-01')
-        .get('/?DomainName=domain1&Action=CreateDomain&Version=2011-02-01')
-        .get('/?DomainName=domain2&Action=CreateDomain&Version=2011-02-01')
-        .get('/?Action=DescribeDomains&Version=2011-02-01')
-        .next(function(response) {
-          assertDomainsReturned(response, ['domain3', 'domain2', 'domain1']);
-          done();
-        })
-        .error(function(error) {
-          done(error);
-        });
-    });
-
-    test('Action=DescribeDomains (all domains, via POST)', function(done) {
-      utils
-        .post('/?DomainName=domain3&Action=CreateDomain&Version=2011-02-01')
-        .post('/?DomainName=domain1&Action=CreateDomain&Version=2011-02-01')
-        .post('/?DomainName=domain2&Action=CreateDomain&Version=2011-02-01')
-        .post('/?Action=DescribeDomains&Version=2011-02-01')
-        .next(function(response) {
-          assertDomainsReturned(response, ['domain3', 'domain2', 'domain1']);
-          done();
-        })
-        .error(function(error) {
-          done(error);
-        });
-    });
-
-    test('Action=DescribeDomains (specified domains)', function(done) {
-      utils
-        .get('/?DomainName=domain3&Action=CreateDomain&Version=2011-02-01')
-        .get('/?DomainName=domain1&Action=CreateDomain&Version=2011-02-01')
-        .get('/?DomainName=domain2&Action=CreateDomain&Version=2011-02-01')
-        .get('/?Action=DescribeDomains&Version=2011-02-01' +
-               '&DomainNames.member.1=domain2' +
-               '&DomainNames.member.2=domain1')
-        .next(function(response) {
-          assertDomainsReturned(response, ['domain2', 'domain1']);
-          done();
-        })
-        .error(function(error) {
-          done(error);
-        });
-    });
-
-    test('Action=DescribeDomains (not existing domain)', function(done) {
-      utils
-        .get('/?DomainName=domain3&Action=CreateDomain&Version=2011-02-01')
-        .get('/?DomainName=domain1&Action=CreateDomain&Version=2011-02-01')
-        .get('/?DomainName=domain2&Action=CreateDomain&Version=2011-02-01')
-        .get('/?Action=DescribeDomains&Version=2011-02-01' +
-               '&DomainNames.member.1=unknown')
-        .next(function(response) {
-          assertDomainsReturned(response, []);
-          done();
-        })
-        .error(function(error) {
-          done(error);
-        });
-    });
-
-    test('Action=DescribeDomains (too short name)', function(done) {
-      utils
-        .get('/?Action=DescribeDomains&Version=2011-02-01' +
-               '&DomainNames.member.1=a')
-        .next(function(response) {
-          assertDomainsReturned(response, []);
-        })
-        .get('/?Action=DescribeDomains&Version=2011-02-01' +
-               '&DomainNames.member.1=a' +
-               '&DomainNames.member.2=b')
-        .next(function(response) {
-          assertDomainsReturned(response, []);
-          done();
-        })
-        .error(function(error) {
-          done(error);
-        });
-    });
-
-    test('Action=DescribeDomains (too long name)', function(done) {
-      utils
-        .get('/?Action=DescribeDomains&Version=2011-02-01' +
-               '&DomainNames.member.1=abcdefghijklmnopqrstuvwxyz0123456789')
-        .next(function(response) {
-          assertDomainsReturned(response, []);
-        })
-        .get('/?Action=DescribeDomains&Version=2011-02-01' +
-               '&DomainNames.member.1=abcdefghijklmnopqrstuvwxyz0123456789' +
-               '&DomainNames.member.2=abcdefghijklmnopqrstuvwxyz01234567890')
-        .next(function(response) {
-          assertDomainsReturned(response, []);
-          done();
-        })
-        .error(function(error) {
-          done(error);
-        });
-    });
-
-    test('Action=DescribeDomains (invalid character)', function(done) {
-      utils
-        .get('/?Action=DescribeDomains&Version=2011-02-01' +
-               '&DomainNames.member.1=@_@')
-        .next(function(response) {
-          assertDomainsReturned(response, []);
-        })
-        .get('/?Action=DescribeDomains&Version=2011-02-01' +
-               '&DomainNames.member.1=@_@' +
-               '&DomainNames.member.2=@-@')
-        .next(function(response) {
-          assertDomainsReturned(response, []);
-          done();
-        })
-        .error(function(error) {
-          done(error);
-        });
-    });
-
-    test('Action=DescribeDomains (same domain)', function(done) {
-      utils
-        .get('/?DomainName=domain1&Action=CreateDomain&Version=2011-02-01')
-        .get('/?Action=DescribeDomains&Version=2011-02-01' +
-               '&DomainNames.member.1=domain1' +
-               '&DomainNames.member.2=domain1')
-        .next(function(response) {
-          assertDomainsReturned(response, ['domain1', 'domain1']);
           done();
         })
         .error(function(error) {
@@ -492,7 +213,6 @@ suite('Configuration API', function() {
                                           .member
                                           .NumSearchableDocs;
           assert.equal(recordsCount, '10');
-
           done();
         })
         .error(function(error) {
