@@ -230,7 +230,7 @@ ScenarioRunner.prototype._process = function(scenario, callback) {
 
   var name = request.name;
 
-  if (!this.shoudlAccept(name) || this.shouldReject(name)) {
+  if (!this.shouldAccept(name) || this.shouldReject(name)) {
     skipped = true;
     return processNext();
   }
