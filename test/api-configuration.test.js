@@ -29,7 +29,7 @@ suite('Configuration API', function() {
     setup(commonSetup);
     teardown(commonTeardown);
 
-    test('Action=CreateDomain', function(done) {
+    test('Action=CreateDomain success case', function(done) {
       utils
         .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
         .next(function(response) {
@@ -41,19 +41,7 @@ suite('Configuration API', function() {
         });
     });
 
-    test('multiple Action=CreateDomain requests for the same domain', function(done) {
-      utils
-        .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
-        .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
-        .next(function(response) {
-          assert.isTrue(new Domain('companies', context).exists());
-          done();
-        }).error(function(error) {
-          done(error)
-        });
-    });
-
-    test('Action=CreateDomain with invalid domain name', function(done) {
+    test('Action=CreateDomain failure case', function(done) {
       utils
         .get('/?DomainName=a&Action=CreateDomain&Version=2011-02-01')
         .next(function(response) {
@@ -65,25 +53,12 @@ suite('Configuration API', function() {
         });
     });
 
-    test('Action=CreateDomain without domain name', function(done) {
-      utils
-        .get('/?DomainName=&Action=CreateDomain&Version=2011-02-01')
-        .next(function(response) {
-          assert.isFalse(new Domain('companies', context).exists());
-          done();
-        })
-        .error(function(error) {
-          done(error);
-        });
-    });
-
-    test('Action=DeleteDomain', function(done) {
-      var domain;
+    test('Action=DeleteDomain success case', function(done) {
       utils
         .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
         .get('/?DomainName=companies&Action=DeleteDomain&Version=2011-02-01')
         .next(function(response) {
-          assert.isFalse(domain.exists());
+          assert.isFalse(new Domain('companies', context).exists());
           done();
         })
         .error(function(error) {
