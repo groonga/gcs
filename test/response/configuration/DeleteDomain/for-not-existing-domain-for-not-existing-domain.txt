@@ -5,25 +5,7 @@ content-length: 917
 date: Mon, 26 Nov 2012 09:36:48 GMT
 
 <DeleteDomainResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
-  <DeleteDomainResult>
-    <DomainStatus>
-      <SearchPartitionCount>0</SearchPartitionCount>
-      <SearchService>
-        <Arn>arn:aws:cs:us-east-1:788574296432:search/companies</Arn>
-      </SearchService>
-      <NumSearchableDocs>0</NumSearchableDocs>
-      <Created>true</Created>
-      <DomainId>788574296432/companies</DomainId>
-      <Processing>false</Processing>
-      <SearchInstanceCount>0</SearchInstanceCount>
-      <DomainName>companies</DomainName>
-      <RequiresIndexDocuments>false</RequiresIndexDocuments>
-      <Deleted>true</Deleted>
-      <DocService>
-        <Arn>arn:aws:cs:us-east-1:788574296432:doc/companies</Arn>
-      </DocService>
-    </DomainStatus>
-  </DeleteDomainResult>
+  <DeleteDomainResult/>
   <ResponseMetadata>
     <RequestId>cb0e98a4-37ac-11e2-8b5f-abde5222ef64</RequestId>
   </ResponseMetadata>
