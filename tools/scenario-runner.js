@@ -112,7 +112,7 @@ ScenariosRunner.prototype._process = function(params) {
 
     runner.on('end', function(event) {
       if (params.scenarios.length) {
-        if (self.options.scenarioInterval) {
+        if (self.options.scenarioInterval && !event.skipped) {
           self.emit('wait', { message: 'waiting ' + self.options.scenarioInterval + 'msec for the next scenario...' });
           setTimeout(function() { self._process(params); },
                      self.options.scenarioInterval);
@@ -169,6 +169,42 @@ ScenarioRunner.prototype.initializeScenario = function(scenario) {
   return scenario;
 };
 
+ScenarioRunner.prototype.shouldAccept = function(name) {
+  if (!this.options.accept)
+    return true;
+
+  if (!this._acceptFilter) {
+    this._acceptFilter = this.options.accept;
+    if (typeof this._acceptFilter == 'string' &&
+        /^\/(.+\)/([gim]*)/.test(this._acceptFilter)) {
+      this._acceptFilter = new RegExp(RegExp.$1, RegExp.$2 || '');
+    }
+  }
+
+  if (typeof this._acceptFilter == 'string')
+    return name.indexOf(this._acceptFilter) > -1;
+  else
+    return this._acceptFilter.test(name);
+};
+
+ScenarioRunner.prototype.shouldReject = function(name) {
+  if (!this.options.reject)
+    return false;
+
+  if (!this._rejectFilter) {
+    this._rejectFilter = this.options.reject;
+    if (typeof this._rejectFilter == 'string' &&
+        /^\/(.+\)/([gim]*)/.test(this._rejectFilter)) {
+      this._rejectFilter = new RegExp(RegExp.$1, RegExp.$2 || '');
+    }
+  }
+
+  if (typeof this._rejectFilter == 'string')
+    return name.indexOf(this._rejectFilter) > -1;
+  else
+    return this._rejectFilter.test(name);
+};
+
 ScenarioRunner.prototype._process = function(scenario, callback) {
   if (!scenario.toBeProcessedRequests) {
     scenario = this.initializeScenario(scenario);
@@ -177,6 +213,7 @@ ScenarioRunner.prototype._process = function(scenario, callback) {
 
   var request = scenario.toBeProcessedRequests.shift();
   var self = this;
+  var skipped = false;
   function processNext() {
     if (scenario.toBeProcessedRequests.length) {
       self._process(scenario, callback);
@@ -184,13 +221,20 @@ ScenarioRunner.prototype._process = function(scenario, callback) {
       var elapsedTime = Date.now() - scenario.start;
       var event = {
         elapsedTime: elapsedTime,
-        scenario: scenario
+        scenario: scenario,
+        skipped: skipped
       };
       self.emit('end', event);
     }
   }
 
   var name = request.name;
+
+  if (!this.shoudlAccept(name) || this.shouldReject(name)) {
+    skipped = true;
+    return processNext();
+  }
+
   var count = 1;
   while (name in scenario.processed) {
     name = request.name + count++;

@@ -41,6 +41,12 @@ commandLine
           'Interval to run each scenario (in msec). [600000]',
           Number,
           600000)
+  .option('--accept <scenario name>',
+          'Process only scenarios matched to the filter.',
+          String)
+  .option('--reject <scenario name>',
+          'Process except scenarios matched to the filter.',
+          String)
   .option('--ignore-dirty-environment',
           'Continue running scenarios if there is any existing domain.',
           Boolean)
@@ -116,7 +122,10 @@ runner.on('scenario', function(event) {
   mkdirp.sync(event.scenario.responsesDir);
 
   event.runner.on('end', function(event) {
-    console.log('  Done. (elapsed time: ' + event.elapsedTime + 'msec)');
+    if (event.skipped)
+      console.log('  Skipped.');
+    else
+      console.log('  Done. (elapsed time: ' + event.elapsedTime + 'msec)');
   });
 
   event.runner.on('wait', function(event) {
