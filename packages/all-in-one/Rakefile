@@ -117,7 +117,7 @@ end
 
 libgroonga_so_path = @dist_dir + "lib/libgroonga.#{shared_object_extension}"
 namespace(:groonga) do
-  version = "2.0.8"
+  version = "2.0.9"
   source_basename = "groonga-#{version}"
   tar_gz_basename = "#{source_basename}.tar.gz"
   build_dir = @build_dir + "groonga"
