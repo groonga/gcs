@@ -60,7 +60,6 @@ source: ../$(PACKAGE)-$(VERSION).tar.gz
 	cp -a ../../lib/ $(PACKAGE)-$(VERSION)
 	cp -a ../../npm-shrinkwrap.json $(PACKAGE)-$(VERSION)
 	cp -a ../../package.json $(PACKAGE)-$(VERSION)
-	cp -a ../../public/ $(PACKAGE)-$(VERSION)
 	cp -a ../../test/ $(PACKAGE)-$(VERSION)
 	cp -a ../../tools/ $(PACKAGE)-$(VERSION)
 	cp -a ../../views/ $(PACKAGE)-$(VERSION)
