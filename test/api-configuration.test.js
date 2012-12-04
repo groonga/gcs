@@ -106,10 +106,10 @@ suite('Configuration API', function() {
       var domain = new Domain('companies', context);
       var status = response.body.CreateDomainResponse.CreateDomainResult.DomainStatus;
       assert.deepEqual(
-        { documentsEndpoint: status.DocService.Endpoint,
-          searchEndpoint:    status.SearchService.Endpoint },
-        { documentsEndpoint: domain.getDocumentsEndpoint(baseHost),
-          searchEndpoint:    domain.getSearchEndpoint(baseHost) }
+        { documentsEndpoint: status.DocService.Arn,
+          searchEndpoint:    status.SearchService.Arn },
+        { documentsEndpoint: domain.documentsArn,
+          searchEndpoint:    domain.searchArn }
       );
     }
 
