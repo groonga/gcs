@@ -16,14 +16,26 @@ commandLine
 
 var client = new Client(commandLine);
 
+
+function arnToEndpoint(arn, prefix) {
+  var match = arn.test(/^arn:aws:cs:[^:]+:([^:]+):(?:doc|search)/(.+)$/);
+  if (!match)
+    client.raiseFatalError('invalid arn: ' + arn);
+
+  var name = match[2];
+  var id = match[1];
+  var hostAndPort = client.host + ':' + client.port;
+  return prefix + '-' + name + '-' + id + '.' + hostAndPort;
+}
+
 function reportStatus(domain, indexFields, defaultSearchField) {
   console.log('=== Domain Summary ===');
   console.log('Domain Name: %s',
               domain.DomainName);
   console.log('Document Service endpoint: %s',
-              domain.DocService.Endpoint);
+              arnToEndpoint(domain.DocService.Arn, 'doc'));
   console.log('Search Service endpoint: %s',
-              domain.SearchService.Endpoint);
+              arnToEndpoint(domain.SearchService.Arn, 'search'));
   console.log('SearchInstanceType: %s',
               null);
   console.log('SearchPartitionCount: %s',
