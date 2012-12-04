@@ -920,7 +920,7 @@ suite('gcs-post-sdf', function() {
     domain.getIndexField('description').setType('text').createSync();
     domain.getIndexField('age').setType('uint').createSync();
     domain.getIndexField('product').setType('literal').createSync();
-    endpoint = arnToEndpoint(domain.documentsArn, '127.0.0.1:' + utils.testPort);
+    endpoint = arnToEndpoint(domain.documentsArn, '127.0.0.1.xip.io:' + utils.testPort);
   }
 
   test('post add sdf json', function(done) {
