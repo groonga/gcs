@@ -249,36 +249,6 @@ suite('database', function() {
         domain = new Domain('valid').setId(Domain.DEFAULT_ID).validate();
       });
 
-      test('regular domain, with port', function() {
-        assert.equal(domain.getDocumentsEndpoint('my.domain:0123'),
-                     'doc-valid-' + Domain.DEFAULT_ID + '.my.domain:0123');
-      });
-
-      test('regular domain, without port', function() {
-        assert.equal(domain.getDocumentsEndpoint('my.domain'),
-                     'doc-valid-' + Domain.DEFAULT_ID + '.my.domain');
-      });
-
-      test('IP address, with port', function() {
-        assert.equal(domain.getDocumentsEndpoint('192.168.0.1:4567'),
-                     'doc-valid-' + Domain.DEFAULT_ID + '.192.168.0.1.xip.io:4567');
-      });
-
-      test('IP address, without port', function() {
-        assert.equal(domain.getDocumentsEndpoint('192.168.0.1'),
-                     'doc-valid-' + Domain.DEFAULT_ID + '.192.168.0.1.xip.io');
-      });
-
-      test('localhost, with port', function() {
-        assert.equal(domain.getDocumentsEndpoint('localhost:4567'),
-                     'doc-valid-' + Domain.DEFAULT_ID + '.127.0.0.1.xip.io:4567');
-      });
-
-      test('localhost, without port', function() {
-        assert.equal(domain.getDocumentsEndpoint('localhost'),
-                     'doc-valid-' + Domain.DEFAULT_ID + '.127.0.0.1.xip.io');
-      });
-
       test('arn', function() {
         assert.equal(domain.documentsArn,
                      'arn:aws:cs:us-east-1:' + Domain.DEFAULT_ID + ':doc/valid');
@@ -289,36 +259,6 @@ suite('database', function() {
       var domain;
       setup(function() {
         domain = new Domain('valid').setId(Domain.DEFAULT_ID).validate();
-      });
-
-      test('regular domain, with port', function() {
-        assert.equal(domain.getSearchEndpoint('my.domain:0123'),
-                     'search-valid-' + Domain.DEFAULT_ID + '.my.domain:0123');
-      });
-
-      test('regular domain, without port', function() {
-        assert.equal(domain.getSearchEndpoint('my.domain'),
-                     'search-valid-' + Domain.DEFAULT_ID + '.my.domain');
-      });
-
-      test('IP address, with port', function() {
-        assert.equal(domain.getSearchEndpoint('192.168.0.1:4567'),
-                     'search-valid-' + Domain.DEFAULT_ID + '.192.168.0.1.xip.io:4567');
-      });
-
-      test('IP address, without port', function() {
-        assert.equal(domain.getSearchEndpoint('192.168.0.1'),
-                     'search-valid-' + Domain.DEFAULT_ID + '.192.168.0.1.xip.io');
-      });
-
-      test('localhost, with port', function() {
-        assert.equal(domain.getSearchEndpoint('localhost:4567'),
-                     'search-valid-' + Domain.DEFAULT_ID + '.127.0.0.1.xip.io:4567');
-      });
-
-      test('localhost, without port', function() {
-        assert.equal(domain.getSearchEndpoint('localhost'),
-                     'search-valid-' + Domain.DEFAULT_ID + '.127.0.0.1.xip.io');
       });
 
       test('arn', function() {

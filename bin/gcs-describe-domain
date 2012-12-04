@@ -25,15 +25,16 @@ function toValidHostAndPort(hostAndPort) {
   return hostAndPort.join(':');
 }
 
-function arnToEndpoint(arn, prefix) {
-  var match = arn.match(/^arn:aws:cs:[^:]+:([^:]+):(?:doc|search)\/(.+)$/);
+function arnToEndpoint(arn) {
+  var match = arn.match(/^arn:aws:cs:[^:]+:([^:]+):([^\/]+)\/(.+)$/);
   if (!match)
     client.raiseFatalError('invalid arn: ' + arn);
 
-  var name = match[2];
   var id = match[1];
+  var type = match[2];
+  var name = match[3];
   var hostAndPort = client.host + ':' + client.port;
-  return prefix + '-' + name + '-' + id + '.' + toValidHostAndPort(hostAndPort);
+  return type + '-' + name + '-' + id + '.' + toValidHostAndPort(hostAndPort);
 }
 
 function reportStatus(domain, indexFields, defaultSearchField) {

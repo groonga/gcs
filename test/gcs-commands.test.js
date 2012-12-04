@@ -167,6 +167,14 @@ suite('gcs-delete-domain', function() {
   });
 });
 
+function arnToEndpoint(arn, hostPort) {
+  var match = arn.match(/^arn:aws:cs:[^:]+:([^:]+):([^\/]+)\/(.+)$/);
+  var id = match[1];
+  var type = match[2];
+  var name = match[3];
+  return type + '-' + name + '-' + id + '.' + hostPort;
+}
+
 suite('gcs-describe-domain', function() {
   setup(commonSetup);
   teardown(commonTeardown);
@@ -190,9 +198,9 @@ suite('gcs-describe-domain', function() {
                              '=== Domain Summary ===\n' +
                              'Domain Name: domain1\n' +
                              'Document Service endpoint: ' +
-                               domain.getDocumentsEndpoint(hostPort) + '\n' +
+                               arnToEndpoint(domain.documentsArn, hostPort) + '\n' +
                              'Search Service endpoint: ' +
-                               domain.getSearchEndpoint(hostPort) + '\n' +
+                               arnToEndpoint(domain.searchArn, hostPort) + '\n' +
                              'SearchInstanceType: null\n' +
                              'SearchPartitionCount: 0\n' +
                              'SearchInstanceCount: 0\n' +
@@ -231,9 +239,9 @@ suite('gcs-describe-domain', function() {
                              '=== Domain Summary ===\n' +
                              'Domain Name: domain2\n' +
                              'Document Service endpoint: ' +
-                               domain2.getDocumentsEndpoint(hostPort) + '\n' +
+                               arnToEndpoint(domain2.documentsArn, hostPort) + '\n' +
                              'Search Service endpoint: ' +
-                               domain2.getSearchEndpoint(hostPort) + '\n' +
+                               arnToEndpoint(domain2.searchArn, hostPort) + '\n' +
                              'SearchInstanceType: null\n' +
                              'SearchPartitionCount: 0\n' +
                              'SearchInstanceCount: 0\n' +
@@ -250,9 +258,9 @@ suite('gcs-describe-domain', function() {
                              '=== Domain Summary ===\n' +
                              'Domain Name: domain1\n' +
                              'Document Service endpoint: ' +
-                               domain1.getDocumentsEndpoint(hostPort) + '\n' +
+                               arnToEndpoint(domain.documentsArn, hostPort) + '\n' +
                              'Search Service endpoint: ' +
-                               domain1.getSearchEndpoint(hostPort) + '\n' +
+                               arnToEndpoint(domain.searchArn, hostPort) + '\n' +
                              'SearchInstanceType: null\n' +
                              'SearchPartitionCount: 0\n' +
                              'SearchInstanceCount: 0\n' +
@@ -912,7 +920,7 @@ suite('gcs-post-sdf', function() {
     domain.getIndexField('description').setType('text').createSync();
     domain.getIndexField('age').setType('uint').createSync();
     domain.getIndexField('product').setType('literal').createSync();
-    endpoint = domain.getDocumentsEndpoint('localhost:' + utils.testPort);
+    endpoint = arnToEndpoint(domain.documentsArn, 'localhost:' + utils.testPort);
   }
 
   test('post add sdf json', function(done) {
