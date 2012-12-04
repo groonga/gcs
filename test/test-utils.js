@@ -12,10 +12,8 @@ var url = require('url');
 
 var temporaryDirectory = exports.temporaryDirectory = path.join(__dirname, 'tmp');
 
-var testBaseHost = 'api.localhost';
 var testConfigurationHost = 'configuration.localhost';
 var testPort = 3333;
-exports.testBaseHost = testBaseHost;
 exports.testConfigurationHost = testConfigurationHost;
 exports.testPort = testPort;
 

@@ -20,7 +20,6 @@ script
   export GCS_QUERY_LOG_PATH
   export GCS_ERROR_LOG_PATH
   export GCS_PORT
-  export GCS_BASE_HOST
   export GCS_PRIVILEGED_RANGES
 
   exec /usr/sbin/gcs

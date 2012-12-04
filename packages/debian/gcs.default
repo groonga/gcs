@@ -19,12 +19,6 @@ GCS_ERROR_LOG_PATH=/var/log/gcs/error.log
 # The port number to listen
 GCS_PORT=7575
 
-# The base host and port of endpoints returned as a part of DomainStatus.
-# For example, if you set as "GCS_BASE_HOST=example.com:7575", then the
-# document endpoint of a domain named "mysearchdomain" will be returned like:
-#   "doc-mysearchdomain-xxxxxx.example.com:7575"
-#GCS_BASE_HOST=127.0.0.1.xip.io:7575
-
 # Privileged IP range for the configuration API. Any request from out of
 # the range is denied.
 # You can specify multiple ranges as comma-separated list like:
