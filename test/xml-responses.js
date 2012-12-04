@@ -24,12 +24,10 @@ function defineGenericResponse(action, result) {
 
 var DocService =
     exports.DocService = {
-      Endpoint: '',
       Arn: ''
     };
 var SearchService =
     exports.SearchService = {
-      Endpoint: '',
       Arn: ''
     };
 var DomainStatus =
