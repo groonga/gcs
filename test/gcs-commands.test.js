@@ -258,9 +258,9 @@ suite('gcs-describe-domain', function() {
                              '=== Domain Summary ===\n' +
                              'Domain Name: domain1\n' +
                              'Document Service endpoint: ' +
-                               arnToEndpoint(domain.documentsArn, hostPort) + '\n' +
+                               arnToEndpoint(domain1.documentsArn, hostPort) + '\n' +
                              'Search Service endpoint: ' +
-                               arnToEndpoint(domain.searchArn, hostPort) + '\n' +
+                               arnToEndpoint(domain1.searchArn, hostPort) + '\n' +
                              'SearchInstanceType: null\n' +
                              'SearchPartitionCount: 0\n' +
                              'SearchInstanceCount: 0\n' +
@@ -920,7 +920,7 @@ suite('gcs-post-sdf', function() {
     domain.getIndexField('description').setType('text').createSync();
     domain.getIndexField('age').setType('uint').createSync();
     domain.getIndexField('product').setType('literal').createSync();
-    endpoint = arnToEndpoint(domain.documentsArn, 'localhost:' + utils.testPort);
+    endpoint = arnToEndpoint(domain.documentsArn, '127.0.0.1:' + utils.testPort);
   }
 
   test('post add sdf json', function(done) {
