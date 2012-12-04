@@ -16,6 +16,14 @@ commandLine
 
 var client = new Client(commandLine);
 
+function toValidHostAndPort(hostAndPort) {
+  hostAndPort = hostAndPort.split(':');
+  if (hostAndPort[0] == 'localhost')
+    hostAndPort[0] = '127.0.0.1';
+  if (hostAndPort[0].match(/^\d+\.\d+\.\d+\.\d+$/))
+    hostAndPort[0] += '.xip.io';
+  return hostAndPort.join(':');
+}
 
 function arnToEndpoint(arn, prefix) {
   var match = arn.match(/^arn:aws:cs:[^:]+:([^:]+):(?:doc|search)\/(.+)$/);
@@ -25,7 +33,7 @@ function arnToEndpoint(arn, prefix) {
   var name = match[2];
   var id = match[1];
   var hostAndPort = client.host + ':' + client.port;
-  return prefix + '-' + name + '-' + id + '.' + hostAndPort;
+  return prefix + '-' + name + '-' + id + '.' + toValidHostAndPort(hostAndPort);
 }
 
 function reportStatus(domain, indexFields, defaultSearchField) {
