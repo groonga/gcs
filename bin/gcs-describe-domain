@@ -18,7 +18,7 @@ var client = new Client(commandLine);
 
 
 function arnToEndpoint(arn, prefix) {
-  var match = arn.test(/^arn:aws:cs:[^:]+:([^:]+):(?:doc|search)/(.+)$/);
+  var match = arn.match(/^arn:aws:cs:[^:]+:([^:]+):(?:doc|search)/(.+)$/);
   if (!match)
     client.raiseFatalError('invalid arn: ' + arn);
 
