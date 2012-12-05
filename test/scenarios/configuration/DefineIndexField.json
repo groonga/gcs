@@ -46,6 +46,21 @@
                 "IndexField.TextOptions.ResultEnabled": "true" } },
 
   [
+    { "name"  : "conflicting options in multiple steps: setup",
+      "params": { "Action": "DefineIndexField",
+                  "DomainName": "companies",
+                  "IndexField.IndexFieldName": "name_with_conflicting_options",
+                  "IndexField.IndexFieldType": "text",
+                  "IndexField.TextOptions.FacetEnabled": "true" } },
+    { "name"  : "set conflicting option",
+      "params": { "Action": "DefineIndexField",
+                  "DomainName": "companies",
+                  "IndexField.IndexFieldName": "name_with_conflicting_options",
+                  "IndexField.IndexFieldType": "text",
+                  "IndexField.TextOptions.ResultEnabled": "true" } }
+  ],
+
+  [
     { "name"  : "uint, without options",
       "params": { "Action": "DefineIndexField",
                   "DomainName": "companies",
