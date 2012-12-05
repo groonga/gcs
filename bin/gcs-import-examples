@@ -105,20 +105,20 @@ search_endpoint=`$bin_path/gcs-describe-domain --domain-name example "$@" | grep
 echo "==== Adding index fields"
 echo "== Creating 'name' field"
 run $bin_path/gcs-configure-fields --domain-name example --name name --type text --option result "$@"
-run $bin_path/gcs-configure-fields --domain-name example --name name --type text --option facet "$@"
+#run $bin_path/gcs-configure-fields --domain-name example --name name --type text --option facet "$@"
 echo
 echo "== Creating 'address' field"
 run $bin_path/gcs-configure-fields --domain-name example --name address --type text --option result "$@"
-run $bin_path/gcs-configure-fields --domain-name example --name address --type text --option facet "$@"
+#run $bin_path/gcs-configure-fields --domain-name example --name address --type text --option facet "$@"
 echo
 echo "== Creating 'email_address' field"
 run $bin_path/gcs-configure-fields --domain-name example --name email_address --type text --option result "$@"
-run $bin_path/gcs-configure-fields --domain-name example --name email_address --type text --option facet "$@"
+#run $bin_path/gcs-configure-fields --domain-name example --name email_address --type text --option facet "$@"
 echo
 echo "== Creating 'products' field"
 run $bin_path/gcs-configure-fields --domain-name example --name products --type literal --option search "$@"
 run $bin_path/gcs-configure-fields --domain-name example --name products --type literal --option result "$@"
-run $bin_path/gcs-configure-fields --domain-name example --name products --type literal --option facet "$@"
+#run $bin_path/gcs-configure-fields --domain-name example --name products --type literal --option facet "$@"
 echo
 
 echo
