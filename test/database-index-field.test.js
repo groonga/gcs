@@ -524,8 +524,8 @@ suite('database', function() {
 
         field.setOption('Option1', 'false');
         field.setOption('Option2', '1');
-        field.clearAllOptions();
         field.saveOptions();
+        field.clearAllOptions();
         assert.deepEqual(field.getAllOptions(), {});
       });
     });
