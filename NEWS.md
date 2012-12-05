@@ -1,6 +1,25 @@
 # News
 
-## v1.4.0 (booked at 2012-11-29)
+## v1.4.0 (booked at 2012-12-26)
+
+### API compatibility
+
+ * Now "DocService/Endpoint" and "SearchService/Endpoint" disappear from domain statuses.
+   You have to guess endpoints from the "arn" or other informations.
+ * DefineIndexField never merge newly specified options with previously defined options.
+   (In other words, now DefineIndexField always clear old options.)
+
+### Command line interface
+
+ * The option "--base-host" for the command bin/gcs is now obsolete.
+   You don't need to give host name of the server to the server process anymre.
+
+### Daemon
+
+ * An environment variable GCS_BASE_HOST is now obsolete.
+   You don't need to give host name of the server to the server process anymre.
+
+## v1.4.0 (2012-11-29)
 
 ### API compatibility
 
