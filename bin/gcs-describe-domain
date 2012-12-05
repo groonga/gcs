@@ -16,35 +16,14 @@ commandLine
 
 var client = new Client(commandLine);
 
-function toValidHostAndPort(hostAndPort) {
-  hostAndPort = hostAndPort.split(':');
-  if (hostAndPort[0] == 'localhost')
-    hostAndPort[0] = '127.0.0.1';
-  if (hostAndPort[0].match(/^\d+\.\d+\.\d+\.\d+$/))
-    hostAndPort[0] += '.xip.io';
-  return hostAndPort.join(':');
-}
-
-function arnToEndpoint(arn) {
-  var match = arn.match(/^arn:aws:cs:[^:]+:([^:]+):([^\/]+)\/(.+)$/);
-  if (!match)
-    client.raiseFatalError('invalid arn: ' + arn);
-
-  var id = match[1];
-  var type = match[2];
-  var name = match[3];
-  var hostAndPort = client.host + ':' + client.port;
-  return type + '-' + name + '-' + id + '.' + toValidHostAndPort(hostAndPort);
-}
-
 function reportStatus(domain, indexFields, defaultSearchField) {
   console.log('=== Domain Summary ===');
   console.log('Domain Name: %s',
               domain.DomainName);
   console.log('Document Service endpoint: %s',
-              arnToEndpoint(domain.DocService.Arn, 'doc'));
+              client.arnToEndpoint(domain.DocService.Arn));
   console.log('Search Service endpoint: %s',
-              arnToEndpoint(domain.SearchService.Arn, 'search'));
+              client.arnToEndpoint(domain.SearchService.Arn));
   console.log('SearchInstanceType: %s',
               null);
   console.log('SearchPartitionCount: %s',
