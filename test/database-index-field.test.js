@@ -515,6 +515,19 @@ suite('database', function() {
         actual = field.getAllOptions();
         assert.deepEqual(actual, expected);
       });
+
+      test('clearAllOptions', function() {
+        field.setOption('Option1', 'false');
+        field.setOption('Option2', '1');
+        field.clearAllOptions();
+        assert.deepEqual(field.getAllOptions(), {});
+
+        field.setOption('Option1', 'false');
+        field.setOption('Option2', '1');
+        field.clearAllOptions();
+        field.saveOptions();
+        assert.deepEqual(field.getAllOptions(), {});
+      });
     });
 
     suite('database modifications', function() {
