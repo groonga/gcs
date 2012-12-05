@@ -1,15 +1,15 @@
 {
   "name": "gcs",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "dependencies": {
     "awssum": {
-      "version": "0.12.1",
+      "version": "0.12.2",
       "dependencies": {
         "fmt": {
           "version": "0.4.0"
         },
         "underscore": {
-          "version": "1.4.2"
+          "version": "1.4.3"
         },
         "xml": {
           "version": "0.0.7"
@@ -95,7 +95,7 @@
       "version": "1.4.0"
     },
     "nroonga": {
-      "version": "0.2.3",
+      "version": "0.2.4",
       "dependencies": {
         "msgpack2": {
           "version": "0.1.10"
