@@ -1,6 +1,6 @@
 # News
 
-## v1.4.0 (booked at 2012-12-26)
+## v1.5.0 (booked at 2012-12-26)
 
 ### API compatibility
 
