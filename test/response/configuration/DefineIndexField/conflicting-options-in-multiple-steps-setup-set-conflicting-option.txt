@@ -1,0 +1,29 @@
+HTTP/1.1 200 OK
+x-amzn-requestid: 7128e796-3ea8-11e2-ab95-2995ea56cce7
+content-type: text/xml
+content-length: 828
+date: Wed, 05 Dec 2012 06:53:15 GMT
+
+<DefineIndexFieldResponse xmlns="http://cloudsearch.amazonaws.com/doc/2011-02-01">
+  <DefineIndexFieldResult>
+    <IndexField>
+      <Status>
+        <CreationDate>2012-12-05T06:53:12Z</CreationDate>
+        <PendingDeletion>false</PendingDeletion>
+        <UpdateVersion>5</UpdateVersion>
+        <State>RequiresIndexDocuments</State>
+        <UpdateDate>2012-12-05T06:53:14Z</UpdateDate>
+      </Status>
+      <Options>
+        <IndexFieldType>text</IndexFieldType>
+        <IndexFieldName>name_with_conflicting_options</IndexFieldName>
+        <TextOptions>
+          <ResultEnabled>true</ResultEnabled>
+        </TextOptions>
+      </Options>
+    </IndexField>
+  </DefineIndexFieldResult>
+  <ResponseMetadata>
+    <RequestId>7128e796-3ea8-11e2-ab95-2995ea56cce7</RequestId>
+  </ResponseMetadata>
+</DefineIndexFieldResponse>
