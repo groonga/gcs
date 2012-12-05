@@ -27,7 +27,7 @@ else
   printf $YELLOW
 cat <<"EOT"
 
-You need to run gcs on port 7575. Just run gcs command without any options on another terminal.
+You need to run gcs (by default, on port 7575). Just run gcs command without any options on another terminal.
 
   $ gcs
 
@@ -90,12 +90,12 @@ done
 
 
 echo "==== Deleting 'example' domain (if exists)"
-$bin_path/gcs-delete-domain --domain-name example --force
+$bin_path/gcs-delete-domain --domain-name example --force "$@"
 echo
 
 echo "==== Creating 'example' domain"
 
-run $bin_path/gcs-create-domain --domain-name example
+run $bin_path/gcs-create-domain --domain-name example "$@"
 echo
 echo
 
@@ -104,26 +104,26 @@ search_endpoint=`$bin_path/gcs-describe-domain --domain-name example | grep "Sea
 
 echo "==== Adding index fields"
 echo "== Creating 'name' field"
-run $bin_path/gcs-configure-fields --domain-name example --name name --type text --option result
-run $bin_path/gcs-configure-fields --domain-name example --name name --type text --option facet
+run $bin_path/gcs-configure-fields --domain-name example --name name --type text --option result "$@"
+run $bin_path/gcs-configure-fields --domain-name example --name name --type text --option facet "$@"
 echo
 echo "== Creating 'address' field"
-run $bin_path/gcs-configure-fields --domain-name example --name address --type text --option result
-run $bin_path/gcs-configure-fields --domain-name example --name address --type text --option facet
+run $bin_path/gcs-configure-fields --domain-name example --name address --type text --option result "$@"
+run $bin_path/gcs-configure-fields --domain-name example --name address --type text --option facet "$@"
 echo
 echo "== Creating 'email_address' field"
-run $bin_path/gcs-configure-fields --domain-name example --name email_address --type text --option result
-run $bin_path/gcs-configure-fields --domain-name example --name email_address --type text --option facet
+run $bin_path/gcs-configure-fields --domain-name example --name email_address --type text --option result "$@"
+run $bin_path/gcs-configure-fields --domain-name example --name email_address --type text --option facet "$@"
 echo
 echo "== Creating 'products' field"
-run $bin_path/gcs-configure-fields --domain-name example --name products --type literal --option search
-run $bin_path/gcs-configure-fields --domain-name example --name products --type literal --option result
-run $bin_path/gcs-configure-fields --domain-name example --name products --type literal --option facet
+run $bin_path/gcs-configure-fields --domain-name example --name products --type literal --option search "$@"
+run $bin_path/gcs-configure-fields --domain-name example --name products --type literal --option result "$@"
+run $bin_path/gcs-configure-fields --domain-name example --name products --type literal --option facet "$@"
 echo
 
 echo
 echo "==== Indexing data"
-run $bin_path/gcs-post-sdf --domain-name example --source $examples_path/example.sdf.json
+run $bin_path/gcs-post-sdf --domain-name example --source $examples_path/example.sdf.json "$@"
 echo
 
 echo
