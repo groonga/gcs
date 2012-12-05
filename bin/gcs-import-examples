@@ -99,8 +99,8 @@ run $bin_path/gcs-create-domain --domain-name example "$@"
 echo
 echo
 
-documents_endpoint=`$bin_path/gcs-describe-domain --domain-name example | grep "Document Service endpoint" | cut -d " " -f 4`
-search_endpoint=`$bin_path/gcs-describe-domain --domain-name example | grep "Search Service endpoint" | cut -d " " -f 4`
+documents_endpoint=`$bin_path/gcs-describe-domain --domain-name example "$@" | grep "Document Service endpoint" | cut -d " " -f 4`
+search_endpoint=`$bin_path/gcs-describe-domain --domain-name example "$@" | grep "Search Service endpoint" | cut -d " " -f 4`
 
 echo "==== Adding index fields"
 echo "== Creating 'name' field"
