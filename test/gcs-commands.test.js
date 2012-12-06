@@ -536,6 +536,9 @@ suite('gcs-configure-fields', function() {
   testConfigureFieldOptionSuccess('literal', ['noresult', 'nosearch'], '');
   testConfigureFieldOptionSuccess('literal', ['search'], 'Search');
   testConfigureFieldOptionSuccess('literal', ['nosearch'], '');
+
+  // multiple "--option"
+  testConfigureFieldOptionSuccess('literal', ['--option', 'result', '--option', 'search'], 'Search Result');
 });
 
 suite('gcs-configure-text-options', function() {
