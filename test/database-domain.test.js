@@ -674,7 +674,20 @@ suite('database', function() {
         temporaryDatabase = undefined;
       });
 
-      test('addRecordSync', function() {
+      test('addDocumentSync', function() {
+        var document = {
+              id: 'id1',
+              fields: {
+                address: 'Shibuya, Tokyo, Japan',
+                age: 1,
+                description: '',
+                email_address: 'info@razil.jp',
+                name: 'Brazil',
+                product: 'groonga'
+              }
+            };
+        domain.addDocumentSync(document);
+
         var record = {
               id: 'id1',
               address: 'Shibuya, Tokyo, Japan',
@@ -684,13 +697,12 @@ suite('database', function() {
               name: 'Brazil',
               product: 'groonga'
             };
-        domain.addRecordSync(record);
         assert.deepEqual(domain.dumpSync(), [record]);
       });
 
-      test('deleteRecordSync', function() {
+      test('deleteDocumentSync', function() {
         utils.loadDumpFile(context, __dirname + '/fixture/companies/data.grn');
-        domain.deleteRecordSync('id1');
+        domain.deleteDocumentSync('id1');
 
         var actualDump = domain.dumpSync();
         var found = actualDump.some(function(record) {
