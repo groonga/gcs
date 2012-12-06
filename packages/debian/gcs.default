@@ -7,6 +7,9 @@
 # The location of the database
 GCS_DATABASE_PATH=$(echo ~gcs)/.gcs/database/gcs
 
+# The location of the directory which is used  to store uploaded documents
+GCS_DOCUMENTS_PATH=$(echo ~gcs)/.gcs/documents
+
 # The location of the access log
 GCS_ACCESS_LOG_PATH=/var/log/gcs/access.log
 
