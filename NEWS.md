@@ -13,6 +13,13 @@
 
  * The option "--base-host" for the command bin/gcs is now obsolete.
    You don't need to give host name of the server to the server process anymre.
+ * gcs-configure-fields now accept multiple "--option" options, like:
+   
+       $ gcs-configure-fields -d domain --name field --type literal --option search result
+   
+   or
+   
+       $ gcs-configure-fields -d domain --name field --type literal --option search --option result
 
 ### Daemon
 
