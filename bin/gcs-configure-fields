@@ -119,46 +119,44 @@ client.getIndexFieldStatus(fieldName, function(error, field) {
         }
       };
 
-  if (fieldOptions.length) {
-    var options = {};
-    fieldOptions.forEach(function(option) {
-      switch (option) {
-        case 'search':   options.SearchEnabled = 'true';  break;
-        case 'nosearch': options.SearchEnabled = 'false'; break;
-        case 'facet':    options.FacetEnabled =  'true';  break;
-        case 'nofacet':  options.FacetEnabled =  'false'; break;
-        case 'result':   options.ResultEnabled = 'true';  break;
-        case 'noresult': options.ResultEnabled = 'false'; break;
-        default:
-          client.raiseFatalError('invalid field option ' + option);
-      }
-    });
-
-    switch (type) {
-      case 'text':
-        if (fieldOptions.indexOf('search') > -1 ||
-            fieldOptions.indexOf('nosearch') > -1)
-          client.raiseFatalError('searchable option cannot be configured for the type text.');
-        params.IndexField.TextOptions = options;
-        break;
-
-      case 'uint':
-        if (fieldOptions.indexOf('facet') > -1 ||
-            fieldOptions.indexOf('nofacet') > -1)
-          client.raiseFatalError('facet option cannot be configured for the type uint.');
-        if (fieldOptions.indexOf('result') > -1 ||
-            fieldOptions.indexOf('noresult') > -1)
-          client.raiseFatalError('returnable option cannot be configured for the type uint.');
-        if (fieldOptions.indexOf('search') > -1 ||
-            fieldOptions.indexOf('nosearch') > -1)
-          client.raiseFatalError('searchable option cannot be configured for the type uint.');
-        params.IndexField.UIntOptions = options;
-        break;
-
-      case 'literal':
-        params.IndexField.LiteralOptions = options;
-        break;
+  var options = {};
+  fieldOptions.forEach(function(option) {
+    switch (option) {
+      case 'search':   options.SearchEnabled = 'true';  break;
+      case 'nosearch': options.SearchEnabled = 'false'; break;
+      case 'facet':    options.FacetEnabled =  'true';  break;
+      case 'nofacet':  options.FacetEnabled =  'false'; break;
+      case 'result':   options.ResultEnabled = 'true';  break;
+      case 'noresult': options.ResultEnabled = 'false'; break;
+      default:
+        client.raiseFatalError('invalid field option ' + option);
     }
+  });
+
+  if (options.FacetEnabled == 'true' &&
+      options.ResultEnabled == 'true')
+    client.raiseFatalError('"facet" and "result" options are exclusive.');
+
+  switch (type) {
+    case 'text':
+      if ('SearchEnabled' in options)
+        client.raiseFatalError('searchable option cannot be configured for the type text.');
+      params.IndexField.TextOptions = options;
+      break;
+
+    case 'uint':
+      if ('FacetEnabled' in options)
+        client.raiseFatalError('facet option cannot be configured for the type uint.');
+      if ('ResultEnabled' in options)
+        client.raiseFatalError('returnable option cannot be configured for the type uint.');
+      if ('SearchEnabled' in options)
+        client.raiseFatalError('searchable option cannot be configured for the type uint.');
+      params.IndexField.UIntOptions = options;
+      break;
+
+    case 'literal':
+      params.IndexField.LiteralOptions = options;
+      break;
   }
 
 
