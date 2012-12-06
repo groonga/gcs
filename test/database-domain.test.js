@@ -120,7 +120,7 @@ suite('database', function() {
       test('not supported', function() {
         assert.throw(function() {
           var request = { query: { DomainName: 'test0123' } };
-          var domain = new Domain(request).validate();
+          var domain = new Domain({ source: request }).validate();
         }, /no domain name/);
       });
     });
@@ -187,7 +187,7 @@ suite('database', function() {
       test('from host, valid', function() {
         var host = 'doc-test0123-id0123.example.com';
         var request = { headers: { host: host } };
-        var domain = new Domain(request).validate();
+        var domain = new Domain({ source: request }).validate();
         assert.deepEqual({ name: domain.name, id: domain.id },
                          { name: 'test0123', id: 'id0123' });
       });
@@ -196,7 +196,7 @@ suite('database', function() {
         assert.throw(function() {
           var host = 'doc-domain_name-id0123.example.com';
           var request = { headers: { host: host } };
-          var domain = new Domain(request).validate();
+          var domain = new Domain({ source: request }).validate();
         }, '1 validation error detected: ' +
              'Value \'domain_name\' at \'%NAME_FIELD%\' failed to satisfy constraint: ' +
                'Member must satisfy regular expression pattern: ' +
@@ -207,7 +207,7 @@ suite('database', function() {
         var host = 'example.com';
         var request = { headers: { host: host },
                         url: '/gcs/test0123-id0123' };
-        var domain = new Domain(request).validate();
+        var domain = new Domain({ source: request }).validate();
         assert.deepEqual({ name: domain.name, id: domain.id },
                          { name: 'test0123', id: 'id0123' });
       });
@@ -217,7 +217,7 @@ suite('database', function() {
           var host = 'example.com';
         var request = { headers: { host: host },
                         url: '/gcs/test_0123-id0123' };
-          var domain = new Domain(request).validate();
+          var domain = new Domain({ source: request }).validate();
         }, '1 validation error detected: ' +
              'Value \'domain_name\' at \'%NAME_FIELD%\' failed to satisfy constraint: ' +
                'Member must satisfy regular expression pattern: ' +
@@ -228,7 +228,7 @@ suite('database', function() {
         var host = 'doc-test0123-id0123.example.com';
         var request = { headers: { host: host },
                         url: '/gcs/test4567-id4567' };
-        var domain = new Domain(request).validate();
+        var domain = new Domain({ source: request }).validate();
         assert.deepEqual({ name: domain.name, id: domain.id },
                          { name: 'test0123', id: 'id0123' });
       });
@@ -238,7 +238,7 @@ suite('database', function() {
         var request = { headers: { host: host },
                         url: '/gcs/test4567-id4567',
                         query: { DomainName: 'test890' } };
-        var domain = new Domain(request).validate();
+        var domain = new Domain({ source: request }).validate();
         assert.equal(domain.name, 'test0123');
       });
     });
@@ -276,7 +276,7 @@ suite('database', function() {
         temporaryDatabase = utils.createTemporaryDatabase();
         context = temporaryDatabase.get();
         utils.loadDumpFile(context, __dirname + '/fixture/companies/ddl-custom-id.grn');
-        domain = new Domain('companies', context);
+        domain = new Domain({ name: 'companies', context: context });
       });
 
       teardown(function() {
@@ -291,7 +291,7 @@ suite('database', function() {
       });
 
       test('id for database (unknown, new table)', function() {
-        domain = new Domain('unknown', context);
+        domain = new Domain({ name: 'unknown', context: context });
         assert.equal(typeof domain.id, 'string');
         assert.deepEqual({ idLength:     domain.id.length,
                            normalizedId: domain.id.replace(/[1-9a-z]/g, '0'),
@@ -419,7 +419,7 @@ suite('database', function() {
         domain.defaultSearchField = nameField;
         assert.equal(domain.defaultSearchField, nameField);
 
-        var anotherDomainInstance = new Domain('companies', context);
+        var anotherDomainInstance = new Domain({ name: 'companies', context: context });
         assert.equal(anotherDomainInstance.defaultSearchField,
                      anotherDomainInstance.getIndexField('name'));
       });
@@ -430,7 +430,7 @@ suite('database', function() {
         domain.defaultSearchField = 'name';
         assert.equal(domain.defaultSearchField, domain.getIndexField('name'));
 
-        var anotherDomainInstance = new Domain('companies', context);
+        var anotherDomainInstance = new Domain({ name: 'companies', context: context });
         assert.equal(anotherDomainInstance.defaultSearchField,
                      anotherDomainInstance.getIndexField('name'));
       });
@@ -452,7 +452,7 @@ suite('database', function() {
         assert.isTrue(domain.defaultSearchField === null,
                       domain.defaultSearchField);
 
-        var anotherDomainInstance = new Domain('companies', context);
+        var anotherDomainInstance = new Domain({ name: 'companies', context: context });
         assert.equal(anotherDomainInstance.defaultSearchField, null);
       });
     });
@@ -472,7 +472,7 @@ suite('database', function() {
       });
 
       test('createSync', function() {
-        var domain = new Domain('companies', context);
+        var domain = new Domain({ name: 'companies', context: context });
         assert.isFalse(domain.exists());
 
         domain.createSync();
@@ -494,7 +494,7 @@ suite('database', function() {
       });
 
       test('createSync again', function() {
-        var domain = new Domain('companies', context);
+        var domain = new Domain({ name: 'companies', context: context });
         domain.createSync();
         assert.throw(function() {
           domain.createSync();
@@ -502,7 +502,7 @@ suite('database', function() {
       });
 
       test('deleteSync', function() {
-        var domain = new Domain('companies', context);
+        var domain = new Domain({ name: 'companies', context: context });
         domain.saveSync();
         assert.isTrue(domain.exists());
 
@@ -515,7 +515,7 @@ suite('database', function() {
       });
 
       test('deleteSync again', function() {
-        var domain = new Domain('companies', context);
+        var domain = new Domain({ name: 'companies', context: context });
         domain.saveSync();
         domain.deleteSync();
         assert.throw(function() {
@@ -524,7 +524,7 @@ suite('database', function() {
       });
 
       test('updateSynonymsSync, initialize', function() {
-        var domain = new Domain('companies', context);
+        var domain = new Domain({ name: 'companies', context: context });
         assert.isFalse(domain.hasSynonymsTableSync());
 
         domain.updateSynonymsSync({
@@ -560,7 +560,7 @@ suite('database', function() {
       });
 
       test('updateSynonymsSync, replace', function() {
-        var domain = new Domain('companies', context);
+        var domain = new Domain({ name: 'companies', context: context });
         domain.updateSynonymsSync({
           tokio: ['tokyo'],
           dekkaido: 'hokkaido'
@@ -595,7 +595,7 @@ suite('database', function() {
       });
 
       test('getSynonymSync, existent', function() {
-        var domain = new Domain('companies', context);
+        var domain = new Domain({ name: 'companies', context: context });
         domain.updateSynonymsSync({
           tokio: ['tonkin', 'tokyo']
         });
@@ -604,7 +604,7 @@ suite('database', function() {
       });
 
       test('getSynonymSync, nonexistent', function() {
-        var domain = new Domain('companies', context);
+        var domain = new Domain({ name: 'companies', context: context });
         domain.updateSynonymsSync({
           tokio: ['tonkin', 'tokyo']
         });
@@ -613,7 +613,7 @@ suite('database', function() {
       });
 
       test('getSynonymsSync', function() {
-        var domain = new Domain('companies', context);
+        var domain = new Domain({ name: 'companies', context: context });
         domain.updateSynonymsSync({
           tokio: ['tonkin', 'tokyo'],
           dekkaido: 'hokkaido'
@@ -628,20 +628,20 @@ suite('database', function() {
       });
 
       test('getSynonymsSync for new domain', function() {
-        var domain = new Domain('companies', context);
+        var domain = new Domain({ name: 'companies', context: context });
         var expectedSynonyms = {};
         var synonyms = domain.getSynonymsSync();
         assert.deepEqual(synonyms, expectedSynonyms);
       });
 
       test('getAll', function() {
-        var domain3 = new Domain('domain3', context);
+        var domain3 = new Domain({ name: 'domain3', context: context });
         domain3.saveSync();
 
-        var domain1 = new Domain('domain1', context);
+        var domain1 = new Domain({ name: 'domain1', context: context });
         domain1.saveSync();
 
-        var domain2 = new Domain('domain2', context);
+        var domain2 = new Domain({ name: 'domain2', context: context });
         domain2.saveSync();
 
         var allDomains = Domain.getAll(context);
@@ -665,7 +665,7 @@ suite('database', function() {
         temporaryDatabase = utils.createTemporaryDatabase();
         context = temporaryDatabase.get();
         utils.loadDumpFile(context, __dirname + '/fixture/companies/ddl.grn');
-        domain = new Domain('companies', context);
+        domain = new Domain({ name: 'companies', context: context });
       });
 
       teardown(function() {
@@ -799,7 +799,7 @@ suite('database', function() {
       setup(function() {
         temporaryDatabase = utils.createTemporaryDatabase();
         context = temporaryDatabase.get();
-        domain = new Domain('companies', context);
+        domain = new Domain({ name: 'companies', context: context });
         domain.saveSync();
       });
 

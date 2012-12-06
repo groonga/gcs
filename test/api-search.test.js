@@ -350,7 +350,7 @@ suite('Search API', function() {
     var domain;
 
     setup(function() {
-      domain = new Domain('people', context)
+      domain = new Domain({ name: 'people', context: context })
                  .setId('00000000000000000000000000').saveSync();
       domain.getIndexField('realname').setType('text')
         .setResultEnabled(true).saveSync();

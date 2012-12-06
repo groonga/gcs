@@ -166,7 +166,7 @@ suite('BoolanQueryTranslator', function() {
   setup(function() {
     temporaryDatabase = utils.createTemporaryDatabase();
     context = temporaryDatabase.get();
-    domain = new Domain('test', context).createSync();
+    domain = new Domain({ name: 'test', context: context }).createSync();
     [
       'type',
       'name',

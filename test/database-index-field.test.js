@@ -14,7 +14,7 @@ suite('database', function() {
     setup(function() {
       temporaryDatabase = utils.createTemporaryDatabase();
       context = temporaryDatabase.get();
-      domain = new Domain('testdomain', context);
+      domain = new Domain({ name: 'testdomain', context: context });
       domain.id = Domain.DEFAULT_ID;
       domain.saveSync();
     });
@@ -209,7 +209,7 @@ suite('database', function() {
         temporaryDatabase = utils.createTemporaryDatabase();
         context = temporaryDatabase.get();
         utils.loadDumpFile(context, __dirname + '/fixture/companies/ddl.grn');
-        domain = new Domain('companies', context);
+        domain = new Domain({ name: 'companies', context: context });
       });
 
       teardown(function() {
@@ -252,7 +252,7 @@ suite('database', function() {
       setup(function() {
         temporaryDatabase = utils.createTemporaryDatabase();
         context = temporaryDatabase.get();
-        domain = new Domain('companies', context);
+        domain = new Domain({ name: 'companies', context: context });
         domain.saveSync();
       });
 
@@ -398,7 +398,7 @@ suite('database', function() {
       setup(function() {
         temporaryDatabase = utils.createTemporaryDatabase();
         context = temporaryDatabase.get();
-        domain = new Domain('companies', context);
+        domain = new Domain({ name: 'companies', context: context });
         domain.saveSync();
         field = domain.getIndexField('field').setType('text');
       });
@@ -538,7 +538,7 @@ suite('database', function() {
       setup(function() {
         temporaryDatabase = utils.createTemporaryDatabase();
         context = temporaryDatabase.get();
-        domain = new Domain('companies', context);
+        domain = new Domain({ name: 'companies', context: context });
         domain.saveSync();
       });
 
@@ -714,7 +714,7 @@ suite('database', function() {
       setup(function() {
         temporaryDatabase = utils.createTemporaryDatabase();
         context = temporaryDatabase.get();
-        domain = new Domain('companies', context);
+        domain = new Domain({ name: 'companies', context: context });
         domain.saveSync();
       });
 
@@ -782,7 +782,7 @@ suite('database', function() {
       setup(function() {
         temporaryDatabase = utils.createTemporaryDatabase();
         context = temporaryDatabase.get();
-        domain = new Domain('companies', context);
+        domain = new Domain({ name: 'companies', context: context });
         domain.saveSync();
       });
 

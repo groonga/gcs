@@ -54,7 +54,7 @@ suite('gcs-create-domain', function() {
                        'Domain endpoints are currently being created.');
 
         context.reopen();
-        var domain = new Domain('test', context);
+        var domain = new Domain({ name: 'test', context: context });
         assert.isTrue(domain.exists());
 
         done();
@@ -65,7 +65,7 @@ suite('gcs-create-domain', function() {
   });
 
   test('create again', function(done) {
-    new Domain('test', context).createSync();
+    new Domain({ name: 'test', context: context }).createSync();
     utils
       .run('gcs-create-domain',
            '--domain-name', 'test',
@@ -113,7 +113,7 @@ suite('gcs-delete-domain', function() {
   teardown(commonTeardown);
 
   test('delete force', function(done) {
-    new Domain('test', context).createSync();
+    new Domain({ name: 'test', context: context }).createSync();
     utils
       .run('gcs-delete-domain',
            '--domain-name', 'test',
@@ -127,7 +127,7 @@ suite('gcs-delete-domain', function() {
                          result.output.stderr);
 
         context.reopen();
-        var domain = new Domain('test', context);
+        var domain = new Domain({ name: 'test', context: context });
         assert.isFalse(domain.exists());
 
         done();
@@ -182,8 +182,8 @@ suite('gcs-describe-domain', function() {
   var hostPort = '127.0.0.1.xip.io:' + utils.testPort;
 
   test('describe one', function(done) {
-    var domain2 = new Domain('domain2', context).createSync();
-    var domain1 = new Domain('domain1', context).createSync();
+    var domain2 = new Domain({ name: 'domain2', context: context }).createSync();
+    var domain1 = new Domain({ name: 'domain1', context: context }).createSync();
     var nameField = domain1.getIndexField('name').setType('text').createSync();
     var ageField = domain1.getIndexField('age').setType('uint').createSync();
     utils
@@ -191,7 +191,7 @@ suite('gcs-describe-domain', function() {
            '--domain-name', 'domain1',
            '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
-        var domain = new Domain('domain1', context);
+        var domain = new Domain({ name: 'domain1', context: context });
         assert.deepEqual({ code: result.code, message: result.output.stdout },
                          { code: 0,
                            message:
@@ -224,15 +224,15 @@ suite('gcs-describe-domain', function() {
   });
 
   test('describe all', function(done) {
-    new Domain('domain2', context).createSync();
-    new Domain('domain1', context).createSync();
+    new Domain({ name: 'domain1', context: context }).createSync();
+    new Domain({ name: 'domain2', context: context }).createSync();
     utils
       .run('gcs-describe-domain',
            '--show-all',
            '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
-        var domain1 = new Domain('domain1', context);
-        var domain2 = new Domain('domain2', context);
+        var domain1 = new Domain({ name: 'domain1', context: context });
+        var domain2 = new Domain({ name: 'domain2', context: context });
         assert.deepEqual({ code: result.code, message: result.output.stdout },
                          { code: 0,
                            message:
@@ -298,7 +298,7 @@ suite('gcs-configure-fields', function() {
   }
 
   function testCreateField(done, name, type, options) {
-    new Domain('companies', context).createSync();
+    new Domain({ name: 'companies', context: context }).createSync();
     utils
       .run('gcs-create-domain',
            '--domain-name', 'companies',
@@ -312,7 +312,7 @@ suite('gcs-configure-fields', function() {
         assertSuccess(result, name, 'RequiresIndexDocuments', type, options);
 
         context.reopen();
-        var domain = new Domain('companies', context);
+        var domain = new Domain({ name: 'companies', context: context });
         var field = domain.getIndexField(name);
         assert.deepEqual({ type: field.type, exists: field.exists() },
                          { type: type, exists: true });
@@ -335,7 +335,7 @@ suite('gcs-configure-fields', function() {
   });
 
   function testDeleteField(done, name, type) {
-    var domain = new Domain('companies', context);
+    var domain = new Domain({ name: 'companies', context: context });
     domain.createSync();
     var field = domain.getIndexField(name).setType(type);
     field.createSync();
@@ -354,7 +354,7 @@ suite('gcs-configure-fields', function() {
                          result.output.stderr);
 
         context.reopen();
-        var domain = new Domain('companies', context);
+        var domain = new Domain({ name: 'companies', context: context });
         var field = domain.getIndexField(name);
         assert.isFalse(field.exists());
 
@@ -376,7 +376,7 @@ suite('gcs-configure-fields', function() {
   });
 
   test('delete not-existing field', function(done) {
-    new Domain('companies', context).createSync();
+    new Domain({ name: 'companies', context: context }).createSync();
     utils
       .run('gcs-configure-fields',
            '--domain-name', 'companies',
@@ -398,7 +398,7 @@ suite('gcs-configure-fields', function() {
   });
 
   test('create field without type', function(done) {
-    new Domain('companies', context).createSync();
+    new Domain({ name: 'companies', context: context }).createSync();
     utils
       .run('gcs-configure-fields',
            '--domain-name', 'companies',
@@ -448,7 +448,7 @@ suite('gcs-configure-fields', function() {
 
   function testConfigureFieldOptionSuccess(type, options, resultOptions) {
     test('with options ' + type + ', ' + options, function(done) {
-      new Domain('companies', context).createSync();
+      new Domain({ name: 'companies', context: context }).createSync();
       utils
         .run.apply(utils, createCommandLineArgs(type, options))
         .next(function(result) {
@@ -467,7 +467,7 @@ suite('gcs-configure-fields', function() {
 
   function testConfigureFieldOptionFailure(type, options) {
     test('with options ' + type + ', ' + options, function(done) {
-      new Domain('companies', context).createSync();
+      new Domain({ name: 'companies', context: context }).createSync();
       utils
         .run.apply(utils, createCommandLineArgs(type, options))
         .next(function(result) {
@@ -546,7 +546,7 @@ suite('gcs-configure-text-options', function() {
   teardown(commonTeardown);
 
   test('load synonyms', function() {
-    new Domain('companies', context).createSync();
+    new Domain({ name: 'companies', context: context }).createSync();
     utils
       .run('gcs-configure-text-options',
            '--domain-name', 'companies',
@@ -595,7 +595,7 @@ suite('gcs-configure-text-options', function() {
   });
 
   test('print synonyms', function() {
-    var domain = new Domain('companies', context);
+    var domain = new Domain({ name: 'companies', context: context });
     domain.createSync();
     domain.updateSynonymsSync({
       hokkaido: 'dekkaido',
@@ -655,7 +655,7 @@ suite('gcs-configure-default-search-field', function() {
   teardown(commonTeardown);
 
   test('set to an existing field', function(done) {
-    var domain = new Domain('companies', context).createSync();
+    var domain = new Domain({ name: 'companies', context: context }).createSync();
     domain.getIndexField('name').setType('text').createSync();
     utils
       .run('gcs-configure-default-search-field',
@@ -679,7 +679,7 @@ suite('gcs-configure-default-search-field', function() {
   });
 
   test('set to a missing field', function(done) {
-    var domain = new Domain('companies', context).createSync();
+    var domain = new Domain({ name: 'companies', context: context }).createSync();
     domain.getIndexField('name').setType('text').createSync();
     utils
       .run('gcs-configure-default-search-field',
@@ -705,7 +705,7 @@ suite('gcs-configure-default-search-field', function() {
   });
 
   test('set to blank', function(done) {
-    var domain = new Domain('companies', context).createSync();
+    var domain = new Domain({ name: 'companies', context: context }).createSync();
     domain.getIndexField('name').setType('text').createSync();
     utils
       .run('gcs-configure-default-search-field',
@@ -734,7 +734,7 @@ suite('gcs-configure-default-search-field', function() {
   });
 
   test('set to blank (omitted "name" option)', function(done) {
-    var domain = new Domain('companies', context).createSync();
+    var domain = new Domain({ name: 'companies', context: context }).createSync();
     domain.getIndexField('name').setType('text').createSync();
     utils
       .run('gcs-configure-default-search-field',
@@ -762,7 +762,7 @@ suite('gcs-configure-default-search-field', function() {
   });
 
   test('Described default search field', function(done) {
-    var domain = new Domain('companies', context).createSync();
+    var domain = new Domain({ name: 'companies', context: context }).createSync();
     domain.getIndexField('name').setType('text').createSync();
     utils
       .run('gcs-configure-default-search-field',
@@ -789,7 +789,7 @@ suite('gcs-index-documents', function() {
   teardown(commonTeardown);
 
   test('reindex', function(done) {
-    var domain = new Domain('companies', context);
+    var domain = new Domain({ name: 'companies', context: context });
     domain.createSync();
     domain.getIndexField('name').setType('text').createSync();
     domain.getIndexField('age').setType('uint').createSync();
@@ -857,7 +857,7 @@ suite('gcs-post-sdf', function() {
 
   var endpoint;
   function setupDomain() {
-    var domain = new Domain('companies', context);
+    var domain = new Domain({ name: 'companies', context: context });
     domain.createSync();
     domain.getIndexField('name').setType('text').createSync();
     domain.getIndexField('address').setType('text').createSync();

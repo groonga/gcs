@@ -11,6 +11,12 @@ commandLine
             '[' + CLI.defaultDatabasePath + ']',
           String,
           CLI.defaultDatabasePath)
+  .option('--documents-path <path>',
+          'documents path' +
+            '(GCS_DOCUMENTS_PATH) ' +
+            '[' + CLI.defaultDocumentsPath + ']',
+          String,
+          CLI.defaultDocumentsPath)
   .option('-p, --port <port>',
           'The port number assigned to the service' +
             '(GCS_PORT) ' +
@@ -45,6 +51,7 @@ commandLine
 
 var server = gcsServer.createServer({
       databasePath:      commandLine.options.databasePath,
+      documentsPath:     commandLine.options.documentsPath,
       accessLogPath:     commandLine.options.accessLogPath,
       queryLogPath:      commandLine.options.queryLogPath,
       errorLogPath:      commandLine.options.errorLogPath,
@@ -56,5 +63,6 @@ var server = gcsServer.createServer({
 server.listen(commandLine.port, function() {
   console.log('gcs listening at %d', commandLine.port);
   console.log('database is at %s', commandLine.options.databasePath);
+  console.log('documents are stored into %s', commandLine.options.documentsPath);
   console.log('privileged IP ranges are %s', commandLine.options.privilege);
 });

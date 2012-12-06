@@ -33,7 +33,7 @@ suite('Configuration API', function() {
       utils
         .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
         .next(function(response) {
-          assert.isTrue(new Domain('companies', context).exists());
+          assert.isTrue(new Domain({ name: 'companies', context: context }).exists());
           done();
         })
         .error(function(error) {
@@ -45,7 +45,7 @@ suite('Configuration API', function() {
       utils
         .get('/?DomainName=a&Action=CreateDomain&Version=2011-02-01')
         .next(function(response) {
-          assert.isFalse(new Domain('companies', context).exists());
+          assert.isFalse(new Domain({ name: 'companies', context: context }).exists());
           done();
         })
         .error(function(error) {
@@ -58,7 +58,7 @@ suite('Configuration API', function() {
         .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
         .get('/?DomainName=companies&Action=DeleteDomain&Version=2011-02-01')
         .next(function(response) {
-          assert.isFalse(new Domain('companies', context).exists());
+          assert.isFalse(new Domain({ name: 'companies', context: context }).exists());
           done();
         })
         .error(function(error) {
@@ -101,7 +101,7 @@ suite('Configuration API', function() {
              'IndexField.IndexFieldType=text&' +
              'Action=DefineIndexField&Version=2011-02-01')
         .next(function(response) {
-          var domain = new Domain('companies', context);
+          var domain = new Domain({ name: 'companies', context: context });
           var field = domain.getIndexField('name');
           assert.isTrue(field.exists(), response.body);
           done();
@@ -124,7 +124,7 @@ suite('Configuration API', function() {
              'IndexField.IndexFieldType=text&' +
              'Action=DefineIndexField&Version=2011-02-01')
         .next(function() {
-          domain = new Domain('companies', context);
+          domain = new Domain({ name: 'companies', context: context });
           field = domain.getIndexField('name');
         })
         .get('/?DomainName=companies&IndexFieldName=name&' +
@@ -159,7 +159,7 @@ suite('Configuration API', function() {
       utils
         .get('/?DomainName=companies&Action=CreateDomain&Version=2011-02-01')
         .next(function() {
-          domain = new Domain('companies', context);
+          domain = new Domain({ name: 'companies', context: context });
           assert.isFalse(domain.hasSynonymsTableSync());
         })
         .get('/?Version=2011-02-01&Action=UpdateSynonymOptions&' +
@@ -257,7 +257,7 @@ suite('Configuration API', function() {
                'IndexField.IndexFieldName=name&IndexField.IndexFieldType=text&' +
                'Action=DefineIndexField&Version=2011-02-01')
         .next(function() {
-          domain = new Domain('companies', context);
+          domain = new Domain({ name: 'companies', context: context });
           assert.isTrue(domain.defaultSearchField === null,
                         domain.defaultSearchField);
         })
@@ -361,7 +361,7 @@ suite('Configuration API', function() {
         .get('/?DomainName=companies&' +
              'Action=IndexDocuments&Version=2011-02-01')
         .next(function(response) {
-          var domain = new Domain('companies', context);
+          var domain = new Domain({ name: 'companies', context: context });
           assert.isTrue(domain.exists());
           assert.isTrue(domain.getIndexField('name').exists());
           assert.isTrue(domain.getIndexField('age').exists());
