@@ -19,7 +19,9 @@ commandLine
           'result, noresult. Text and literal fields cannot have both the ' +
           'facet and result options enabled. By default, text and uint ' +
           'fields are always searchable and uint fields are always ' +
-          'facet-enabled.',
+          'facet-enabled. (Note: If you want to specify multiple options in ' +
+          'a time, do "--option option1 --opton option2" or "--option option1 ' +
+          'option2".',
           String)
   .option('-d, --domain-name <domain name>',
           'The name of the domain that you are configuring. Required.',
@@ -38,9 +40,22 @@ var fieldName = commandLine.options.name;
 if (!fieldName)
   client.raiseFatalError('You must specify the field name.');
 
-var option = commandLine.options.option;
-if (typeof option != 'string')
-  option = null;
+function getFieldOptions() {
+  var args = client.rawArgs;
+  var index = args.indexOf('--option');
+  if (index < 0)
+    return [];
+
+  var options = [];
+  args.slice(index + 1).some(function(arg) {
+    if (arg == '--option') return false;
+    if (arg.indexOf('--') == 0) return true;
+    options.push(arg);
+  });
+  return options;
+}
+
+var fieldOptions = getFieldOptions();
 
 function doDelete(field) {
   function sendDeleteRequest() {
@@ -85,8 +100,6 @@ client.getIndexFieldStatus(fieldName, function(error, field) {
   if (!field) {
     if (!type)
       client.raiseFatalError('You must specify the field type.');
-  } else if (!option) {
-    client.raiseFatalError('You must specify the configuring option.');
   }
 
   switch (type) {
@@ -106,32 +119,38 @@ client.getIndexFieldStatus(fieldName, function(error, field) {
         }
       };
 
-  if (option) {
+  if (fieldOptions.length) {
     var options = {};
-    switch (option) {
-      case 'search':   options.SearchEnabled = 'true';  break;
-      case 'nosearch': options.SearchEnabled = 'false'; break;
-      case 'facet':    options.FacetEnabled =  'true';  break;
-      case 'nofacet':  options.FacetEnabled =  'false'; break;
-      case 'result':   options.ResultEnabled = 'true';  break;
-      case 'noresult': options.ResultEnabled = 'false'; break;
-      default:
-        client.raiseFatalError('invalid field option ' + option);
-    }
+    fieldOptions.forEach(function(option) {
+      switch (option) {
+        case 'search':   options.SearchEnabled = 'true';  break;
+        case 'nosearch': options.SearchEnabled = 'false'; break;
+        case 'facet':    options.FacetEnabled =  'true';  break;
+        case 'nofacet':  options.FacetEnabled =  'false'; break;
+        case 'result':   options.ResultEnabled = 'true';  break;
+        case 'noresult': options.ResultEnabled = 'false'; break;
+        default:
+          client.raiseFatalError('invalid field option ' + option);
+      }
+    });
 
     switch (type) {
       case 'text':
-        if (option == 'search' || option == 'nosearch')
+        if (fieldOptions.indexOf('search') > -1 ||
+            fieldOptions.indexOf('nosearch') > -1)
           client.raiseFatalError('searchable option cannot be configured for the type text.');
         params.IndexField.TextOptions = options;
         break;
 
       case 'uint':
-        if (option == 'facet' || option == 'nofacet')
+        if (fieldOptions.indexOf('facet') > -1 ||
+            fieldOptions.indexOf('nofacet') > -1)
           client.raiseFatalError('facet option cannot be configured for the type uint.');
-        if (option == 'result' || option == 'noresult')
+        if (fieldOptions.indexOf('result') > -1 ||
+            fieldOptions.indexOf('noresult') > -1)
           client.raiseFatalError('returnable option cannot be configured for the type uint.');
-        if (option == 'search' || option == 'nosearch')
+        if (fieldOptions.indexOf('search') > -1 ||
+            fieldOptions.indexOf('nosearch') > -1)
           client.raiseFatalError('searchable option cannot be configured for the type uint.');
         params.IndexField.UIntOptions = options;
         break;
