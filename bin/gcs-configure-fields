@@ -20,7 +20,7 @@ commandLine
           'facet and result options enabled. By default, text and uint ' +
           'fields are always searchable and uint fields are always ' +
           'facet-enabled. (Note: If you want to specify multiple options in ' +
-          'a time, do "--option option1 --opton option2" or "--option option1 ' +
+          'a time, do "--option option1 --option option2" or "--option option1 ' +
           'option2".',
           String)
   .option('-d, --domain-name <domain name>',
