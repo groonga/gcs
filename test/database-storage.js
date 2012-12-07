@@ -9,7 +9,7 @@ var FileStorage = require('../lib/database/storage').FileStorage;
 
 function sha1hash(string) {
   var shasum = crypto.createHash('sha1');
-  shasum.update(string);
+  shasum.update(String(string));
   return shasum.digest('hex');
 }
 
