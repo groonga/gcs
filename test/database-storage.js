@@ -100,17 +100,18 @@ suite('database', function() {
     });
 
     test('deleteSync for unknown document', function() {
+      var document = createNewDocument();
+      storage.saveSync(document);
+
       assertFilesCount(storage.directoryPath, 0, function() {
         storage.deleteSync('unknown ' + Date.now());
       });
     });
 
     test('clearSync', function() {
-      assertFilesCount(storage.directoryPath, 3, function() {
-        storage.saveSync(createNewDocument());
-        storage.saveSync(createNewDocument());
-        storage.saveSync(createNewDocument());
-      });
+      storage.saveSync(createNewDocument());
+      storage.saveSync(createNewDocument());
+      storage.saveSync(createNewDocument());
       storage.clearSync();
       assert.isFalse(path.existsSync(storage.directoryPath));
     });
