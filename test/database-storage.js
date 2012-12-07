@@ -79,6 +79,7 @@ suite('database', function() {
         storage.saveSync(updatedDocument);
       });
 
+      var filePath = path.join(utils.temporaryDirectory, 'storage', sha1hash(document.id));
       var contents = fs.readFileSync(filePath, 'UTF-8');
       contents = JSON.parse(contents);
       assert.deepEqual(contents, updatedDocument);
