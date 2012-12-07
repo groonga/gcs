@@ -129,11 +129,6 @@ exports.loadDumpFile = function(context, path) {
   });
 }
 
-function isDirectory(path) {
-  return fs.statSync(path).isDirectory();
-}
-exports.isDirectory = isDirectory;
-
 exports.rmRSync = rmRSync;
 
 function XMLStringToJSON(xml) {
