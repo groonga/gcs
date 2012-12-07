@@ -6,7 +6,7 @@ var http = require('http');
 var Deferred = require('jsdeferred').Deferred;
 var nativeNroonga = require('nroonga');
 var wrappedNroonga = require(__dirname + '/../lib/wrapped-nroonga');
-var rm = require(__dirname + '/../lib/rm');
+var rmRSync = require(__dirname + '/../lib/rm').rmRSync;
 var xml2js = require('xml2js');
 var spawn = require('child_process').spawn;
 var url = require('url');
@@ -134,7 +134,7 @@ function isDirectory(path) {
 }
 exports.isDirectory = isDirectory;
 
-exports.rmRSync = rm.rmRSync;
+exports.rmRSync = rmRSync;
 
 function XMLStringToJSON(xml) {
   var xml2js = require('xml2js');
