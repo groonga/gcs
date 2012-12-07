@@ -6,6 +6,7 @@ var http = require('http');
 var Deferred = require('jsdeferred').Deferred;
 var nativeNroonga = require('nroonga');
 var wrappedNroonga = require(__dirname + '/../lib/wrapped-nroonga');
+var rm = require(__dirname + '/../lib/rm');
 var xml2js = require('xml2js');
 var spawn = require('child_process').spawn;
 var url = require('url');
@@ -133,22 +134,7 @@ function isDirectory(path) {
 }
 exports.isDirectory = isDirectory;
 
-function rmRSync(directoryPath) {
-  if (!path.existsSync(directoryPath)) return;
-
-  var files = fs.readdirSync(directoryPath);
-  var file, filePath;
-  for (var i = 0, maxi = files.length; i < maxi; i++) {
-    file = files[i];
-    filePath = path.join(directoryPath, file);
-    if (isDirectory(filePath))
-      rmRSync(filePath);
-    else
-      fs.unlinkSync(filePath);
-  }
-  fs.rmdirSync(directoryPath);
-}
-exports.rmRSync = rmRSync;
+exports.rmRSync = rm.rmRSync;
 
 function XMLStringToJSON(xml) {
   var xml2js = require('xml2js');
