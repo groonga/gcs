@@ -42,10 +42,10 @@ suite('database', function() {
     });
 
     test('saveSync for new document', function() {
+      var document = createNewDocument();
       var filePath = path.join(utils.temporaryDirectory, 'storage', sha1hash(document.id));
       assert.isFalse(path.existsSync(filePath));
 
-      var document = createNewDocument();
       assertFilesCount(storage.directoryPath, 1, function() {
         storage.saveSync(document);
       });
