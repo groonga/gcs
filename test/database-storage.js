@@ -1,6 +1,7 @@
 var utils = require('./test-utils');
 
 var assert = require('chai').assert;
+var fs = require('fs');
 var path = require('path');
 var crypto = require('crypto');
 
