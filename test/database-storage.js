@@ -4,6 +4,7 @@ var assert = require('chai').assert;
 var fs = require('fs');
 var path = require('path');
 var crypto = require('crypto');
+var mkdirp = require('mkdirp');
 
 var FileStorage = require('../lib/database/storage').FileStorage;
 
@@ -42,7 +43,17 @@ suite('database', function() {
       storage = undefined;
     });
 
+    test('auto creation of the data directory', function() {
+      var document = createNewDocument();
+      var filePath = path.join(utils.temporaryDirectory, 'storage', sha1hash(document.id));
+      assert.isFalse(path.existsSync(storage.directoryPath));
+      storage.saveSync(document);
+      assert.isTrue(path.existsSync(storage.directoryPath));
+    });
+
     test('saveSync for new document', function() {
+      mkdirp(storage.directoryPath);
+
       var document = createNewDocument();
       var filePath = path.join(utils.temporaryDirectory, 'storage', sha1hash(document.id));
       assert.isFalse(path.existsSync(filePath));
