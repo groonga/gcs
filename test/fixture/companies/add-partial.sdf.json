@@ -1,0 +1,102 @@
+[
+  {
+    "type": "add",
+    "id": "id1",
+    "version": 1,
+    "lang": "en",
+    "fields": {
+      "name": "Brazil",
+      "members": []
+    }
+  },
+  {
+    "type": "add",
+    "id": "id2",
+    "version": 1,
+    "lang": "en",
+    "fields": {
+      "name": "Enishi Tech Inc.",
+      "members": ["darashi"]
+    }
+  },
+  {
+    "type": "add",
+    "id": "id3",
+    "version": 1,
+    "lang": "en",
+    "fields": {
+      "name": "ClearCode Inc.",
+      "members": ["kou", "piro"]
+    }
+  },
+  {
+    "type": "add",
+    "id": "id4",
+    "version": 1,
+    "lang": "en",
+    "fields": {
+      "name": "Anaheim Electronics",
+      "members": []
+    }
+  },
+  {
+    "type": "add",
+    "id": "id5",
+    "version": 1,
+    "lang": "en",
+    "fields": {
+      "name": "Shinsei Industry",
+      "members": []
+    }
+  },
+  {
+    "type": "add",
+    "id": "id6",
+    "version": 1,
+    "lang": "en",
+    "fields": {
+      "name": "Omni Consumer Products",
+      "members": []
+    }
+  },
+  {
+    "type": "add",
+    "id": "id7",
+    "version": 1,
+    "lang": "en",
+    "fields": {
+      "name": "Capsule Corporation",
+      "members": []
+    }
+  },
+  {
+    "type": "add",
+    "id": "id8",
+    "version": 1,
+    "lang": "en",
+    "fields": {
+      "name": "Stark Industries",
+      "members": []
+    }
+  },
+  {
+    "type": "add",
+    "id": "id9",
+    "version": 1,
+    "lang": "en",
+    "fields": {
+      "name": "Umbrella Corporation",
+      "members": []
+    }
+  },
+  {
+    "type": "add",
+    "id": "id10",
+    "version": 1,
+    "lang": "en",
+    "fields": {
+      "name": "U.S. Robots and Mechanical Men",
+      "members": []
+    }
+  }
+]

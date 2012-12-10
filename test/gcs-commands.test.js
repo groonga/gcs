@@ -574,9 +574,11 @@ suite('gcs-configure-from-sdf', function() {
            '--source', batchFile,
            '--force',
            '--endpoint', 'localhost:' + utils.testPort)
-      .next(function(result) {
-        assert.equal(0, result.code);
-      })
+      .run('gcs-configure-from-sdf',
+           '--domain-name', 'companies',
+           '--source', batchFile,
+           '--force',
+           '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
         assert.equal(1, result.code);
         done();
@@ -592,15 +594,44 @@ suite('gcs-configure-from-sdf', function() {
       .run('gcs-configure-from-sdf',
            '--domain-name', 'companies',
            '--source', batchFile,
+           '--force',
+           '--endpoint', 'localhost:' + utils.testPort)
+      .run('gcs-configure-from-sdf',
+           '--domain-name', 'companies',
+           '--source', batchFile,
            '--replace',
            '--force',
            '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
-      })
-      .next(function(result) {
         assert.equal(0, result.code);
         var domain = new Domain({ name: 'companies', context: context });
         assert.equal(domain.indexFields.length, 5);
+        done();
+      })
+      .error(function(e) {
+        done(e);
+      });
+  });
+
+  test('update (partial)', function(done) {
+    new Domain({ name: 'companies', context: context }).createSync();
+    utils
+      .run('gcs-configure-from-sdf',
+           '--domain-name', 'companies',
+           '--source', batchFile,
+           '--force',
+           '--endpoint', 'localhost:' + utils.testPort)
+      .next(function(result) {
+      })
+      .run('gcs-configure-from-sdf',
+           '--domain-name', 'companies',
+           '--source', path.join(fixturesDirectory, 'add-partial.sdf.json'),
+           '--force',
+           '--endpoint', 'localhost:' + utils.testPort)
+      .next(function(result) {
+        assert.equal(0, result.code);
+        var domain = new Domain({ name: 'companies', context: context });
+        assert.equal(domain.indexFields.length, 6);
         done();
       })
       .error(function(e) {
