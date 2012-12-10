@@ -60,6 +60,37 @@ suite('documents/batch API', function() {
       });
   });
 
+  test('add (xml)', function(done) {
+    var addBatch = fs.readFileSync(__dirname + '/fixture/companies/add.sdf.xml', 'UTF-8');
+    utils
+      .post('/2011-02-01/documents/batch', addBatch, {
+        'Content-Type': 'application/xml',
+        'Content-Length': addBatch.length,
+        'Host': 'doc-companies-00000000000000000000000000.localhost'
+      })
+      .next(function(response) {
+        var expected = {
+              statusCode: 200,
+              body: JSON.stringify({
+                status: 'success',
+                adds: 10,
+                deletes: 0
+              })
+            };
+        assert.deepEqual(response, expected);
+
+        var dump = context.commandSync('dump', {
+              tables: 'companies_00000000000000000000000000'
+            });
+        assert.equal(dump, schemeDump + '\n' + loadDump);
+
+        done();
+      })
+      .error(function(error) {
+        done(error);
+      });
+  });
+
   test('delete', function(done) {
     var path = '/2011-02-01/documents/batch';
     utils
