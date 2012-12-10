@@ -39,5 +39,7 @@ suite('batch/xml', function() {
   testConvert('add, multiple items, single values', 'add');
   testConvert('add, multiple items, multiple values', 'add-multiple-values');
   testConvert('add, multiple items, single values, non-ascii', 'non-ascii.add');
-  testConvert('add, single item', 'delete');
+  testConvert('delete, single item', 'delete');
+  testConvert('delete, multiple item', 'delete-multiple');
+  testConvert('mixed', 'add-delete-mixed');
 });

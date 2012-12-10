@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<batch>
+  <delete id="id1" version="2"/>
+  <delete id="id2" version="2"/>
+</batch>

@@ -1,0 +1,12 @@
+[
+  {
+    "type": "delete",
+    "id": "id1",
+    "version": 2
+  },
+  {
+    "type": "delete",
+    "id": "id2",
+    "version": 2
+  }
+]

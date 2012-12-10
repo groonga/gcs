@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<batch>
+  <add id="id1" version="1" lang="en">
+    <field name="name">Brazil</field>
+    <field name="address">Shibuya, Tokyo, Japan</field>
+    <field name="email_address">info@razil.jp</field>
+    <field name="age">1</field>
+    <field name="product">groonga</field>
+  </add>
+  <delete id="id4" version="2"/>
+  <add id="id2" version="1" lang="en">
+    <field name="name">Enishi Tech Inc.</field>
+    <field name="address">Sapporo, Hokkaido, Japan</field>
+    <field name="email_address">info@enishi-tech.com</field>
+    <field name="age">2</field>
+    <field name="product">groonga</field>
+  </add>
+  <delete id="id5" version="2"/>
+  <add id="id3" version="1" lang="en">
+    <field name="name">ClearCode Inc.</field>
+    <field name="address">Hongo, Tokyo, Japan</field>
+    <field name="email_address">info@clear-code.com</field>
+    <field name="age">3</field>
+    <field name="product">groonga</field>
+  </add>
+  <delete id="id6" version="2"/>
+</batch>

@@ -1,0 +1,56 @@
+[
+  {
+    "type": "add",
+    "id": "id1",
+    "version": 1,
+    "lang": "en",
+    "fields": {
+      "name": "Brazil",
+      "address": "Shibuya, Tokyo, Japan",
+      "email_address": "info@razil.jp",
+      "age": 1,
+      "product": "groonga"
+    }
+  },
+  {
+    "type": "delete",
+    "id": "id4",
+    "version": 2
+  },
+  {
+    "type": "add",
+    "id": "id2",
+    "version": 1,
+    "lang": "en",
+    "fields": {
+      "name": "Enishi Tech Inc.",
+      "address": "Sapporo, Hokkaido, Japan",
+      "email_address": "info@enishi-tech.com",
+      "age": 2,
+      "product": "groonga"
+    }
+  },
+  {
+    "type": "delete",
+    "id": "id5",
+    "version": 2
+  },
+  {
+    "type": "add",
+    "id": "id3",
+    "version": 1,
+    "lang": "en",
+    "fields": {
+      "name": "ClearCode Inc.",
+      "address": "Hongo, Tokyo, Japan",
+      "email_address": "info@clear-code.com",
+      "age": 3,
+      "product": "groonga"
+    }
+  },
+  {
+    "type": "delete",
+    "id": "id6",
+    "version": 2
+  }
+]
