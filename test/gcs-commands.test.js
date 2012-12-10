@@ -553,7 +553,7 @@ suite('gcs-configure-from-sdf', function() {
     utils
       .run('gcs-configure-from-sdf',
            '--domain-name', 'companies',
-           '--source', batchFile
+           '--source', batchFile,
            '--force',
            '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
