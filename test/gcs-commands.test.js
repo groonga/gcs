@@ -548,6 +548,13 @@ suite('gcs-configure-from-sdf', function() {
   var fixturesDirectory = path.join(__dirname, 'fixture', 'companies');
   var batchFile = path.join(fixturesDirectory, 'add.sdf.json');
 
+  function assertFieldsExist(domain, fields) {
+    assert.deepEqual(domain.indexFields.map(function(field) {
+                       return field.name;
+                     }).sort(),
+                     fields.sort());
+  }
+
   test('create new', function(done) {
     new Domain({ name: 'companies', context: context }).createSync();
     utils
@@ -557,8 +564,10 @@ suite('gcs-configure-from-sdf', function() {
            '--force',
            '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
+        assert.equal(0, result.code);
         var domain = new Domain({ name: 'companies', context: context });
-        assert.equal(domain.indexFields.length, 5);
+        assertFieldsExist(domain,
+                          ['name', 'address', 'email_address', 'age', 'product']);
         done();
       })
       .error(function(e) {
@@ -574,6 +583,9 @@ suite('gcs-configure-from-sdf', function() {
            '--source', batchFile,
            '--force',
            '--endpoint', 'localhost:' + utils.testPort)
+      .next(function(result) {
+        assert.equal(0, result.code);
+      })
       .run('gcs-configure-from-sdf',
            '--domain-name', 'companies',
            '--source', batchFile,
@@ -596,6 +608,9 @@ suite('gcs-configure-from-sdf', function() {
            '--source', batchFile,
            '--force',
            '--endpoint', 'localhost:' + utils.testPort)
+      .next(function(result) {
+        assert.equal(0, result.code);
+      })
       .run('gcs-configure-from-sdf',
            '--domain-name', 'companies',
            '--source', batchFile,
@@ -605,7 +620,8 @@ suite('gcs-configure-from-sdf', function() {
       .next(function(result) {
         assert.equal(0, result.code);
         var domain = new Domain({ name: 'companies', context: context });
-        assert.equal(domain.indexFields.length, 5);
+        assertFieldsExist(domain,
+                          ['name', 'address', 'email_address', 'age', 'product']);
         done();
       })
       .error(function(e) {
@@ -622,6 +638,7 @@ suite('gcs-configure-from-sdf', function() {
            '--force',
            '--endpoint', 'localhost:' + utils.testPort)
       .next(function(result) {
+        assert.equal(0, result.code);
       })
       .run('gcs-configure-from-sdf',
            '--domain-name', 'companies',
@@ -631,7 +648,8 @@ suite('gcs-configure-from-sdf', function() {
       .next(function(result) {
         assert.equal(0, result.code);
         var domain = new Domain({ name: 'companies', context: context });
-        assert.equal(domain.indexFields.length, 6);
+        assertFieldsExist(domain,
+                          ['name', 'address', 'email_address', 'age', 'product', 'members']);
         done();
       })
       .error(function(e) {
