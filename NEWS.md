@@ -8,7 +8,7 @@
    You have to guess endpoints from the "arn" or other informations.
  * DefineIndexField never merge newly specified options with previously defined options.
    (In other words, now DefineIndexField always clear old options.)
- * XML SDF batches is now acceptable. (Note: all responses from documents/batch
+ * XML SDF batches are now acceptable. (Note: all responses from documents/batch
    API are still returned in JSON.)
 
 ### Command line interface
