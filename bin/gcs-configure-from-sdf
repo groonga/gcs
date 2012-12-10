@@ -38,7 +38,7 @@ function listExistingFields(callback) {
       client.raiseFatalError(error);
 
     indexFields.forEach(function(indexField) {
-      console.log(client.summarizeIndexFieldStatus(indexField));
+      console.log(client.summarizeIndexFieldStatus(indexField, true));
     });
 
     callback(null, indexFields);
@@ -109,7 +109,7 @@ function collectFieldConfigurations(sourceFile, existingFieldNames) {
 function listDetectedFields(fields) {
   console.log('Detected field configurations from all the sources :');
   fields.forEach(function(field) {
-    console.log(client.summarizeIndexFieldStatus(field));
+    console.log(client.summarizeIndexFieldStatus(field, true));
   });
 }
 
@@ -119,12 +119,12 @@ function listProposedFields(fields, existingFields) {
   var listedFieldNames = {};
   fields.forEach(function(field) {
     var status = field.existing ? '[UPDATE]' : '[NEW]';
-    allFields.push(client.summarizeIndexFieldStatus(field) + ' ' + status);
+    allFields.push(client.summarizeIndexFieldStatus(field, true) + ' ' + status);
     listedFieldNames[field.Options.IndexFieldName] = true;
   });
   existingFields.forEach(function(field) {
     if (!(field.Options.IndexFieldName in listedFieldNames))
-      allFields.push(client.summarizeIndexFieldStatus(field) + ' [NO CHANGE]');
+      allFields.push(client.summarizeIndexFieldStatus(field, true) + ' [NO CHANGE]');
   });
   allFields.sort().forEach(function(summary) {
     console.log(summary);
