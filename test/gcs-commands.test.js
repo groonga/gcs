@@ -583,9 +583,6 @@ suite('gcs-configure-from-sdf', function() {
            '--source', batchFile,
            '--force',
            '--endpoint', 'localhost:' + utils.testPort)
-      .next(function(result) {
-        assert.equal(0, result.code);
-      })
       .run('gcs-configure-from-sdf',
            '--domain-name', 'companies',
            '--source', batchFile,
@@ -608,9 +605,6 @@ suite('gcs-configure-from-sdf', function() {
            '--source', batchFile,
            '--force',
            '--endpoint', 'localhost:' + utils.testPort)
-      .next(function(result) {
-        assert.equal(0, result.code);
-      })
       .run('gcs-configure-from-sdf',
            '--domain-name', 'companies',
            '--source', batchFile,
@@ -637,9 +631,6 @@ suite('gcs-configure-from-sdf', function() {
            '--source', batchFile,
            '--force',
            '--endpoint', 'localhost:' + utils.testPort)
-      .next(function(result) {
-        assert.equal(0, result.code);
-      })
       .run('gcs-configure-from-sdf',
            '--domain-name', 'companies',
            '--source', path.join(fixturesDirectory, 'add-partial.sdf.json'),
