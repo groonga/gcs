@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<batch>
+  <add id="id1" version="1" lang="en">
+    <field name="name">Brazil</field>
+    <field name="address">Shibuya, Tokyo, Japan</field>
+    <field name="email_address">info@razil.jp</field>
+    <field name="age">1</field>
+    <field name="product">groonga</field>
+  </add>
+  <add id="id2" version="1" lang="en">
+    <field name="name">Enishi Tech Inc.</field>
+    <field name="address">Sapporo, Hokkaido, Japan</field>
+    <field name="email_address">info@enishi-tech.com</field>
+    <field name="age">2</field>
+    <field name="product">groonga</field>
+  </add>
+  <add id="id3" version="1" lang="en">
+    <field name="name">ClearCode Inc.</field>
+    <field name="address">Hongo, Tokyo, Japan</field>
+    <field name="email_address">info@clear-code.com</field>
+    <field name="age">3</field>
+    <field name="product">groonga</field>
+  </add>
+  <add id="id4" version="1" lang="en">
+    <field name="name">Anaheim Electronics</field>
+    <field name="address">Granada, Moon</field>
+    <field name="email_address"></field>
+    <field name="age">4</field>
+    <field name="product">gundam</field>
+  </add>
+  <add id="id5" version="1" lang="en">
+    <field name="name">Shinsei Industry</field>
+    <field name="address">Earth</field>
+    <field name="email_address"></field>
+    <field name="age">5</field>
+    <field name="product">valkyrie</field>
+  </add>
+  <add id="id6" version="1" lang="en">
+    <field name="name">Omni Consumer Products</field>
+    <field name="address">Detroit and Delta City, Michigan, United States</field>
+    <field name="email_address"></field>
+    <field name="age">6</field>
+    <field name="product">robocop</field>
+  </add>
+  <add id="id7" version="1" lang="en">
+    <field name="name">Capsule Corporation</field>
+    <field name="address">West City</field>
+    <field name="email_address"></field>
+    <field name="age">7</field>
+    <field name="product">time machine</field>
+  </add>
+  <add id="id8" version="1" lang="en">
+    <field name="name">Stark Industries</field>
+    <field name="address">United States</field>
+    <field name="email_address"></field>
+    <field name="age">8</field>
+    <field name="product">iron man</field>
+  </add>
+  <add id="id9" version="1" lang="en">
+    <field name="name">Umbrella Corporation</field>
+    <field name="address">Tokyo, Japan</field>
+    <field name="email_address"></field>
+    <field name="age">9</field>
+    <field name="product">tyrant</field>
+  </add>
+  <add id="id10" version="1" lang="en">
+    <field name="name">U.S. Robots and Mechanical Men</field>
+    <field name="address">New York, United States</field>
+    <field name="email_address"></field>
+    <field name="age">10</field>
+    <field name="product">ndr114</field>
+  </add>
+</batch>
