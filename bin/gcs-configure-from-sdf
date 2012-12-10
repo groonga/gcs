@@ -218,7 +218,7 @@ client.getDomainStatus(function(error, domain) {
         process.exit(1);
       }
 
-      listProposedFields(fields, indexField);
+      listProposedFields(fields, indexFields);
 
       console.log(separator);
 
