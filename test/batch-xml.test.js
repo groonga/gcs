@@ -30,13 +30,13 @@ function sortBatches(batches) {
 suite('batch/xml', function() {
   test('add, multiple items, single values', function() {
     var jsonBatch = readJSONBatch(path.join(fixtures, 'add.sdf.json'));
-    var xmlBatch = readJSONBatch(path.join(fixtures, 'add.sdf.xml'));
+    var xmlBatch = readXMLBatch(path.join(fixtures, 'add.sdf.xml'));
     assert.deepEqual(xmlBatch, jsonBatch);
   });
 
   test('delete, single item', function() {
     var jsonBatch = readJSONBatch(path.join(fixtures, 'delete.sdf.json'));
-    var xmlBatch = readJSONBatch(path.join(fixtures, 'delete.sdf.xml'));
+    var xmlBatch = readXMLBatch(path.join(fixtures, 'delete.sdf.xml'));
     assert.deepEqual(xmlBatch, jsonBatch);
   });
 });
