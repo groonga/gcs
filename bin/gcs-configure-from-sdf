@@ -231,6 +231,5 @@ client.getDomainStatus(function(error, domain) {
       client.raiseFatalError('Fatal error!\n' +
                              error.message + '\n' + error.stack);
     }
-
   });
 });

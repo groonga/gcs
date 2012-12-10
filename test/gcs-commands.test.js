@@ -541,6 +541,74 @@ suite('gcs-configure-fields', function() {
   testConfigureFieldOptionSuccess('literal', ['--option', 'result', '--option', 'search'], 'Search Result');
 });
 
+suite('gcs-configure-from-sdf', function() {
+  setup(commonSetup);
+  teardown(commonTeardown);
+
+  var fixturesDirectory = path.join(__dirname, 'fixture', 'companies');
+  var batchFile = path.join(fixturesDirectory, 'add.sdf.json');
+
+  test('create new', function(done) {
+    new Domain({ name: 'companies', context: context }).createSync();
+    utils
+      .run('gcs-configure-from-sdf',
+           '--domain-name', 'companies',
+           '--source', batchFile
+           '--force',
+           '--endpoint', 'localhost:' + utils.testPort)
+      .next(function(result) {
+        var domain = new Domain({ name: 'companies', context: context });
+        assert.equal(domain.indexFields.length, 5);
+        done();
+      })
+      .error(function(e) {
+        done(e);
+      });
+  });
+
+  test('update (failed)', function(done) {
+    new Domain({ name: 'companies', context: context }).createSync();
+    utils
+      .run('gcs-configure-from-sdf',
+           '--domain-name', 'companies',
+           '--source', batchFile,
+           '--force',
+           '--endpoint', 'localhost:' + utils.testPort)
+      .next(function(result) {
+        assert.equal(0, result.code);
+      })
+      .next(function(result) {
+        assert.equal(1, result.code);
+        done();
+      });
+      .error(function(e) {
+        done(e);
+      });
+  });
+
+  test('update (success)', function(done) {
+    new Domain({ name: 'companies', context: context }).createSync();
+    utils
+      .run('gcs-configure-from-sdf',
+           '--domain-name', 'companies',
+           '--source', batchFile,
+           '--replace',
+           '--force',
+           '--endpoint', 'localhost:' + utils.testPort)
+      .next(function(result) {
+      })
+      .next(function(result) {
+        assert.equal(0, result.code);
+        var domain = new Domain({ name: 'companies', context: context });
+        assert.equal(domain.indexFields.length, 5);
+        done();
+      });
+      .error(function(e) {
+        done(e);
+      });
+  });
+});
+
 suite('gcs-configure-text-options', function() {
   setup(commonSetup);
   teardown(commonTeardown);
