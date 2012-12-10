@@ -70,7 +70,7 @@ function collectFieldConfigurations(sourceFile, existingFieldNames) {
 
       var values = batch.fields[name];
       if (Array.isArray(values)) {
-        field[name].hasMultipleValue = true;
+        fields[name].hasMultipleValue = true;
       } else {
         values = [values];
       }
