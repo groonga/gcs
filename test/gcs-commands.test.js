@@ -580,7 +580,7 @@ suite('gcs-configure-from-sdf', function() {
       .next(function(result) {
         assert.equal(1, result.code);
         done();
-      });
+      })
       .error(function(e) {
         done(e);
       });
@@ -602,7 +602,7 @@ suite('gcs-configure-from-sdf', function() {
         var domain = new Domain({ name: 'companies', context: context });
         assert.equal(domain.indexFields.length, 5);
         done();
-      });
+      })
       .error(function(e) {
         done(e);
       });
