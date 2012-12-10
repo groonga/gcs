@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<batch>
+  <add id="id1" version="1" lang="en">
+    <field name="name">Brazil</field>
+    <field name="address">Shibuya, Tokyo, Japan</field>
+    <field name="email_address">info@razil.jp</field>
+    <field name="age">1</field>
+    <field name="product">moritapo</field>
+    <field name="product">groonga</field>
+  </add>
+  <add id="id6" version="1" lang="en">
+    <field name="name">Omni Consumer Products</field>
+    <field name="address">Detroit and Delta City, Michigan, United States</field>
+    <field name="email_address"></field>
+    <field name="age">6</field>
+    <field name="product">robocop</field>
+  </add>
+  <add id="id10" version="1" lang="en">
+    <field name="name">U.S. Robots and Mechanical Men</field>
+    <field name="address">New York, United States</field>
+    <field name="email_address"></field>
+    <field name="age">10</field>
+    <field name="product">ndr114</field>
+    <field name="product">spd13</field>
+  </add>
+</batch>

@@ -27,16 +27,17 @@ function sortBatches(batches) {
   });
 }
 
-suite('batch/xml', function() {
-  test('add, multiple items, single values', function() {
-    var jsonBatch = readJSONBatch(path.join(fixtures, 'add.sdf.json'));
-    var xmlBatch = readXMLBatch(path.join(fixtures, 'add.sdf.xml'));
-    assert.deepEqual(xmlBatch, jsonBatch);
+function testConvert(name, basename) {
+  test(name, function() {
+    var jsonBatch = readJSONBatch(path.join(fixtures, basename + '.sdf.json'));
+    var xmlBatch = readXMLBatch(path.join(fixtures, basename + '.sdf.xml'));
+    assert.equal(JSON.stringify(xmlBatch), JSON.stringify(jsonBatch));
   });
+}
 
-  test('delete, single item', function() {
-    var jsonBatch = readJSONBatch(path.join(fixtures, 'delete.sdf.json'));
-    var xmlBatch = readXMLBatch(path.join(fixtures, 'delete.sdf.xml'));
-    assert.deepEqual(xmlBatch, jsonBatch);
-  });
+suite('batch/xml', function() {
+  testConvert('add, multiple items, single values', 'add');
+  testConvert('add, multiple items, multiple values', 'add-multiple-values');
+  testConvert('add, multiple items, single values, non-ascii', 'non-ascii.add');
+  testConvert('add, single item', 'delete');
 });

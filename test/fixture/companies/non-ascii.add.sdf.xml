@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<batch>
+  <add id="id1" version="1" lang="en">
+    <field name="name">未来検索ブラジル</field>
+    <field name="address">渋谷, 東京, 日本</field>
+    <field name="email_address">info@razil.jp</field>
+    <field name="age">1</field>
+    <field name="product">groonga</field>
+  </add>
+  <add id="id2" version="1" lang="en">
+    <field name="name">えにしテック</field>
+    <field name="address">札幌, 北海道, 日本</field>
+    <field name="email_address">info@enishi-tech.com</field>
+    <field name="age">2</field>
+    <field name="product">groonga</field>
+  </add>
+  <add id="id3" version="1" lang="en">
+    <field name="name">クリアコード</field>
+    <field name="address">本郷, 東京, 日本</field>
+    <field name="email_address">info@clear-code.com</field>
+    <field name="age">3</field>
+    <field name="product">groonga</field>
+  </add>
+  <add id="id4" version="1" lang="en">
+    <field name="name">アナハイム・エレクトロニクス</field>
+    <field name="address">グラナダ, 月面</field>
+    <field name="email_address"></field>
+    <field name="age">4</field>
+    <field name="product">gundam</field>
+  </add>
+  <add id="id5" version="1" lang="en">
+    <field name="name">新星インダストリー</field>
+    <field name="address">地球</field>
+    <field name="email_address"></field>
+    <field name="age">5</field>
+    <field name="product">valkyrie</field>
+  </add>
+  <add id="id6" version="1" lang="en">
+    <field name="name">オム二社</field>
+    <field name="address">デトロイト・デルタシティ, ミシガン, アメリカ合衆国</field>
+    <field name="email_address"></field>
+    <field name="age">6</field>
+    <field name="product">robocop</field>
+  </add>
+  <add id="id7" version="1" lang="en">
+    <field name="name">カプセルコーポレーション</field>
+    <field name="address">西の都</field>
+    <field name="email_address"></field>
+    <field name="age">7</field>
+    <field name="product">time machine</field>
+  </add>
+  <add id="id8" version="1" lang="en">
+    <field name="name">スターク・インダストリー</field>
+    <field name="address">アメリカ合衆国</field>
+    <field name="email_address"></field>
+    <field name="age">8</field>
+    <field name="product">iron man</field>
+  </add>
+  <add id="id9" version="1" lang="en">
+    <field name="name">アンブレラ社</field>
+    <field name="address">東京, 日本</field>
+    <field name="email_address"></field>
+    <field name="age">9</field>
+    <field name="product">tyrant</field>
+  </add>
+  <add id="id10" version="1" lang="en">
+    <field name="name">U.S. Robots and Mechanical Men</field>
+    <field name="address">ニューヨーク, アメリカ合衆国</field>
+    <field name="email_address"></field>
+    <field name="age">10</field>
+    <field name="product">ndr114</field>
+  </add>
+</batch>
