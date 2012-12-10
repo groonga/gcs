@@ -1,0 +1,236 @@
+#!/usr/bin/env node
+
+var CLI = require(__dirname + '/../lib/command-line').CommandLineInterface;
+var Client = require(__dirname + '/../lib/client').Client;
+var fs = require('fs');
+var path = require('path');
+
+var LITERAL_TYPE_THRESHOLD = 5;
+
+var commandLine = new CLI();
+commandLine
+  .usage('--source <path to SDF file> ' +
+         '[options]')
+  .option('-s, --source <path to SDF file>',
+          'The path to a file which contains the SDF data you want to scan. ' +
+          'Required.',
+          String)
+  .option('-d, --domain-name <domain name>',
+          'The name of the domain that you are updating. Required.',
+          String)
+  .option('-f, --force',
+          'Apply changes to the domain\'s configuration without confirmation.',
+          Boolean)
+  .option('-re, --replace',
+          'Upload configuration information for all identified fields and ' +
+            'overwrite the configuration of any fields that were already ' +
+            'defined. (Prompts for confirmation unless you also specify ' +
+            '--force.)',
+          Boolean)
+  .parseClient();
+
+function listExistingFields(callback) {
+  console.log('Existing field configuration for the domain - %s :',
+              client.domainName); 
+
+  client.getIndexFieldStatuses(client.domainName, function(error, indexFields) {
+    if (error)
+      client.raiseFatalError(error);
+
+    var existingFieldNames = [];
+    indexFields.forEach(function(indexField) {
+      existingFieldNames.push(indexField.Options.IndexFieldName);
+      console.log(client.summarizeIndexFieldStatus(indexField));
+    });
+
+    callback(null, existingFieldNames);
+  });
+}
+
+function collectFieldConfigurations(sourceFile, existingFieldNames) {
+  var batches = fs.readFileSync(sourceFile, 'UTF-8');
+  batches = JSON.parse(batches);
+
+  var fields = {};
+  batches.forEach(function(batch) {
+    Object.keys(batch.fields).forEach(function(name) {
+      if (!(name in fields)) {
+        fields[name] = {
+          Status: {
+            State: ''
+          },
+          Options: {
+            IndexFieldName: name,
+            IndexFieldType: 'uint'
+          },
+          textCount: 0,
+          values: {}
+        };
+      }
+
+      var values = batch.fields[name];
+      if (Array.isArray(values)) {
+        field[name].hasMultipleValue = true;
+      } else {
+        values = [values];
+      }
+      values.forEach(function(value) {
+        if (typeof value == 'string')
+          fields[name].textCount++;
+          fields[name].values[value] = fields[name].values[value] || 0;
+          fields[name].values[value]++;
+      });
+    });
+  });
+
+  var fields = Object.keys(fields).map(function(name) { return fields[name]; });
+  fields.forEach(function(field) {
+    if (field.textCount) {
+      field.Options.IndexFieldType = 'text';
+      var values = Object.keys(field.values);
+      if (field.hasMultipleValue &&
+          values.some(function(value) {
+            return field.values[value] > LITERAL_TYPE_THRESHOLD;
+          })) {
+        field.Options.IndexFieldType = 'literal';
+        field.Options.LiteralOptions = {
+          SearchEnabled: 'true',
+          FacetEnabled: 'true'
+        };
+      } else {
+        field.Options.TextOptions = {
+          ResultEnabled: 'true'
+        };
+      }
+    }
+    field.existing = existingFieldNames.indexOf(field.Options.IndexFieldName) > -1;
+  });
+  return fields;
+}
+
+function listDetectedFields(fields) {
+  console.log('Detected field configurations from all the sources :');
+  fields.forEach(function(field) {
+    console.log(client.summarizeIndexFieldStatus(field));
+  });
+}
+
+function listProposedFields(fields) {
+  console.log('New proposed field configuration for the domain - %s :', client.domainName);
+  fields.forEach(function(field) {
+    var status = field.existing ? '[UPDATE]' : '[NEW]';
+    console.log(client.summarizeIndexFieldStatus(field) + ' ' + status);
+  });
+}
+
+function defineFields(fields, callback) {
+  fields = fields.slice(0);
+  var count = fields.length;
+  var define = function() {
+    var field = fields.shift();
+    var params = {
+      DomainName: client.domainName,
+      IndexField: field.Options
+    };
+    client.configurationAPI.DefineIndexField(params, function(error, response) {
+      if (error)
+        client.raiseFatalError(error);
+
+      if (fields.length)
+        return define();
+
+      callback(null);
+    });
+  };
+
+  console.log('Configuring fields');
+  define();
+}
+
+var client = new Client(commandLine);
+
+client.assertHaveDomainName();
+client.getDomainStatus(function(error, domain) {
+  if (error)
+    client.raiseFatalError(error);
+
+  if (!commandLine.options.source)
+    client.raiseFatalError('You must specify the source SDF.');
+
+  var sourceFile = CLI.resolve(commandLine.options.source);
+  console.log('Processing: %s', sourceFile);
+
+  if (!path.existsSync(sourceFile))
+    client.raiseFatalError('No such file');
+
+  var format = sourceFile.match(/\.(xml|json)$/i);
+  if (!format)
+    client.raiseFatalError('Unknown format');
+
+  format = format[1].toLowerCase();
+  console.log('Detected source format for %s as %s', path.basename(sourceFile), format)
+
+  if (format != 'json')
+    client.raiseFatalError('Unsupported format: %s');
+
+  console.log('Analyzing %s', sourceFile);
+
+  var separator = '-----------------------------------------------------------------------------------';
+  console.log(separator);
+
+  listExistingFields(function(error, existingFieldNames) {
+    try {
+      console.log(separator);
+      var fields = collectFieldConfigurations(sourceFile, existingFieldNames);
+      listDetectedFields(fields);
+
+      console.log(separator);
+
+      var needReplace = false;
+      if (!commandLine.options.replace) {
+        fields = fields.filter(function(field) {
+          if (field.existing) {
+            needReplace = true;
+            return false;
+          } else {
+            return true;
+          }
+        });
+      }
+
+      if (!fields.length) {
+        if (needReplace) {
+          console.log('All fields found during analysis already exist in the ' +
+                        'domain. Specify the --replace option to force re-upload ' +
+                        'of fields found during analysis.');
+        }
+        process.exit(1);
+      }
+
+      listProposedFields(fields);
+
+      console.log(separator);
+
+      var doDefine = function(ok) {
+        if (!ok)
+          process.exit(1);
+
+        defineFields(fields, function(error) {
+          console.log('Defined %s field configurations.', fields.length);
+          process.exit(0);
+        });
+      };
+
+      if (commandLine.options.force) {
+        doDefine(true);
+        process.exit(0);
+      } else {
+        commandLine.confirm('Configure [' + client.domainName + '] with analyzed fields (y/N) ', doDefine);
+      }
+    } catch(error) {
+      client.raiseFatalError('Fatal error!\n' +
+                             error.message + '\n' + error.stack);
+    }
+
+  });
+});
