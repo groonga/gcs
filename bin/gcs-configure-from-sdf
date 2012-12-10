@@ -2,6 +2,7 @@
 
 var CLI = require(__dirname + '/../lib/command-line').CommandLineInterface;
 var Client = require(__dirname + '/../lib/client').Client;
+var xml = require(__dirname + '/../lib/batch/xml');
 var fs = require('fs');
 var path = require('path');
 
@@ -47,7 +48,11 @@ function listExistingFields(callback) {
 
 function collectFieldConfigurations(sourceFile, existingFieldNames) {
   var batches = fs.readFileSync(sourceFile, 'UTF-8');
-  batches = JSON.parse(batches);
+
+  if (/\.xml$/i.test(sourceFile))
+    batches = xml.toJSON(batches);
+  else
+    batches = JSON.parse(batches);
 
   var fields = {};
   batches.forEach(function(batch) {
@@ -177,9 +182,6 @@ client.getDomainStatus(function(error, domain) {
 
   format = format[1].toLowerCase();
   console.log('Detected source format for %s as %s', path.basename(sourceFile), format)
-
-  if (format != 'json')
-    client.raiseFatalError('Unsupported format: %s');
 
   console.log('Analyzing %s', sourceFile);
 

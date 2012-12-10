@@ -575,6 +575,27 @@ suite('gcs-configure-from-sdf', function() {
       });
   });
 
+  test('create new, xml', function(done) {
+    var batchFile = path.join(fixturesDirectory, 'add.sdf.xml');
+    new Domain({ name: 'companies', context: context }).createSync();
+    utils
+      .run('gcs-configure-from-sdf',
+           '--domain-name', 'companies',
+           '--source', batchFile,
+           '--force',
+           '--endpoint', 'localhost:' + utils.testPort)
+      .next(function(result) {
+        assert.equal(0, result.code);
+        var domain = new Domain({ name: 'companies', context: context });
+        assertFieldsExist(domain,
+                          ['name', 'address', 'email_address', 'age', 'product']);
+        done();
+      })
+      .error(function(e) {
+        done(e);
+      });
+  });
+
   test('update (failed)', function(done) {
     new Domain({ name: 'companies', context: context }).createSync();
     utils
@@ -1021,6 +1042,34 @@ suite('gcs-post-sdf', function() {
                              'Processing: ' + batchFile + '\n' +
                              'Detected source format for ' +
                                'non-ascii.add.sdf.json as json\n' +
+                             'Status: success\n' +
+                             'Added: 10\n' +
+                             'Deleted: 0\n' },
+                         result.output.stderr);
+        done();
+      })
+      .error(function(e) {
+        done(e);
+      });
+  });
+
+  test('post add sdf xml', function(done) {
+    setupDomain();
+    var batchFile = path.join(fixturesDirectory, 'add.sdf.xml');
+    utils
+      .run('gcs-post-sdf',
+           '--domain-name', 'companies',
+           '--source', batchFile,
+           '--document-endpoint', endpoint,
+           '--endpoint', 'localhost:' + utils.testPort)
+      .next(function(result) {
+        assert.deepEqual({ code:    result.code,
+                           message: result.output.stdout },
+                         { code:    0,
+                           message:
+                             'Processing: ' + batchFile + '\n' +
+                             'Detected source format for ' +
+                               'add.sdf.xml as xml\n' +
                              'Status: success\n' +
                              'Added: 10\n' +
                              'Deleted: 0\n' },
