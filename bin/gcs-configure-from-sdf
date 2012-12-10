@@ -223,7 +223,6 @@ client.getDomainStatus(function(error, domain) {
 
       if (commandLine.options.force) {
         doDefine(true);
-        process.exit(0);
       } else {
         commandLine.confirm('Configure [' + client.domainName + '] with analyzed fields (y/N) ', doDefine);
       }
