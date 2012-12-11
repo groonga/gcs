@@ -16,7 +16,7 @@
  * gcs-configure-from-sdf is now available. You can define multiple index fields
    from existing SDF file.
  * The option "--base-host" for the command bin/gcs is now obsolete.
-   You don't need to give host name of the server to the server process anymre.
+   You don't need to give host name of the server to the server process anymore.
  * gcs-configure-fields now accept multiple "--option" options, like:
    
        $ gcs-configure-fields -d domain --name field --type literal --option search result
@@ -28,7 +28,7 @@
 ### Daemon
 
  * An environment variable GCS_BASE_HOST is now obsolete.
-   You don't need to give host name of the server to the server process anymre.
+   You don't need to give host name of the server to the server process anymore.
 
 ## v1.4.0 (2012-11-29)
 
