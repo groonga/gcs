@@ -21,7 +21,7 @@
     "awssum": "",
     "commander": "",
     "dateformat": "",
-    "express": "~ 2.5.10",
+    "express": "",
     "jade": "",
     "jsdeferred": "",
     "mkdirp": "",
