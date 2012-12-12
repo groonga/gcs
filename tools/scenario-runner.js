@@ -1,6 +1,8 @@
 var Client = require(__dirname + '/../lib/client').Client;
 var EventEmitter = require('events').EventEmitter;
 var xml2js = require('xml2js');
+var xml2jsConfig = JSON.parse(JSON.stringify(xml2js.defaults['0.1']));
+xml2jsConfig.explicitRoot = true;
 
 var statusCodeTable = {
   500: 'Inetnal Server Error',
@@ -247,7 +249,7 @@ ScenarioRunner.prototype._process = function(scenario, callback) {
 
     var statusCode = response.StatusCode;
     if (statusCode == 400) {
-      var parser = new xml2js.Parser({ explicitRoot: true });
+      var parser = new xml2js.Parser(xml2jsConfig);
       parser.parseString(response.Body, function(error, result) {
         var errorCode = result.ErrorResponse.Error.Code;
         if (errorCode === 'Throttling') {
@@ -310,9 +312,7 @@ Response.prototype = {
     return this._body;
   },
   _XMLStringToJSON: function(xml) {
-    var parser = new xml2js.Parser({
-                   explicitRoot: true
-                 });
+    var parser = new xml2js.Parser(xml2jsConfig);
     var json;
     parser.addListener('end', function(result) {
       json = result;

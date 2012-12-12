@@ -11,6 +11,14 @@
         "underscore": {
           "version": "1.4.3"
         },
+        "xml2js": {
+          "version": "0.1.14",
+          "dependencies": {
+            "sax": {
+              "version": "0.4.2"
+            }
+          }
+        },
         "xml": {
           "version": "0.0.7"
         },
@@ -192,7 +200,7 @@
       }
     },
     "xml2js": {
-      "version": "0.1.14",
+      "version": "0.2.2",
       "dependencies": {
         "sax": {
           "version": "0.4.2"

@@ -28,7 +28,7 @@
     "node-uuid": "",
     "nroonga": "",
     "winston": "",
-    "xml2js": "0.1.14",
+    "xml2js": "",
     "xmlbuilder": "0.3.11"
   },
   "scripts": {

@@ -8,6 +8,8 @@ var nativeNroonga = require('nroonga');
 var wrappedNroonga = require(__dirname + '/../lib/wrapped-nroonga');
 var rmRSync = require(__dirname + '/../lib/rm').rmRSync;
 var xml2js = require('xml2js');
+var xml2jsConfig = JSON.parse(JSON.stringify(xml2js.defaults['0.1']));
+xml2jsConfig.explicitRoot = true;
 var spawn = require('child_process').spawn;
 var url = require('url');
 
@@ -132,10 +134,8 @@ exports.loadDumpFile = function(context, path) {
 exports.rmRSync = rmRSync;
 
 function XMLStringToJSON(xml) {
-  var xml2js = require('xml2js');
-  var parser = new xml2js.Parser({
-                 explicitRoot: true
-               });
+  var parser = new xml2js.Parser(xml2jsConfig);
+
   var json;
   parser.addListener('end', function(result) {
     json = result;
