@@ -211,16 +211,16 @@
       "version": "0.4.2"
     },
     "chai": {
-      "version": "1.3.0"
+      "version": "1.4.0"
     },
     "mocha": {
-      "version": "1.6.0",
+      "version": "1.7.4",
       "dependencies": {
         "commander": {
           "version": "0.6.1"
         },
         "growl": {
-          "version": "1.5.1"
+          "version": "1.6.1"
         },
         "jade": {
           "version": "0.26.3",
