@@ -29,7 +29,7 @@
     "nroonga": "",
     "winston": "",
     "xml2js": "",
-    "xmlbuilder": "0.3.11"
+    "xmlbuilder": ""
   },
   "scripts": {
     "test": "NODE_ENV=test ./node_modules/.bin/mocha --reporter list --ui tdd --timeout 5s",
