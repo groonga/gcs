@@ -290,10 +290,14 @@ ScenarioRunner.prototype._process = function(scenario, callback) {
         path = path.replace(/%ROOT%/gim, __dirname + '/../');
         batches = this.client.readSDFBatch(path);
       }
-      return this.client.DocumentsBatch({ Docs: batches }, requestCallback);
+      return this.client.setupAPI('doc', function(documentsAPI) {
+        documentsAPI.DocumentsBatch({ Docs: batches }, requestCallback);
+      });
 
     case 'search':
-      return this.client.Search(request.params, requestCallback);
+      return this.client.setupAPI('search', function(searchAPI) {
+        searchAPI.Search(request.params, requestCallback);
+      });
 
     case 'configuration':
     default:
