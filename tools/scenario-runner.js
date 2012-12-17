@@ -285,7 +285,7 @@ ScenarioRunner.prototype._process = function(scenario, callback) {
     }
   };
 
-  switch (scenario.type) {
+  switch (request.type) {
     case 'doc':
       var batches = request.body;
       if (typeof batches == 'string') {
