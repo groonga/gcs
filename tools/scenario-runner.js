@@ -289,7 +289,9 @@ ScenarioRunner.prototype._process = function(scenario, callback) {
     case 'doc':
       var batches = request.body;
       if (typeof batches == 'string') {
-        batches = fs.readFileSync(request.body, 'UTF-8');
+        var path = request.body;
+        path = path.replace(/%ROOT%/gim, __dirname + '/../');
+        batches = fs.readFileSync(path, 'UTF-8');
         if (format == 'xml')
           batches = xml.toJSON(batches);
         else
