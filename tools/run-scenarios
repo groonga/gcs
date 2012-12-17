@@ -75,7 +75,7 @@ if (commandLine.options.scenario) {
 
   scenarios = fs.readdirSync(scenariosDir);
   scenarios = scenarios.filter(function(file) {
-    return /\.json$/i.test(file)
+    return /[a-z0-9].*\.json$/i.test(file)
   }).map(function(file) {
     return path.resolve(scenariosDir, file);
   });
