@@ -282,7 +282,7 @@ ScenarioRunner.prototype._process = function(scenario, callback) {
     }
   };
 
-  switch (request.type) {
+  switch (request.api) {
     case 'doc':
       var batches = request.body;
       if (typeof batches == 'string') {
@@ -290,11 +290,13 @@ ScenarioRunner.prototype._process = function(scenario, callback) {
         path = path.replace(/%ROOT%/gim, __dirname + '/../');
         batches = this.client.readSDFBatch(path);
       }
+      this.client.domainName = request.domain;
       return this.client.setupAPI('doc', function(documentsAPI) {
         documentsAPI.DocumentsBatch({ Docs: batches }, requestCallback);
       });
 
     case 'search':
+      this.client.domainName = request.domain;
       return this.client.setupAPI('search', function(searchAPI) {
         searchAPI.Search(request.params, requestCallback);
       });

@@ -32,8 +32,9 @@
                   "IndexFieldName": "product",
                   "IndexFieldType": "literal",
                   "LiteralOptions.FacetEnabled": "true" } },
-    { "name": "upload",
-      "type": "doc",
-      "body": "%ROOT%/test/fixture/companies/add.sdf.json" }
+    { "name":   "upload",
+      "api":    "doc",
+      "domain": "companies",
+      "body":   "%ROOT%/test/fixture/companies/add.sdf.json" }
   ]
 ]
