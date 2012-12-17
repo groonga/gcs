@@ -244,7 +244,7 @@ ScenarioRunner.prototype._process = function(scenario, callback) {
 
   this.emit('request:start', { scenario: scenario, request: request });
 
-  this.client.rawConfigurationRequest(request.params.Action, request.params, function(error, response) {
+  var requestCallback = function(error, response) {
     if (error) response = error;
 
     var statusCode = response.StatusCode;
@@ -280,7 +280,21 @@ ScenarioRunner.prototype._process = function(scenario, callback) {
     } else {
       processNext();
     }
-  });
+  };
+
+  switch (scenario.type) {
+    case 'doc':
+      return this.client.DocumentsBatch(request.params, requestCallback);
+
+    case 'search':
+      return this.client.Search(request.params, requestCallback);
+
+    case 'configuration':
+    default:
+      return this.client.rawConfigurationRequest(request.params.Action, request.params, requestCallback);
+};
+
+ScenarioRunner.prototype._sendConfigurationRequest = function(scenario, callback) {
 };
 
 function toSafeName(name) {
