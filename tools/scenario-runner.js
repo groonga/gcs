@@ -292,6 +292,7 @@ ScenarioRunner.prototype._process = function(scenario, callback) {
     case 'configuration':
     default:
       return this.client.rawConfigurationRequest(request.params.Action, request.params, requestCallback);
+  }
 };
 
 ScenarioRunner.prototype._sendConfigurationRequest = function(scenario, callback) {
