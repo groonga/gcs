@@ -1,8 +1,5 @@
 var Client = require(__dirname + '/../lib/client').Client;
 var EventEmitter = require('events').EventEmitter;
-var xml = require(__dirname + '/../lib/batch/xml');
-var fs = require('fs');
-var path = require('path');
 var xml2js = require('xml2js');
 var xml2jsConfig = JSON.parse(JSON.stringify(xml2js.defaults['0.1']));
 xml2jsConfig.explicitRoot = true;
@@ -291,11 +288,7 @@ ScenarioRunner.prototype._process = function(scenario, callback) {
       if (typeof batches == 'string') {
         var path = request.body;
         path = path.replace(/%ROOT%/gim, __dirname + '/../');
-        batches = fs.readFileSync(path, 'UTF-8');
-        if (format == 'xml')
-          batches = xml.toJSON(batches);
-        else
-          batches = JSON.parse(batches);
+        batches = this.client.readSDFBatch(path);
       }
       return this.client.DocumentsBatch({ Docs: batches }, requestCallback);
 
