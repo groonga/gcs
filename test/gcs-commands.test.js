@@ -1203,7 +1203,7 @@ suite('gcs-post-sdf', function() {
                            message: result.output.stdout },
                          { code:    1,
                            message: 'Processing: ' + batchFile + '\n' +
-                                    'Unknown format\n' },
+                                    'Unknown format <txt>. Supported: xml, json\n' },
                          result.output.stderr);
         done();
       })
