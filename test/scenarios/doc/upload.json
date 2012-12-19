@@ -1,0 +1,18 @@
+[
+  { "name":   "add delete mixed (xml)",
+    "api":    "doc",
+    "domain": "companies",
+    "body":   "%ROOT%/test/fixture/companies/add-delete-mixed.sdf.xml" },
+  { "name":   "no value, empty fields (xml)",
+    "api":    "doc",
+    "domain": "companies",
+    "body":   "%ROOT%/test/fixture/companies/invalid.sdf.xml" },
+  { "name":   "valid invalid mixed (xml)",
+    "api":    "doc",
+    "domain": "companies",
+    "body":   "%ROOT%/test/fixture/companies/mixed.sdf.xml" },
+  { "name":   "multiple values (xml)",
+    "api":    "doc",
+    "domain": "companies",
+    "body":   "%ROOT%/test/fixture/companies/add-multiple-values.sdf.xml" }
+]

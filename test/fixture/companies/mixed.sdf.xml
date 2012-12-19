@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<batch>
+  <delete id="invalidfield" version="2"/>
+  <add id="invalidfield" version="1" lang="en">
+    <field name="name">has unknown fields</field>
+    <field name="unknown1">unknown</field>
+    <field name="unknown2">unknown</field>
+  </add>
+  <add id="nofields" version="1" lang="en">
+  </add>
+  <add id="emptyfields" version="1" lang="en">
+    <field name="name">empty fields</field>
+    <field name="address"></field>
+    <field name="age"></field>
+  </add>
+  <add id="emptynamefield" version="1" lang="en">
+    <field name="name">empty name fields</field>
+    <field name="">empty</field>
+  </add>
+  <add id="id1" version="1" lang="en">
+    <field name="name">Brazil</field>
+    <field name="address">Shibuya, Tokyo, Japan</field>
+    <field name="email_address">info@razil.jp</field>
+    <field name="age">1</field>
+    <field name="product">groonga</field>
+  </add>
+  <add id="id2" version="1" lang="en">
+    <field name="name">Enishi Tech Inc.</field>
+    <field name="address">Sapporo, Hokkaido, Japan</field>
+    <field name="email_address">info@enishi-tech.com</field>
+    <field name="age">2</field>
+    <field name="product">groonga</field>
+  </add>
+  <add id="id3" version="1" lang="en">
+    <field name="name">ClearCode Inc.</field>
+    <field name="address">Hongo, Tokyo, Japan</field>
+    <field name="email_address">info@clear-code.com</field>
+    <field name="age">3</field>
+    <field name="product">groonga</field>
+  </add>
+</batch>
