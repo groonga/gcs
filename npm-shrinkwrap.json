@@ -19,6 +19,9 @@
             }
           }
         },
+        "dateformat": {
+          "version": "1.0.4-1.2.3"
+        },
         "xml": {
           "version": "0.0.7"
         },
@@ -52,10 +55,10 @@
       }
     },
     "dateformat": {
-      "version": "1.0.3-1.2.3"
+      "version": "1.0.4-1.2.3"
     },
     "express": {
-      "version": "3.0.4",
+      "version": "3.0.5",
       "dependencies": {
         "connect": {
           "version": "2.7.1",
