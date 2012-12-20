@@ -11,6 +11,7 @@ date: Mon, 19 Nov 2012 11:24:48 GMT
         <SearchPartitionCount>0</SearchPartitionCount>
         <SearchService>
           <Arn>arn:aws:cs:us-east-1:788574296432:search/domain1</Arn>
+          <Endpoint>%ENDPOINT%</Endpoint>
         </SearchService>
         <NumSearchableDocs>0</NumSearchableDocs>
         <Created>true</Created>
@@ -22,12 +23,14 @@ date: Mon, 19 Nov 2012 11:24:48 GMT
         <Deleted>false</Deleted>
         <DocService>
           <Arn>arn:aws:cs:us-east-1:788574296432:doc/domain1</Arn>
+          <Endpoint>%ENDPOINT%</Endpoint>
         </DocService>
       </member>
       <member>
         <SearchPartitionCount>0</SearchPartitionCount>
         <SearchService>
           <Arn>arn:aws:cs:us-east-1:788574296432:search/domain2</Arn>
+          <Endpoint>%ENDPOINT%</Endpoint>
         </SearchService>
         <NumSearchableDocs>0</NumSearchableDocs>
         <Created>true</Created>
@@ -39,6 +42,7 @@ date: Mon, 19 Nov 2012 11:24:48 GMT
         <Deleted>false</Deleted>
         <DocService>
           <Arn>arn:aws:cs:us-east-1:788574296432:doc/domain2</Arn>
+          <Endpoint>%ENDPOINT%</Endpoint>
         </DocService>
       </member>
     </DomainStatusList>

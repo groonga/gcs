@@ -10,6 +10,7 @@ date: Mon, 19 Nov 2012 10:58:41 GMT
       <SearchPartitionCount>0</SearchPartitionCount>
       <SearchService>
         <Arn>arn:aws:cs:us-east-1:788574296432:search/companies</Arn>
+        <Endpoint>%ENDPOINT%</Endpoint>
       </SearchService>
       <NumSearchableDocs>0</NumSearchableDocs>
       <Created>true</Created>
@@ -21,6 +22,7 @@ date: Mon, 19 Nov 2012 10:58:41 GMT
       <Deleted>false</Deleted>
       <DocService>
         <Arn>arn:aws:cs:us-east-1:788574296432:doc/companies</Arn>
+        <Endpoint>%ENDPOINT%</Endpoint>
       </DocService>
     </DomainStatus>
   </CreateDomainResult>
