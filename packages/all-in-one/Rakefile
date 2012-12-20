@@ -153,7 +153,7 @@ end
 
 node_path = @dist_dir + "bin/node"
 namespace(:node) do
-  version = "0.8.15"
+  version = "0.8.16"
   source_basename = "node-v#{version}"
   tar_gz_basename = "#{source_basename}.tar.gz"
   build_dir = @build_dir + "node"
