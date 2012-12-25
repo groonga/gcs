@@ -412,7 +412,7 @@ Response.prototype = {
               break;
 
             case 'Arn':
-              normalized = value.replace(/^(arn:aws:cs:us-east-1:)[^:]+(:[^\/]+\/[^\/]+)$/, '$1%DOMAIN_ID%$2');
+              normalized = value.replace(/^(arn:aws:cs:us-east-1:)[^:]+(:\d+\/[^\/]+)$/, '$1%DOMAIN_ID%$2');
               break;
 
             case 'Endpoint':
