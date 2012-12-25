@@ -4,6 +4,11 @@
 
 ### API compatibility
 
+ * Id part of "DocService/Arn", "SearchService/Arn", and "DomainId" of
+   "DomainStatus" are now returned with the value different from the domain id
+   string in the endpoint host name correctly. You always need to refer
+   "DocService/Endpoint" or "SearchService/Endpoint" to know endpoint host
+   names.
  * DefineIndexField never merge newly specified options with previously defined options.
    (In other words, now DefineIndexField always clear old options.)
  * XML SDF batches are now acceptable. (Note: all responses from documents/batch
