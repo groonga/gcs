@@ -408,7 +408,7 @@ Response.prototype = {
               break;
 
             case 'DomainId':
-              normalized = value.replace(/^.+\//, '%DOMAIN_ID%/');
+              normalized = value.replace(/^\d+\//, '%DOMAIN_ID%/');
               break;
 
             case 'Arn':
