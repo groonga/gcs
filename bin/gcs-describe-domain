@@ -21,9 +21,9 @@ function reportStatus(domain, indexFields, defaultSearchField) {
   console.log('Domain Name: %s',
               domain.DomainName);
   console.log('Document Service endpoint: %s',
-              client.arnToEndpoint(domain.DocService.Arn));
+              domain.DocService.Endpoint);
   console.log('Search Service endpoint: %s',
-              client.arnToEndpoint(domain.SearchService.Arn));
+              domain.SearchService.Endpoint);
   console.log('SearchInstanceType: %s',
               null);
   console.log('SearchPartitionCount: %s',
