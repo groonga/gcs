@@ -167,14 +167,6 @@ suite('gcs-delete-domain', function() {
   });
 });
 
-function arnToEndpoint(arn, hostPort) {
-  var match = arn.match(/^arn:aws:cs:[^:]+:([^:]+):([^\/]+)\/(.+)$/);
-  var id = match[1];
-  var type = match[2];
-  var name = match[3];
-  return type + '-' + name + '-' + id + '.' + hostPort;
-}
-
 suite('gcs-describe-domain', function() {
   setup(commonSetup);
   teardown(commonTeardown);
@@ -198,9 +190,9 @@ suite('gcs-describe-domain', function() {
                              '=== Domain Summary ===\n' +
                              'Domain Name: domain1\n' +
                              'Document Service endpoint: ' +
-                               arnToEndpoint(domain.documentsArn, hostPort) + '\n' +
+                               domain.documentsEndpoint(hostPort) + '\n' +
                              'Search Service endpoint: ' +
-                               arnToEndpoint(domain.searchArn, hostPort) + '\n' +
+                               domain.searchEndpoint(hostPort) + '\n' +
                              'SearchInstanceType: null\n' +
                              'SearchPartitionCount: 0\n' +
                              'SearchInstanceCount: 0\n' +
@@ -239,9 +231,9 @@ suite('gcs-describe-domain', function() {
                              '=== Domain Summary ===\n' +
                              'Domain Name: domain2\n' +
                              'Document Service endpoint: ' +
-                               arnToEndpoint(domain2.documentsArn, hostPort) + '\n' +
+                               domain2.documentsEndpoint(hostPort) + '\n' +
                              'Search Service endpoint: ' +
-                               arnToEndpoint(domain2.searchArn, hostPort) + '\n' +
+                               domain2.searchEndpoint(hostPort) + '\n' +
                              'SearchInstanceType: null\n' +
                              'SearchPartitionCount: 0\n' +
                              'SearchInstanceCount: 0\n' +
@@ -258,9 +250,9 @@ suite('gcs-describe-domain', function() {
                              '=== Domain Summary ===\n' +
                              'Domain Name: domain1\n' +
                              'Document Service endpoint: ' +
-                               arnToEndpoint(domain1.documentsArn, hostPort) + '\n' +
+                               domain1.documentsEndpoint(hostPort) + '\n' +
                              'Search Service endpoint: ' +
-                               arnToEndpoint(domain1.searchArn, hostPort) + '\n' +
+                               domain1.searchEndpoint(hostPort) + '\n' +
                              'SearchInstanceType: null\n' +
                              'SearchPartitionCount: 0\n' +
                              'SearchInstanceCount: 0\n' +
@@ -994,7 +986,7 @@ suite('gcs-post-sdf', function() {
     domain.getIndexField('description').setType('text').createSync();
     domain.getIndexField('age').setType('uint').createSync();
     domain.getIndexField('product').setType('literal').createSync();
-    endpoint = arnToEndpoint(domain.documentsArn, '127.0.0.1.xip.io:' + utils.testPort);
+    endpoint = domain.documentsEndpoint('127.0.0.1.xip.io:' + utils.testPort);
   }
 
   test('post add sdf json', function(done) {
