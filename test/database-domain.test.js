@@ -821,7 +821,7 @@ suite('database', function() {
         temporaryDatabase = undefined;
       });
 
-      test('setConfiguration', function() {
+      test('', function() {
         domain.setConfiguration('key1_string', 'abc');
         domain.setConfiguration('key2_number', 123);
         domain.setConfiguration('key3_hash', { value: true });
@@ -839,6 +839,7 @@ suite('database', function() {
              'load --table ' + domain.configurationsTableName + '\n' +
              '[\n' +
              '["_key","value"],\n' +
+             '["self_created_at","' + domain.getCreationDate('self').getTime() + '"],\n' +
              '["key1_string","\\"abc\\""],\n' +
              '["key2_number","123"],\n' +
              '["key3_hash","{\\"value\\":true}"]\n' +
@@ -889,6 +890,7 @@ suite('database', function() {
              'load --table ' + domain.configurationsTableName + '\n' +
              '[\n' +
              '["_key","value"],\n' +
+             '["self_created_at","' + domain.getCreationDate('self').getTime() + '"],\n' +
              '["key1_string","\\"abc\\""]\n' +
              ']';
         var dumpActual = context.commandSync('dump', {
