@@ -251,7 +251,7 @@ suite('database', function() {
 
       test('arn', function() {
         assert.equal(domain.documentsArn,
-                     'arn:aws:cs:us-east-1:' + Domain.DEFAULT_ID + ':doc/valid');
+                     'arn:aws:cs:us-east-1:' + domain.creationDate.getTime() + ':doc/valid');
       });
     });
 
@@ -263,7 +263,7 @@ suite('database', function() {
 
       test('arn', function() {
         assert.equal(domain.searchArn,
-                     'arn:aws:cs:us-east-1:' + Domain.DEFAULT_ID + ':search/valid');
+                     'arn:aws:cs:us-east-1:' + domain.creationDate.getTime() + ':search/valid');
       });
     });
 
