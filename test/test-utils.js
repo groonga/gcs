@@ -197,7 +197,7 @@ exports.toTimeStamp = toTimeStamp;
 function setupResponses(scenarios, date) {
   if (!date) date = new Date();
   var outputDir = path.join(temporaryDirectory, 'results.' + toTimeStamp(date));
-  if (path.existsSync(outputDir)) {
+  if (fs.existsSync(outputDir)) {
     return Deferred.next(function() {
       return outputDir;
     });

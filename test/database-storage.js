@@ -46,9 +46,9 @@ suite('database', function() {
     test('auto creation of the data directory', function() {
       var document = createNewDocument();
       var filePath = path.join(utils.temporaryDirectory, 'storage', sha1hash(document.id));
-      assert.isFalse(path.existsSync(storage.directoryPath));
+      assert.isFalse(fs.existsSync(storage.directoryPath));
       storage.saveSync(document);
-      assert.isTrue(path.existsSync(storage.directoryPath));
+      assert.isTrue(fs.existsSync(storage.directoryPath));
     });
 
     test('saveSync for new document', function() {
@@ -56,13 +56,13 @@ suite('database', function() {
 
       var document = createNewDocument();
       var filePath = path.join(utils.temporaryDirectory, 'storage', sha1hash(document.id));
-      assert.isFalse(path.existsSync(filePath));
+      assert.isFalse(fs.existsSync(filePath));
 
       assertFilesCount(storage.directoryPath, 1, function() {
         storage.saveSync(document);
       });
 
-      assert.isTrue(path.existsSync(filePath));
+      assert.isTrue(fs.existsSync(filePath));
 
       var contents = fs.readFileSync(filePath, 'UTF-8');
       contents = JSON.parse(contents);
@@ -103,11 +103,11 @@ suite('database', function() {
       storage.saveSync(document);
 
       var filePath = path.join(utils.temporaryDirectory, 'storage', sha1hash(document.id));
-      assert.isTrue(path.existsSync(filePath));
+      assert.isTrue(fs.existsSync(filePath));
 
       assertFilesCount(storage.directoryPath, -1, function() {
         storage.deleteSync(document.id);
-        assert.isFalse(path.existsSync(filePath));
+        assert.isFalse(fs.existsSync(filePath));
       });
     });
 
@@ -125,7 +125,7 @@ suite('database', function() {
       storage.saveSync(createNewDocument());
       storage.saveSync(createNewDocument());
       storage.clearSync();
-      assert.isFalse(path.existsSync(storage.directoryPath));
+      assert.isFalse(fs.existsSync(storage.directoryPath));
     });
   });
 });
