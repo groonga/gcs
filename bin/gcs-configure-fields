@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// -*- js -*-
 
 var CLI = require(__dirname + '/../lib/command-line').CommandLineInterface;
 var Client = require(__dirname + '/../lib/client').Client;

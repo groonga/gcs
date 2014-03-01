@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// -*- js -*-
 
 var gcsServer = require(__dirname + '/../lib/server');
 var CLI = require(__dirname + '/../lib/command-line').CommandLineInterface;
