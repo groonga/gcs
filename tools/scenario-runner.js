@@ -1,3 +1,4 @@
+var util = require('util');
 var Client = require(__dirname + '/../lib/client').Client;
 var EventEmitter = require('events').EventEmitter;
 var xml2js = require('xml2js');
@@ -13,10 +14,11 @@ var statusCodeTable = {
 };
 
 function ScenariosRunner(options) {
+  ScenariosRunner.super_.call(this);
   this.options = options;
 }
 
-ScenariosRunner.prototype = new EventEmitter();
+util.inherits(ScenariosRunner, EventEmitter);
 
 ScenariosRunner.prototype.run = function(scenarios) {
   var params = { scenarios: expandScenarios(scenarios) };
@@ -132,13 +134,14 @@ ScenariosRunner.prototype._process = function(params) {
 };
 
 function ScenarioRunner(options) {
+  ScenarioRunner.super_.call(this);
   this.client = new Client(options);
   this.options = options;
   if (options.documentEndpoint)
     this.client.docEndpoint = options.documentEndpoint;
 }
 
-ScenarioRunner.prototype = new EventEmitter();
+util.inherits(ScenarioRunner, EventEmitter);
 
 ScenarioRunner.prototype.run = function(scenario) {
   if (this.options.ignoreDirtyEnvironment) {
