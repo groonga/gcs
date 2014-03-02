@@ -555,9 +555,10 @@ suite('database', function() {
                'column_create ' + domain.configurationsTableName +  ' ' +
                  'value COLUMN_SCALAR ShortText\n' +
                'table_create ' + domain.termsTableName + ' ' +
-                 'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
-                 '--default_tokenizer TokenBigram';
-      }                       
+                 'TABLE_PAT_KEY ShortText ' +
+                 '--default_tokenizer TokenBigram ' +
+                 '--normalizer NormalizerAuto';
+      }
 
       test('createSync for text field', function() {
         var field = new IndexField('name', domain);
@@ -582,8 +583,9 @@ suite('database', function() {
                        'column_create ' + domain.configurationsTableName +  ' ' +
                          'value COLUMN_SCALAR ShortText\n' +
                        'table_create ' + domain.termsTableName + ' ' +
-                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
-                         '--default_tokenizer TokenBigram\n' +
+                         'TABLE_PAT_KEY ShortText ' +
+                         '--default_tokenizer TokenBigram ' +
+                         '--normalizer NormalizerAuto\n' +
                        'column_create ' + domain.termsTableName + ' ' +
                          field.indexColumnName + ' ' +
                          'COLUMN_INDEX|WITH_POSITION ' + domain.tableName +
@@ -629,8 +631,9 @@ suite('database', function() {
                        'column_create ' + domain.configurationsTableName +  ' ' +
                          'value COLUMN_SCALAR ShortText\n' +
                        'table_create ' + domain.termsTableName + ' ' +
-                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
-                         '--default_tokenizer TokenBigram\n' +
+                         'TABLE_PAT_KEY ShortText ' +
+                         '--default_tokenizer TokenBigram ' +
+                         '--normalizer NormalizerAuto\n' +
                        'table_create ' + field.indexTableName + ' ' +
                          'TABLE_PAT_KEY UInt32\n' +
                        'column_create ' + field.indexTableName + ' ' +
@@ -676,8 +679,9 @@ suite('database', function() {
                        'column_create ' + domain.configurationsTableName +  ' ' +
                          'value COLUMN_SCALAR ShortText\n' +
                        'table_create ' + domain.termsTableName + ' ' +
-                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
-                         '--default_tokenizer TokenBigram\n' +
+                         'TABLE_PAT_KEY ShortText ' +
+                         '--default_tokenizer TokenBigram ' +
+                         '--normalizer NormalizerAuto\n' +
                        'table_create ' + field.indexTableName + ' ' +
                          'TABLE_PAT_KEY ShortText\n' +
                        'column_create ' + field.indexTableName + ' ' +
@@ -742,8 +746,9 @@ suite('database', function() {
                        'column_create ' + domain.configurationsTableName +  ' ' +
                          'value COLUMN_SCALAR ShortText\n' +
                        'table_create ' + domain.termsTableName + ' ' +
-                         'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
-                         '--default_tokenizer TokenBigram\n' +
+                         'TABLE_PAT_KEY ShortText ' +
+                         '--default_tokenizer TokenBigram ' +
+                         '--normalizer NormalizerAuto\n' +
                        'column_create ' + domain.termsTableName + ' ' +
                          field.indexColumnName + ' ' +
                          'COLUMN_INDEX|WITH_POSITION ' + domain.tableName +

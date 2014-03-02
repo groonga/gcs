@@ -488,8 +488,9 @@ suite('database', function() {
                            'column_create ' + domain.configurationsTableName +  ' ' +
                              'value COLUMN_SCALAR ShortText\n' +
                            'table_create ' + domain.termsTableName +  ' ' +
-                             'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
-                             '--default_tokenizer TokenBigram';
+                             'TABLE_PAT_KEY ShortText ' +
+                             '--default_tokenizer TokenBigram ' +
+		             '--normalizer NormalizerAuto';
         assert.equal(dump, expectedDump);
       });
 
@@ -541,10 +542,12 @@ suite('database', function() {
              'column_create ' + domain.configurationsTableName + ' ' +
                'value COLUMN_SCALAR ShortText\n' +
              'table_create ' + domain.termsTableName +  ' ' +
-               'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
-               '--default_tokenizer TokenBigram\n' +
+               'TABLE_PAT_KEY ShortText ' +
+               '--default_tokenizer TokenBigram ' +
+               '--normalizer NormalizerAuto\n' +
              'table_create ' + domain.synonymsTableName +  ' ' +
-               'TABLE_HASH_KEY|KEY_NORMALIZE ShortText\n' +
+               'TABLE_HASH_KEY ShortText ' +
+               '--normalizer NormalizerAuto\n' +
              'column_create ' + domain.synonymsTableName + ' ' +
                'synonyms COLUMN_VECTOR ShortText\n' +
              'load --table ' + domain.synonymsTableName + '\n' +
@@ -577,10 +580,12 @@ suite('database', function() {
              'column_create ' + domain.configurationsTableName + ' ' +
                'value COLUMN_SCALAR ShortText\n' +
              'table_create ' + domain.termsTableName +  ' ' +
-               'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
-               '--default_tokenizer TokenBigram\n' +
+               'TABLE_PAT_KEY ShortText ' +
+               '--default_tokenizer TokenBigram ' +
+               '--normalizer NormalizerAuto\n' +
              'table_create ' + domain.synonymsTableName +  ' ' +
-               'TABLE_HASH_KEY|KEY_NORMALIZE ShortText\n' +
+               'TABLE_HASH_KEY ShortText ' +
+               '--normalizer NormalizerAuto\n' +
              'column_create ' + domain.synonymsTableName + ' ' +
                'synonyms COLUMN_VECTOR ShortText\n' +
              'load --table ' + domain.synonymsTableName + '\n' +
@@ -834,8 +839,9 @@ suite('database', function() {
              'column_create ' + domain.configurationsTableName + ' ' +
                'value COLUMN_SCALAR ShortText\n' +
              'table_create ' + domain.termsTableName +  ' ' +
-               'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
-               '--default_tokenizer TokenBigram\n' +
+               'TABLE_PAT_KEY ShortText ' +
+               '--default_tokenizer TokenBigram ' +
+               '--normalizer NormalizerAuto\n' +
              'load --table ' + domain.configurationsTableName + '\n' +
              '[\n' +
              '["_key","value"],\n' +
@@ -885,8 +891,9 @@ suite('database', function() {
              'column_create ' + domain.configurationsTableName + ' ' +
                'value COLUMN_SCALAR ShortText\n' +
              'table_create ' + domain.termsTableName +  ' ' +
-               'TABLE_PAT_KEY|KEY_NORMALIZE ShortText ' +
-               '--default_tokenizer TokenBigram\n' +
+               'TABLE_PAT_KEY ShortText ' +
+               '--default_tokenizer TokenBigram ' +
+               '--normalizer NormalizerAuto\n' +
              'load --table ' + domain.configurationsTableName + '\n' +
              '[\n' +
              '["_key","value"],\n' +
