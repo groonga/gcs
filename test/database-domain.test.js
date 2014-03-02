@@ -39,6 +39,14 @@ suite('database', function() {
                    'valid123_' + Domain.DEFAULT_ID);
     });
 
+    test('hyphen', function() {
+      var domain = new Domain('valid-name');
+      domain.id = Domain.DEFAULT_ID;
+      domain.validate();
+      assert.equal(domain.tableName,
+                   'valid-name_' + Domain.DEFAULT_ID);
+    });
+
     test('without name', function() {
       assert.throw(function() {
         var domain = new Domain('').validate();
@@ -80,14 +88,6 @@ suite('database', function() {
            'Value \'' + name + '\' at \'%NAME_FIELD%\' failed to satisfy constraint: ' +
              'Member must have length less than or equal to ' +
                Domain.MAXIMUM_NAME_LENGTH);
-    });
-
-    test('hyphen', function() {
-      assert.throw(function() {
-        var domain = new Domain('domain-name').validate();
-      }, '1 validation error detected: ' +
-           'Value \'domain-name\' at \'%NAME_FIELD%\' failed to satisfy constraint: ' +
-             'Member cannot include these characters: \'-\'');
     });
 
     test('underscore', function() {
