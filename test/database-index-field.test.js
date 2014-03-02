@@ -68,7 +68,7 @@ suite('database', function() {
         var field = new IndexField('field-name', domain).setType('text').validate();
       }, '1 validation error detected: ' +
            'Value \'field-name\' at \'%NAME_FIELD%\' failed to satisfy constraint: ' +
-             'Member cannot include these characters: \'-\'');
+             'Member must satisfy regular expression pattern: [a-z][a-z0-9_]*');
     });
 
     test('underscore', function() {
