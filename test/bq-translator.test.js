@@ -173,7 +173,8 @@ suite('BoolanQueryTranslator', function() {
       'field',
       'field1',
       'field2',
-      'field3'
+      'field3',
+      'field_name'
     ].forEach(function(field) {
       domain.getIndexField(field).setType('text')
         .setFacetEnabled(true).setSearchEnabled(true).createSync();
@@ -211,6 +212,10 @@ suite('BoolanQueryTranslator', function() {
   testQuery("label",
             "(label 'keyword1 keyword2')",
             'field @ "keyword1" && field @ "keyword2"');
+
+  testQuery("field: valid: _",
+            "field_name:'keyword'",
+            'field_name @ "keyword"');
 
   testQueryError("garbage",
                  "(and 'keyword' type:'ModelName') garbage1 garbage2",
@@ -288,10 +293,14 @@ suite('BoolanQueryTranslator', function() {
                  "(field field1 29)",
                  "(field field1 |2|9)",
                  "open single quote for string value is missing");
-  testGroupError("field: invalid field name",
+  testGroupError("field: invalid field name: upper case",
                  "(field fIeld 'value')",
                  "(field f|I|eld 'value')",
                  "invalid field character: <I>");
+  testGroupError("field: invalid field name: -",
+                 "(field field-name 'value')",
+                 "(field field|-|name 'value')",
+                 "invalid field character: <->");
   testGroupError("field: missing close parenthesis",
                  "(field ",
                  "(field ||",
