@@ -232,7 +232,7 @@ exports.DescribeDefaultSearchFieldResponse = createGenericResponse('DescribeDefa
 
 var DefaultSearchFieldStatus_blank =
     exports.DefaultSearchFieldStatus_blank = {
-      Options: {},
+      Options: '',
       Status: OptionStatus
     };
 exports.UpdateDefaultSearchFieldResponse_blank = createGenericResponse('UpdateDefaultSearchField', {

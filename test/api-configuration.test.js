@@ -291,8 +291,7 @@ suite('Configuration API', function() {
           var fieldName = response.body.UpdateDefaultSearchFieldResponse
                                        .UpdateDefaultSearchFieldResult
                                        .DefaultSearchField.Options;
-          // xml2json converts the content of the empty element to a blank object, not a blank text.
-          assert.deepEqual(fieldName, {});
+          assert.deepEqual(fieldName, '');
 
           done();
         })
@@ -319,8 +318,7 @@ suite('Configuration API', function() {
           var fieldName = response.body.DescribeDefaultSearchFieldResponse
                                        .DescribeDefaultSearchFieldResult
                                        .DefaultSearchField.Options;
-          // xml2json converts the content of the empty element to a blank object, not a blank text.
-          assert.deepEqual(fieldName, {});
+          assert.deepEqual(fieldName, '');
         })
         .get('/?Version=2011-02-01&Action=UpdateDefaultSearchField&' +
              'DomainName=companies&DefaultSearchField=name')
