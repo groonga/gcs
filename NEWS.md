@@ -1,5 +1,25 @@
 # News
 
+## v1.6.0 (2014-03-02)
+
+### Improvements
+
+  * Dropped Node.js 0.6 support.
+  * Supported awssum 1.2.0.
+  * Supported Groonga 4.0.0.
+  * Supported `-` for domain name.
+  * [GitHub#141] Supported parameters specified by HTTP request body.
+    Reported by zjx20. Thanks!!!
+
+### Fixes
+
+  * [GitHub#142] Fixed a bug that `_` is treated as invalid character.
+    Reported by zjx20. Thanks!!!
+
+### Thanks
+
+  * zjx20
+
 ## v1.5.0 (booked at 2012-12-26)
 
 ### API compatibility
