@@ -4,8 +4,8 @@ notifications:
     - travis@clear-code.com
 language: node_js
 node_js:
- - 0.8
- - 0.10
+ - "0.8"
+ - "0.10"
 # env:
 #  - GROONGA_MASTER=yes
 install:
