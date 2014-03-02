@@ -86,7 +86,7 @@ suite('database', function() {
       assert.throw(function() {
         var domain = new Domain('domain-name').validate();
       }, '1 validation error detected: ' +
-           'Value \'domain_name\' at \'%NAME_FIELD%\' failed to satisfy constraint: ' +
+           'Value \'domain-name\' at \'%NAME_FIELD%\' failed to satisfy constraint: ' +
              'Member cannot include these characters: \'-\'');
     });
 
@@ -103,7 +103,7 @@ suite('database', function() {
       assert.throw(function() {
         var domain = new Domain('DomainName').validate();
       }, '1 validation error detected: ' +
-           'Value \'%NAME_FIELD%\' at \'%NAME_FIELD%\' failed to satisfy constraint: ' +
+           'Value \'DomainName\' at \'%NAME_FIELD%\' failed to satisfy constraint: ' +
              'Member must satisfy regular expression pattern: ' +
                Domain.VALID_NAME_PATTERN);
     });
@@ -219,7 +219,7 @@ suite('database', function() {
                         url: '/gcs/test_0123-id0123' };
           var domain = new Domain({ source: request }).validate();
         }, '1 validation error detected: ' +
-             'Value \'domain_name\' at \'%NAME_FIELD%\' failed to satisfy constraint: ' +
+             'Value \'test_0123\' at \'%NAME_FIELD%\' failed to satisfy constraint: ' +
                'Member must satisfy regular expression pattern: ' +
                  Domain.VALID_NAME_PATTERN);
       });
