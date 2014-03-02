@@ -278,7 +278,7 @@ suite('database', function() {
         assert.throw(function() {
           field.resultEnabled = true;
           field.saveSync();
-        }, ' Error defining field: name. '+
+        }, 'Error defining field: name. '+
              'An IndexField may not be both FacetEnabled and ResultEnabled');
       });
 
@@ -343,7 +343,7 @@ suite('database', function() {
         assert.throw(function() {
           field.resultEnabled = true;
           field.saveSync();
-        }, ' Error defining field: product. '+
+        }, 'Error defining field: product. '+
              'An IndexField may not be both FacetEnabled and ResultEnabled');
       });
 
