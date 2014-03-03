@@ -1,5 +1,3 @@
-// -*- indent-tabs-mode: nil; js2-basic-offset: 2 -*-
-
 var utils = require('./test-utils');
 var assert = require('chai').assert;
 
